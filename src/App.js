@@ -9,7 +9,9 @@ function App() {
 
   useEffect(() => {
     setImages(
-      importAll(require.context("./MajongPieces/", false, /\.(png|jpe?g|svg)$/))
+      importAll(
+        require.context("./MahjongPieces/", false, /\.(png|jpe?g|svg)$/)
+      )
     );
   }, []);
 
