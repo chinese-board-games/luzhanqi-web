@@ -82,5 +82,6 @@ ehthumbs_vista.db
 *.lnk
 
 .eslintcache
+.env
 
 # End of https://www.toptal.com/developers/gitignore/api/react,macos,windows,vscode
