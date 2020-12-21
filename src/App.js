@@ -10,6 +10,8 @@ const socket = io("localhost:4000");
 function App() {
   // const [listOfImages, setImages] = useState([]);
   const [socketText, setSocketText] = useState("");
+  const [joinRoomId, setJoinRoomId] = useState("");
+  const [playerName, setPlayerName] = useState("");
   const [roomId, setRoomId] = useState("");
   const [displayTimer, setDisplayTimer] = useState(false);
   const [countdown, setCountdown] = useState(5);
@@ -69,11 +71,6 @@ function App() {
     }
   }, [displayTimer]);
 
-  const handleSubmit = (text) => {
-    console.log(`emitting: ${text}`);
-    socket.emit(text);
-  };
-
   const createNewGame = () => {
     socket.emit("hostCreateNewGame");
   };
@@ -82,10 +79,18 @@ function App() {
     socket.emit("hostRoomFull", roomId);
   };
 
-  const submit = (e) => {
+  const submitDebug = (e) => {
     e.preventDefault();
-    handleSubmit(socketText);
+    console.log(`emitting: ${socketText}`);
+    socket.emit(socketText);
   };
+
+  const joinGame = (e) => {
+    e.preventDefault();
+    console.log(`Attempting to join game ${joinRoomId} as ${playerName}`);
+    socket.emit("playerJoinGame", { playerName, joinRoomId });
+  };
+
   // console.log(`Game ID: ${roomId}`);
   return (
     <>
@@ -99,7 +104,7 @@ function App() {
         ))}
 
         {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
-        <form onSubmit={submit}>
+        <form onSubmit={submitDebug}>
           <label>To socket:</label>
           <input
             type="text"
@@ -108,6 +113,26 @@ function App() {
           />
           <input type="submit" />
         </form>
+
+        <form>
+          <label>Player name:</label>
+          <input
+            type="text"
+            name="name"
+            onChange={(e) => setPlayerName(e.target.value)}
+          />
+        </form>
+
+        <form onSubmit={joinGame}>
+          <label>Join game:</label>
+          <input
+            type="text"
+            name="name"
+            onChange={(e) => setJoinRoomId(e.target.value)}
+          />
+          <input type="submit" />
+        </form>
+
         <button type="button" onClick={createNewGame}>
           Create New Game
         </button>
