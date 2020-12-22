@@ -1,7 +1,3 @@
-/* eslint-disable no-shadow */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/button-has-type */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
@@ -9,17 +5,22 @@ import { io } from "socket.io-client";
 const socket = io("localhost:4000");
 
 function App() {
-  // const [listOfImages, setImages] = useState([]);
+  /** debug message sent through socket on PORT */
   const [socketText, setSocketText] = useState("");
+  /** user-input: game ID to join */
   const [joinRoomId, setJoinRoomId] = useState("");
+  /** user-input: the user's name */
   const [playerName, setPlayerName] = useState("");
+  /** game ID assigned to host */
   const [roomId, setRoomId] = useState("");
+  /** value of countdown timer */
   const [displayTimer, setDisplayTimer] = useState(false);
   const [countdown, setCountdown] = useState(5);
   const [host, setHost] = useState(false);
-  const [turn, setTurn] = useState(-1);
-  const [players, setPlayers] = useState([]);
+  const [clientTurn, setClientTurn] = useState(-1);
+  const [playerList, setPlayerList] = useState([]);
 
+  /** Piece names for Luzhanqi */
   const pieces = [
     "bomb",
     "brigadier_general",
@@ -34,46 +35,45 @@ function App() {
     "major_general",
     "major",
   ];
-  // function importAll(r) {
-  //   return r.keys().map(r);
-  // }
 
+  /**
+   * Socket handlers receive headers and data from SocketIO connection
+   * Function on second parameter handles socket call parameters
+   */
   useEffect(() => {
     socket.on("connect", () => {
       console.log(`SocketID: ${socket.id}`);
       console.log(`Connected: ${socket.connected}`);
     });
 
+    /** Server has created a new game, only host receives this message */
     socket.on("newGameCreated", ({ gameId, mySocketId, players }) => {
       console.log(`GameID: ${gameId}, SocketID: ${mySocketId}`);
       setRoomId(gameId);
       setJoinRoomId(gameId);
-      setPlayers(players);
+      setPlayerList(players);
       console.log(players);
     });
 
-    // setImages(
-    //   importAll(
-    //     require.context("../public/pieces", false, /\.(png|jpe?g|svg)$/)
-    //   )
-    // );
-
+    /** Server is telling all clients the game has started  */
     socket.on("beginNewGame", ({ mySocketId, gameId, turn }) => {
       console.log(`Starting game ${gameId} on socket ${mySocketId}`);
       setDisplayTimer(true);
-      setTurn(turn);
+      setClientTurn(turn);
     });
 
+    /** Server is telling all clients someone has joined the room */
     // eslint-disable-next-line no-shadow
     socket.on("playerJoinedRoom", ({ playerName, players }) => {
       console.log(`${playerName} has joined the room!`);
-      setPlayers(players);
+      setPlayerList(players);
       console.log(players);
     });
 
+    /** Server is telling all clients a move has been made */
     socket.on("playerMadeMove", (data) => {
       console.log("Move has been made", data);
-      setTurn(data.turn);
+      setClientTurn(data.turn);
     });
 
     return () => {
@@ -92,6 +92,12 @@ function App() {
     }
   }, [displayTimer]);
 
+  /**
+   * Functions act as services to the SocketIO instance
+   * Socket emmissions are headers followed by a data object
+   */
+
+  /** Tell the server to create a new game */
   const createNewGame = () => {
     if (playerName) {
       socket.emit("hostCreateNewGame", { playerName });
@@ -101,90 +107,88 @@ function App() {
     }
   };
 
+  /** Tell server to begin game */
   const roomFull = () => {
     socket.emit("hostRoomFull", roomId);
   };
 
+  /** Send debug message to server */
   const submitDebug = (e) => {
     e.preventDefault();
     console.log(`emitting: ${socketText}`);
     socket.emit(socketText);
   };
 
+  /** Attempt to join a game by game ID */
   const joinGame = (e) => {
     e.preventDefault();
     console.log(`Attempting to join game ${joinRoomId} as ${playerName}`);
-    socket.emit("playerJoinGame", { playerName, joinRoomId, players });
+    socket.emit("playerJoinGame", { playerName, joinRoomId, playerList });
   };
 
+  /** Send a move to the server */
   const makeMove = (e) => {
     e.preventDefault();
     console.log("Making move...");
-    socket.emit("makeMove", { playerName, gameId: joinRoomId, turn });
+    socket.emit("makeMove", { playerName, gameId: joinRoomId, clientTurn });
   };
 
   return (
-    <>
-      <div>
-        {/* {listOfImages.map((image, index) => (
-          // console.log(image);
-          <img key={`${index * 5}e`} src={image.default} alt="info" />
-        ))} */}
-        {pieces.map((name) => (
-          <img key={name} src={`pieces/${name}.svg`} alt={name} />
-        ))}
+    <div>
+      {pieces.map((name) => (
+        <img key={name} src={`pieces/${name}.svg`} alt={name} />
+      ))}
 
-        {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
-        <form onSubmit={submitDebug}>
-          <label>To socket:</label>
-          <input
-            type="text"
-            name="name"
-            onChange={(e) => setSocketText(e.target.value)}
-          />
-          <input type="submit" />
-        </form>
+      {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
+      <form onSubmit={submitDebug}>
+        <label>To socket:</label>
+        <input
+          type="text"
+          name="name"
+          onChange={(e) => setSocketText(e.target.value)}
+        />
+        <input type="submit" />
+      </form>
 
-        <form>
-          <label>Player name:</label>
-          <input
-            type="text"
-            name="name"
-            onChange={(e) => setPlayerName(e.target.value)}
-          />
-        </form>
+      <form>
+        <label>Player name:</label>
+        <input
+          type="text"
+          name="name"
+          onChange={(e) => setPlayerName(e.target.value)}
+        />
+      </form>
 
-        <form onSubmit={joinGame}>
-          <label>Join game:</label>
-          <input
-            type="text"
-            name="name"
-            onChange={(e) => setJoinRoomId(e.target.value)}
-          />
-          <input type="submit" />
-        </form>
+      <form onSubmit={joinGame}>
+        <label>Join game:</label>
+        <input
+          type="text"
+          name="name"
+          onChange={(e) => setJoinRoomId(e.target.value)}
+        />
+        <input type="submit" />
+      </form>
 
-        {roomId ? null : (
-          <button type="button" onClick={createNewGame}>
-            Create New Game
-          </button>
-        )}
-
-        <button type="button" onClick={roomFull}>
-          Room Full
+      {roomId ? null : (
+        <button type="button" onClick={createNewGame}>
+          Create New Game
         </button>
-        {displayTimer && countdown > 0 ? <h1>{countdown}</h1> : null}
-        {countdown < 1 ? <img src="board.svg" alt="board" /> : null}
-        <button type="button" onClick={makeMove}>
-          Make move
-        </button>
-        {turn}
-        {(host && turn % 2 === 0) || (!host && turn % 2 === 1)
-          ? "Your turn"
-          : "Not your turn"}
-        {host ? <h1>You are the host</h1> : null}
-      </div>
-    </>
+      )}
+
+      <button type="button" onClick={roomFull}>
+        Room Full
+      </button>
+      {displayTimer && countdown > 0 ? <h1>{countdown}</h1> : null}
+      {countdown < 1 ? <img src="board.svg" alt="board" /> : null}
+      <button type="button" onClick={makeMove}>
+        Make move
+      </button>
+      {clientTurn}
+      {(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1)
+        ? "Your turn"
+        : "Not your turn"}
+      {host ? <h1>You are the host</h1> : null}
+    </div>
   );
 }
 
