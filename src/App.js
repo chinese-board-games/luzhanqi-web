@@ -16,9 +16,9 @@ function App() {
   const [roomId, setRoomId] = useState("");
   const [displayTimer, setDisplayTimer] = useState(false);
   const [countdown, setCountdown] = useState(5);
-  const [turn, setTurn] = useState(-1);
-  const [myTurn, setMyTurn] = useState(-1);
   const [host, setHost] = useState(false);
+  const [turn, setTurn] = useState(-1);
+  const [players, setPlayers] = useState([]);
 
   const pieces = [
     "bomb",
@@ -44,10 +44,12 @@ function App() {
       console.log(`Connected: ${socket.connected}`);
     });
 
-    socket.on("newGameCreated", ({ gameId, mySocketId }) => {
+    socket.on("newGameCreated", ({ gameId, mySocketId, players }) => {
       console.log(`GameID: ${gameId}, SocketID: ${mySocketId}`);
       setRoomId(gameId);
       setJoinRoomId(gameId);
+      setPlayers(players);
+      console.log(players);
     });
 
     // setImages(
@@ -63,15 +65,15 @@ function App() {
     });
 
     // eslint-disable-next-line no-shadow
-    socket.on("playerJoinedRoom", ({ playerName }) => {
+    socket.on("playerJoinedRoom", ({ playerName, players }) => {
       console.log(`${playerName} has joined the room!`);
+      setPlayers(players);
+      console.log(players);
     });
 
     socket.on("playerMadeMove", (data) => {
       console.log("Move has been made", data);
-      const turn =
-        (host && data.turn % 2 === 0) || (!host && data.turn % 2 === 1);
-      setMyTurn(turn);
+      setTurn(data.turn);
     });
 
     return () => {
@@ -91,8 +93,12 @@ function App() {
   }, [displayTimer]);
 
   const createNewGame = () => {
-    socket.emit("hostCreateNewGame");
-    setHost(true);
+    if (playerName) {
+      socket.emit("hostCreateNewGame", { playerName });
+      setHost(true);
+    } else {
+      console.log("You must provide a playerName.");
+    }
   };
 
   const roomFull = () => {
@@ -108,7 +114,7 @@ function App() {
   const joinGame = (e) => {
     e.preventDefault();
     console.log(`Attempting to join game ${joinRoomId} as ${playerName}`);
-    socket.emit("playerJoinGame", { playerName, joinRoomId });
+    socket.emit("playerJoinGame", { playerName, joinRoomId, players });
   };
 
   const makeMove = (e) => {
@@ -117,7 +123,6 @@ function App() {
     socket.emit("makeMove", { playerName, gameId: joinRoomId, turn });
   };
 
-  // console.log(`Game ID: ${roomId}`);
   return (
     <>
       <div>
@@ -170,11 +175,14 @@ function App() {
         </button>
         {displayTimer && countdown > 0 ? <h1>{countdown}</h1> : null}
         {countdown < 1 ? <img src="board.svg" alt="board" /> : null}
-        {myTurn ? (
-          <button type="button" onClick={makeMove}>
-            Make move
-          </button>
-        ) : null}
+        <button type="button" onClick={makeMove}>
+          Make move
+        </button>
+        {turn}
+        {(host && turn % 2 === 0) || (!host && turn % 2 === 1)
+          ? "Your turn"
+          : "Not your turn"}
+        {host ? <h1>You are the host</h1> : null}
       </div>
     </>
   );
