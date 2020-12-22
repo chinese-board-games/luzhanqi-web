@@ -2,6 +2,15 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Ensure that you have ESLint and Prettier installed and enabled in VSCode.  
+Run `npm install` to install node dependencies. Do not use `yarn`.
+In your project directory, initialize a file `.env` with contents `PORT=3000`. 
+Run  
+```
+cat > .env << EOF
+PORT=3000
+EOF
+```
 ## Available Scripts
 
 In the project directory, you can run:
