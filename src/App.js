@@ -1,17 +1,29 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
+import {
+  uniqueNamesGenerator,
+  animals,
+  starWars,
+} from "unique-names-generator";
 
 const socket = io("localhost:4000");
 
 function App() {
   /** debug message sent through socket on PORT */
   const [socketText, setSocketText] = useState("");
-  /** user-input: game ID to join */
-  const [joinRoomId, setJoinRoomId] = useState("");
+
   /** user-input: the user's name */
-  const [playerName, setPlayerName] = useState("");
-  /** game ID assigned to host */
+  const defaultName = uniqueNamesGenerator({
+    dictionaries: [animals, starWars],
+    langth: 2,
+  });
+  const [playerName, setPlayerName] = useState(defaultName);
+  /** game ID assigned to host, or user-input: game Id entered by player */
   const [roomId, setRoomId] = useState("");
   /** value of countdown timer */
   const [displayTimer, setDisplayTimer] = useState(false);
@@ -19,6 +31,7 @@ function App() {
   const [host, setHost] = useState(false);
   const [clientTurn, setClientTurn] = useState(-1);
   const [playerList, setPlayerList] = useState([]);
+  const [error, setError] = useState("");
 
   /** Piece names for Luzhanqi */
   const pieces = [
@@ -50,7 +63,7 @@ function App() {
     socket.on("newGameCreated", ({ gameId, mySocketId, players }) => {
       console.log(`GameID: ${gameId}, SocketID: ${mySocketId}`);
       setRoomId(gameId);
-      setJoinRoomId(gameId);
+      // setJoinRoomId(gameId);
       setPlayerList(players);
       console.log(players);
     });
@@ -60,6 +73,7 @@ function App() {
       console.log(`Starting game ${gameId} on socket ${mySocketId}`);
       setDisplayTimer(true);
       setClientTurn(turn);
+      // console.log(`Turn is ${clientTurn}`);
     });
 
     /** Server is telling all clients someone has joined the room */
@@ -92,6 +106,12 @@ function App() {
     }
   }, [displayTimer]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setError("");
+    }, 5000);
+  }, [error]);
+
   /**
    * Functions act as services to the SocketIO instance
    * Socket emmissions are headers followed by a data object
@@ -103,7 +123,7 @@ function App() {
       socket.emit("hostCreateNewGame", { playerName });
       setHost(true);
     } else {
-      console.log("You must provide a playerName.");
+      setError("You must provide a username.");
     }
   };
 
@@ -122,72 +142,127 @@ function App() {
   /** Attempt to join a game by game ID */
   const joinGame = (e) => {
     e.preventDefault();
-    console.log(`Attempting to join game ${joinRoomId} as ${playerName}`);
-    socket.emit("playerJoinGame", { playerName, joinRoomId, playerList });
+    if (playerName && roomId) {
+      console.log(`Attempting to join game ${roomId} as ${playerName}`);
+      socket.emit("playerJoinGame", {
+        playerName,
+        joinRoomId: roomId,
+        playerList,
+      });
+    } else {
+      setError("You must provide both a game number and a player name.");
+    }
   };
 
   /** Send a move to the server */
   const makeMove = (e) => {
     e.preventDefault();
     console.log("Making move...");
-    socket.emit("makeMove", { playerName, gameId: joinRoomId, clientTurn });
+    socket.emit("makeMove", {
+      playerName,
+      gameId: roomId,
+      turn: clientTurn,
+    });
   };
 
   return (
-    <div>
+    <div style={{ margin: "2em" }}>
       {pieces.map((name) => (
         <img key={name} src={`pieces/${name}.svg`} alt={name} />
       ))}
 
       {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
-      <form onSubmit={submitDebug}>
-        <label>To socket:</label>
-        <input
+
+      <Form onSubmit={submitDebug}>
+        <Form.Label>DANGER Emit to socket:</Form.Label>
+        <Form.Control
           type="text"
           name="name"
+          placeholder="Ex. makeMove"
           onChange={(e) => setSocketText(e.target.value)}
         />
-        <input type="submit" />
-      </form>
+        <Button variant="danger" type="submit">
+          Submit
+        </Button>
+      </Form>
 
-      <form>
-        <label>Player name:</label>
-        <input
+      <Form>
+        <Form.Label>Player name:</Form.Label>
+        <Form.Control
           type="text"
           name="name"
+          placeholder="Ex. Ian"
+          value={playerName}
           onChange={(e) => setPlayerName(e.target.value)}
         />
-      </form>
+      </Form>
 
-      <form onSubmit={joinGame}>
-        <label>Join game:</label>
-        <input
+      <Form onSubmit={joinGame}>
+        <Form.Label>Join game:</Form.Label>
+        <Form.Control
           type="text"
           name="name"
-          onChange={(e) => setJoinRoomId(e.target.value)}
+          placeholder="Ex. 12345"
+          onChange={(e) => setRoomId(e.target.value)}
         />
-        <input type="submit" />
-      </form>
-
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
+      </Form>
+      <h1>Players</h1>
+      {playerList.map((obj) => (
+        <>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingTop: "5em",
+              paddingBottom: "5em",
+              paddingLeft: "2em",
+              paddingRight: "2em",
+              border: "0.5em solid red",
+            }}
+          >
+            <h1>{obj.playername}</h1>
+          </div>
+        </>
+      ))}
+      <br />
       {roomId ? null : (
-        <button type="button" onClick={createNewGame}>
+        <Button type="button" onClick={createNewGame}>
           Create New Game
-        </button>
+        </Button>
       )}
 
-      <button type="button" onClick={roomFull}>
-        Room Full
-      </button>
       {displayTimer && countdown > 0 ? <h1>{countdown}</h1> : null}
-      {countdown < 1 ? <img src="board.svg" alt="board" /> : null}
-      <button type="button" onClick={makeMove}>
-        Make move
-      </button>
-      {clientTurn}
-      {(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1)
-        ? "Your turn"
-        : "Not your turn"}
+      {countdown < 1 ? (
+        <>
+          {(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1) ? (
+            <Button type="button" variant="primary" onClick={makeMove}>
+              Make move
+            </Button>
+          ) : (
+            <Button type="button" variant="secondary">
+              Make move
+            </Button>
+          )}
+          <img src="board.svg" alt="board" />{" "}
+        </>
+      ) : (
+        <>
+          {host ? (
+            <Button type="button" variant="success" onClick={roomFull}>
+              Room Full
+            </Button>
+          ) : null}
+        </>
+      )}
+
+      {clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null}
+
       {host ? <h1>You are the host</h1> : null}
+      {error ? <Alert variant="danger">{error}</Alert> : null}
     </div>
   );
 }
