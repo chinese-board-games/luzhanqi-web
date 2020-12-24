@@ -3,6 +3,8 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 Ensure that you have ESLint and Prettier installed and enabled in VSCode.  
+If you want to run the client using a local database, install and run MongoDB in the background.
+
 Run `npm install` to install node dependencies. Do not use `yarn`.
 In your project directory, initialize a file `.env` with contents `PORT=3000`. 
 Run  
@@ -11,6 +13,10 @@ cat > .env << EOF
 PORT=3000
 EOF
 ```
+You will also need to name a variable `MONGODB_URI` and set it to the MongoDB connection string. Please ask a member of the team for a set of credentials.
+If you want to test the frontend using a local MongoDB server instead, just run MongoDB on your machine (default port 27017).  
+Please note that opening more than one client on `localhost` may result in a socket connection refusal, due to CORS rules on the backend. The two whitelisted ports are `3000` and `3001`.
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -74,6 +80,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/a
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `yarn build` fails to minify
+### `npm build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
