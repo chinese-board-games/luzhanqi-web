@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
+
 import {
   uniqueNamesGenerator,
   animals,
@@ -65,7 +66,6 @@ function App() {
       setRoomId(gameId);
       // setJoinRoomId(gameId);
       setPlayerList(players);
-      console.log(players);
     });
 
     /** Server is telling all clients the game has started  */
@@ -73,7 +73,6 @@ function App() {
       console.log(`Starting game ${gameId} on socket ${mySocketId}`);
       setDisplayTimer(true);
       setClientTurn(turn);
-      // console.log(`Turn is ${clientTurn}`);
     });
 
     /** Server is telling all clients someone has joined the room */
@@ -81,13 +80,17 @@ function App() {
     socket.on("playerJoinedRoom", ({ playerName, players }) => {
       console.log(`${playerName} has joined the room!`);
       setPlayerList(players);
-      console.log(players);
     });
 
     /** Server is telling all clients a move has been made */
     socket.on("playerMadeMove", (data) => {
       console.log("Move has been made", data);
       setClientTurn(data.turn);
+    });
+
+    /** Server is returning an error message to the client */
+    socket.on("error", (errMsg) => {
+      setError(errMsg);
     });
 
     return () => {
@@ -166,103 +169,129 @@ function App() {
   };
 
   return (
-    <div style={{ margin: "2em" }}>
-      {pieces.map((name) => (
-        <img key={name} src={`pieces/${name}.svg`} alt={name} />
-      ))}
+    <div
+      style={{
+        margin: "2em",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <div style={{ width: "35em" }}>
+        <div>
+          {pieces.map((name) => (
+            <img key={name} src={`pieces/${name}.svg`} alt={name} />
+          ))}
+        </div>
 
-      {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
+        {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
 
-      <Form onSubmit={submitDebug}>
-        <Form.Label>DANGER Emit to socket:</Form.Label>
-        <Form.Control
-          type="text"
-          name="name"
-          placeholder="Ex. makeMove"
-          onChange={(e) => setSocketText(e.target.value)}
-        />
-        <Button variant="danger" type="submit">
-          Submit
-        </Button>
-      </Form>
+        <Form onSubmit={submitDebug}>
+          <Form.Label>DANGER Emit to socket:</Form.Label>
+          <Form.Control
+            type="text"
+            name="name"
+            placeholder="Ex. makeMove"
+            onChange={(e) => setSocketText(e.target.value)}
+          />
+          <br />
+          <Button variant="danger" type="submit">
+            Submit
+          </Button>
+        </Form>
 
-      <Form>
-        <Form.Label>Player name:</Form.Label>
-        <Form.Control
-          type="text"
-          name="name"
-          placeholder="Ex. Ian"
-          value={playerName}
-          onChange={(e) => setPlayerName(e.target.value)}
-        />
-      </Form>
+        <Form>
+          <Form.Label>Player name:</Form.Label>
+          <Form.Control
+            type="text"
+            name="name"
+            placeholder="Ex. Ian"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+          />
+        </Form>
 
-      <Form onSubmit={joinGame}>
-        <Form.Label>Join game:</Form.Label>
-        <Form.Control
-          type="text"
-          name="name"
-          placeholder="Ex. 12345"
-          onChange={(e) => setRoomId(e.target.value)}
-        />
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-      <h1>Players</h1>
-      {playerList.map((obj) => (
-        <>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              paddingTop: "5em",
-              paddingBottom: "5em",
-              paddingLeft: "2em",
-              paddingRight: "2em",
-              border: "0.5em solid red",
-            }}
-          >
-            <h1>{obj.playername}</h1>
+        <Form onSubmit={joinGame}>
+          <Form.Label>Join game:</Form.Label>
+          <Form.Control
+            type="text"
+            name="name"
+            placeholder="Ex. 12345"
+            onChange={(e) => setRoomId(e.target.value)}
+          />
+          <br />
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+        <h1>Players</h1>
+        {playerList.map((name) => (
+          <div key={name}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingTop: "5em",
+                paddingBottom: "5em",
+                paddingLeft: "2em",
+                paddingRight: "2em",
+                marginBottom: "1em",
+                border: "0.5em solid red",
+                borderRadius: "1em",
+                width: "35em",
+              }}
+            >
+              <h1>{name}</h1>
+            </div>
           </div>
-        </>
-      ))}
-      <br />
-      {roomId ? null : (
-        <Button type="button" onClick={createNewGame}>
-          Create New Game
-        </Button>
-      )}
+        ))}
+        <br />
+        {roomId ? null : (
+          <Button
+            type="button"
+            onClick={createNewGame}
+            style={{ width: "10em" }}
+          >
+            Create New Game
+          </Button>
+        )}
 
-      {displayTimer && countdown > 0 ? <h1>{countdown}</h1> : null}
-      {countdown < 1 ? (
-        <>
-          {(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1) ? (
-            <Button type="button" variant="primary" onClick={makeMove}>
-              Make move
-            </Button>
-          ) : (
-            <Button type="button" variant="secondary">
-              Make move
-            </Button>
-          )}
-          <img src="board.svg" alt="board" />{" "}
-        </>
-      ) : (
-        <>
-          {host ? (
-            <Button type="button" variant="success" onClick={roomFull}>
-              Room Full
-            </Button>
-          ) : null}
-        </>
-      )}
+        {displayTimer && countdown > 0 ? <h1>{countdown}</h1> : null}
+        {countdown < 1 ? (
+          <>
+            {(host && clientTurn % 2 === 0) ||
+            (!host && clientTurn % 2 === 1) ? (
+              <Button type="button" variant="primary" onClick={makeMove}>
+                Make move
+              </Button>
+            ) : (
+              <Button type="button" variant="secondary">
+                Make move
+              </Button>
+            )}
+            <img src="board.svg" alt="board" />{" "}
+          </>
+        ) : (
+          <>
+            {host ? (
+              <Button
+                type="button"
+                variant="success"
+                onClick={roomFull}
+                style={{ width: "7em" }}
+              >
+                Room Full
+              </Button>
+            ) : null}
+          </>
+        )}
 
-      {clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null}
+        {clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null}
 
-      {host ? <h1>You are the host</h1> : null}
-      {error ? <Alert variant="danger">{error}</Alert> : null}
+        {host ? <h1>You are the host</h1> : null}
+        {error ? <Alert variant="danger">{error}</Alert> : null}
+      </div>
     </div>
   );
 }
