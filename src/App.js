@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-console */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { io } from "socket.io-client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
@@ -34,6 +34,7 @@ function App() {
   const [joinedGame, setJoinedGame] = useState(false);
   const [clientTurn, setClientTurn] = useState(-1);
   const [playerList, setPlayerList] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [myBoard, setMyBoard] = useState(Array(12).fill(Array(5).fill(null)));
   const [myPositions, setMyPositions] = useState(
     Array(6).fill(Array(5).fill(null))
@@ -63,20 +64,23 @@ function App() {
   const [error, setError] = useState("");
 
   /** Piece names for Luzhanqi */
-  const pieces = {
-    bomb: { count: 2, order: 0 },
-    brigadier_general: { count: 2, order: 6 },
-    captain: { count: 3, order: 3 },
-    colonel: { count: 2, order: 5 },
-    engineer: { count: 3, order: 1 },
-    field_marshall: { count: 1, order: 9 },
-    flag: { count: 1, order: 0 },
-    general: { count: 1, order: 8 },
-    landmine: { count: 3, order: 0 },
-    lieutenant: { count: 3, order: 2 },
-    major_general: { count: 2, order: 7 },
-    major: { count: 2, order: 4 },
-  };
+  const pieces = useMemo(
+    () => ({
+      bomb: { count: 2, order: 0 },
+      brigadier_general: { count: 2, order: 6 },
+      captain: { count: 3, order: 3 },
+      colonel: { count: 2, order: 5 },
+      engineer: { count: 3, order: 1 },
+      field_marshall: { count: 1, order: 9 },
+      flag: { count: 1, order: 0 },
+      general: { count: 1, order: 8 },
+      landmine: { count: 3, order: 0 },
+      lieutenant: { count: 3, order: 2 },
+      major_general: { count: 2, order: 7 },
+      major: { count: 2, order: 4 },
+    }),
+    []
+  );
 
   useEffect(() => {
     if (playerList.length > 0) {
@@ -85,14 +89,17 @@ function App() {
       Object.entries(startingBoard).forEach(([pos, name]) => {
         const yX = pos.split(",").map((num) => parseInt(num, 10));
         // console.log(`y: ${yX[0]} x: ${yX[1]}, name: ${name}`);
-        newHalf[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = {
-          name,
-          affiliation: playerList.indexOf(playerName),
-        };
+        if (name !== "none") {
+          newHalf[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = {
+            name,
+            order: pieces[`${name}`].order,
+            affiliation: playerList.indexOf(playerName),
+          };
+        }
       });
       setMyPositions(newHalf);
     }
-  }, [startingBoard]);
+  }, [startingBoard, pieces, playerList, playerName]);
 
   /**
    * Socket handlers receive headers and data from SocketIO connection
@@ -121,10 +128,14 @@ function App() {
     });
 
     /** Server is telling all clients someone has joined the room */
-    // eslint-disable-next-line no-shadow
-    socket.on("playerJoinedRoom", ({ playerName, players }) => {
-      console.log(`${playerName} has joined the room!`);
-      setPlayerList(players);
+    socket.on("playerJoinedRoom", (data) => {
+      console.log(`${data.playerName} has joined the room!`);
+      setPlayerList(data.players);
+    });
+
+    /** Server is telling this socket that it has joined a room */
+    socket.on("youHaveJoinedTheRoom", () => {
+      setJoinedGame(true);
     });
 
     /** Server is sending the starting board with all placed pieces */
@@ -198,7 +209,7 @@ function App() {
     e.preventDefault();
     if (playerName && roomId) {
       console.log(`Attempting to join game ${roomId} as ${playerName}`);
-      setJoinedGame(true);
+      // setJoinedGame(true);
       socket.emit("playerJoinGame", {
         playerName,
         joinRoomId: roomId,
@@ -213,8 +224,8 @@ function App() {
   const sendStartingBoard = (e) => {
     e.preventDefault();
     console.log("Sending board...");
-    console.log(myBoard);
-    socket.emit("playerInitialBoard", { myPositions });
+    console.log(myPositions);
+    socket.emit("playerInitialBoard", { playerName, myPositions });
   };
 
   /** Send a move to the server */
@@ -227,7 +238,7 @@ function App() {
       turn: clientTurn,
     });
   };
-  console.log(myPositions);
+
   return (
     <div
       style={{
@@ -310,7 +321,7 @@ function App() {
               ) : null}
               {host || joinedGame ? null : (
                 <>
-                  <Form>
+                  <Form onSubmit={joinGame}>
                     <Form.Label>Player name:</Form.Label>
                     <Form.Control
                       type="text"
@@ -319,8 +330,6 @@ function App() {
                       value={playerName}
                       onChange={(e) => setPlayerName(e.target.value)}
                     />
-                  </Form>
-                  <Form onSubmit={joinGame}>
                     <Form.Label>Join game:</Form.Label>
                     <Form.Control
                       type="text"
