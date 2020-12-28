@@ -3,11 +3,13 @@ import getSuccessors, {
   isValidY,
   isRailroad,
   isValidDestination,
-  notRailroadSuccessors,
   placePiece,
+  generateAdjList,
+  isCenterPiece,
 } from "./getSuccessors";
 import Piece from "./piece";
 
+// test x and y validation
 test("-1 should not be a valid x value", () => expect(isValidX(-1)).toBe(false));
 test("0 should be a valid x value", () => expect(isValidX(0)).toBe(true));
 test("4 should be a valid x value", () => expect(isValidX(4)).toBe(true));
@@ -19,6 +21,7 @@ test("5 should be a valid y value", () => expect(isValidY(5)).toBe(true));
 test("11 should be a valid y value", () => expect(isValidY(11)).toBe(true));
 test("12 should not be a valid y value", () => expect(isValidY(12)).toBe(false));
 
+// test isRailroad
 const generateRow = y => [...Array(4).keys()].map(x => [x, y]);
 
 const topRailCoords = generateRow(1);
@@ -59,7 +62,11 @@ test("[4, 1] to [4, 11] should be valid railroad coordinates", () =>
     true
 ));
 
-let board = Array(12).fill(Array(5).fill(null));
+// test isValidDestination
+let board = [];
+for (let i = 0; i < 12; i++) {
+  board.push(Array(5).fill(null));
+}
 
 test('out of bound x move [-1, 5] should not be valid', () => (
   expect(isValidDestination(board, -1, 5, 0)).toBe(false)
@@ -69,11 +76,22 @@ test('out of bound y move [0, -1] should not be valid', () => (
   expect(isValidDestination(board, 0, -1, 0)).toBe(false)
 ));
 
-board = placePiece(board, 0, 0, Piece('Marshal', 0));
+board = placePiece(board, 0, 0, Piece('field_marshall', 0));
 test('[0, 0] should be an invalid destination for affiliation 0', () => (
   expect(isValidDestination(board, 0, 0, 0)).toBe(false)
 ));
 test('[0, 0] should be a valid destination for affiliation 1', () => (
   expect(isValidDestination(board, 0, 0, 1)).toBe(true)
 ));
-console.log(board)
+
+// test isCenterPiece
+test('[1, 2] should be a center piece', () => expect(isCenterPiece(1, 2)).toBe(true))
+
+// test generateAdjList
+test('should return a adjacency list', () => {
+  generateAdjList();
+  // console.log(Object.fromEntries(generateAdjList()));
+});
+
+// test getSuccessors
+// test('this should not crash', getSuccessors(board, ))
