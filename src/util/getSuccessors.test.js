@@ -5,7 +5,7 @@ import getSuccessors, {
   isValidDestination,
   placePiece,
   generateAdjList,
-  isCenterPiece,
+  isCamp,
 } from "./getSuccessors";
 import Piece from "./piece";
 
@@ -85,13 +85,25 @@ test('[0, 0] should be a valid destination for affiliation 1', () => (
 ));
 
 // test isCenterPiece
-test('[1, 2] should be a center piece', () => expect(isCenterPiece(1, 2)).toBe(true))
+test('[1, 2] should be a center piece', () => expect(isCamp(1, 2)).toBe(true));
+test('[3, 2] should be a center piece', () => expect(isCamp(3, 2)).toBe(true));
+test('[2, 3] should be a center piece', () => expect(isCamp(2, 3)).toBe(true));
+test('[1, 4] should be a center piece', () => expect(isCamp(1, 4)).toBe(true));
+test('[3, 4] should be a center piece', () => expect(isCamp(3, 4)).toBe(true));
+test('[1, 7] should be a center piece', () => expect(isCamp(1, 7)).toBe(true));
+test('[3, 7] should be a center piece', () => expect(isCamp(3, 7)).toBe(true));
+test('[2, 8] should be a center piece', () => expect(isCamp(2, 8)).toBe(true));
+test('[1, 9] should be a center piece', () => expect(isCamp(1, 9)).toBe(true));
+test('[3, 9] should be a center piece', () => expect(isCamp(3, 9)).toBe(true));
 
 // test generateAdjList
+const adjList = generateAdjList();
 test('should return a adjacency list', () => {
-  generateAdjList();
+  expect(adjList instanceof Map).toBe(true);
   // console.log(Object.fromEntries(generateAdjList()));
 });
 
 // test getSuccessors
-// test('this should not crash', getSuccessors(board, ))
+test('this should not crash', () => {
+  console.log(getSuccessors(board, adjList, 0, 0, 0));
+});
