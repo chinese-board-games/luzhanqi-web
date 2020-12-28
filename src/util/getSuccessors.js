@@ -76,14 +76,14 @@ export default function getSuccessors(board, adjList, x, y, affiliation) {
         });
       }
     }
-    
-    const jsonMoves = new Set([...railroadMoves, ...adjList.get([x, y])]);
-    return jsonMoves.map((m) => JSON.parse(m));
   }
+  const jsonMoves = new Set([...railroadMoves, ...adjList.get(JSON.stringify([x, y]))]);
+  return [...jsonMoves].map((m) => JSON.parse(m));
 }
 
-export const isCenterPiece = (x, y) =>
-  x >= 1 && x <= 3 && ((y >= 2 && y <= 4) || (y >= 7 && y <= 9));
+export const isCamp = (x, y) =>
+  ((x == 1 || x == 3) && (y == 2 || y == 4 || y == 7 || y == 9)) ||
+  (x == 2 && (y == 3 || y == 8));
 
 // note that the coordinates are stored in a JSON format
 export const generateAdjList = () => {
@@ -101,7 +101,7 @@ export const generateAdjList = () => {
         [0, 1],
       ];
 
-      if (isCenterPiece(originX, originY)) {
+      if (isCamp(originX, originY)) {
         // add diagonal connections
         directions.push(
           ...[
@@ -119,7 +119,7 @@ export const generateAdjList = () => {
         if (isValidX(destX) && isValidY(destY)) {
           connections.add(JSON.stringify([destX, destY]));
           // set reverse direction if center piece
-          if (isCenterPiece(originX, originY)) {
+          if (isCamp(originX, originY)) {
             if (!adjList.has(JSON.stringify([destX, destY]))) {
               adjList.set(JSON.stringify([destX, destY]), new Set());
             }
