@@ -1,6 +1,6 @@
 export default function getSuccessors(board, x, y, affiliation) {
     // validate the board
-    if (board.length != 13) {
+    if (board.length != 12) {
         throw 'Invalid number of rows';
     }
 
@@ -9,16 +9,12 @@ export default function getSuccessors(board, x, y, affiliation) {
     }
 
     // validate from
-    if (!validX(x)) {
+    if (!isValidX(x)) {
         throw 'Invalid x';
     }
 
-    if (!validY(y)) {
+    if (!isValidY(y)) {
         throw 'Invalid y';
-    }
-
-    if (isMountainPass(x, y)) {
-        throw 'Invalid "from" coordinates';
     }
 
     const piece = board[y][x];
@@ -84,20 +80,21 @@ export default function getSuccessors(board, x, y, affiliation) {
     }
 }
 
-export const isMountainPass = (x, y) => y == 6 && (x == 1 || x == 3);
+export const isValidX = x => x >= 0 && x < 5;
 
-export const validX = x => x >= 0 && x < 5;
-
-export const validY = y => y >= 0 && y < 13;
+export const isValidY = y => y >= 0 && y < 12;
 
 export const isRailroad = (x, y) => {
+    if (!isValidX(x) || !isValidY(y)) {
+        return false;
+    }
     if (x == 0 || x == 4) {
         return y > 0 && y < 12;
     }
-    return y == 1 || y == 5 || y == 7 || y == 11;
+    return y == 1 || y == 5 || y == 6 || y == 10;
 }
 
-export const isValidDestination = (board, x, y, affiliation) => validX(x) && validY(y) && board[y][x].affiliation !== affiliation;
+export const isValidDestination = (board, x, y, affiliation) => isValidX(x) && isValidY(y) && board[y][x].affiliation !== affiliation;
 
 export const notRailroadSuccessors = (board, x, y , affiliation) => {
     const moves = [];
@@ -109,4 +106,11 @@ export const notRailroadSuccessors = (board, x, y , affiliation) => {
         }
     }
     return moves;
+}
+
+export const placePiece = (board, x, y, piece) => {
+    if (!isValidX(x) || !isValidY(y)) {
+        throw 'Invalid position passed';
+    }
+    return board.map((row, i) => row.map((cell, j) => i == x && j == y ? piece : cell));
 }
