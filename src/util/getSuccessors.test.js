@@ -1,29 +1,23 @@
 import getSuccessors, {
-  isMountainPass,
-  validX,
-  validY,
+  isValidX,
+  isValidY,
   isRailroad,
   isValidDestination,
   notRailroadSuccessors,
+  placePiece,
 } from "./getSuccessors";
+import Piece from "./piece";
 
-test("[1, 6] should be a mountain pass", () =>
-  expect(isMountainPass(1, 6)).toBe(true));
-test("[3, 6] should be a mountain pass", () =>
-  expect(isMountainPass(3, 6)).toBe(true));
-test("[1, 1] should not be a mountain pass", () =>
-  expect(isMountainPass(1, 1)).toBe(false));
+test("-1 should not be a valid x value", () => expect(isValidX(-1)).toBe(false));
+test("0 should be a valid x value", () => expect(isValidX(0)).toBe(true));
+test("4 should be a valid x value", () => expect(isValidX(4)).toBe(true));
+test("5 should not be a valid x value", () => expect(isValidX(5)).toBe(false));
 
-test("-1 should not be a valid y value", () => expect(validY(-1)).toBe(false));
-test("0 should be a valid y value", () => expect(validY(0)).toBe(true));
-test("5 should be a valid y value", () => expect(validY(5)).toBe(true));
-test("12 should be a valid y value", () => expect(validY(12)).toBe(true));
-test("13 should not be a valid y value", () => expect(validY(13)).toBe(false));
-
-test("-1 should not be a valid x value", () => expect(validX(-1)).toBe(false));
-test("0 should be a valid x value", () => expect(validX(0)).toBe(true));
-test("4 should be a valid x value", () => expect(validX(4)).toBe(true));
-test("5 should not be a valid x value", () => expect(validX(5)).toBe(false));
+test("-1 should not be a valid y value", () => expect(isValidY(-1)).toBe(false));
+test("0 should be a valid y value", () => expect(isValidY(0)).toBe(true));
+test("5 should be a valid y value", () => expect(isValidY(5)).toBe(true));
+test("11 should be a valid y value", () => expect(isValidY(11)).toBe(true));
+test("12 should not be a valid y value", () => expect(isValidY(12)).toBe(false));
 
 const generateRow = y => [...Array(4).keys()].map(x => [x, y]);
 
@@ -39,19 +33,20 @@ test("[0, 5] to [4, 5] should be valid railroad coordinates", () =>
     true
 ));
 
-const botMidRailCoords = generateRow(7);
-test("[0, 7] to [4, 7] should be valid railroad coordinates", () =>
+const botMidRailCoords = generateRow(6);
+test("[0, 6] to [4, 6] should be valid railroad coordinates", () =>
   expect(botMidRailCoords.map(([x, y]) => isRailroad(x, y)).every((v) => v)).toBe(
     true
 ));
 
-const botRailCoords = generateRow(11);
-test("[0, 11] to [4, 11] should be valid railroad coordinates", () =>
+const botRailCoords = generateRow(10);
+test("[0, 10] to [4, 10] should be valid railroad coordinates", () =>
   expect(botRailCoords.map(([x, y]) => isRailroad(x, y)).every((v) => v)).toBe(
     true
 ));
 
-const generateCol = x => [...Array(13).keys()].map(y => [x, y]);
+const generateCol = x => [...Array(12).keys()].map(y => [x, y]);
+
 const leftCol = generateCol(0).slice(1, -1);
 test("[0, 1] to [0, 11] should be valid railroad coordinates", () =>
   expect(leftCol.map(([x, y]) => isRailroad(x, y)).every((v) => v)).toBe(
@@ -64,3 +59,21 @@ test("[4, 1] to [4, 11] should be valid railroad coordinates", () =>
     true
 ));
 
+let board = Array(12).fill(Array(5).fill(null));
+
+test('out of bound x move [-1, 5] should not be valid', () => (
+  expect(isValidDestination(board, -1, 5, 0)).toBe(false)
+));
+
+test('out of bound y move [0, -1] should not be valid', () => (
+  expect(isValidDestination(board, 0, -1, 0)).toBe(false)
+));
+
+board = placePiece(board, 0, 0, Piece('Marshal', 0));
+test('[0, 0] should be an invalid destination for affiliation 0', () => (
+  expect(isValidDestination(board, 0, 0, 0)).toBe(false)
+));
+test('[0, 0] should be a valid destination for affiliation 1', () => (
+  expect(isValidDestination(board, 0, 0, 1)).toBe(true)
+));
+console.log(board)
