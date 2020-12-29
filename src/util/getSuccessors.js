@@ -1,10 +1,29 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-throw-literal */
+export const isValidX = (x) => x >= 0 && x < 5;
+
+export const isValidY = (y) => y >= 0 && y < 12;
+
+export const isValidDestination = (board, x, y, affiliation) =>
+  isValidX(x) && isValidY(y) && board[y][x].affiliation !== affiliation;
+
+export const isRailroad = (x, y) => {
+  if (!isValidX(x) || !isValidY(y)) {
+    return false;
+  }
+  if (x === 0 || x === 4) {
+    return y > 0 && y < 12;
+  }
+  return y === 1 || y === 5 || y === 6 || y === 10;
+};
+
 export default function getSuccessors(board, adjList, x, y, affiliation) {
   // validate the board
-  if (board.length != 12) {
+  if (board.length !== 12) {
     throw "Invalid number of rows";
   }
 
-  if (!board.every((row) => row.length == 5)) {
+  if (!board.every((row) => row.length === 5)) {
     throw "Invalid number of columns";
   }
 
@@ -20,12 +39,12 @@ export default function getSuccessors(board, adjList, x, y, affiliation) {
   const piece = board[y][x];
 
   // get the piece type
-  if (piece == null || piece == "landmine" || piece == "flag") {
+  if (piece == null || piece === "landmine" || piece === "flag") {
     return [];
   }
 
   const railroadMoves = new Set();
-  if (piece == "engineer") {
+  if (piece === "engineer") {
     if (isRailroad(x, y)) {
       // perform dfs to find availible moves
       const stack = [[x, y]];
@@ -38,13 +57,14 @@ export default function getSuccessors(board, adjList, x, y, affiliation) {
       ];
 
       while (stack) {
+        let [curX, curY] = null;
         [curX, curY] = stack.pop();
 
         visited.add([curX, curY]);
 
         if (isValidDestination(board, curX, curY, affiliation)) {
           // don't add the first location
-          if (!(curX == x && curY == y)) {
+          if (!(curX === x && curY === y)) {
             railroadMoves.add(JSON.stringify([curX, curY]));
           }
           directions.forEach((incX, incY) => {
@@ -55,35 +75,36 @@ export default function getSuccessors(board, adjList, x, y, affiliation) {
           });
         }
       }
-    } else {
-      if (isRailroad(x, y)) {
-        const directions = [
-          [-1, 0],
-          [0, -1],
-          [1, 0],
-          [0, 1],
-        ];
-        directions.forEach((direction) => {
-          const [incX, incY] = direction;
+    } else if (isRailroad(x, y)) {
+      const directions = [
+        [-1, 0],
+        [0, -1],
+        [1, 0],
+        [0, 1],
+      ];
+      directions.forEach((direction) => {
+        const [incX, incY] = direction;
 
-          let curX = x + incX;
-          let curY = y + incY;
-          while (isValidDestination(board, curX, curY, affiliation)) {
-            railroadMoves.add(JSON.stringify([curX, curY]));
-            curX += incX;
-            curY += incY;
-          }
-        });
-      }
+        let curX = x + incX;
+        let curY = y + incY;
+        while (isValidDestination(board, curX, curY, affiliation)) {
+          railroadMoves.add(JSON.stringify([curX, curY]));
+          curX += incX;
+          curY += incY;
+        }
+      });
     }
   }
-  const jsonMoves = new Set([...railroadMoves, ...adjList.get(JSON.stringify([x, y]))]);
+  const jsonMoves = new Set([
+    ...railroadMoves,
+    ...adjList.get(JSON.stringify([x, y])),
+  ]);
   return [...jsonMoves].map((m) => JSON.parse(m));
 }
 
 export const isCamp = (x, y) =>
-  ((x == 1 || x == 3) && (y == 2 || y == 4 || y == 7 || y == 9)) ||
-  (x == 2 && (y == 3 || y == 8));
+  ((x === 1 || x === 3) && (y === 2 || y === 4 || y === 7 || y === 9)) ||
+  (x === 2 && (y === 3 || y === 8));
 
 // note that the coordinates are stored in a JSON format
 export const generateAdjList = () => {
@@ -138,28 +159,11 @@ export const generateAdjList = () => {
   return adjList;
 };
 
-export const isValidX = (x) => x >= 0 && x < 5;
-
-export const isValidY = (y) => y >= 0 && y < 12;
-
-export const isRailroad = (x, y) => {
-  if (!isValidX(x) || !isValidY(y)) {
-    return false;
-  }
-  if (x == 0 || x == 4) {
-    return y > 0 && y < 12;
-  }
-  return y == 1 || y == 5 || y == 6 || y == 10;
-};
-
-export const isValidDestination = (board, x, y, affiliation) =>
-  isValidX(x) && isValidY(y) && board[y][x].affiliation !== affiliation;
-
 export const placePiece = (board, x, y, piece) => {
   if (!isValidX(x) || !isValidY(y)) {
     throw "Invalid position passed";
   }
   return board.map((row, i) =>
-    row.map((cell, j) => (i == x && j == y ? piece : cell))
+    row.map((cell, j) => (i === x && j === y ? piece : cell))
   );
 };
