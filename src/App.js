@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 /* eslint-disable no-console */
 import React, { useEffect, useState, useMemo } from "react";
 import { io } from "socket.io-client";
