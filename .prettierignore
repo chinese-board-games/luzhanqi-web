@@ -1,0 +1,9 @@
+# Ignore artifacts:
+build
+coverage
+
+# github actions
+.github
+
+# node modules
+node_modules
