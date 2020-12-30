@@ -1,4 +1,4 @@
-const pieces = {
+export const pieces = {
   bomb: { count: 2, order: -1 },
   brigadier_general: { count: 2, order: 6 },
   captain: { count: 3, order: 3 },
@@ -13,15 +13,22 @@ const pieces = {
   major: { count: 2, order: 4 },
 };
 
-export default (name, affiliation) => {
+/**
+ * Initializes and returns a piece object
+ * @param {String} name the name of the piece, should be a key in pieces object
+ * @param {Number} affiliation 0 for host, increments by 1 for additional players
+ * @returns {Object} new Piece object
+ */
+const Piece = (name, affiliation) => {
   if (!pieces[name]) {
     throw Error("Invalid piece name provided");
   }
   return {
     name,
     affiliation,
-    ...pieces[name],
+    order: pieces[name].order,
     kills: 0,
-    alive: true,
   };
 };
+
+export default Piece;
