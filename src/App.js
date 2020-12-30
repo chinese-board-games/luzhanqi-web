@@ -1,16 +1,16 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
-
 import {
   uniqueNamesGenerator,
   animals,
   starWars,
 } from "unique-names-generator";
+import Piece, { pieces } from "./util/piece";
 
 const socket = io("localhost:4000");
 
@@ -38,6 +38,7 @@ function App() {
   const [myPositions, setMyPositions] = useState(
     Array(6).fill(Array(5).fill(null))
   );
+  const [submittedSide, setSubmittedSide] = useState(false);
 
   /**
    * Game phases:
@@ -62,25 +63,6 @@ function App() {
   // const [startingBoard, setStartingBoard] = useState();
   const [error, setError] = useState("");
 
-  /** Piece names for Luzhanqi */
-  const pieces = useMemo(
-    () => ({
-      bomb: { count: 2, order: 0 },
-      brigadier_general: { count: 2, order: 6 },
-      captain: { count: 3, order: 3 },
-      colonel: { count: 2, order: 5 },
-      engineer: { count: 3, order: 1 },
-      field_marshall: { count: 1, order: 9 },
-      flag: { count: 1, order: 0 },
-      general: { count: 1, order: 8 },
-      landmine: { count: 3, order: 0 },
-      lieutenant: { count: 3, order: 2 },
-      major_general: { count: 2, order: 7 },
-      major: { count: 2, order: 4 },
-    }),
-    []
-  );
-
   useEffect(() => {
     if (playerList.length > 0) {
       let newHalf = Array(6).fill(null);
@@ -89,16 +71,15 @@ function App() {
         const yX = pos.split(",").map((num) => parseInt(num, 10));
         // console.log(`y: ${yX[0]} x: ${yX[1]}, name: ${name}`);
         if (name !== "none") {
-          newHalf[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = {
+          newHalf[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = Piece(
             name,
-            order: pieces[`${name}`].order,
-            affiliation: playerList.indexOf(playerName),
-          };
+            playerList.indexOf(playerName)
+          );
         }
       });
       setMyPositions(newHalf);
     }
-  }, [startingBoard, pieces, playerList, playerName]);
+  }, [startingBoard, playerList, playerName]);
 
   /**
    * Socket handlers receive headers and data from SocketIO connection
@@ -138,9 +119,13 @@ function App() {
     });
 
     /** Server is sending the starting board with all placed pieces */
-    socket.on("boardSetUp", ({ board }) => {
-      setMyBoard(board);
+    socket.on("boardSet", (game) => {
+      setMyBoard(game.board);
       setGamePhase(2);
+    });
+
+    socket.on("halfBoardReceived", () => {
+      setSubmittedSide(true);
     });
 
     /** Server is telling all clients a move has been made */
@@ -224,7 +209,11 @@ function App() {
     e.preventDefault();
     console.log("Sending board...");
     console.log(myPositions);
-    socket.emit("playerInitialBoard", { playerName, myPositions });
+    socket.emit("playerInitialBoard", {
+      playerName,
+      myPositions,
+      room: roomId,
+    });
   };
 
   /** Send a move to the server */
@@ -248,12 +237,6 @@ function App() {
       }}
     >
       <div style={{ width: "35em" }}>
-        <div>
-          {Object.keys(pieces).map((name) => (
-            <img key={name} src={`pieces/${name}.svg`} alt={name} />
-          ))}
-        </div>
-
         {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
 
         <Form onSubmit={submitDebug}>
@@ -334,7 +317,7 @@ function App() {
                       type="text"
                       name="name"
                       placeholder="Ex. 12345"
-                      onChange={(e) => setRoomId(e.target.value)}
+                      onChange={(e) => setRoomId(e.target.value.toString())}
                     />
                     <br />
                     <Button variant="primary" type="submit">
@@ -347,7 +330,7 @@ function App() {
           ) : null
         }
         {/* {displayTimer && countdown > 0 ? <h1>{countdown}</h1> : null} */}
-        {gamePhase === 1 ? (
+        {gamePhase === 1 && !submittedSide ? (
           <>
             <h2>Frontier</h2>
             <Form
@@ -384,6 +367,8 @@ function App() {
             </Button>
           </>
         ) : null}
+
+        {submittedSide ? <h2>Waiting for other player</h2> : null}
 
         {gamePhase === 2 ? (
           <>
