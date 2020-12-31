@@ -1,11 +1,43 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-throw-literal */
+
+/**
+ * Checks validity of row index
+ * @param {Number} x the x value (column) of a coordinate pair
+ * @returns {boolean} whether the column index is within board bounds
+ * @see isValidX
+ */
+
 export const isValidX = (x) => x >= 0 && x < 5;
+
+/**
+ * Checks validity of column index
+ * @param {Number} y the y value (row) of a coordinate pair
+ * @returns {boolean} whether the row index is within board bounds
+ * @see isValidY
+ */
 
 export const isValidY = (y) => y >= 0 && y < 12;
 
+/**
+ * Checks validity of coordinate pair as piece destination
+ * @param {Object} board the Board object as defined in the backend Schema
+ * @param {Number} x the column of the target coordinate pair
+ * @param {Number} y the row of the target coordinate pair
+ * @param {Number} affiliation 0 for host, increments by 1 for additional players
+ * @returns {boolean} whether the target destination is valid
+ * @see isValidDestination
+ */
+
 export const isValidDestination = (board, x, y, affiliation) =>
   isValidX(x) && isValidY(y) && board[y][x].affiliation !== affiliation;
+
+/**
+ * Checks whether the space is a railroad tile
+ * @param {Number} x the column of the target coordinate pair
+ * @param {Number} y the row of the target coordinate pair
+ * @returns {boolean} whether the space is a railroad tile
+ */
 
 export const isRailroad = (x, y) => {
   if (!isValidX(x) || !isValidY(y)) {
@@ -16,6 +48,17 @@ export const isRailroad = (x, y) => {
   }
   return y === 1 || y === 5 || y === 6 || y === 10;
 };
+
+/**
+ * Gets a list of possible positions the piece at a given coordinate pair can travel to
+ * @param {Object} board the Board object as defined in the backend Schema
+ * @param {Number} x the column of the source coordinate pair
+ * @param {Number} y the row of the source coordinate pair
+ * @param {Array} adjList a list of lists representing the graph of duplex tile connections
+ * @param {Number} affiliation 0 for host, increments by 1 for additional players
+ * @returns {Array} list of positions that the piece may travel to during its turn
+ * @see getSuccessors
+ */
 
 export default function getSuccessors(board, adjList, x, y, affiliation) {
   // validate the board
@@ -102,10 +145,23 @@ export default function getSuccessors(board, adjList, x, y, affiliation) {
   return [...jsonMoves].map((m) => JSON.parse(m));
 }
 
+/**
+ * Checks whether a given space is a camp tile
+ * @param {Number} x the column of the target coordinate pair
+ * @param {Number} y the row of the target coordinate pair
+ * @returns {boolean} whether the tile is a camp
+ * @see isCamp
+ 
+ */
 export const isCamp = (x, y) =>
   ((x === 1 || x === 3) && (y === 2 || y === 4 || y === 7 || y === 9)) ||
   (x === 2 && (y === 3 || y === 8));
 
+/**
+ * Generates the adjacency graph for a two player Luzhanqi game
+ * @returns {Array<Array>} list of lists indicating duplex tile connections
+ * @see generateAdjList
+ */
 // note that the coordinates are stored in a JSON format
 export const generateAdjList = () => {
   const adjList = new Map();
@@ -159,6 +215,13 @@ export const generateAdjList = () => {
   return adjList;
 };
 
+/**
+ *
+ * @param {Object} board the Board object as defined in the backend Schema
+ * @param {Number} x the column of the target coordinate pair
+ * @param {Number} y the row of the target coordinate pair
+ * @param {*} piece a Piece object as defined in Piece.js
+ */
 export const placePiece = (board, x, y, piece) => {
   if (!isValidX(x) || !isValidY(y)) {
     throw "Invalid position passed";
