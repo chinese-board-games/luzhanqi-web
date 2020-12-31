@@ -5,14 +5,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
-import {
-  uniqueNamesGenerator,
-  animals,
-  starWars,
-} from "unique-names-generator";
+import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
 import Piece, { pieces } from "./util/piece";
 
-const socket = io("localhost:4000");
+// const socket = io("localhost:4000");
+const socket = io("https://luzhanqi.herokuapp.com/");
 
 function App() {
   /** debug message sent through socket on PORT */
@@ -20,7 +17,7 @@ function App() {
 
   /** user-input: the user's name */
   const defaultName = uniqueNamesGenerator({
-    dictionaries: [animals, starWars],
+    dictionaries: [colors, animals],
     length: 2,
   });
   const [playerName, setPlayerName] = useState(defaultName);
@@ -368,10 +365,82 @@ function App() {
           </>
         ) : null}
 
-        {submittedSide ? <h2>Waiting for other player</h2> : null}
+        {submittedSide && gamePhase === 1 ? (
+          <h2>Waiting for other player</h2>
+        ) : null}
 
         {gamePhase === 2 ? (
           <>
+            <div
+              style={{
+                backgroundColor: "yellow",
+                display: "inline-flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "1em",
+              }}
+            >
+              {myBoard.slice(0, 6).map((row) => (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "nowrap",
+                  }}
+                >
+                  {row.map((piece) => (
+                    <>
+                      {piece === null ? (
+                        <img src="pieces/blank.svg" alt="blank" />
+                      ) : (
+                        <div
+                          role="button"
+                          onClick={() => {}}
+                          onKeyDown={() => {}}
+                          tabIndex={0}
+                        >
+                          <img
+                            src={`pieces/${piece.name}.svg`}
+                            alt={piece.name}
+                          />
+                        </div>
+                      )}
+                    </>
+                  ))}
+                </div>
+              ))}
+              <h3>Mountain pass</h3>
+              {myBoard.slice(6).map((row) => (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "nowrap",
+                  }}
+                >
+                  {row.map((piece) => (
+                    <>
+                      {piece === null ? (
+                        <img src="pieces/blank.svg" alt="blank" />
+                      ) : (
+                        <div
+                          role="button"
+                          onClick={() => {}}
+                          onKeyDown={() => {}}
+                          tabIndex={0}
+                        >
+                          <img
+                            src={`pieces/${piece.name}.svg`}
+                            alt={piece.name}
+                          />
+                        </div>
+                      )}
+                    </>
+                  ))}
+                </div>
+              ))}
+            </div>
             <img src="board.svg" alt="board" />
             {(host && clientTurn % 2 === 0) ||
             (!host && clientTurn % 2 === 1) ? (
