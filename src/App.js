@@ -6,14 +6,15 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
+import { isEqual } from "lodash";
 import Piece, { pieces } from "./util/piece";
 
-// const socket = io("localhost:4000");
-const socket = io("https://luzhanqi.herokuapp.com/");
+const socket = io("localhost:4000");
+// const socket = io("https://luzhanqi.herokuapp.com/");
 
 function App() {
   /** debug message sent through socket on PORT */
-  const [socketText, setSocketText] = useState("");
+  // const [socketText, setSocketText] = useState("");
 
   /** user-input: the user's name */
   const defaultName = uniqueNamesGenerator({
@@ -36,6 +37,10 @@ function App() {
     Array(6).fill(Array(5).fill(null))
   );
   const [submittedSide, setSubmittedSide] = useState(false);
+  const [pendingMove, setPendingMove] = useState({
+    source: [],
+    target: [],
+  });
 
   /**
    * Game phases:
@@ -66,7 +71,6 @@ function App() {
       newHalf = newHalf.map(() => new Array(5).fill(null));
       Object.entries(startingBoard).forEach(([pos, name]) => {
         const yX = pos.split(",").map((num) => parseInt(num, 10));
-        // console.log(`y: ${yX[0]} x: ${yX[1]}, name: ${name}`);
         if (name !== "none") {
           newHalf[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = Piece(
             name,
@@ -129,6 +133,7 @@ function App() {
     socket.on("playerMadeMove", (data) => {
       console.log("Move has been made", data);
       setClientTurn(data.turn);
+      setMyBoard(data.board);
     });
 
     /** Server is returning an error message to the client */
@@ -178,12 +183,12 @@ function App() {
     socket.emit("hostRoomFull", roomId);
   };
 
-  /** Send debug message to server */
-  const submitDebug = (e) => {
-    e.preventDefault();
-    console.log(`emitting: ${socketText}`);
-    socket.emit(socketText);
-  };
+  // /** Send debug message to server */
+  // const submitDebug = (e) => {
+  //   e.preventDefault();
+  //   console.log(`emitting: ${socketText}`);
+  //   socket.emit(socketText);
+  // };
 
   /** Attempt to join a game by game ID */
   const joinGame = (e) => {
@@ -216,12 +221,28 @@ function App() {
   /** Send a move to the server */
   const makeMove = (e) => {
     e.preventDefault();
-    console.log("Making move...");
     socket.emit("makeMove", {
       playerName,
-      gameId: roomId,
+      room: roomId,
       turn: clientTurn,
+      pendingMove,
     });
+    setPendingMove({ source: [], target: [] });
+  };
+
+  const setMove = (y, x) => {
+    if (pendingMove.source.length > 0) {
+      if (isEqual(pendingMove.source, [y, x])) {
+        setPendingMove({
+          source: [],
+          target: [],
+        });
+      } else {
+        setPendingMove((prevState) => ({ ...prevState, target: [y, x] }));
+      }
+    } else {
+      setPendingMove({ source: [y, x], target: [] });
+    }
   };
 
   return (
@@ -236,7 +257,7 @@ function App() {
       <div style={{ width: "35em" }}>
         {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
 
-        <Form onSubmit={submitDebug}>
+        {/* <Form onSubmit={submitDebug}>
           <Form.Label>DANGER Emit to socket:</Form.Label>
           <Form.Control
             type="text"
@@ -248,30 +269,30 @@ function App() {
           <Button variant="danger" type="submit">
             Submit
           </Button>
-        </Form>
+        </Form> */}
 
         <h1>Players</h1>
-        {playerList.map((name) => (
-          <div key={name}>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          {playerList.map((name) => (
             <div
+              key={name}
               style={{
-                display: "flex",
+                display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                paddingTop: "5em",
-                paddingBottom: "5em",
-                paddingLeft: "2em",
-                paddingRight: "2em",
-                marginBottom: "1em",
-                border: "0.5em solid red",
-                borderRadius: "1em",
-                width: "35em",
+                paddingTop: "0.5em",
+                paddingBottom: "0.5em",
+                paddingLeft: "0.5em",
+                paddingRight: "0.5em",
+                margin: "0.5em",
+                border: "0.2em solid green",
+                borderRadius: "0.5em",
               }}
             >
-              <h1>{name}</h1>
+              <h5 style={{ fontWeight: "bold", margin: 0 }}>{name}</h5>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
         <br />
         {roomId ? null : (
           <Button
@@ -289,14 +310,17 @@ function App() {
             <>
               <h3>{joinedGame}</h3>
               {host ? (
-                <Button
-                  type="button"
-                  variant="success"
-                  onClick={roomFull}
-                  style={{ width: "7em" }}
-                >
-                  Room Full
-                </Button>
+                <>
+                  <h3>Click &quot;Room Full&quot; to begin the game</h3>
+                  <Button
+                    type="button"
+                    variant="success"
+                    onClick={roomFull}
+                    style={{ width: "7em" }}
+                  >
+                    Room Full
+                  </Button>
+                </>
               ) : null}
               {host || joinedGame ? null : (
                 <>
@@ -381,67 +405,79 @@ function App() {
                 padding: "1em",
               }}
             >
-              {myBoard.slice(0, 6).map((row) => (
+              {myBoard.slice(0, 6).map((row, y) => (
                 <div
+                  key={`game_row_${y + 1}`}
                   style={{
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "nowrap",
                   }}
                 >
-                  {row.map((piece) => (
-                    <>
+                  {row.map((piece, x) => (
+                    <div
+                      key={`game_piece_${[y + 1, x + 1]}`}
+                      role="button"
+                      onClick={() => setMove(y, x)}
+                      onKeyDown={() => {}}
+                      tabIndex={0}
+                    >
                       {piece === null ? (
-                        <img src="pieces/blank.svg" alt="blank" />
+                        <img
+                          key={`game_blank_${[y + 1, x + 1]}`}
+                          src="pieces/blank.svg"
+                          alt="blank"
+                        />
                       ) : (
-                        <div
-                          role="button"
-                          onClick={() => {}}
-                          onKeyDown={() => {}}
-                          tabIndex={0}
-                        >
-                          <img
-                            src={`pieces/${piece.name}.svg`}
-                            alt={piece.name}
-                          />
-                        </div>
+                        <img
+                          key={`game_piece_image_${[y + 1, x + 1]}`}
+                          src={`pieces/${piece.name}.svg`}
+                          alt={piece.name}
+                        />
                       )}
-                    </>
+                    </div>
                   ))}
                 </div>
               ))}
               <h3>Mountain pass</h3>
-              {myBoard.slice(6).map((row) => (
+              {myBoard.slice(6).map((row, y) => (
                 <div
+                  key={`game_row_${y + 7}`}
                   style={{
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "nowrap",
                   }}
                 >
-                  {row.map((piece) => (
-                    <>
+                  {row.map((piece, x) => (
+                    <div
+                      key={`game_piece_${[y + 7, x + 1]}`}
+                      role="button"
+                      onClick={() => setMove(y + 6, x)}
+                      onKeyDown={() => {}}
+                      tabIndex={0}
+                    >
                       {piece === null ? (
-                        <img src="pieces/blank.svg" alt="blank" />
+                        <img
+                          key={`game_blank_${[y + 7, x + 1]}`}
+                          src="pieces/blank.svg"
+                          alt="blank"
+                        />
                       ) : (
-                        <div
-                          role="button"
-                          onClick={() => {}}
-                          onKeyDown={() => {}}
-                          tabIndex={0}
-                        >
-                          <img
-                            src={`pieces/${piece.name}.svg`}
-                            alt={piece.name}
-                          />
-                        </div>
+                        <img
+                          key={`game_piece_image_${[y + 7, x + 1]}`}
+                          src={`pieces/${piece.name}.svg`}
+                          alt={piece.name}
+                        />
                       )}
-                    </>
+                    </div>
                   ))}
                 </div>
               ))}
             </div>
-            <img src="board.svg" alt="board" />
+            <h3>Source: {pendingMove.source}</h3>
+            <h3>Target: {pendingMove.target}</h3>
+            {/* <img src="board.svg" alt="board" /> */}
             {(host && clientTurn % 2 === 0) ||
             (!host && clientTurn % 2 === 1) ? (
               <Button type="button" variant="primary" onClick={makeMove}>
@@ -456,8 +492,6 @@ function App() {
         ) : null}
 
         {clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null}
-
-        {host ? <h1>You are the host</h1> : null}
         {error ? <Alert variant="danger">{error}</Alert> : null}
       </div>
     </div>
