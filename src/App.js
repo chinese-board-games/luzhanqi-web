@@ -9,8 +9,8 @@ import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
 import { isEqual } from "lodash";
 import Piece, { pieces } from "./util/piece";
 
-const socket = io("localhost:4000");
-// const socket = io("https://luzhanqi.herokuapp.com/");
+// const socket = io("localhost:4000");
+const socket = io("https://luzhanqi.herokuapp.com/");
 
 function App() {
   /** debug message sent through socket on PORT */
