@@ -6,14 +6,15 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
+import { isEqual } from "lodash";
 import Piece, { pieces } from "./util/piece";
 
-// const socket = io("localhost:4000");
-const socket = io("https://luzhanqi.herokuapp.com/");
+const socket = io("localhost:4000");
+// const socket = io("https://luzhanqi.herokuapp.com/");
 
 function App() {
   /** debug message sent through socket on PORT */
-  const [socketText, setSocketText] = useState("");
+  // const [socketText, setSocketText] = useState("");
 
   /** user-input: the user's name */
   const defaultName = uniqueNamesGenerator({
@@ -36,6 +37,10 @@ function App() {
     Array(6).fill(Array(5).fill(null))
   );
   const [submittedSide, setSubmittedSide] = useState(false);
+  const [pendingMove, setPendingMove] = useState({
+    source: [],
+    target: [],
+  });
 
   /**
    * Game phases:
@@ -66,7 +71,6 @@ function App() {
       newHalf = newHalf.map(() => new Array(5).fill(null));
       Object.entries(startingBoard).forEach(([pos, name]) => {
         const yX = pos.split(",").map((num) => parseInt(num, 10));
-        // console.log(`y: ${yX[0]} x: ${yX[1]}, name: ${name}`);
         if (name !== "none") {
           newHalf[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = Piece(
             name,
@@ -129,6 +133,7 @@ function App() {
     socket.on("playerMadeMove", (data) => {
       console.log("Move has been made", data);
       setClientTurn(data.turn);
+      setMyBoard(data.board);
     });
 
     /** Server is returning an error message to the client */
@@ -178,12 +183,12 @@ function App() {
     socket.emit("hostRoomFull", roomId);
   };
 
-  /** Send debug message to server */
-  const submitDebug = (e) => {
-    e.preventDefault();
-    console.log(`emitting: ${socketText}`);
-    socket.emit(socketText);
-  };
+  // /** Send debug message to server */
+  // const submitDebug = (e) => {
+  //   e.preventDefault();
+  //   console.log(`emitting: ${socketText}`);
+  //   socket.emit(socketText);
+  // };
 
   /** Attempt to join a game by game ID */
   const joinGame = (e) => {
@@ -216,14 +221,64 @@ function App() {
   /** Send a move to the server */
   const makeMove = (e) => {
     e.preventDefault();
-    console.log("Making move...");
-    socket.emit("makeMove", {
-      playerName,
-      gameId: roomId,
-      turn: clientTurn,
-    });
+    if (pendingMove.source.length > 0 && pendingMove.target.length) {
+      socket.emit("makeMove", {
+        playerName,
+        room: roomId,
+        turn: clientTurn,
+        pendingMove,
+      });
+    } else {
+      setError("You must have both a source and target tile");
+    }
+
+    setPendingMove({ source: [], target: [] });
   };
 
+  const setMove = (y, x) => {
+    if (pendingMove.source.length > 0) {
+      console.log(pendingMove.source);
+      const sourcePiece = myBoard[pendingMove.source[0]][pendingMove.source[1]];
+      if (
+        isEqual(pendingMove.source, [y, x]) ||
+        (myBoard[y][x] && myBoard[y][x].affiliation === sourcePiece.affiliation)
+      ) {
+        setPendingMove({
+          source: [],
+          target: [],
+        });
+      } else {
+        setPendingMove((prevState) => ({ ...prevState, target: [y, x] }));
+      }
+    } else if (
+      myBoard[y][x] !== null &&
+      myBoard[y][x].affiliation === playerList.indexOf(playerName)
+    ) {
+      setPendingMove({ source: [y, x], target: [] });
+    }
+  };
+
+  const setExampleOne = () => {
+    const example1 = [
+      ["major_general", "lieutenant", "colonel", "engineer", "major_general"],
+      ["engineer", "none", "field_marshall", "none", "engineer"],
+      ["colonel", "lieutenant", "none", "bomb", "major"],
+      ["brigadier_general", "none", "brigadier_general", "none", "lieutenant"],
+      ["bomb", "landmine", "general", "captain", "captain"],
+      ["landmine", "flag", "major", "landmine", "captain"],
+    ];
+
+    const exampleBoard = {};
+    example1.forEach((row, y) => {
+      row.forEach((pieceName, x) => {
+        const pos = [y, x];
+        exampleBoard[pos] = pieceName;
+      });
+    });
+    setStartingBoard(exampleBoard);
+  };
+
+  console.log(myBoard);
   return (
     <div
       style={{
@@ -234,9 +289,10 @@ function App() {
       }}
     >
       <div style={{ width: "35em" }}>
+        <h1>陸戰棋 Luzhanqi</h1>
         {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
 
-        <Form onSubmit={submitDebug}>
+        {/* <Form onSubmit={submitDebug}>
           <Form.Label>DANGER Emit to socket:</Form.Label>
           <Form.Control
             type="text"
@@ -248,30 +304,31 @@ function App() {
           <Button variant="danger" type="submit">
             Submit
           </Button>
-        </Form>
+        </Form> */}
 
-        <h1>Players</h1>
-        {playerList.map((name) => (
-          <div key={name}>
+        {playerList.length > 0 ? <h2>Players</h2> : null}
+
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          {playerList.map((name) => (
             <div
+              key={name}
               style={{
-                display: "flex",
+                display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                paddingTop: "5em",
-                paddingBottom: "5em",
-                paddingLeft: "2em",
-                paddingRight: "2em",
-                marginBottom: "1em",
-                border: "0.5em solid red",
-                borderRadius: "1em",
-                width: "35em",
+                paddingTop: "0.5em",
+                paddingBottom: "0.5em",
+                paddingLeft: "0.5em",
+                paddingRight: "0.5em",
+                margin: "0.5em",
+                border: "0.2em solid green",
+                borderRadius: "0.5em",
               }}
             >
-              <h1>{name}</h1>
+              <h5 style={{ fontWeight: "bold", margin: 0 }}>{name}</h5>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
         <br />
         {roomId ? null : (
           <Button
@@ -289,14 +346,17 @@ function App() {
             <>
               <h3>{joinedGame}</h3>
               {host ? (
-                <Button
-                  type="button"
-                  variant="success"
-                  onClick={roomFull}
-                  style={{ width: "7em" }}
-                >
-                  Room Full
-                </Button>
+                <>
+                  <h3>Click &quot;Room Full&quot; to begin the game</h3>
+                  <Button
+                    type="button"
+                    variant="success"
+                    onClick={roomFull}
+                    style={{ width: "7em" }}
+                  >
+                    Room Full
+                  </Button>
+                </>
               ) : null}
               {host || joinedGame ? null : (
                 <>
@@ -359,6 +419,9 @@ function App() {
                 </Form.Group>
               ))}
             </Form>
+            <Button type="button" variant="secondary" onClick={setExampleOne}>
+              Set Example 1
+            </Button>
             <Button type="button" variant="info" onClick={sendStartingBoard}>
               Send Board Placement
             </Button>
@@ -371,9 +434,228 @@ function App() {
 
         {gamePhase === 2 ? (
           <>
+            <svg
+              style={{ position: "absolute", width: "582px" }}
+              viewBox="0 0 582 1006"
+            >
+              <g>
+                <rect
+                  style={{ fill: "none" }}
+                  x="12%"
+                  y="5%"
+                  width="76%"
+                  height="90%"
+                  stroke="black"
+                  strokeWidth="0.25em"
+                />
+                <line
+                  x1="50%"
+                  y1="5%"
+                  x2="50%"
+                  y2="95%"
+                  stroke="black"
+                  strokeWidth="0.25em"
+                />
+                <g>
+                  <circle
+                    style={{ fill: "white" }}
+                    cx="50%"
+                    cy="26.65%"
+                    r={45}
+                  />
+                  <text
+                    fontSize={35}
+                    x="50%"
+                    y="26.65%"
+                    textAnchor="middle"
+                    stroke="black"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    行營
+                  </text>
+                </g>
+
+                <g>
+                  <circle
+                    style={{ fill: "white" }}
+                    cx="31%"
+                    cy="19.45%"
+                    r={45}
+                  />
+                  <text
+                    fontSize={35}
+                    x="31%"
+                    y="19.45%"
+                    textAnchor="middle"
+                    stroke="black"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    行營
+                  </text>
+                </g>
+                <g>
+                  <circle
+                    style={{ fill: "white" }}
+                    cx="69%"
+                    cy="19.45%"
+                    r={45}
+                  />
+                  <text
+                    fontSize={35}
+                    x="69%"
+                    y="19.45%"
+                    textAnchor="middle"
+                    stroke="black"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    行營
+                  </text>
+                </g>
+
+                <g>
+                  <circle
+                    style={{ fill: "white" }}
+                    cx="31%"
+                    cy="33.75%"
+                    r={45}
+                  />
+                  <text
+                    fontSize={35}
+                    x="31%"
+                    y="33.75%"
+                    textAnchor="middle"
+                    stroke="black"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    行營
+                  </text>
+                </g>
+                <g>
+                  <circle
+                    style={{ fill: "white" }}
+                    cx="69%"
+                    cy="33.75%"
+                    r={45}
+                  />
+                  <text
+                    fontSize={35}
+                    x="69%"
+                    y="33.75%"
+                    textAnchor="middle"
+                    stroke="black"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    行營
+                  </text>
+                </g>
+
+                <g>
+                  <circle
+                    style={{ fill: "white" }}
+                    cx="50%"
+                    cy="73.35%"
+                    r={45}
+                  />
+                  <text
+                    fontSize={35}
+                    x="50%"
+                    y="73.35%"
+                    textAnchor="middle"
+                    stroke="black"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    行營
+                  </text>
+                </g>
+
+                <g>
+                  <circle
+                    style={{ fill: "white" }}
+                    cx="31%"
+                    cy="80.55%"
+                    r={45}
+                  />
+                  <text
+                    fontSize={35}
+                    x="31%"
+                    y="80.55%"
+                    textAnchor="middle"
+                    stroke="black"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    行營
+                  </text>
+                </g>
+                <g>
+                  <circle
+                    style={{ fill: "white" }}
+                    cx="69%"
+                    cy="80.55%"
+                    r={45}
+                  />
+                  <text
+                    fontSize={35}
+                    x="69%"
+                    y="80.55%"
+                    textAnchor="middle"
+                    stroke="black"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    行營
+                  </text>
+                </g>
+
+                <g>
+                  <circle
+                    style={{ fill: "white" }}
+                    cx="31%"
+                    cy="66.25%"
+                    r={45}
+                  />
+                  <text
+                    fontSize={35}
+                    x="31%"
+                    y="66.25%"
+                    textAnchor="middle"
+                    stroke="black"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    行營
+                  </text>
+                </g>
+                <g>
+                  <circle
+                    style={{ fill: "white" }}
+                    cx="69%"
+                    cy="66.25%"
+                    r={45}
+                  />
+                  <text
+                    fontSize={35}
+                    x="69%"
+                    y="66.25%"
+                    textAnchor="middle"
+                    stroke="black"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    行營
+                  </text>
+                </g>
+              </g>
+            </svg>
             <div
               style={{
-                backgroundColor: "yellow",
+                backgroundColor: "#4F7276",
                 display: "inline-flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -381,67 +663,173 @@ function App() {
                 padding: "1em",
               }}
             >
-              {myBoard.slice(0, 6).map((row) => (
+              {myBoard.slice(0, 6).map((row, y) => (
                 <div
+                  key={`game_row_${y + 1}`}
                   style={{
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "nowrap",
+                    zIndex: 0,
                   }}
                 >
-                  {row.map((piece) => (
-                    <>
+                  {row.map((piece, x) => (
+                    <div
+                      key={`game_piece_${[y + 1, x + 1]}`}
+                      role="button"
+                      onClick={() => setMove(y, x)}
+                      onKeyDown={() => {}}
+                      tabIndex={0}
+                      style={{ margin: "1em" }}
+                    >
                       {piece === null ? (
-                        <img src="pieces/blank.svg" alt="blank" />
+                        <img
+                          key={`game_blank_${[y + 1, x + 1]}`}
+                          src="pieces/blank.svg"
+                          alt="blank"
+                        />
                       ) : (
-                        <div
-                          role="button"
-                          onClick={() => {}}
-                          onKeyDown={() => {}}
-                          tabIndex={0}
-                        >
-                          <img
-                            src={`pieces/${piece.name}.svg`}
-                            alt={piece.name}
-                          />
-                        </div>
+                        <img
+                          key={`game_piece_image_${[y + 1, x + 1]}`}
+                          src={
+                            playerList.indexOf(playerName) === piece.affiliation
+                              ? `pieces/${piece.name}.svg`
+                              : `pieces/enemy/${piece.name}_enemy.svg`
+                          }
+                          alt={piece.name}
+                        />
                       )}
-                    </>
+                    </div>
                   ))}
                 </div>
               ))}
-              <h3>Mountain pass</h3>
-              {myBoard.slice(6).map((row) => (
+              {/* <h3>Mountain pass</h3> */}
+              <svg viewBox="0 0 100 20">
+                {/* <line x1={10} y1="0" x2={10} y2={20} stroke="black" />
+                <line x1={50} y1="0" x2={50} y2={20} stroke="black" />
+                <line x1={90} y1="0" x2={90} y2={20} stroke="black" /> */}
+
+                <g>
+                  <rect
+                    style={{ fill: "black" }}
+                    x="2.5%"
+                    y="18%"
+                    width="15%"
+                    height="60%"
+                    stroke="black"
+                    strokeWidth="0.05em"
+                  />
+                  <text
+                    fontSize={5}
+                    x="5%"
+                    y="24%"
+                    textAnchor="middle"
+                    stroke="white"
+                    strokeWidth="0.3px"
+                    dy="1.3em"
+                    dx="1em"
+                  >
+                    前站
+                  </text>
+                </g>
+
+                <g>
+                  <rect
+                    style={{ fill: "black" }}
+                    x="82.5%"
+                    y="18%"
+                    width="15%"
+                    height="60%"
+                    stroke="black"
+                    strokeWidth="0.05em"
+                  />
+                  <text
+                    fontSize={5}
+                    x="85%"
+                    y="24%"
+                    textAnchor="middle"
+                    stroke="white"
+                    strokeWidth="0.3px"
+                    dy="1.3em"
+                    dx="1em"
+                  >
+                    前站
+                  </text>
+                </g>
+
+                <g>
+                  <circle cx={30} cy={10} r={8} fill="red" />
+                  <text
+                    fontSize={7}
+                    x="30%"
+                    y="50%"
+                    textAnchor="middle"
+                    stroke="white"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    山界
+                  </text>
+                </g>
+                <g>
+                  <circle cx={70} cy={10} r={8} fill="red" />
+                  <text
+                    fontSize={7}
+                    x="70%"
+                    y="50%"
+                    textAnchor="middle"
+                    stroke="white"
+                    strokeWidth="0.5px"
+                    dy=".3em"
+                  >
+                    山界
+                  </text>
+                </g>
+              </svg>
+              {myBoard.slice(6).map((row, y) => (
                 <div
+                  key={`game_row_${y + 7}`}
                   style={{
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "nowrap",
+                    zIndex: 0,
                   }}
                 >
-                  {row.map((piece) => (
-                    <>
+                  {row.map((piece, x) => (
+                    <div
+                      key={`game_piece_${[y + 7, x + 1]}`}
+                      role="button"
+                      onClick={() => setMove(y + 6, x)}
+                      onKeyDown={() => {}}
+                      tabIndex={0}
+                      style={{ margin: "1em" }}
+                    >
                       {piece === null ? (
-                        <img src="pieces/blank.svg" alt="blank" />
+                        <img
+                          key={`game_blank_${[y + 7, x + 1]}`}
+                          src="pieces/blank.svg"
+                          alt="blank"
+                        />
                       ) : (
-                        <div
-                          role="button"
-                          onClick={() => {}}
-                          onKeyDown={() => {}}
-                          tabIndex={0}
-                        >
-                          <img
-                            src={`pieces/${piece.name}.svg`}
-                            alt={piece.name}
-                          />
-                        </div>
+                        <img
+                          key={`game_piece_image_${[y + 7, x + 1]}`}
+                          src={
+                            playerList.indexOf(playerName) === piece.affiliation
+                              ? `pieces/${piece.name}.svg`
+                              : `pieces/enemy/${piece.name}_enemy.svg`
+                          }
+                          alt={piece.name}
+                        />
                       )}
-                    </>
+                    </div>
                   ))}
                 </div>
               ))}
             </div>
-            <img src="board.svg" alt="board" />
+            <h3>Source: {pendingMove.source}</h3>
+            <h3>Target: {pendingMove.target}</h3>
+            {/* <img src="board.svg" alt="board" /> */}
             {(host && clientTurn % 2 === 0) ||
             (!host && clientTurn % 2 === 1) ? (
               <Button type="button" variant="primary" onClick={makeMove}>
@@ -456,8 +844,6 @@ function App() {
         ) : null}
 
         {clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null}
-
-        {host ? <h1>You are the host</h1> : null}
         {error ? <Alert variant="danger">{error}</Alert> : null}
       </div>
     </div>
