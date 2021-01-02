@@ -691,6 +691,7 @@ function App() {
               viewBox="0 0 582 1006"
             >
               <g>
+                {/* Roads */}
                 <rect
                   style={{ fill: "none" }}
                   x="12%"
@@ -708,6 +709,29 @@ function App() {
                   stroke="black"
                   strokeWidth="0.25em"
                 />
+
+                {/* Railroads */}
+                <rect
+                  style={{ fill: "none" }}
+                  x="12%"
+                  y="12.5%"
+                  width="76%"
+                  height="75.5%"
+                  stroke="brown"
+                  strokeWidth="0.25em"
+                />
+
+                <rect
+                  style={{ fill: "none" }}
+                  x="12%"
+                  y="41%"
+                  width="76%"
+                  height="18%"
+                  stroke="brown"
+                  strokeWidth="0.25em"
+                />
+
+                {/* Upper safe zones */}
                 <g>
                   <circle
                     style={{ fill: "white" }}
@@ -837,7 +861,7 @@ function App() {
                     行營
                   </text>
                 </g>
-
+                {/* Lower safe zones */}
                 <g>
                   <circle
                     style={{ fill: "white" }}
