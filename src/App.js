@@ -9,8 +9,8 @@ import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
 import { isEqual } from "lodash";
 import Piece, { pieces } from "./util/piece";
 
-const socket = io("localhost:4000");
-// const socket = io("https://luzhanqi.herokuapp.com/");
+// const socket = io("localhost:4000");
+const socket = io("https://luzhanqi.herokuapp.com/");
 
 function App() {
   /** debug message sent through socket on PORT */
@@ -239,14 +239,16 @@ function App() {
     if (pendingMove.source.length > 0) {
       console.log(pendingMove.source);
       const sourcePiece = myBoard[pendingMove.source[0]][pendingMove.source[1]];
-      if (
-        isEqual(pendingMove.source, [y, x]) ||
-        (myBoard[y][x] && myBoard[y][x].affiliation === sourcePiece.affiliation)
-      ) {
+      if (isEqual(pendingMove.source, [y, x])) {
         setPendingMove({
           source: [],
           target: [],
         });
+      } else if (
+        myBoard[y][x] &&
+        myBoard[y][x].affiliation === sourcePiece.affiliation
+      ) {
+        setPendingMove({ source: [y, x], target: [] });
       } else {
         setPendingMove((prevState) => ({ ...prevState, target: [y, x] }));
       }
@@ -344,9 +346,15 @@ function App() {
           /** Players join the game */
           gamePhase === 0 ? (
             <>
-              <h3>{joinedGame}</h3>
+              {joinedGame && !host ? (
+                <>
+                  <h3>請等主持人</h3>
+                  <h3>Waiting for the host</h3>
+                </>
+              ) : null}
               {host ? (
                 <>
+                  <h3>按 &quot;Room Full&quot; 開始遊戲</h3>
                   <h3>Click &quot;Room Full&quot; to begin the game</h3>
                   <Button
                     type="button"
@@ -389,7 +397,7 @@ function App() {
         {/* {displayTimer && countdown > 0 ? <h1>{countdown}</h1> : null} */}
         {gamePhase === 1 && !submittedSide ? (
           <>
-            <h2>Frontier</h2>
+            <h2>前線</h2>
             <Form
               style={{
                 display: "flex",
@@ -429,7 +437,10 @@ function App() {
         ) : null}
 
         {submittedSide && gamePhase === 1 ? (
-          <h2>Waiting for other player</h2>
+          <>
+            <h2>請等對手</h2>
+            <h2>Waiting for other player</h2>
+          </>
         ) : null}
 
         {gamePhase === 2 ? (
@@ -459,6 +470,8 @@ function App() {
                 <g>
                   <circle
                     style={{ fill: "white" }}
+                    stroke="black"
+                    strokeWidth="8"
                     cx="50%"
                     cy="26.65%"
                     r={45}
@@ -479,6 +492,8 @@ function App() {
                 <g>
                   <circle
                     style={{ fill: "white" }}
+                    stroke="black"
+                    strokeWidth="8"
                     cx="31%"
                     cy="19.45%"
                     r={45}
@@ -498,6 +513,8 @@ function App() {
                 <g>
                   <circle
                     style={{ fill: "white" }}
+                    stroke="black"
+                    strokeWidth="8"
                     cx="69%"
                     cy="19.45%"
                     r={45}
@@ -518,6 +535,8 @@ function App() {
                 <g>
                   <circle
                     style={{ fill: "white" }}
+                    stroke="black"
+                    strokeWidth="8"
                     cx="31%"
                     cy="33.75%"
                     r={45}
@@ -537,6 +556,8 @@ function App() {
                 <g>
                   <circle
                     style={{ fill: "white" }}
+                    stroke="black"
+                    strokeWidth="8"
                     cx="69%"
                     cy="33.75%"
                     r={45}
@@ -557,6 +578,8 @@ function App() {
                 <g>
                   <circle
                     style={{ fill: "white" }}
+                    stroke="black"
+                    strokeWidth="8"
                     cx="50%"
                     cy="73.35%"
                     r={45}
@@ -577,6 +600,8 @@ function App() {
                 <g>
                   <circle
                     style={{ fill: "white" }}
+                    stroke="black"
+                    strokeWidth="8"
                     cx="31%"
                     cy="80.55%"
                     r={45}
@@ -596,6 +621,8 @@ function App() {
                 <g>
                   <circle
                     style={{ fill: "white" }}
+                    stroke="black"
+                    strokeWidth="8"
                     cx="69%"
                     cy="80.55%"
                     r={45}
@@ -616,6 +643,8 @@ function App() {
                 <g>
                   <circle
                     style={{ fill: "white" }}
+                    stroke="black"
+                    strokeWidth="8"
                     cx="31%"
                     cy="66.25%"
                     r={45}
@@ -635,6 +664,8 @@ function App() {
                 <g>
                   <circle
                     style={{ fill: "white" }}
+                    stroke="black"
+                    strokeWidth="8"
                     cx="69%"
                     cy="66.25%"
                     r={45}
@@ -720,7 +751,7 @@ function App() {
                     strokeWidth="0.05em"
                   />
                   <text
-                    fontSize={5}
+                    fontSize="31%"
                     x="5%"
                     y="24%"
                     textAnchor="middle"
@@ -729,11 +760,31 @@ function App() {
                     dy="1.3em"
                     dx="1em"
                   >
-                    前站
+                    前線
                   </text>
-                </g>
 
-                <g>
+                  <rect
+                    style={{ fill: "black" }}
+                    x="42.5%"
+                    y="18%"
+                    width="15%"
+                    height="60%"
+                    stroke="black"
+                    strokeWidth="0.05em"
+                  />
+                  <text
+                    fontSize="31%"
+                    x="45%"
+                    y="24%"
+                    textAnchor="middle"
+                    stroke="white"
+                    strokeWidth="0.3px"
+                    dy="1.3em"
+                    dx="1em"
+                  >
+                    前線
+                  </text>
+
                   <rect
                     style={{ fill: "black" }}
                     x="82.5%"
@@ -744,7 +795,7 @@ function App() {
                     strokeWidth="0.05em"
                   />
                   <text
-                    fontSize={5}
+                    fontSize="31%"
                     x="85%"
                     y="24%"
                     textAnchor="middle"
@@ -753,34 +804,48 @@ function App() {
                     dy="1.3em"
                     dx="1em"
                   >
-                    前站
+                    前線
                   </text>
                 </g>
 
                 <g>
-                  <circle cx={30} cy={10} r={8} fill="red" />
+                  <circle
+                    cx="30%"
+                    cy="50%"
+                    r="12%"
+                    fill="#FEF1C2"
+                    stroke="green"
+                    strokeWidth="2%"
+                  />
                   <text
-                    fontSize={7}
+                    fontSize="40%"
                     x="30%"
                     y="50%"
                     textAnchor="middle"
-                    stroke="white"
-                    strokeWidth="0.5px"
-                    dy=".3em"
+                    stroke="black"
+                    strokeWidth="0.3%"
+                    dy="9%"
                   >
                     山界
                   </text>
                 </g>
                 <g>
-                  <circle cx={70} cy={10} r={8} fill="red" />
+                  <circle
+                    cx="70%"
+                    cy="50%"
+                    r="12%"
+                    fill="#FEF1C2"
+                    stroke="green"
+                    strokeWidth="2%"
+                  />
                   <text
-                    fontSize={7}
+                    fontSize="40%"
                     x="70%"
                     y="50%"
                     textAnchor="middle"
-                    stroke="white"
-                    strokeWidth="0.5px"
-                    dy=".3em"
+                    stroke="black"
+                    strokeWidth="0.3%"
+                    dy="9%"
                   >
                     山界
                   </text>
