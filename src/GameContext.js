@@ -2,7 +2,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
-import Piece from "./util/piece";
 
 const socket = io("localhost:4000");
 // const socket = io("https://luzhanqi.herokuapp.com/");
@@ -75,23 +74,6 @@ export const GameProvider = ({ children }) => {
     startingBoard: { startingBoard, setStartingBoard },
     error: { error, setError },
   };
-
-  useEffect(() => {
-    if (playerList.length > 0) {
-      let newHalf = Array(6).fill(null);
-      newHalf = newHalf.map(() => new Array(5).fill(null));
-      Object.entries(startingBoard).forEach(([pos, name]) => {
-        const yX = pos.split(",").map((num) => parseInt(num, 10));
-        if (name !== "none") {
-          newHalf[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = Piece(
-            name,
-            playerList.indexOf(playerName)
-          );
-        }
-      });
-      setMyPositions(newHalf);
-    }
-  }, [startingBoard, playerList, playerName]);
 
   /**
    * Socket handlers receive headers and data from SocketIO connection

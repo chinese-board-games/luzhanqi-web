@@ -1,18 +1,36 @@
 /* eslint-disable no-console */
-import React, { useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { GameContext } from "../../GameContext";
-import { pieces } from "../../util/piece";
+import Piece, { pieces } from "../../util/piece";
 
 const SetBoard = () => {
   const gameState = useContext(GameContext);
   const { socket } = gameState;
   const { playerName } = gameState.playerName;
   const { roomId } = gameState.roomId;
-  const { myPositions } = gameState.myPositions;
+  const { playerList } = gameState.playerList;
+  const { myPositions, setMyPositions } = gameState.myPositions;
   const { submittedSide } = gameState.submittedSide;
   const { startingBoard, setStartingBoard } = gameState.startingBoard;
+
+  useEffect(() => {
+    if (playerList.length > 0) {
+      let newHalf = Array(6).fill(null);
+      newHalf = newHalf.map(() => new Array(5).fill(null));
+      Object.entries(startingBoard).forEach(([pos, name]) => {
+        const yX = pos.split(",").map((num) => parseInt(num, 10));
+        if (name !== "none") {
+          newHalf[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = Piece(
+            name,
+            playerList.indexOf(playerName)
+          );
+        }
+      });
+      setMyPositions(newHalf);
+    }
+  }, [startingBoard, playerList, playerName, setMyPositions]);
 
   /** Send the starting board to the server (my side) */
   const sendStartingBoard = (e) => {
