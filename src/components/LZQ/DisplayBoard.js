@@ -4,6 +4,8 @@ import React, { useContext } from "react";
 import { isEqual } from "lodash";
 import Button from "react-bootstrap/Button";
 import { GameContext } from "../../GameContext";
+import BoardBackground from "./BoardBackground";
+import MountainPass from "./MountainPass";
 
 const DisplayBoard = () => {
   const gameState = useContext(GameContext);
@@ -17,7 +19,12 @@ const DisplayBoard = () => {
   const { pendingMove, setPendingMove } = gameState.pendingMove;
   const { setError } = gameState.error;
 
-  /** Send a move to the server */
+  /**
+   * Send a move to the server
+   * @param {Object} e the event on the element from which this callback was called
+   * @see makeMove
+   */
+
   const makeMove = (e) => {
     e.preventDefault();
     if (pendingMove.source.length > 0 && pendingMove.target.length) {
@@ -35,6 +42,13 @@ const DisplayBoard = () => {
 
     setPendingMove({ source: [], target: [] });
   };
+
+  /**
+   * Takes a set of coordinates and sets the corresponding tile as either source or target
+   * @param {Number} y
+   * @param {Number} x
+   * @see setMove
+   */
 
   const setMove = (y, x) => {
     y = host ? y : 11 - y;
@@ -64,10 +78,23 @@ const DisplayBoard = () => {
     }
   };
 
+  /**
+   * Rotates the board values 180 degrees
+   * @param {Object} board a 2D array representing the game board
+   * @returns {Object}
+   * @see transformBoard
+   */
+
   const transformBoard = (board) =>
     board.map((row, y) =>
       row.map((piece, x) => board[board.length - 1 - y][row.length - 1 - x])
     );
+
+  /**
+   * Takes a pair of coordinates and returns the style for the corresponding tile
+   * @param {Number} y row of a tile
+   * @param {Number} x column of a tile
+   */
 
   const getHighlightStyle = (y, x) => {
     y = host ? y : 11 - y;
@@ -81,6 +108,11 @@ const DisplayBoard = () => {
     }
     return {};
   };
+
+  /**
+   * Displays the pieces in myBoard
+   * @see displayPieces
+   */
 
   const displayPieces = () => {
     const displayedPieces = host ? myBoard : transformBoard(myBoard);
@@ -128,121 +160,6 @@ const DisplayBoard = () => {
       </div>
     ));
 
-    const mountainPass = () => (
-      <svg viewBox="0 0 100 20">
-        <g>
-          <rect
-            style={{ fill: "black" }}
-            x="2.5%"
-            y="18%"
-            width="15%"
-            height="60%"
-            stroke="black"
-            strokeWidth="0.05em"
-          />
-          <text
-            fontSize="31%"
-            x="5%"
-            y="24%"
-            textAnchor="middle"
-            stroke="white"
-            strokeWidth="0.3px"
-            dy="1.3em"
-            dx="1em"
-          >
-            前線
-          </text>
-
-          <rect
-            style={{ fill: "black" }}
-            x="42.5%"
-            y="18%"
-            width="15%"
-            height="60%"
-            stroke="black"
-            strokeWidth="0.05em"
-          />
-          <text
-            fontSize="31%"
-            x="45%"
-            y="24%"
-            textAnchor="middle"
-            stroke="white"
-            strokeWidth="0.3px"
-            dy="1.3em"
-            dx="1em"
-          >
-            前線
-          </text>
-
-          <rect
-            style={{ fill: "black" }}
-            x="82.5%"
-            y="18%"
-            width="15%"
-            height="60%"
-            stroke="black"
-            strokeWidth="0.05em"
-          />
-          <text
-            fontSize="31%"
-            x="85%"
-            y="24%"
-            textAnchor="middle"
-            stroke="white"
-            strokeWidth="0.3px"
-            dy="1.3em"
-            dx="1em"
-          >
-            前線
-          </text>
-        </g>
-
-        <g>
-          <circle
-            cx="30%"
-            cy="50%"
-            r="12%"
-            fill="#FEF1C2"
-            stroke="green"
-            strokeWidth="2%"
-          />
-          <text
-            fontSize="40%"
-            x="30%"
-            y="50%"
-            textAnchor="middle"
-            stroke="black"
-            strokeWidth="0.3%"
-            dy="9%"
-          >
-            山界
-          </text>
-        </g>
-        <g>
-          <circle
-            cx="70%"
-            cy="50%"
-            r="12%"
-            fill="#FEF1C2"
-            stroke="green"
-            strokeWidth="2%"
-          />
-          <text
-            fontSize="40%"
-            x="70%"
-            y="50%"
-            textAnchor="middle"
-            stroke="black"
-            strokeWidth="0.3%"
-            dy="9%"
-          >
-            山界
-          </text>
-        </g>
-      </svg>
-    );
-
     const secondHalf = displayedPieces.slice(6).map((row, y) => (
       <div
         key={`game_row_${y + 7}`}
@@ -289,7 +206,7 @@ const DisplayBoard = () => {
     return (
       <>
         {firstHalf}
-        {mountainPass()}
+        {MountainPass()}
         {secondHalf}
       </>
     );
@@ -297,269 +214,7 @@ const DisplayBoard = () => {
 
   return (
     <>
-      <svg
-        style={{ position: "absolute", width: "582px" }}
-        viewBox="0 0 582 1006"
-      >
-        <g>
-          {/* Roads */}
-          <rect
-            style={{ fill: "none" }}
-            x="12%"
-            y="5%"
-            width="76%"
-            height="90%"
-            stroke="black"
-            strokeWidth="0.25em"
-          />
-          <line
-            x1="50%"
-            y1="5%"
-            x2="50%"
-            y2="95%"
-            stroke="black"
-            strokeWidth="0.25em"
-          />
-
-          {/* Railroads */}
-          <rect
-            style={{ fill: "none" }}
-            x="12%"
-            y="12.5%"
-            width="76%"
-            height="75.5%"
-            stroke="brown"
-            strokeWidth="0.25em"
-          />
-
-          <rect
-            style={{ fill: "none" }}
-            x="12%"
-            y="41%"
-            width="76%"
-            height="18%"
-            stroke="brown"
-            strokeWidth="0.25em"
-          />
-
-          {/* Upper safe zones */}
-          <g>
-            <circle
-              style={{ fill: "white" }}
-              stroke="black"
-              strokeWidth="8"
-              cx="50%"
-              cy="26.65%"
-              r={45}
-            />
-            <text
-              fontSize={35}
-              x="50%"
-              y="26.65%"
-              textAnchor="middle"
-              stroke="black"
-              strokeWidth="0.5px"
-              dy=".3em"
-            >
-              行營
-            </text>
-          </g>
-
-          <g>
-            <circle
-              style={{ fill: "white" }}
-              stroke="black"
-              strokeWidth="8"
-              cx="31%"
-              cy="19.45%"
-              r={45}
-            />
-            <text
-              fontSize={35}
-              x="31%"
-              y="19.45%"
-              textAnchor="middle"
-              stroke="black"
-              strokeWidth="0.5px"
-              dy=".3em"
-            >
-              行營
-            </text>
-          </g>
-          <g>
-            <circle
-              style={{ fill: "white" }}
-              stroke="black"
-              strokeWidth="8"
-              cx="69%"
-              cy="19.45%"
-              r={45}
-            />
-            <text
-              fontSize={35}
-              x="69%"
-              y="19.45%"
-              textAnchor="middle"
-              stroke="black"
-              strokeWidth="0.5px"
-              dy=".3em"
-            >
-              行營
-            </text>
-          </g>
-
-          <g>
-            <circle
-              style={{ fill: "white" }}
-              stroke="black"
-              strokeWidth="8"
-              cx="31%"
-              cy="33.75%"
-              r={45}
-            />
-            <text
-              fontSize={35}
-              x="31%"
-              y="33.75%"
-              textAnchor="middle"
-              stroke="black"
-              strokeWidth="0.5px"
-              dy=".3em"
-            >
-              行營
-            </text>
-          </g>
-          <g>
-            <circle
-              style={{ fill: "white" }}
-              stroke="black"
-              strokeWidth="8"
-              cx="69%"
-              cy="33.75%"
-              r={45}
-            />
-            <text
-              fontSize={35}
-              x="69%"
-              y="33.75%"
-              textAnchor="middle"
-              stroke="black"
-              strokeWidth="0.5px"
-              dy=".3em"
-            >
-              行營
-            </text>
-          </g>
-
-          <g>
-            <circle
-              style={{ fill: "white" }}
-              stroke="black"
-              strokeWidth="8"
-              cx="50%"
-              cy="73.35%"
-              r={45}
-            />
-            <text
-              fontSize={35}
-              x="50%"
-              y="73.35%"
-              textAnchor="middle"
-              stroke="black"
-              strokeWidth="0.5px"
-              dy=".3em"
-            >
-              行營
-            </text>
-          </g>
-          {/* Lower safe zones */}
-          <g>
-            <circle
-              style={{ fill: "white" }}
-              stroke="black"
-              strokeWidth="8"
-              cx="31%"
-              cy="80.55%"
-              r={45}
-            />
-            <text
-              fontSize={35}
-              x="31%"
-              y="80.55%"
-              textAnchor="middle"
-              stroke="black"
-              strokeWidth="0.5px"
-              dy=".3em"
-            >
-              行營
-            </text>
-          </g>
-          <g>
-            <circle
-              style={{ fill: "white" }}
-              stroke="black"
-              strokeWidth="8"
-              cx="69%"
-              cy="80.55%"
-              r={45}
-            />
-            <text
-              fontSize={35}
-              x="69%"
-              y="80.55%"
-              textAnchor="middle"
-              stroke="black"
-              strokeWidth="0.5px"
-              dy=".3em"
-            >
-              行營
-            </text>
-          </g>
-
-          <g>
-            <circle
-              style={{ fill: "white" }}
-              stroke="black"
-              strokeWidth="8"
-              cx="31%"
-              cy="66.25%"
-              r={45}
-            />
-            <text
-              fontSize={35}
-              x="31%"
-              y="66.25%"
-              textAnchor="middle"
-              stroke="black"
-              strokeWidth="0.5px"
-              dy=".3em"
-            >
-              行營
-            </text>
-          </g>
-          <g>
-            <circle
-              style={{ fill: "white" }}
-              stroke="black"
-              strokeWidth="8"
-              cx="69%"
-              cy="66.25%"
-              r={45}
-            />
-            <text
-              fontSize={35}
-              x="69%"
-              y="66.25%"
-              textAnchor="middle"
-              stroke="black"
-              strokeWidth="0.5px"
-              dy=".3em"
-            >
-              行營
-            </text>
-          </g>
-        </g>
-      </svg>
+      <BoardBackground />
       <div
         style={{
           backgroundColor: "#4F7276",
