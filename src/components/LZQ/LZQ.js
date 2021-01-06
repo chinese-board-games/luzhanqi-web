@@ -7,7 +7,7 @@ import { GameContext } from "../../contexts/GameContext";
 import BoardBackground from "./BoardBackground";
 import MountainPass from "./MountainPass";
 
-const DisplayBoard = () => {
+const LZQ = () => {
   const gameState = useContext(GameContext);
   const { socket } = gameState;
   const { playerName } = gameState.playerName;
@@ -249,4 +249,4 @@ const DisplayBoard = () => {
   );
 };
 
-export default DisplayBoard;
+export default LZQ;

@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { GameContext } from "../../contexts/GameContext";
 
-const PlayerEntry = () => {
+const Lobby = () => {
   const gameState = useContext(GameContext);
   const { socket } = gameState;
   const { playerName, setPlayerName } = gameState.playerName;
@@ -119,4 +119,4 @@ const PlayerEntry = () => {
   );
 };
 
-export default PlayerEntry;
+export default Lobby;
