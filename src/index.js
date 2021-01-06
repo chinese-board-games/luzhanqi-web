@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { GameProvider } from "./GameContext";
+import { GameProvider } from "./contexts/GameContext";
 
 ReactDOM.render(
   <React.StrictMode>

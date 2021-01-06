@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
-import { GameContext } from "./GameContext";
+import { GameContext } from "./contexts/GameContext";
 import PlayerEntry from "./components/Lobby/PlayerEntry";
 import SetBoard from "./components/Setup/SetBoard";
 import DisplayBoard from "./components/LZQ/DisplayBoard";

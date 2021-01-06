@@ -2,7 +2,7 @@
 import React, { useContext } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { GameContext } from "../../GameContext";
+import { GameContext } from "../../contexts/GameContext";
 
 const PlayerEntry = () => {
   const gameState = useContext(GameContext);
