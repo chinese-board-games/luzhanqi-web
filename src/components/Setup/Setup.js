@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import { GameContext } from "../../contexts/GameContext";
 import Piece, { pieces } from "../../util/piece";
 
-const SetBoard = () => {
+const Setup = () => {
   const gameState = useContext(GameContext);
   const { socket } = gameState;
   const { playerName } = gameState.playerName;
@@ -111,4 +111,4 @@ const SetBoard = () => {
   );
 };
 
-export default SetBoard;
+export default Setup;

@@ -3,9 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import { GameContext } from "./contexts/GameContext";
-import PlayerEntry from "./components/Lobby/PlayerEntry";
-import SetBoard from "./components/Setup/SetBoard";
-import DisplayBoard from "./components/LZQ/DisplayBoard";
+import Lobby from "./components/Lobby";
+import Setup from "./components/Setup";
+import LZQ from "./components/LZQ";
 import Piece from "./util/piece";
 
 const App = () => {
@@ -111,17 +111,17 @@ const App = () => {
 
         {
           /** Players join the game */
-          gamePhase === 0 ? <PlayerEntry /> : null
+          gamePhase === 0 ? <Lobby /> : null
         }
 
         {
           /** Players set their boards */
-          gamePhase === 1 ? <SetBoard /> : null
+          gamePhase === 1 ? <Setup /> : null
         }
 
         {
           /** Players play the game */
-          gamePhase === 2 ? <DisplayBoard /> : null
+          gamePhase === 2 ? <LZQ /> : null
         }
 
         {
