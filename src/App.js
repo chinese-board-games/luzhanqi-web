@@ -7,6 +7,7 @@ import Lobby from "./components/Lobby";
 import Setup from "./components/Setup";
 import LZQ from "./components/LZQ";
 import Piece from "./util/piece";
+import GameOver from "./components/GameOver";
 
 const App = () => {
   const gameState = useContext(GameContext);
@@ -122,6 +123,11 @@ const App = () => {
         {
           /** Players play the game */
           gamePhase === 2 ? <LZQ /> : null
+        }
+
+        {
+          /** Players see the endgame */
+          gamePhase === 3 ? <GameOver /> : null
         }
 
         {
