@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
-import React, { useContext } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useContext, useState } from "react";
 import { isEqual } from "lodash";
+// import { getSuccessors } from "@chinese-board-games/luzhanqi-util";
 import Button from "react-bootstrap/Button";
 import { GameContext } from "../../contexts/GameContext";
 import BoardBackground from "./BoardBackground";
@@ -19,6 +21,10 @@ const LZQ = () => {
   const { pendingMove, setPendingMove } = gameState.pendingMove;
   const { setError } = gameState.error;
 
+  const [origin, setOrigin] = useState(null);
+  const [dest, setDest] = useState(null);
+  const [successors, setSuccessors] = useState([]);
+
   /**
    * Send a move to the server
    * @param {Object} e the event on the element from which this callback was called
@@ -28,13 +34,11 @@ const LZQ = () => {
   const makeMove = (e) => {
     e.preventDefault();
     if (pendingMove.source.length > 0 && pendingMove.target.length) {
-      const sendingMove = pendingMove;
-
       socket.emit("makeMove", {
         playerName,
         room: roomId,
         turn: clientTurn,
-        pendingMove: sendingMove,
+        pendingMove,
       });
     } else {
       setError("You must have both a source and target tile");
