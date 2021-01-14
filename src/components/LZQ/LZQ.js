@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-unused-vars */
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { isEqual } from "lodash";
-// import { getSuccessors } from "@chinese-board-games/luzhanqi-util";
+import {
+  getSuccessors,
+  generateAdjList,
+} from "@chinese-board-games/luzhanqi-util";
 import Button from "react-bootstrap/Button";
 import { GameContext } from "../../contexts/GameContext";
 import BoardBackground from "./BoardBackground";
@@ -21,30 +23,39 @@ const LZQ = () => {
   const { pendingMove, setPendingMove } = gameState.pendingMove;
   const { setError } = gameState.error;
 
-  const [origin, setOrigin] = useState(null);
-  const [dest, setDest] = useState(null);
-  const [successors, setSuccessors] = useState([]);
+  const [, setSuccessors] = useState([]);
+
+  const adjList = useMemo(() => generateAdjList(), []);
+
+  useEffect(() => {
+    const { source, target } = pendingMove;
+    if (source && target) {
+      // TODO: fix the affiliation field from 0 to the actual affiliation
+      setSuccessors(getSuccessors(myBoard, adjList, source[0], source[1], 0));
+    } else {
+      setSuccessors([]);
+    }
+  }, [pendingMove, adjList, myBoard]);
 
   /**
    * Send a move to the server
    * @param {Object} e the event on the element from which this callback was called
    * @see makeMove
    */
-
   const makeMove = (e) => {
     e.preventDefault();
-    if (pendingMove.source.length > 0 && pendingMove.target.length) {
+    const { source, target } = pendingMove;
+    if (source && target) {
       socket.emit("makeMove", {
         playerName,
         room: roomId,
         turn: clientTurn,
         pendingMove,
       });
+      setPendingMove({ source: [], target: [] });
     } else {
       setError("You must have both a source and target tile");
     }
-
-    setPendingMove({ source: [], target: [] });
   };
 
   /**

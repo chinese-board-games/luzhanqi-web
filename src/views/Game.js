@@ -1,22 +1,19 @@
+/* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from "react";
 import Alert from "react-bootstrap/Alert";
-import Button from "react-bootstrap/Button";
 
 import Lobby from "../components/Lobby";
 import Setup from "../components/Setup";
 import LZQ from "../components/LZQ";
-import Piece from "../util/piece";
 
 import { GameContext } from "../contexts/GameContext";
 
 const Game = () => {
   const gameState = useContext(GameContext);
   const { roomId } = gameState.roomId;
-  const { setPlayerName } = gameState.playerName;
   const { clientTurn } = gameState.clientTurn;
-  const { playerList, setPlayerList } = gameState.playerList;
-  const { gamePhase, setGamePhase } = gameState.gamePhase;
-  const { setMyBoard } = gameState.myBoard;
+  const { playerList } = gameState.playerList;
+  const { gamePhase } = gameState.gamePhase;
   const { error, setError } = gameState.error;
 
   /** Clear errors after 5 seconds */
@@ -25,49 +22,6 @@ const Game = () => {
       setError("");
     }, 5000);
   }, [error, setError]);
-
-  const showBoardDebug = () => {
-    setGamePhase(2);
-    setPlayerName("admin");
-    setPlayerList(["admin"]);
-
-    const example1 = [
-      ["major_general", "lieutenant", "colonel", "engineer", "major_general"],
-      ["engineer", "none", "field_marshall", "none", "engineer"],
-      ["colonel", "lieutenant", "none", "bomb", "major"],
-      ["brigadier_general", "none", "brigadier_general", "none", "lieutenant"],
-      ["bomb", "landmine", "general", "captain", "captain"],
-      ["landmine", "flag", "major", "landmine", "captain"],
-      ["major_general", "lieutenant", "colonel", "engineer", "major_general"],
-      ["engineer", "none", "field_marshall", "none", "engineer"],
-      ["colonel", "lieutenant", "none", "bomb", "major"],
-      ["brigadier_general", "none", "brigadier_general", "none", "lieutenant"],
-      ["bomb", "landmine", "general", "captain", "captain"],
-      ["landmine", "flag", "major", "landmine", "captain"],
-    ];
-
-    const exampleBoard = {};
-    example1.forEach((row, y) => {
-      row.forEach((pieceName, x) => {
-        const pos = [y, x];
-        exampleBoard[pos] = pieceName;
-      });
-    });
-
-    let newBoard = Array(12).fill(null);
-    newBoard = newBoard.map(() => new Array(5).fill(null));
-    Object.entries(exampleBoard).forEach(([pos, name]) => {
-      const randBin = Math.round(Math.random());
-      const yX = pos.split(",").map((num) => parseInt(num, 10));
-      if (name !== "none") {
-        newBoard[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = Piece(
-          name,
-          randBin
-        );
-      }
-    });
-    setMyBoard(newBoard);
-  };
 
   return (
     <div
@@ -79,9 +33,6 @@ const Game = () => {
       }}
     >
       <div style={{ width: "35em" }}>
-        <Button type="button" variant="primary" onClick={showBoardDebug}>
-          Show Board Debug
-        </Button>
         <h1>陸戰棋 Luzhanqi</h1>
         {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
 

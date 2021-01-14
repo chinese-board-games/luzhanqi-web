@@ -9,7 +9,7 @@ import Debug from "./views/Debug";
 const App = () => (
   <Router>
     <Menu path="/" />
-    <Game path="/game/:roomId" />
+    <Game path="/game" />
     <Debug path="/debug" />
   </Router>
 );
