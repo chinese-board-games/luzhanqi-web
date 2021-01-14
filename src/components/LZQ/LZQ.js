@@ -23,19 +23,28 @@ const LZQ = () => {
   const { pendingMove, setPendingMove } = gameState.pendingMove;
   const { setError } = gameState.error;
 
-  const [, setSuccessors] = useState([]);
+  const [sucessors, setSuccessors] = useState([]);
 
   const adjList = useMemo(() => generateAdjList(), []);
 
   useEffect(() => {
     const { source, target } = pendingMove;
-    if (source && target) {
-      // TODO: fix the affiliation field from 0 to the actual affiliation
-      setSuccessors(getSuccessors(myBoard, adjList, source[0], source[1], 0));
+    if (source && source.length === 2 && target && target.length === 2) {
+      console.log(source);
+      console.log(target);
+      setSuccessors(
+        getSuccessors(
+          myBoard,
+          adjList,
+          source[1],
+          source[0],
+          playerList.indexOf(playerName)
+        )
+      );
     } else {
       setSuccessors([]);
     }
-  }, [pendingMove, adjList, myBoard]);
+  }, [pendingMove, adjList, myBoard, playerList, playerName]);
 
   /**
    * Send a move to the server
@@ -226,7 +235,7 @@ const LZQ = () => {
       </>
     );
   };
-
+  console.log(sucessors);
   return (
     <>
       <BoardBackground />
