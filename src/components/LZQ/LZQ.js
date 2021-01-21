@@ -1,7 +1,11 @@
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { isEqual } from "lodash";
+import {
+  getSuccessors,
+  generateAdjList,
+} from "@chinese-board-games/luzhanqi-util";
 import Button from "react-bootstrap/Button";
 import { GameContext } from "../../contexts/GameContext";
 import BoardBackground from "./BoardBackground";
@@ -19,28 +23,48 @@ const LZQ = () => {
   const { pendingMove, setPendingMove } = gameState.pendingMove;
   const { setError } = gameState.error;
 
+  const [sucessors, setSuccessors] = useState([]);
+
+  const adjList = useMemo(() => generateAdjList(), []);
+
+  useEffect(() => {
+    const { source, target } = pendingMove;
+    if (source && source.length === 2 && target && target.length === 2) {
+      console.log(source);
+      console.log(target);
+      setSuccessors(
+        getSuccessors(
+          myBoard,
+          adjList,
+          source[1],
+          source[0],
+          playerList.indexOf(playerName)
+        )
+      );
+    } else {
+      setSuccessors([]);
+    }
+  }, [pendingMove, adjList, myBoard, playerList, playerName]);
+
   /**
    * Send a move to the server
    * @param {Object} e the event on the element from which this callback was called
    * @see makeMove
    */
-
   const makeMove = (e) => {
     e.preventDefault();
-    if (pendingMove.source.length > 0 && pendingMove.target.length) {
-      const sendingMove = pendingMove;
-
+    const { source, target } = pendingMove;
+    if (source && target) {
       socket.emit("makeMove", {
         playerName,
         room: roomId,
         turn: clientTurn,
-        pendingMove: sendingMove,
+        pendingMove,
       });
+      setPendingMove({ source: [], target: [] });
     } else {
       setError("You must have both a source and target tile");
     }
-
-    setPendingMove({ source: [], target: [] });
   };
 
   /**
@@ -211,7 +235,7 @@ const LZQ = () => {
       </>
     );
   };
-
+  console.log(sucessors);
   return (
     <>
       <BoardBackground />
