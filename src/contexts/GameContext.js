@@ -3,8 +3,8 @@ import React, { createContext, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
 
-// const socket = io("localhost:4000");
-const socket = io("https://luzhanqi.herokuapp.com/");
+const socket = io("localhost:4000");
+// const socket = io("https://luzhanqi.herokuapp.com/");
 
 export const GameContext = createContext({});
 
@@ -127,6 +127,12 @@ export const GameProvider = ({ children }) => {
       console.log("Move has been made", data);
       setClientTurn(data.turn);
       setMyBoard(data.board);
+    });
+
+    /** Server is telling all clients the game has ended */
+    socket.on("endGame", (winner) => {
+      console.log(winner);
+      setGamePhase(3);
     });
 
     /** Server is returning an error message to the client */
