@@ -30,14 +30,15 @@ const LZQ = () => {
   useEffect(() => {
     const { source, target } = pendingMove;
     if (source && source.length === 2 && target && target.length === 2) {
-      console.log(source);
-      console.log(target);
+      console.log("source", source);
+      console.log("target", target);
+      console.log("board", myBoard);
       setSuccessors(
         getSuccessors(
           myBoard,
           adjList,
-          source[1],
           source[0],
+          source[1],
           playerList.indexOf(playerName)
         )
       );
@@ -55,13 +56,18 @@ const LZQ = () => {
     e.preventDefault();
     const { source, target } = pendingMove;
     if (source && target) {
-      socket.emit("makeMove", {
-        playerName,
-        room: roomId,
-        turn: clientTurn,
-        pendingMove,
-      });
-      setPendingMove({ source: [], target: [] });
+      if (sucessors.some((s) => isEqual(s, target))) {
+        socket.emit("makeMove", {
+          playerName,
+          room: roomId,
+          turn: clientTurn,
+          pendingMove,
+        });
+        setPendingMove({ source: [], target: [] });
+      } else {
+        // eslint-disable-next-line no-alert
+        alert("Invalid Move.");
+      }
     } else {
       setError("You must have both a source and target tile");
     }
@@ -79,7 +85,6 @@ const LZQ = () => {
     x = host ? x : 4 - x;
 
     if (pendingMove.source.length > 0) {
-      console.log(pendingMove.source);
       const sourcePiece = myBoard[pendingMove.source[0]][pendingMove.source[1]];
       if (isEqual(pendingMove.source, [y, x])) {
         setPendingMove({
@@ -235,7 +240,7 @@ const LZQ = () => {
       </>
     );
   };
-  console.log(sucessors);
+  console.log("successors", sucessors);
   return (
     <>
       <BoardBackground />
