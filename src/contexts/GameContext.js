@@ -3,8 +3,9 @@ import React, { createContext, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
 
-const socket = io("localhost:4000");
-// const socket = io("https://luzhanqi.herokuapp.com/");
+import { apiBaseUrl } from "../config";
+
+const socket = io(apiBaseUrl);
 
 export const GameContext = createContext({});
 
