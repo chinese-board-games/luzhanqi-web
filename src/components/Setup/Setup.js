@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
-import React, { useEffect, useContext } from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Piece from "../Piece";
-import { pieces } from "../Piece/Piece";
-import { GameContext } from "../../contexts/GameContext";
+import React, { useEffect, useContext } from 'react';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Piece from '../Piece';
+import { pieces } from '../Piece/Piece';
+import { GameContext } from '../../contexts/GameContext';
 
 const Setup = () => {
   const gameState = useContext(GameContext);
@@ -21,8 +21,8 @@ const Setup = () => {
       let newHalf = Array(6).fill(null);
       newHalf = newHalf.map(() => new Array(5).fill(null));
       Object.entries(startingBoard).forEach(([pos, name]) => {
-        const yX = pos.split(",").map((num) => parseInt(num, 10));
-        if (name !== "none") {
+        const yX = pos.split(',').map((num) => parseInt(num, 10));
+        if (name !== 'none') {
           newHalf[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = Piece(
             name,
             playerList.indexOf(playerName)
@@ -36,23 +36,23 @@ const Setup = () => {
   /** Send the starting board to the server (my side) */
   const sendStartingBoard = (e) => {
     e.preventDefault();
-    console.log("Sending board...");
+    console.log('Sending board...');
     console.log(myPositions);
-    socket.emit("playerInitialBoard", {
+    socket.emit('playerInitialBoard', {
       playerName,
       myPositions,
-      room: roomId,
+      room: roomId
     });
   };
 
   const setExampleOne = () => {
     const example1 = [
-      ["major_general", "lieutenant", "colonel", "engineer", "major_general"],
-      ["engineer", "none", "field_marshall", "none", "engineer"],
-      ["colonel", "lieutenant", "none", "bomb", "major"],
-      ["brigadier_general", "none", "brigadier_general", "none", "lieutenant"],
-      ["bomb", "landmine", "general", "captain", "captain"],
-      ["landmine", "flag", "major", "landmine", "captain"],
+      ['major_general', 'lieutenant', 'colonel', 'engineer', 'major_general'],
+      ['engineer', 'none', 'field_marshall', 'none', 'engineer'],
+      ['colonel', 'lieutenant', 'none', 'bomb', 'major'],
+      ['brigadier_general', 'none', 'brigadier_general', 'none', 'lieutenant'],
+      ['bomb', 'landmine', 'general', 'captain', 'captain'],
+      ['landmine', 'flag', 'major', 'landmine', 'captain']
     ];
 
     const exampleBoard = {};
@@ -75,14 +75,13 @@ const Setup = () => {
       <h2>前線</h2>
       <Form
         style={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
-          width: "25em",
-        }}
-      >
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          width: '25em'
+        }}>
         {Object.keys(startingBoard).map((pos) => (
-          <Form.Group style={{ width: "5em" }} key={pos}>
+          <Form.Group style={{ width: '5em' }} key={pos}>
             <Form.Control
               as="select"
               size="sm"
@@ -90,10 +89,9 @@ const Setup = () => {
               onChange={(e) =>
                 setStartingBoard({
                   ...startingBoard,
-                  [pos]: e.target.value,
+                  [pos]: e.target.value
                 })
-              }
-            >
+              }>
               {Object.keys(pieces).map((piece) => (
                 <option key={piece}>{piece}</option>
               ))}

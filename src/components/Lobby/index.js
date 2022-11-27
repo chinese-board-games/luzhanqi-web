@@ -1,3 +1,3 @@
-import Lobby from "./Lobby";
+import Lobby from './Lobby';
 
 export default Lobby;

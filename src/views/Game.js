@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useEffect } from "react";
-import Alert from "react-bootstrap/Alert";
+import React, { useContext, useEffect } from 'react';
+import Alert from 'react-bootstrap/Alert';
 
-import Lobby from "../components/Lobby";
-import Setup from "../components/Setup";
-import LZQ from "../components/LZQ";
+import Lobby from '../components/Lobby';
+import Setup from '../components/Setup';
+import LZQ from '../components/LZQ';
 
-import { GameContext } from "../contexts/GameContext";
+import { GameContext } from '../contexts/GameContext';
 
 const Game = () => {
   const gameState = useContext(GameContext);
@@ -19,43 +19,41 @@ const Game = () => {
   /** Clear errors after 5 seconds */
   useEffect(() => {
     setTimeout(() => {
-      setError("");
+      setError('');
     }, 5000);
   }, [error, setError]);
 
   return (
     <div
       style={{
-        margin: "2em",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <div style={{ width: "35em" }}>
+        margin: '2em',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+      <div style={{ width: '35em' }}>
         <h1>陸戰棋 Luzhanqi</h1>
         {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
 
         {playerList.length > 0 ? <h2>Players</h2> : null}
 
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
           {playerList.map((name) => (
             <div
               key={name}
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                paddingTop: "0.5em",
-                paddingBottom: "0.5em",
-                paddingLeft: "0.5em",
-                paddingRight: "0.5em",
-                margin: "0.5em",
-                border: "0.2em solid green",
-                borderRadius: "0.5em",
-              }}
-            >
-              <h5 style={{ fontWeight: "bold", margin: 0 }}>{name}</h5>
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingTop: '0.5em',
+                paddingBottom: '0.5em',
+                paddingLeft: '0.5em',
+                paddingRight: '0.5em',
+                margin: '0.5em',
+                border: '0.2em solid green',
+                borderRadius: '0.5em'
+              }}>
+              <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
             </div>
           ))}
         </div>
