@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from "react";
-import { Piece } from "@chinese-board-games/luzhanqi-util";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 
+import Piece from "../components/Piece";
 import Lobby from "../components/Lobby";
 import Setup from "../components/Setup";
 import LZQ from "../components/LZQ";
