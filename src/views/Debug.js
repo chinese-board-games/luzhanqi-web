@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useEffect } from "react";
-import Alert from "react-bootstrap/Alert";
-import Button from "react-bootstrap/Button";
+import React, { useContext, useEffect } from 'react';
+import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
 
-import Piece from "../components/Piece";
-import Lobby from "../components/Lobby";
-import Setup from "../components/Setup";
-import LZQ from "../components/LZQ";
+import Piece from '../components/Piece';
+import Lobby from '../components/Lobby';
+import Setup from '../components/Setup';
+import LZQ from '../components/LZQ';
 
-import { GameContext } from "../contexts/GameContext";
+import { GameContext } from '../contexts/GameContext';
 
 const Game = () => {
   const gameState = useContext(GameContext);
@@ -23,28 +23,28 @@ const Game = () => {
   /** Clear errors after 5 seconds */
   useEffect(() => {
     setTimeout(() => {
-      setError("");
+      setError('');
     }, 5000);
   }, [error, setError]);
 
   const showBoardDebug = () => {
     setGamePhase(2);
-    setPlayerName("admin");
-    setPlayerList(["admin"]);
+    setPlayerName('admin');
+    setPlayerList(['admin']);
 
     const example1 = [
-      ["major_general", "lieutenant", "colonel", "engineer", "major_general"],
-      ["engineer", "none", "field_marshall", "none", "engineer"],
-      ["colonel", "lieutenant", "none", "bomb", "major"],
-      ["brigadier_general", "none", "brigadier_general", "none", "lieutenant"],
-      ["bomb", "landmine", "general", "captain", "captain"],
-      ["landmine", "flag", "major", "landmine", "captain"],
-      ["major_general", "lieutenant", "colonel", "engineer", "major_general"],
-      ["engineer", "none", "field_marshall", "none", "engineer"],
-      ["colonel", "lieutenant", "none", "bomb", "major"],
-      ["brigadier_general", "none", "brigadier_general", "none", "lieutenant"],
-      ["bomb", "landmine", "general", "captain", "captain"],
-      ["landmine", "flag", "major", "landmine", "captain"],
+      ['major_general', 'lieutenant', 'colonel', 'engineer', 'major_general'],
+      ['engineer', 'none', 'field_marshall', 'none', 'engineer'],
+      ['colonel', 'lieutenant', 'none', 'bomb', 'major'],
+      ['brigadier_general', 'none', 'brigadier_general', 'none', 'lieutenant'],
+      ['bomb', 'landmine', 'general', 'captain', 'captain'],
+      ['landmine', 'flag', 'major', 'landmine', 'captain'],
+      ['major_general', 'lieutenant', 'colonel', 'engineer', 'major_general'],
+      ['engineer', 'none', 'field_marshall', 'none', 'engineer'],
+      ['colonel', 'lieutenant', 'none', 'bomb', 'major'],
+      ['brigadier_general', 'none', 'brigadier_general', 'none', 'lieutenant'],
+      ['bomb', 'landmine', 'general', 'captain', 'captain'],
+      ['landmine', 'flag', 'major', 'landmine', 'captain']
     ];
 
     const exampleBoard = {};
@@ -59,12 +59,9 @@ const Game = () => {
     newBoard = newBoard.map(() => new Array(5).fill(null));
     Object.entries(exampleBoard).forEach(([pos, name]) => {
       const randBin = Math.round(Math.random());
-      const yX = pos.split(",").map((num) => parseInt(num, 10));
-      if (name !== "none") {
-        newBoard[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = Piece(
-          name,
-          randBin
-        );
+      const yX = pos.split(',').map((num) => parseInt(num, 10));
+      if (name !== 'none') {
+        newBoard[parseInt(yX[0], 10)][parseInt(yX[1], 10)] = Piece(name, randBin);
       }
     });
     setMyBoard(newBoard);
@@ -73,13 +70,12 @@ const Game = () => {
   return (
     <div
       style={{
-        margin: "2em",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <div style={{ width: "35em" }}>
+        margin: '2em',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+      <div style={{ width: '35em' }}>
         <Button type="button" variant="primary" onClick={showBoardDebug}>
           Show Board Debug
         </Button>
@@ -88,24 +84,23 @@ const Game = () => {
 
         {playerList.length > 0 ? <h2>Players</h2> : null}
 
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
           {playerList.map((name) => (
             <div
               key={name}
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                paddingTop: "0.5em",
-                paddingBottom: "0.5em",
-                paddingLeft: "0.5em",
-                paddingRight: "0.5em",
-                margin: "0.5em",
-                border: "0.2em solid green",
-                borderRadius: "0.5em",
-              }}
-            >
-              <h5 style={{ fontWeight: "bold", margin: 0 }}>{name}</h5>
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingTop: '0.5em',
+                paddingBottom: '0.5em',
+                paddingLeft: '0.5em',
+                paddingRight: '0.5em',
+                margin: '0.5em',
+                border: '0.2em solid green',
+                borderRadius: '0.5em'
+              }}>
+              <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
             </div>
           ))}
         </div>

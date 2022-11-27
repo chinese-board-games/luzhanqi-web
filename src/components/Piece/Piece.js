@@ -11,7 +11,7 @@ export const pieces = {
   landmine: { count: 3, order: -1 },
   lieutenant: { count: 3, order: 2 },
   major_general: { count: 2, order: 7 },
-  major: { count: 2, order: 4 },
+  major: { count: 2, order: 4 }
 };
 
 /**
@@ -34,13 +34,13 @@ export const pieces = {
  */
 const Piece = (name, affiliation) => {
   if (!pieces[name]) {
-    throw Error("Invalid piece name provided");
+    throw Error('Invalid piece name provided');
   }
   return {
     name,
     affiliation,
     order: pieces[name].order,
-    kills: 0,
+    kills: 0
   };
 };
 

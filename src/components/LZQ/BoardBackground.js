@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
 const BoardBackground = () => (
-  <svg style={{ position: "absolute", width: "582px" }} viewBox="0 0 582 1006">
+  <svg style={{ position: 'absolute', width: '582px' }} viewBox="0 0 582 1006">
     <g>
       {/* Roads */}
       <rect
-        style={{ fill: "none" }}
+        style={{ fill: 'none' }}
         x="12%"
         y="5%"
         width="76%"
@@ -13,18 +13,11 @@ const BoardBackground = () => (
         stroke="black"
         strokeWidth="0.25em"
       />
-      <line
-        x1="50%"
-        y1="5%"
-        x2="50%"
-        y2="95%"
-        stroke="black"
-        strokeWidth="0.25em"
-      />
+      <line x1="50%" y1="5%" x2="50%" y2="95%" stroke="black" strokeWidth="0.25em" />
 
       {/* Railroads */}
       <rect
-        style={{ fill: "none" }}
+        style={{ fill: 'none' }}
         x="12%"
         y="12.5%"
         width="76%"
@@ -34,7 +27,7 @@ const BoardBackground = () => (
       />
 
       <rect
-        style={{ fill: "none" }}
+        style={{ fill: 'none' }}
         x="12%"
         y="41%"
         width="76%"
@@ -46,7 +39,7 @@ const BoardBackground = () => (
       {/* Upper safe zones */}
       <g>
         <circle
-          style={{ fill: "white" }}
+          style={{ fill: 'white' }}
           stroke="black"
           strokeWidth="8"
           cx="50%"
@@ -60,15 +53,14 @@ const BoardBackground = () => (
           textAnchor="middle"
           stroke="black"
           strokeWidth="0.5px"
-          dy=".3em"
-        >
+          dy=".3em">
           行營
         </text>
       </g>
 
       <g>
         <circle
-          style={{ fill: "white" }}
+          style={{ fill: 'white' }}
           stroke="black"
           strokeWidth="8"
           cx="31%"
@@ -82,14 +74,13 @@ const BoardBackground = () => (
           textAnchor="middle"
           stroke="black"
           strokeWidth="0.5px"
-          dy=".3em"
-        >
+          dy=".3em">
           行營
         </text>
       </g>
       <g>
         <circle
-          style={{ fill: "white" }}
+          style={{ fill: 'white' }}
           stroke="black"
           strokeWidth="8"
           cx="69%"
@@ -103,15 +94,14 @@ const BoardBackground = () => (
           textAnchor="middle"
           stroke="black"
           strokeWidth="0.5px"
-          dy=".3em"
-        >
+          dy=".3em">
           行營
         </text>
       </g>
 
       <g>
         <circle
-          style={{ fill: "white" }}
+          style={{ fill: 'white' }}
           stroke="black"
           strokeWidth="8"
           cx="31%"
@@ -125,14 +115,13 @@ const BoardBackground = () => (
           textAnchor="middle"
           stroke="black"
           strokeWidth="0.5px"
-          dy=".3em"
-        >
+          dy=".3em">
           行營
         </text>
       </g>
       <g>
         <circle
-          style={{ fill: "white" }}
+          style={{ fill: 'white' }}
           stroke="black"
           strokeWidth="8"
           cx="69%"
@@ -146,15 +135,14 @@ const BoardBackground = () => (
           textAnchor="middle"
           stroke="black"
           strokeWidth="0.5px"
-          dy=".3em"
-        >
+          dy=".3em">
           行營
         </text>
       </g>
 
       <g>
         <circle
-          style={{ fill: "white" }}
+          style={{ fill: 'white' }}
           stroke="black"
           strokeWidth="8"
           cx="50%"
@@ -168,15 +156,14 @@ const BoardBackground = () => (
           textAnchor="middle"
           stroke="black"
           strokeWidth="0.5px"
-          dy=".3em"
-        >
+          dy=".3em">
           行營
         </text>
       </g>
       {/* Lower safe zones */}
       <g>
         <circle
-          style={{ fill: "white" }}
+          style={{ fill: 'white' }}
           stroke="black"
           strokeWidth="8"
           cx="31%"
@@ -190,14 +177,13 @@ const BoardBackground = () => (
           textAnchor="middle"
           stroke="black"
           strokeWidth="0.5px"
-          dy=".3em"
-        >
+          dy=".3em">
           行營
         </text>
       </g>
       <g>
         <circle
-          style={{ fill: "white" }}
+          style={{ fill: 'white' }}
           stroke="black"
           strokeWidth="8"
           cx="69%"
@@ -211,15 +197,14 @@ const BoardBackground = () => (
           textAnchor="middle"
           stroke="black"
           strokeWidth="0.5px"
-          dy=".3em"
-        >
+          dy=".3em">
           行營
         </text>
       </g>
 
       <g>
         <circle
-          style={{ fill: "white" }}
+          style={{ fill: 'white' }}
           stroke="black"
           strokeWidth="8"
           cx="31%"
@@ -233,14 +218,13 @@ const BoardBackground = () => (
           textAnchor="middle"
           stroke="black"
           strokeWidth="0.5px"
-          dy=".3em"
-        >
+          dy=".3em">
           行營
         </text>
       </g>
       <g>
         <circle
-          style={{ fill: "white" }}
+          style={{ fill: 'white' }}
           stroke="black"
           strokeWidth="8"
           cx="69%"
@@ -254,8 +238,7 @@ const BoardBackground = () => (
           textAnchor="middle"
           stroke="black"
           strokeWidth="0.5px"
-          dy=".3em"
-        >
+          dy=".3em">
           行營
         </text>
       </g>

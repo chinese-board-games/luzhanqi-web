@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
-import React, { useContext, useEffect, useMemo, useState } from "react";
-import { isEqual } from "lodash";
-import Button from "react-bootstrap/Button";
-import { GameContext } from "../../contexts/GameContext";
-import BoardBackground from "./BoardBackground";
-import MountainPass from "./MountainPass";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { isEqual } from 'lodash';
+import Button from 'react-bootstrap/Button';
+import { GameContext } from '../../contexts/GameContext';
+import BoardBackground from './BoardBackground';
+import MountainPass from './MountainPass';
 
 const LZQ = () => {
   const gameState = useContext(GameContext);
@@ -45,7 +45,7 @@ const LZQ = () => {
     // adjList,
     myBoard,
     playerList,
-    playerName,
+    playerName
   ]);
 
   /**
@@ -58,15 +58,15 @@ const LZQ = () => {
     const { source, target } = pendingMove;
     console.log(source, target);
     if (source.length && target.length) {
-      socket.emit("makeMove", {
+      socket.emit('makeMove', {
         playerName,
         room: roomId,
         turn: clientTurn,
-        pendingMove,
+        pendingMove
       });
       setPendingMove({ source: [], target: [] });
     } else {
-      setError("You must have both a source and target tile");
+      setError('You must have both a source and target tile');
     }
   };
 
@@ -87,12 +87,9 @@ const LZQ = () => {
       if (isEqual(pendingMove.source, [y, x])) {
         setPendingMove({
           source: [],
-          target: [],
+          target: []
         });
-      } else if (
-        myBoard[y][x] &&
-        myBoard[y][x].affiliation === sourcePiece.affiliation
-      ) {
+      } else if (myBoard[y][x] && myBoard[y][x].affiliation === sourcePiece.affiliation) {
         setPendingMove({ source: [y, x], target: [] });
       } else {
         setPendingMove((prevState) => ({ ...prevState, target: [y, x] }));
@@ -113,9 +110,7 @@ const LZQ = () => {
    */
 
   const transformBoard = (board) =>
-    board.map((row, y) =>
-      row.map((piece, x) => board[board.length - 1 - y][row.length - 1 - x])
-    );
+    board.map((row, y) => row.map((piece, x) => board[board.length - 1 - y][row.length - 1 - x]));
 
   /**
    * Takes a pair of coordinates and returns the style for the corresponding tile
@@ -128,10 +123,10 @@ const LZQ = () => {
     x = host ? x : 4 - x;
     const { source, target } = pendingMove;
     if (y === source[0] && x === source[1]) {
-      return { filter: "drop-shadow(0 0 0.3em black)" };
+      return { filter: 'drop-shadow(0 0 0.3em black)' };
     }
     if (y === target[0] && x === target[1]) {
-      return { filter: "drop-shadow(0 0 0.3em brown)" };
+      return { filter: 'drop-shadow(0 0 0.3em brown)' };
     }
     return {};
   };
@@ -148,12 +143,11 @@ const LZQ = () => {
       <div
         key={`game_row_${y + 1}`}
         style={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "nowrap",
-          zIndex: 0,
-        }}
-      >
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'nowrap',
+          zIndex: 0
+        }}>
         {row.map((piece, x) => (
           <div
             key={`game_piece_${[y + 1, x + 1]}`}
@@ -161,8 +155,7 @@ const LZQ = () => {
             onClick={() => setMove(y, x)}
             onKeyDown={() => {}}
             tabIndex={0}
-            style={{ margin: "1em" }}
-          >
+            style={{ margin: '1em' }}>
             {piece === null ? (
               <img
                 style={getHighlightStyle(y, x)}
@@ -191,12 +184,11 @@ const LZQ = () => {
       <div
         key={`game_row_${y + 7}`}
         style={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "nowrap",
-          zIndex: 0,
-        }}
-      >
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'nowrap',
+          zIndex: 0
+        }}>
         {row.map((piece, x) => (
           <div
             key={`game_piece_${[y + 7, x + 1]}`}
@@ -204,8 +196,7 @@ const LZQ = () => {
             onClick={() => setMove(y + 6, x)}
             onKeyDown={() => {}}
             tabIndex={0}
-            style={{ margin: "1em" }}
-          >
+            style={{ margin: '1em' }}>
             {piece === null ? (
               <img
                 style={getHighlightStyle(y + 6, x)}
@@ -244,14 +235,13 @@ const LZQ = () => {
       <BoardBackground />
       <div
         style={{
-          backgroundColor: "#4F7276",
-          display: "inline-flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "1em",
-        }}
-      >
+          backgroundColor: '#4F7276',
+          display: 'inline-flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '1em'
+        }}>
         {displayPieces()}
       </div>
       <h3>

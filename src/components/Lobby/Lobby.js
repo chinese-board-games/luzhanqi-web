@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import React, { useContext } from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import { GameContext } from "../../contexts/GameContext";
+import React, { useContext } from 'react';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import { GameContext } from '../../contexts/GameContext';
 
 const Lobby = () => {
   const gameState = useContext(GameContext);
@@ -17,16 +17,16 @@ const Lobby = () => {
   /** Tell the server to create a new game */
   const createNewGame = () => {
     if (playerName) {
-      socket.emit("hostCreateNewGame", { playerName });
+      socket.emit('hostCreateNewGame', { playerName });
       setHost(true);
     } else {
-      setError("You must provide a username.");
+      setError('You must provide a username.');
     }
   };
 
   /** Tell server to begin game */
   const roomFull = () => {
-    socket.emit("hostRoomFull", roomId);
+    socket.emit('hostRoomFull', roomId);
   };
 
   /** Attempt to join a game by game ID */
@@ -34,13 +34,13 @@ const Lobby = () => {
     e.preventDefault();
     if (playerName && roomId) {
       console.log(`Attempting to join game ${roomId} as ${playerName}`);
-      socket.emit("playerJoinGame", {
+      socket.emit('playerJoinGame', {
         playerName,
         joinRoomId: roomId,
-        playerList,
+        playerList
       });
     } else {
-      setError("You must provide both a game number and a player name.");
+      setError('You must provide both a game number and a player name.');
     }
   };
 
@@ -49,11 +49,7 @@ const Lobby = () => {
       {
         /** There is no assigned room, give option to create room */
         roomId ? null : (
-          <Button
-            type="button"
-            onClick={createNewGame}
-            style={{ width: "10em" }}
-          >
+          <Button type="button" onClick={createNewGame} style={{ width: '10em' }}>
             Create New Game
           </Button>
         )
@@ -75,12 +71,7 @@ const Lobby = () => {
           <>
             <h3>按 &quot;Room Full&quot; 開始遊戲</h3>
             <h3>Click &quot;Room Full&quot; to begin the game</h3>
-            <Button
-              type="button"
-              variant="success"
-              onClick={roomFull}
-              style={{ width: "7em" }}
-            >
+            <Button type="button" variant="success" onClick={roomFull} style={{ width: '7em' }}>
               Room Full
             </Button>
           </>

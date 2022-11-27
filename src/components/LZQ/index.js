@@ -1,3 +1,3 @@
-import LZQ from "./LZQ";
+import LZQ from './LZQ';
 
 export default LZQ;
