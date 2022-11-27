@@ -2,10 +2,6 @@
 /* eslint-disable no-param-reassign */
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { isEqual } from "lodash";
-import {
-  getSuccessors,
-  generateAdjList,
-} from "@chinese-board-games/luzhanqi-util";
 import Button from "react-bootstrap/Button";
 import { GameContext } from "../../contexts/GameContext";
 import BoardBackground from "./BoardBackground";
@@ -25,26 +21,32 @@ const LZQ = () => {
 
   const [sucessors, setSuccessors] = useState([]);
 
-  const adjList = useMemo(() => generateAdjList(), []);
+  // const adjList = useMemo(() => generateAdjList(), []);
 
   useEffect(() => {
     const { source, target } = pendingMove;
     if (source && source.length === 2 && target && target.length === 2) {
       console.log(source);
       console.log(target);
-      setSuccessors(
-        getSuccessors(
-          myBoard,
-          adjList,
-          source[1],
-          source[0],
-          playerList.indexOf(playerName)
-        )
-      );
+      // setSuccessors(
+      //   getSuccessors(
+      //     myBoard,
+      //     adjList,
+      //     source[1],
+      //     source[0],
+      //     playerList.indexOf(playerName)
+      //   )
+      // );
     } else {
       setSuccessors([]);
     }
-  }, [pendingMove, adjList, myBoard, playerList, playerName]);
+  }, [
+    pendingMove,
+    // adjList,
+    myBoard,
+    playerList,
+    playerName,
+  ]);
 
   /**
    * Send a move to the server
@@ -54,7 +56,8 @@ const LZQ = () => {
   const makeMove = (e) => {
     e.preventDefault();
     const { source, target } = pendingMove;
-    if (source && target) {
+    console.log(source, target);
+    if (source.length && target.length) {
       socket.emit("makeMove", {
         playerName,
         room: roomId,

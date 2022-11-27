@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 import React, { useEffect, useContext } from "react";
-import { Piece, pieces } from "@chinese-board-games/luzhanqi-util";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Piece from "../Piece";
+import { pieces } from "../Piece/Piece";
 import { GameContext } from "../../contexts/GameContext";
 
 const Setup = () => {
