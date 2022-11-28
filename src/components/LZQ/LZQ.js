@@ -19,12 +19,21 @@ const LZQ = () => {
   const { pendingMove, setPendingMove } = gameState.pendingMove;
   const { setError } = gameState.error;
 
-  const [sucessors, setSuccessors] = useState([]);
+  const { successors, setSuccessors } = gameState.successors;
 
   // const adjList = useMemo(() => generateAdjList(), []);
 
   useEffect(() => {
     const { source, target } = pendingMove;
+    if (source && source.length === 2) {
+      socket.emit('pieceSelection', {
+        board: myBoard,
+        piece: source,
+        playerName,
+        room: roomId
+      });
+    }
+
     if (source && source.length === 2 && target && target.length === 2) {
       console.log(source);
       console.log(target);
@@ -229,7 +238,6 @@ const LZQ = () => {
       </>
     );
   };
-  console.log(sucessors);
   return (
     <>
       <BoardBackground />
@@ -252,6 +260,7 @@ const LZQ = () => {
         Target: {host ? pendingMove.target[0] : 11 - pendingMove.target[0]}
         {host ? pendingMove.target[1] : 4 - pendingMove.target[1]}
       </h3>
+      <p>{successors.length > 0 ? JSON.stringify(successors[0]) : 'No successors'}</p>
 
       {(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1) ? (
         <Button type="button" variant="primary" onClick={makeMove}>
