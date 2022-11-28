@@ -124,6 +124,7 @@ export const GameProvider = ({ children }) => {
 
     socket.on('pieceSelected', (pieces) => {
       setSuccessors(pieces);
+      console.log('successors: ', pieces);
     });
 
     /** Server is telling all clients a move has been made */

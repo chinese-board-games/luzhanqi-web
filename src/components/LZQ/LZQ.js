@@ -35,8 +35,8 @@ const LZQ = () => {
     }
 
     if (source && source.length === 2 && target && target.length === 2) {
-      console.log(source);
-      console.log(target);
+      // console.log(source);
+      // console.log(target);
       // setSuccessors(
       //   getSuccessors(
       //     myBoard,
@@ -132,10 +132,19 @@ const LZQ = () => {
     x = host ? x : 4 - x;
     const { source, target } = pendingMove;
     if (y === source[0] && x === source[1]) {
-      return { filter: 'drop-shadow(0 0 0.3em black)' };
+      return {
+        transform: 'scale(1.2)',
+        filter: 'drop-shadow(0 0 1em black)'
+      };
     }
     if (y === target[0] && x === target[1]) {
       return { filter: 'drop-shadow(0 0 0.3em brown)' };
+    }
+    if (successors.some((successor) => successor[0] === y && successor[1] === x)) {
+      return {
+        outline: '3px dashed orange',
+        outlineOffset: '-3px'
+      };
     }
     return {};
   };
