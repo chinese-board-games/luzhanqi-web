@@ -32,6 +32,7 @@ export const GameProvider = ({ children }) => {
     source: [],
     target: []
   });
+  const [successors, setSuccessors] = useState([]);
 
   /**
    * Game phases:
@@ -68,6 +69,7 @@ export const GameProvider = ({ children }) => {
     myPositions: { myPositions, setMyPositions },
     submittedSide: { submittedSide, setSubmittedSide },
     pendingMove: { pendingMove, setPendingMove },
+    successors: { successors, setSuccessors },
     gamePhase: { gamePhase, setGamePhase },
     startingBoard: { startingBoard, setStartingBoard },
     error: { error, setError }
@@ -118,6 +120,10 @@ export const GameProvider = ({ children }) => {
 
     socket.on('halfBoardReceived', () => {
       setSubmittedSide(true);
+    });
+
+    socket.on('pieceSelected', (pieces) => {
+      setSuccessors(pieces);
     });
 
     /** Server is telling all clients a move has been made */
