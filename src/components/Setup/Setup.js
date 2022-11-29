@@ -36,8 +36,6 @@ const Setup = () => {
   /** Send the starting board to the server (my side) */
   const sendStartingBoard = (e) => {
     e.preventDefault();
-    console.log('Sending board...');
-    console.log(myPositions);
     socket.emit('playerInitialBoard', {
       playerName,
       myPositions,

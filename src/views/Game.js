@@ -5,13 +5,13 @@ import Alert from 'react-bootstrap/Alert';
 import Lobby from '../components/Lobby';
 import Setup from '../components/Setup';
 import LZQ from '../components/LZQ';
+import GameOver from '../components/GameOver';
 
 import { GameContext } from '../contexts/GameContext';
 
 const Game = () => {
   const gameState = useContext(GameContext);
   const { roomId } = gameState.roomId;
-  const { clientTurn } = gameState.clientTurn;
   const { playerList } = gameState.playerList;
   const { gamePhase } = gameState.gamePhase;
   const { error, setError } = gameState.error;
@@ -72,6 +72,11 @@ const Game = () => {
         {
           /** Players play the game */
           gamePhase === 2 ? <LZQ /> : null
+        }
+
+        {
+          /** End of game */
+          gamePhase === 3 ? <GameOver /> : null
         }
 
         {

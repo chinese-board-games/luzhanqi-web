@@ -34,19 +34,7 @@ const LZQ = () => {
       });
     }
 
-    if (source && source.length === 2 && target && target.length === 2) {
-      // console.log(source);
-      // console.log(target);
-      // setSuccessors(
-      //   getSuccessors(
-      //     myBoard,
-      //     adjList,
-      //     source[1],
-      //     source[0],
-      //     playerList.indexOf(playerName)
-      //   )
-      // );
-    } else {
+    if (!(source && source.length === 2 && target && target.length === 2)) {
       setSuccessors([]);
     }
   }, [roomId, setSuccessors, socket, pendingMove, myBoard, playerList, playerName]);
@@ -90,7 +78,6 @@ const LZQ = () => {
     x = host ? x : 4 - x;
 
     if (pendingMove.source.length > 0) {
-      console.log(pendingMove.source);
       const sourcePiece = myBoard[pendingMove.source[0]][pendingMove.source[1]];
       if (isEqual(pendingMove.source, [y, x])) {
         setPendingMove({
