@@ -76,7 +76,7 @@ const Game = () => {
 
         {
           /** Indicate current turn */
-          clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null
+          // clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null
         }
 
         {

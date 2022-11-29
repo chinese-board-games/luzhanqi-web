@@ -49,13 +49,7 @@ const LZQ = () => {
     } else {
       setSuccessors([]);
     }
-  }, [
-    pendingMove,
-    // adjList,
-    myBoard,
-    playerList,
-    playerName
-  ]);
+  }, [roomId, setSuccessors, socket, pendingMove, myBoard, playerList, playerName]);
 
   /**
    * Send a move to the server
@@ -67,12 +61,17 @@ const LZQ = () => {
     const { source, target } = pendingMove;
     console.log(source, target);
     if (source.length && target.length) {
-      socket.emit('makeMove', {
-        playerName,
-        room: roomId,
-        turn: clientTurn,
-        pendingMove
-      });
+      // if target is in successors, make move
+      if (successors.some((successor) => isEqual(successor, target))) {
+        socket.emit('makeMove', {
+          playerName,
+          room: roomId,
+          turn: clientTurn,
+          pendingMove
+        });
+      } else {
+        setError('Invalid move');
+      }
       setPendingMove({ source: [], target: [] });
     } else {
       setError('You must have both a source and target tile');
@@ -261,15 +260,14 @@ const LZQ = () => {
         }}>
         {displayPieces()}
       </div>
-      <h3>
+      {/* <h3>
         Source: {host ? pendingMove.source[0] : 11 - pendingMove.source[0]}
         {host ? pendingMove.source[1] : 4 - pendingMove.source[1]}
       </h3>
       <h3>
         Target: {host ? pendingMove.target[0] : 11 - pendingMove.target[0]}
         {host ? pendingMove.target[1] : 4 - pendingMove.target[1]}
-      </h3>
-      <p>{successors.length > 0 ? JSON.stringify(successors[0]) : 'No successors'}</p>
+      </h3> */}
 
       {(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1) ? (
         <Button type="button" variant="primary" onClick={makeMove}>
