@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { isEqual } from 'lodash';
 import Button from 'react-bootstrap/Button';
 import { GameContext } from '../../contexts/GameContext';

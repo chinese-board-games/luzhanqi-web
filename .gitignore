@@ -86,3 +86,5 @@ ehthumbs_vista.db
 build
 
 # End of https://www.toptal.com/developers/gitignore/api/react,macos,windows,vscode
+
+.nvmrc
