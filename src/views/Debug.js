@@ -7,6 +7,7 @@ import Piece from '../components/Piece';
 import Lobby from '../components/Lobby';
 import Setup from '../components/Setup';
 import LZQ from '../components/LZQ';
+import GameOver from '../components/GameOver';
 
 import { GameContext } from '../contexts/GameContext';
 
@@ -119,6 +120,11 @@ const Game = () => {
         {
           /** Players play the game */
           gamePhase === 2 ? <LZQ /> : null
+        }
+
+        {
+          /** End of game */
+          gamePhase === 3 ? <GameOver /> : null
         }
 
         {
