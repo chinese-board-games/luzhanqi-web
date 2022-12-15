@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { GameContext } from '../../contexts/GameContext';
@@ -13,6 +13,26 @@ const Lobby = () => {
   const { joinedGame } = gameState.joinedGame;
   const { playerList } = gameState.playerList;
   const { setError } = gameState.error;
+  const { storedPlayerName, setStoredPlayerName } = gameState.storedPlayerName;
+  const { storedRoomId, setStoredRoomId } = gameState.storedRoomId;
+  const { storedPlayerList, setStoredPlayerList } = gameState.storedPlayerList;
+
+  const [rejoin, setRejoin] = useState(false);
+
+  useEffect(() => {
+    setStoredPlayerName(window.sessionStorage.getItem('playerName'));
+    setStoredRoomId(window.sessionStorage.getItem('roomId'));
+    setStoredPlayerList(window.sessionStorage.getItem('playerList') || []);
+  }, []);
+
+  useEffect(() => {
+    if (storedPlayerName && storedRoomId && storedPlayerList.length) {
+      setRejoin(true);
+    }
+    return () => {
+      setRejoin(false);
+    };
+  }, [storedPlayerName, storedRoomId, storedPlayerList]);
 
   /** Tell the server to create a new game */
   const createNewGame = () => {
@@ -41,6 +61,21 @@ const Lobby = () => {
       });
     } else {
       setError('You must provide both a game number and a player name.');
+    }
+  };
+
+  /** Attempt to rejoin a game by game ID */
+  const rejoinGame = (e) => {
+    e.preventDefault();
+    if (storedPlayerName && storedRoomId) {
+      console.log(`Attempting to rejoin game ${roomId} as ${playerName}`);
+      socket.emit('playerRejoinGame', {
+        storedPlayerName,
+        storedRoomId,
+        storedPlayerList
+      });
+    } else {
+      console.error('playerName and storedRoomId not stored, cannot rejoin game.');
     }
   };
 
@@ -82,6 +117,12 @@ const Lobby = () => {
         /** Not host and haven't joined a game, give option to join game */
         host || joinedGame ? null : (
           <>
+            {rejoin ? (
+              <Button variant="primary" onClick={rejoinGame}>
+                Rejoin
+              </Button>
+            ) : null}
+
             <Form onSubmit={joinGame}>
               <Form.Label>Player name:</Form.Label>
               <Form.Control

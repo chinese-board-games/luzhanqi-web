@@ -18,6 +18,9 @@ export const GameProvider = ({ children }) => {
   const [playerName, setPlayerName] = useState(defaultName);
   /** game ID assigned to host, or user-input: game Id entered by player */
   const [roomId, setRoomId] = useState('');
+  const [storedPlayerName, setStoredPlayerName] = useState(null);
+  const [storedRoomId, setStoredRoomId] = useState(null);
+  const [storedPlayerList, setStoredPlayerList] = useState([]);
 
   const [host, setHost] = useState(false);
   const [joinedGame, setJoinedGame] = useState(false);
@@ -62,6 +65,9 @@ export const GameProvider = ({ children }) => {
     socket,
     playerName: { playerName, setPlayerName },
     roomId: { roomId, setRoomId },
+    storedPlayerName: { storedPlayerName, setStoredPlayerName },
+    storedRoomId: { storedRoomId, setStoredRoomId },
+    storedPlayerList: { storedPlayerList, setStoredPlayerList },
     host: { host, setHost },
     joinedGame: { joinedGame, setJoinedGame },
     clientTurn: { clientTurn, setClientTurn },
@@ -110,8 +116,12 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling this socket that it has joined a room */
-    socket.on('youHaveJoinedTheRoom', () => {
+    socket.on('youHaveJoinedTheRoom', (data) => {
       setJoinedGame(true);
+      setPlayerList(data.players);
+      window.sessionStorage.setItem('playerName', playerName);
+      window.sessionStorage.setItem('roomId', roomId);
+      window.sessionStorage.setItem('playerList', data.players);
     });
 
     /** Server is sending the starting board with all placed pieces */
