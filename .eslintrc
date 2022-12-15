@@ -1,11 +1,5 @@
 {
-  "extends": [
-    "react-app",
-    "airbnb",
-    "plugin:jsx-a11y/recommended",
-    "prettier",
-    "prettier/react"
-  ],
+  "extends": ["airbnb", "plugin:jsx-a11y/recommended", "prettier", "prettier/react"],
   "plugins": ["jsx-a11y", "prettier"],
   "rules": {
     "no-unused-vars": "warn",
@@ -24,5 +18,8 @@
         "semi": true
       }
     ]
+  },
+  "env": {
+    "browser": true
   }
 }

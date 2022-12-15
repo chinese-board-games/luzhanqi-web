@@ -7,7 +7,7 @@ function Menu() {
     <div>
       <h1>陸戰棋 Luzhanqi</h1>
       <Link to="/game">Create Match</Link>
-      <Link to="/game">Join Match</Link>
+      <Link to="/game">Join/Rejoin Match</Link>
       <Button>Settings</Button>
     </div>
   );
