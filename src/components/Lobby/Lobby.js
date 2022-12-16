@@ -118,7 +118,7 @@ const Lobby = () => {
         host || joinedGame ? null : (
           <>
             {rejoin ? (
-              <Button variant="primary" onClick={rejoinGame}>
+              <Button variant="warning" onClick={rejoinGame}>
                 Rejoin
               </Button>
             ) : null}
