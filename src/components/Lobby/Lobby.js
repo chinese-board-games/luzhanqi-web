@@ -2,7 +2,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { GameContext } from '../../contexts/GameContext';
+import { GameContext } from 'contexts/GameContext';
+import Login from 'components/Login';
+import { useFirebaseAuth } from 'contexts/FirebaseContext';
+import { getAuth } from 'firebase/auth';
 
 const Lobby = () => {
   const gameState = useContext(GameContext);
@@ -16,6 +19,7 @@ const Lobby = () => {
   const { storedPlayerName, setStoredPlayerName } = gameState.storedPlayerName;
   const { storedRoomId, setStoredRoomId } = gameState.storedRoomId;
   const { storedPlayerList, setStoredPlayerList } = gameState.storedPlayerList;
+  const user = useFirebaseAuth();
 
   const [rejoin, setRejoin] = useState(false);
 
@@ -122,7 +126,22 @@ const Lobby = () => {
                 Rejoin
               </Button>
             ) : null}
-
+            {user ? (
+              <>
+                <h2>Hello {user.email}</h2>
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    getAuth().signOut();
+                    // window.location.reload();
+                  }}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Login />
+            )}
+            {/* {showLogin ? <Login /> : null} */}
             <Form onSubmit={joinGame}>
               <Form.Label>Player name:</Form.Label>
               <Form.Control

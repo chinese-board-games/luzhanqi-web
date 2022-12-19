@@ -88,3 +88,5 @@ build
 # End of https://www.toptal.com/developers/gitignore/api/react,macos,windows,vscode
 
 .nvmrc
+# Local Netlify folder
+.netlify
