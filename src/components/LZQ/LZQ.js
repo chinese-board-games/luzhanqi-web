@@ -3,7 +3,7 @@
 import React, { useContext, useEffect } from 'react';
 import { isEqual } from 'lodash';
 import Button from 'react-bootstrap/Button';
-import { GameContext } from '../../contexts/GameContext';
+import { GameContext } from 'contexts/GameContext';
 import BoardBackground from './BoardBackground';
 import MountainPass from './MountainPass';
 

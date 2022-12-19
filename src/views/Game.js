@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from 'react';
 import Alert from 'react-bootstrap/Alert';
+import { GameContext } from 'contexts/GameContext';
 
-import Lobby from '../components/Lobby';
-import Setup from '../components/Setup';
-import LZQ from '../components/LZQ';
-import GameOver from '../components/GameOver';
-
-import { GameContext } from '../contexts/GameContext';
+import Lobby from 'components/Lobby';
+import Setup from 'components/Setup';
+import LZQ from 'components/LZQ';
+import GameOver from 'components/GameOver';
 
 const Game = () => {
   const gameState = useContext(GameContext);
