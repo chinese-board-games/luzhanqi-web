@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';

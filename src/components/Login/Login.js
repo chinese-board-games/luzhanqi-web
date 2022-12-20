@@ -2,6 +2,7 @@ import React from 'react';
 import SignIn from './SignIn';
 import CreateAccount from './CreateAccount';
 import Google from './Google';
+import Phone from './Phone';
 
 const LoginComponent = () => {
   const [existingAccount, setExistingAccount] = React.useState(false);
@@ -15,6 +16,7 @@ const LoginComponent = () => {
         <CreateAccount setExistingAccount={setExistingAccount} />
       )}
       <Google />
+      <Phone />
     </>
   );
 };
