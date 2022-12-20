@@ -108,7 +108,6 @@ const Phone = () => {
             <Form.Group className="mb-3" controlId="formBasicPhoneNumber">
               <Form.Label>Phone Number</Form.Label>
               <PhoneInput
-                placeholder="+1 (555) 555-5555"
                 country="us"
                 value={phoneNumber}
                 onChange={(phone) => setPhoneNumber(phone)}
@@ -117,8 +116,8 @@ const Phone = () => {
                 We&#39;ll never share your phone number with anyone else.
               </Form.Text>
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit Phone Number
+            <Button variant="info" type="submit">
+              Login
             </Button>
           </Form>
         </>

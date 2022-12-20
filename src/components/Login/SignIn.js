@@ -1,8 +1,11 @@
+/* eslint-disable no-console */
 import { getAuth } from 'firebase/auth';
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // eslint-disable-next-line react/prop-types
 const SignIn = ({ setExistingAccount }) => {
@@ -24,6 +27,7 @@ const SignIn = ({ setExistingAccount }) => {
         const errorMessage = err.message;
         console.log(`errorCode: ${errorCode}`);
         console.log(`errorMessage: ${errorMessage}`);
+        toast.error(errorMessage);
       });
   };
   if (error) {
@@ -71,13 +75,14 @@ const SignIn = ({ setExistingAccount }) => {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Submit
+        <Button variant="info" type="submit">
+          Login
         </Button>
         <Button variant="link" onClick={() => setExistingAccount(false)}>
           Create Account
         </Button>
       </Form>
+      <ToastContainer />
     </div>
   );
 };

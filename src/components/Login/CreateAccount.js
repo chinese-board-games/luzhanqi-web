@@ -88,8 +88,8 @@ const CreateAccount = ({ setExistingAccount }) => {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit" disabled={!(password === confirmPassword)}>
-          Submit
+        <Button variant="info" type="submit" disabled={!(password === confirmPassword)}>
+          Sign Up
         </Button>
         <Button variant="link" onClick={() => setExistingAccount(true)}>
           Sign In
