@@ -3,9 +3,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { GameContext } from 'contexts/GameContext';
-import Login from 'components/Login';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
-import { getAuth } from 'firebase/auth';
 
 const Lobby = () => {
   const gameState = useContext(GameContext);
@@ -88,7 +86,7 @@ const Lobby = () => {
       {
         /** There is no assigned room, give option to create room */
         roomId ? null : (
-          <Button type="button" onClick={createNewGame} style={{ width: '10em' }}>
+          <Button variant="success" onClick={createNewGame} style={{ width: '10em' }}>
             Create New Game
           </Button>
         )
@@ -129,19 +127,10 @@ const Lobby = () => {
             {user ? (
               <>
                 <h2>Hello {user.email}</h2>
-                <Button
-                  variant="danger"
-                  onClick={() => {
-                    getAuth().signOut();
-                    window.location.reload();
-                  }}>
-                  Logout
-                </Button>
               </>
             ) : (
-              <Login />
+              <div />
             )}
-            {/* {showLogin ? <Login /> : null} */}
             <Form onSubmit={joinGame}>
               <Form.Label>Player name:</Form.Label>
               <Form.Control
@@ -159,7 +148,7 @@ const Lobby = () => {
                 onChange={(e) => setRoomId(e.target.value.toString())}
               />
               <br />
-              <Button variant="primary" type="submit">
+              <Button variant="info" type="submit">
                 Submit
               </Button>
             </Form>

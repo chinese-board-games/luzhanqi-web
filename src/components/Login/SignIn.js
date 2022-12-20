@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // eslint-disable-next-line react/prop-types
-const SignIn = ({ setExistingAccount }) => {
+const SignIn = ({ setExistingAccount, setShowModal }) => {
   const auth = getAuth();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -21,6 +21,7 @@ const SignIn = ({ setExistingAccount }) => {
         // Signed in
         console.log(`userCredential: ${userCredential}`);
         // ...
+        setShowModal(false);
       })
       .catch((err) => {
         const errorCode = err.code;

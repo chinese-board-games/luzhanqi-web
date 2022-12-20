@@ -5,7 +5,8 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Google = () => {
+// eslint-disable-next-line react/prop-types
+const Google = ({ setShowModal }) => {
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
 
@@ -21,6 +22,7 @@ const Google = () => {
         console.log(`credential: ${JSON.stringify(credential)}`);
         console.log(`token: ${token}`);
         console.log(`user: ${JSON.stringify(user)}`);
+        setShowModal(false);
       })
       .catch((error) => {
         // Handle Errors here.
@@ -40,12 +42,12 @@ const Google = () => {
   };
 
   return (
-    <>
+    <div style={{ margin: '0.5em' }}>
       <Button variant="outline-primary" onClick={handleGoogleSignIn}>
         Sign in with Google
       </Button>
       <ToastContainer />
-    </>
+    </div>
   );
 };
 
