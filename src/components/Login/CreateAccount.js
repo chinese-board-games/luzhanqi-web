@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
 // eslint-disable-next-line react/prop-types
-const CreateAccount = ({ setExistingAccount }) => {
+const CreateAccount = ({ setExistingAccount, setShowModal }) => {
   const auth = getAuth();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -30,6 +30,7 @@ const CreateAccount = ({ setExistingAccount }) => {
         const errorMessage = err.message;
         console.log(`errorCode: ${errorCode}`);
         console.log(`errorMessage: ${errorMessage}`);
+        setShowModal(false);
       });
   };
   if (error) {

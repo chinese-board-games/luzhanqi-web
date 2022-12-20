@@ -5,18 +5,19 @@ import CreateAccount from './CreateAccount';
 import Google from './Google';
 import Phone from './Phone';
 
-const LoginComponent = () => {
+// eslint-disable-next-line react/prop-types
+const LoginComponent = ({ setShowModal }) => {
   const [existingAccount, setExistingAccount] = React.useState(false);
   const [usePhone, setUsePhone] = React.useState(false);
 
   const displayEmail = (
     <>
       {existingAccount ? (
-        <SignIn setExistingAccount={setExistingAccount} />
+        <SignIn setExistingAccount={setExistingAccount} setShowModal={setShowModal} />
       ) : (
-        <CreateAccount setExistingAccount={setExistingAccount} />
+        <CreateAccount setExistingAccount={setExistingAccount} setShowModal={setShowModal} />
       )}
-      <Google />
+      <Google setShowModal={setShowModal} />
     </>
   );
 
@@ -26,7 +27,7 @@ const LoginComponent = () => {
       <Button variant="link" onClick={() => setUsePhone(!usePhone)}>
         {usePhone ? 'Use Email' : 'Use Phone'}
       </Button>
-      {usePhone ? <Phone /> : displayEmail}
+      {usePhone ? <Phone setShowModal={setShowModal} /> : displayEmail}
     </div>
   );
 };

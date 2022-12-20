@@ -80,7 +80,6 @@ const Game = () => {
         <Button type="button" variant="primary" onClick={showBoardDebug}>
           Show Board Debug
         </Button>
-        <h1>陸戰棋 Luzhanqi</h1>
         {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
 
         {playerList.length > 0 ? <h2>Players</h2> : null}

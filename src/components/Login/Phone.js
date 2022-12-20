@@ -8,7 +8,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-phone-input-2/lib/style.css';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Phone = () => {
+// eslint-disable-next-line react/prop-types
+const Phone = ({ setShowModal }) => {
   // state variable to display confirmation code input
   const [displayConfirmationCodePrompt, setDisplayConfirmationCodePrompt] = React.useState(false);
   const [phoneNumber, setPhoneNumber] = React.useState('');
@@ -18,7 +19,8 @@ const Phone = () => {
   // create a ref to the recaptcha container
   const recaptchaContainerRef = React.useRef();
 
-  const handleSubmitPhoneNumber = () => {
+  const handleSubmitPhoneNumber = (e) => {
+    e.preventDefault();
     if (phoneNumber === '' || phoneNumber.length < 10) {
       toast.warn('Please enter a valid phone number');
       window.verifier.clear();
@@ -71,6 +73,7 @@ const Phone = () => {
         const { user } = result;
         // ...
         console.log(`user: ${user} user.phoneNumber: ${user.phoneNumber}`);
+        setShowModal(false);
       })
       .catch((err) => {
         // User couldn't sign in (bad verification code?)
