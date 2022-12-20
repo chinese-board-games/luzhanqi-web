@@ -2,6 +2,8 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Google = () => {
   const auth = getAuth();
@@ -33,13 +35,17 @@ const Google = () => {
         console.log(`errorMessage: ${errorMessage}`);
         console.log(`email: ${email}`);
         console.log(`credential: ${JSON.stringify(credential)}`);
+        toast.error(errorMessage);
       });
   };
 
   return (
-    <Button variant="outline-primary" onClick={handleGoogleSignIn}>
-      Sign in with Google
-    </Button>
+    <>
+      <Button variant="outline-primary" onClick={handleGoogleSignIn}>
+        Sign in with Google
+      </Button>
+      <ToastContainer />
+    </>
   );
 };
 
