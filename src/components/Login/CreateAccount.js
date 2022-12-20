@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { getAuth } from 'firebase/auth';
 import React from 'react';
 import Button from 'react-bootstrap/Button';

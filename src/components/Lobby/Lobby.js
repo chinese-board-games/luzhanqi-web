@@ -133,7 +133,7 @@ const Lobby = () => {
                   variant="danger"
                   onClick={() => {
                     getAuth().signOut();
-                    // window.location.reload();
+                    window.location.reload();
                   }}>
                   Logout
                 </Button>
