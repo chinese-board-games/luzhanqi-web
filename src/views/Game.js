@@ -35,7 +35,15 @@ const Game = () => {
           alignItems: 'center'
         }}>
         <div style={{ width: '35em' }}>
-          {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
+          {roomId ? (
+            <div>
+              <h1>{`Your game ID is: ${roomId}`}</h1>
+              <h4>
+                Give this ID to your opponent, who will use it to join the game under their own
+                username
+              </h4>
+            </div>
+          ) : null}
 
           {playerList.length > 0 ? <h2>Players</h2> : null}
 
