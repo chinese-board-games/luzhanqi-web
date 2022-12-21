@@ -3,7 +3,7 @@
 import React, { useContext, useEffect } from 'react';
 import { isEqual } from 'lodash';
 import Button from 'react-bootstrap/Button';
-import { GameContext } from '../../contexts/GameContext';
+import { GameContext } from 'contexts/GameContext';
 import BoardBackground from './BoardBackground';
 import MountainPass from './MountainPass';
 
@@ -17,11 +17,9 @@ const LZQ = () => {
   const { playerList } = gameState.playerList;
   const { myBoard } = gameState.myBoard;
   const { pendingMove, setPendingMove } = gameState.pendingMove;
-  const { setError } = gameState.error;
+  const { setErrors } = gameState.errors;
 
   const { successors, setSuccessors } = gameState.successors;
-
-  // const adjList = useMemo(() => generateAdjList(), []);
 
   useEffect(() => {
     const { source, target } = pendingMove;
@@ -58,11 +56,11 @@ const LZQ = () => {
           pendingMove
         });
       } else {
-        setError('Invalid move');
+        setErrors((prevErrors) => [...prevErrors, 'Invalid move']);
       }
       setPendingMove({ source: [], target: [] });
     } else {
-      setError('You must have both a source and target tile');
+      setErrors((prevErrors) => [...prevErrors, 'You must have both a source and target tile']);
     }
   };
 
@@ -174,7 +172,7 @@ const LZQ = () => {
                 src={
                   playerList.indexOf(playerName) === piece.affiliation
                     ? `pieces/${piece.name}.svg`
-                    : `pieces/enemy/${piece.name}_enemy.svg`
+                    : 'pieces/enemy/blank_enemy.svg' // `pieces/enemy/${piece.name}_enemy.svg`
                 }
                 alt={piece.name}
               />
@@ -215,7 +213,7 @@ const LZQ = () => {
                 src={
                   playerList.indexOf(playerName) === piece.affiliation
                     ? `pieces/${piece.name}.svg`
-                    : `pieces/enemy/${piece.name}_enemy.svg`
+                    : 'pieces/enemy/blank_enemy.svg' // `pieces/enemy/${piece.name}_enemy.svg`
                 }
                 alt={piece.name}
               />
