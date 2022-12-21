@@ -80,7 +80,15 @@ const Game = () => {
         <Button type="button" variant="primary" onClick={showBoardDebug}>
           Show Board Debug
         </Button>
-        {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
+        {roomId ? (
+          <div>
+            <h1>{`Your game ID is: ${roomId}`}</h1>
+            <h2>
+              Give this ID to your opponent, who will use it to join the game under their own
+              username
+            </h2>
+          </div>
+        ) : null}
 
         {playerList.length > 0 ? <h2>Players</h2> : null}
 
