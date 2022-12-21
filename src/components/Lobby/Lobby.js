@@ -2,7 +2,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { GameContext } from '../../contexts/GameContext';
+import { GameContext } from 'contexts/GameContext';
+import { useFirebaseAuth } from 'contexts/FirebaseContext';
 
 const Lobby = () => {
   const gameState = useContext(GameContext);
@@ -12,10 +13,11 @@ const Lobby = () => {
   const { host, setHost } = gameState.host;
   const { joinedGame } = gameState.joinedGame;
   const { playerList } = gameState.playerList;
-  const { setError } = gameState.error;
+  const { setErrors } = gameState.errors;
   const { storedPlayerName, setStoredPlayerName } = gameState.storedPlayerName;
   const { storedRoomId, setStoredRoomId } = gameState.storedRoomId;
   const { storedPlayerList, setStoredPlayerList } = gameState.storedPlayerList;
+  const user = useFirebaseAuth();
 
   const [rejoin, setRejoin] = useState(false);
 
@@ -40,7 +42,7 @@ const Lobby = () => {
       socket.emit('hostCreateNewGame', { playerName });
       setHost(true);
     } else {
-      setError('You must provide a username.');
+      setErrors((prevErrors) => [...prevErrors, 'You must provide a username.']);
     }
   };
 
@@ -60,7 +62,10 @@ const Lobby = () => {
         playerList
       });
     } else {
-      setError('You must provide both a game number and a player name.');
+      setErrors((prevErrors) => [
+        ...prevErrors,
+        'You must provide both a game number and a player name.'
+      ]);
     }
   };
 
@@ -84,7 +89,7 @@ const Lobby = () => {
       {
         /** There is no assigned room, give option to create room */
         roomId ? null : (
-          <Button type="button" onClick={createNewGame} style={{ width: '10em' }}>
+          <Button variant="success" onClick={createNewGame} style={{ width: '10em' }}>
             Create New Game
           </Button>
         )
@@ -122,7 +127,13 @@ const Lobby = () => {
                 Rejoin
               </Button>
             ) : null}
-
+            {user ? (
+              <>
+                <h2>Hello {user.email}</h2>
+              </>
+            ) : (
+              <div />
+            )}
             <Form onSubmit={joinGame}>
               <Form.Label>Player name:</Form.Label>
               <Form.Control
@@ -140,7 +151,7 @@ const Lobby = () => {
                 onChange={(e) => setRoomId(e.target.value.toString())}
               />
               <br />
-              <Button variant="primary" type="submit">
+              <Button variant="info" type="submit">
                 Submit
               </Button>
             </Form>

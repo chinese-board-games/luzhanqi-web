@@ -3,8 +3,9 @@ import React, { createContext, useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
 
-const socket = io('localhost:4000');
-// const socket = io("https://luzhanqi.herokuapp.com/");
+const socket = io(process.env.REACT_APP_API);
+// const socket = io('localhost:4000');
+// const socket = io('https://luzhanqi.herokuapp.com/');
 
 export const GameContext = createContext({});
 
@@ -59,7 +60,7 @@ export const GameProvider = ({ children }) => {
   const [winner, setWinner] = useState(null);
 
   // const [startingBoard, setStartingBoard] = useState();
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState([]);
 
   const gameState = {
     socket,
@@ -80,7 +81,12 @@ export const GameProvider = ({ children }) => {
     gamePhase: { gamePhase, setGamePhase },
     startingBoard: { startingBoard, setStartingBoard },
     winner: { winner, setWinner },
-    error: { error, setError }
+    errors: { errors, setErrors }
+  };
+
+  // extend error (list of errors) to include new errors
+  const pushErrors = (newErrors) => {
+    setErrors((prevErrorStack) => [...prevErrorStack, ...newErrors]);
   };
 
   /**
@@ -154,7 +160,7 @@ export const GameProvider = ({ children }) => {
 
     /** Server is returning an error message to the client */
     socket.on('error', (errMsg) => {
-      setError(errMsg);
+      pushErrors(errMsg);
     });
 
     return () => {
@@ -163,7 +169,7 @@ export const GameProvider = ({ children }) => {
         console.log(`Connected: ${socket.connected}`);
       });
     };
-  }, [roomId, error]);
+  }, [roomId, JSON.stringify(errors)]);
 
   return <GameContext.Provider value={gameState}>{children}</GameContext.Provider>;
 };

@@ -21,5 +21,15 @@
   },
   "env": {
     "browser": true
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["contexts", "./src/contexts"],
+          ["components", "./src/components"]
+        ]
+      }
+    }
   }
 }
