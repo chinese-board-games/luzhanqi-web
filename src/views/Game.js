@@ -17,7 +17,6 @@ const Game = () => {
 
   /** Clear errors after 1 second each */
   useEffect(() => {
-    // toast log and clear all errors
     errors.forEach((error) => {
       toast.error(error, {
         toastId: `${Date.now()}`
