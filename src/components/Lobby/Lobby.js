@@ -13,7 +13,7 @@ const Lobby = () => {
   const { host, setHost } = gameState.host;
   const { joinedGame } = gameState.joinedGame;
   const { playerList } = gameState.playerList;
-  const { setError } = gameState.error;
+  const { setErrors } = gameState.errors;
   const { storedPlayerName, setStoredPlayerName } = gameState.storedPlayerName;
   const { storedRoomId, setStoredRoomId } = gameState.storedRoomId;
   const { storedPlayerList, setStoredPlayerList } = gameState.storedPlayerList;
@@ -42,7 +42,7 @@ const Lobby = () => {
       socket.emit('hostCreateNewGame', { playerName });
       setHost(true);
     } else {
-      setError('You must provide a username.');
+      setErrors((prevErrors) => [...prevErrors, 'You must provide a username.']);
     }
   };
 
@@ -62,7 +62,10 @@ const Lobby = () => {
         playerList
       });
     } else {
-      setError('You must provide both a game number and a player name.');
+      setErrors((prevErrors) => [
+        ...prevErrors,
+        'You must provide both a game number and a player name.'
+      ]);
     }
   };
 

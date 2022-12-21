@@ -36,6 +36,7 @@ const Setup = () => {
   /** Send the starting board to the server (my side) */
   const sendStartingBoard = (e) => {
     e.preventDefault();
+    console.log('sendStartingBoard', myPositions);
     socket.emit('playerInitialBoard', {
       playerName,
       myPositions,
@@ -84,15 +85,20 @@ const Setup = () => {
               as="select"
               size="sm"
               value={startingBoard[pos]}
-              onChange={(e) =>
+              onChange={(e) => {
                 setStartingBoard({
                   ...startingBoard,
                   [pos]: e.target.value
-                })
-              }>
-              {Object.keys(pieces).map((piece) => (
-                <option key={piece}>{piece}</option>
-              ))}
+                });
+              }}>
+              {Object.keys(pieces)
+                .sort((a, b) => pieces[b].order - pieces[a].order)
+                .map((piece) => (
+                  // eslint-disable-next-line react/no-unknown-property
+                  <option key={piece} piece={piece}>
+                    {piece}
+                  </option>
+                ))}
               <option>none</option>
             </Form.Control>
           </Form.Group>

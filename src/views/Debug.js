@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from 'react';
-import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 
 import Piece from 'components/Piece';
@@ -19,14 +18,15 @@ const Game = () => {
   const { playerList, setPlayerList } = gameState.playerList;
   const { gamePhase, setGamePhase } = gameState.gamePhase;
   const { setMyBoard } = gameState.myBoard;
-  const { error, setError } = gameState.error;
+  const { errors, setErrors } = gameState.errors;
 
-  /** Clear errors after 5 seconds */
+  /** Clear errors after 1 second each */
   useEffect(() => {
     setTimeout(() => {
-      setError('');
-    }, 5000);
-  }, [error, setError]);
+      // remove oldest error from the stack
+      setErrors((prev) => prev.slice(1));
+    }, 1000);
+  }, [errors, setErrors]);
 
   const showBoardDebug = () => {
     setGamePhase(2);
@@ -133,7 +133,7 @@ const Game = () => {
 
         {
           /** Display an error */
-          error ? <Alert variant="danger">{error}</Alert> : null
+          // error ? <Alert variant="danger">{error}</Alert> : null
         }
       </div>
     </div>
