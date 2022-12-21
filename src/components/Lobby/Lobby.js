@@ -1,5 +1,9 @@
 /* eslint-disable no-console */
-import React, { useContext, useState, useEffect } from 'react';
+import React, {
+  useContext
+  // useState,
+  // useEffect
+} from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { GameContext } from 'contexts/GameContext';
@@ -14,27 +18,27 @@ const Lobby = () => {
   const { joinedGame } = gameState.joinedGame;
   const { playerList } = gameState.playerList;
   const { setErrors } = gameState.errors;
-  const { storedPlayerName, setStoredPlayerName } = gameState.storedPlayerName;
-  const { storedRoomId, setStoredRoomId } = gameState.storedRoomId;
-  const { storedPlayerList, setStoredPlayerList } = gameState.storedPlayerList;
+  // const { storedPlayerName, setStoredPlayerName } = gameState.storedPlayerName;
+  // const { storedRoomId, setStoredRoomId } = gameState.storedRoomId;
+  // const { storedPlayerList, setStoredPlayerList } = gameState.storedPlayerList;
   const user = useFirebaseAuth();
 
-  const [rejoin, setRejoin] = useState(false);
+  // const [rejoin, setRejoin] = useState(false);
 
-  useEffect(() => {
-    setStoredPlayerName(window.sessionStorage.getItem('playerName'));
-    setStoredRoomId(window.sessionStorage.getItem('roomId'));
-    setStoredPlayerList(window.sessionStorage.getItem('playerList') || []);
-  }, []);
+  // useEffect(() => {
+  //   setStoredPlayerName(window.sessionStorage.getItem('playerName'));
+  //   setStoredRoomId(window.sessionStorage.getItem('roomId'));
+  //   setStoredPlayerList(window.sessionStorage.getItem('playerList') || []);
+  // }, []);
 
-  useEffect(() => {
-    if (storedPlayerName && storedRoomId && storedPlayerList.length) {
-      setRejoin(true);
-    }
-    return () => {
-      setRejoin(false);
-    };
-  }, [storedPlayerName, storedRoomId, storedPlayerList]);
+  // useEffect(() => {
+  //   if (storedPlayerName && storedRoomId && storedPlayerList.length) {
+  //     setRejoin(true);
+  //   }
+  //   return () => {
+  //     setRejoin(false);
+  //   };
+  // }, [storedPlayerName, storedRoomId, storedPlayerList]);
 
   /** Tell the server to create a new game */
   const createNewGame = () => {
@@ -69,20 +73,20 @@ const Lobby = () => {
     }
   };
 
-  /** Attempt to rejoin a game by game ID */
-  const rejoinGame = (e) => {
-    e.preventDefault();
-    if (storedPlayerName && storedRoomId) {
-      console.log(`Attempting to rejoin game ${roomId} as ${playerName}`);
-      socket.emit('playerRejoinGame', {
-        storedPlayerName,
-        storedRoomId,
-        storedPlayerList
-      });
-    } else {
-      console.error('playerName and storedRoomId not stored, cannot rejoin game.');
-    }
-  };
+  // /** Attempt to rejoin a game by game ID */
+  // const rejoinGame = (e) => {
+  //   e.preventDefault();
+  //   if (storedPlayerName && storedRoomId) {
+  //     console.log(`Attempting to rejoin game ${roomId} as ${playerName}`);
+  //     socket.emit('playerRejoinGame', {
+  //       storedPlayerName,
+  //       storedRoomId,
+  //       storedPlayerList
+  //     });
+  //   } else {
+  //     console.error('playerName and storedRoomId not stored, cannot rejoin game.');
+  //   }
+  // };
 
   return (
     <>
@@ -122,11 +126,12 @@ const Lobby = () => {
         /** Not host and haven't joined a game, give option to join game */
         host || joinedGame ? null : (
           <>
-            {rejoin ? (
+            {/* disabled until fully implemented */}
+            {/* {rejoin ? (
               <Button variant="warning" onClick={rejoinGame}>
                 Rejoin
               </Button>
-            ) : null}
+            ) : null} */}
             {user ? (
               <>
                 <h2>Hello {user.email}</h2>

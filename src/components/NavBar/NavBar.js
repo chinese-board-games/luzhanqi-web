@@ -1,14 +1,14 @@
 import Login from 'components/Login';
-import { getAuth } from 'firebase/auth';
+// import { getAuth } from 'firebase/auth';
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { useAuthState } from 'react-firebase-hooks/auth';
+// import { useAuthState } from 'react-firebase-hooks/auth';
 import Modal from 'react-modal';
 
 const NavBar = () => {
   // state variable to set modal to open or closed
   const [showModal, setShowModal] = React.useState(false);
-  const [user] = useAuthState(getAuth());
+  // const [user] = useAuthState(getAuth());
 
   return (
     <div
@@ -21,7 +21,8 @@ const NavBar = () => {
       }}>
       <h1>陸戰棋</h1>
 
-      {user ? (
+      {/* disabled until fully implemented */}
+      {/* {user ? (
         <>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <h5 style={{ display: 'inline', margin: '0.5em' }}>
@@ -41,7 +42,7 @@ const NavBar = () => {
         <Button variant="info" onClick={() => setShowModal(true)}>
           Sign In/Sign Up
         </Button>
-      )}
+      )} */}
 
       <Modal
         ariaHideApp={false}
