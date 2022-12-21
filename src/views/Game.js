@@ -1,93 +1,100 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from 'react';
-import Alert from 'react-bootstrap/Alert';
 import { GameContext } from 'contexts/GameContext';
 
 import Lobby from 'components/Lobby';
 import Setup from 'components/Setup';
 import LZQ from 'components/LZQ';
 import GameOver from 'components/GameOver';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Game = () => {
   const gameState = useContext(GameContext);
   const { roomId } = gameState.roomId;
   const { playerList } = gameState.playerList;
   const { gamePhase } = gameState.gamePhase;
-  const { error, setError } = gameState.error;
+  const { errors, setErrors } = gameState.errors;
 
-  /** Clear errors after 5 seconds */
+  /** Clear errors after 1 second each */
   useEffect(() => {
-    setTimeout(() => {
-      setError('');
-    }, 5000);
-  }, [error, setError]);
+    // toast log and clear all errors
+    errors.forEach((error) => {
+      toast.error(error, {
+        toastId: `${Date.now()}`
+      });
+    });
+    setErrors([]);
+  }, [JSON.stringify(errors), toast.error]);
 
   return (
-    <div
-      style={{
-        margin: '2em',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}>
-      <div style={{ width: '35em' }}>
-        {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
+    <>
+      <div
+        style={{
+          margin: '2em',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}>
+        <div style={{ width: '35em' }}>
+          {roomId ? <h1>{`Your game ID is: ${roomId}`}</h1> : null}
 
-        {playerList.length > 0 ? <h2>Players</h2> : null}
+          {playerList.length > 0 ? <h2>Players</h2> : null}
 
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          {playerList.map((name) => (
-            <div
-              key={name}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingTop: '0.5em',
-                paddingBottom: '0.5em',
-                paddingLeft: '0.5em',
-                paddingRight: '0.5em',
-                margin: '0.5em',
-                border: '0.2em solid green',
-                borderRadius: '0.5em'
-              }}>
-              <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
-            </div>
-          ))}
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            {playerList.map((name) => (
+              <div
+                key={name}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingTop: '0.5em',
+                  paddingBottom: '0.5em',
+                  paddingLeft: '0.5em',
+                  paddingRight: '0.5em',
+                  margin: '0.5em',
+                  border: '0.2em solid green',
+                  borderRadius: '0.5em'
+                }}>
+                <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
+              </div>
+            ))}
+          </div>
+          <br />
+
+          {
+            /** Players join the game */
+            gamePhase === 0 ? <Lobby /> : null
+          }
+
+          {
+            /** Players set their boards */
+            gamePhase === 1 ? <Setup /> : null
+          }
+
+          {
+            /** Players play the game */
+            gamePhase === 2 ? <LZQ /> : null
+          }
+
+          {
+            /** End of game */
+            gamePhase === 3 ? <GameOver /> : null
+          }
+
+          {
+            /** Indicate current turn */
+            // clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null
+          }
+
+          {
+            /** Display an error */
+            // error ? <Alert variant="danger">{error}</Alert> : null
+          }
         </div>
-        <br />
-
-        {
-          /** Players join the game */
-          gamePhase === 0 ? <Lobby /> : null
-        }
-
-        {
-          /** Players set their boards */
-          gamePhase === 1 ? <Setup /> : null
-        }
-
-        {
-          /** Players play the game */
-          gamePhase === 2 ? <LZQ /> : null
-        }
-
-        {
-          /** End of game */
-          gamePhase === 3 ? <GameOver /> : null
-        }
-
-        {
-          /** Indicate current turn */
-          // clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null
-        }
-
-        {
-          /** Display an error */
-          error ? <Alert variant="danger">{error}</Alert> : null
-        }
       </div>
-    </div>
+      <ToastContainer />
+    </>
   );
 };
 

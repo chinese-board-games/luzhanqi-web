@@ -17,11 +17,9 @@ const LZQ = () => {
   const { playerList } = gameState.playerList;
   const { myBoard } = gameState.myBoard;
   const { pendingMove, setPendingMove } = gameState.pendingMove;
-  const { setError } = gameState.error;
+  const { setErrors } = gameState.errors;
 
   const { successors, setSuccessors } = gameState.successors;
-
-  // const adjList = useMemo(() => generateAdjList(), []);
 
   useEffect(() => {
     const { source, target } = pendingMove;
@@ -58,11 +56,11 @@ const LZQ = () => {
           pendingMove
         });
       } else {
-        setError('Invalid move');
+        setErrors((prevErrors) => [...prevErrors, 'Invalid move']);
       }
       setPendingMove({ source: [], target: [] });
     } else {
-      setError('You must have both a source and target tile');
+      setErrors((prevErrors) => [...prevErrors, 'You must have both a source and target tile']);
     }
   };
 

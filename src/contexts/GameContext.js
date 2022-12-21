@@ -60,7 +60,7 @@ export const GameProvider = ({ children }) => {
   const [winner, setWinner] = useState(null);
 
   // const [startingBoard, setStartingBoard] = useState();
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState([]);
 
   const gameState = {
     socket,
@@ -81,7 +81,12 @@ export const GameProvider = ({ children }) => {
     gamePhase: { gamePhase, setGamePhase },
     startingBoard: { startingBoard, setStartingBoard },
     winner: { winner, setWinner },
-    error: { error, setError }
+    errors: { errors, setErrors }
+  };
+
+  // extend error (list of errors) to include new errors
+  const pushErrors = (newErrors) => {
+    setErrors((prevErrorStack) => [...prevErrorStack, ...newErrors]);
   };
 
   /**
@@ -155,7 +160,7 @@ export const GameProvider = ({ children }) => {
 
     /** Server is returning an error message to the client */
     socket.on('error', (errMsg) => {
-      setError(errMsg);
+      pushErrors(errMsg);
     });
 
     return () => {
@@ -164,7 +169,7 @@ export const GameProvider = ({ children }) => {
         console.log(`Connected: ${socket.connected}`);
       });
     };
-  }, [roomId, error]);
+  }, [roomId, JSON.stringify(errors)]);
 
   return <GameContext.Provider value={gameState}>{children}</GameContext.Provider>;
 };
