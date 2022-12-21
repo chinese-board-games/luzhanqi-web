@@ -172,7 +172,7 @@ const LZQ = () => {
                 src={
                   playerList.indexOf(playerName) === piece.affiliation
                     ? `pieces/${piece.name}.svg`
-                    : `pieces/enemy/${piece.name}_enemy.svg`
+                    : 'pieces/enemy/blank_enemy.svg' // `pieces/enemy/${piece.name}_enemy.svg`
                 }
                 alt={piece.name}
               />
@@ -213,7 +213,7 @@ const LZQ = () => {
                 src={
                   playerList.indexOf(playerName) === piece.affiliation
                     ? `pieces/${piece.name}.svg`
-                    : `pieces/enemy/${piece.name}_enemy.svg`
+                    : 'pieces/enemy/blank_enemy.svg' // `pieces/enemy/${piece.name}_enemy.svg`
                 }
                 alt={piece.name}
               />
