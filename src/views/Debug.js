@@ -2,11 +2,11 @@
 import React, { useContext, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 
-import Piece from 'components/Piece';
 import Lobby from 'components/Lobby';
 import Setup from 'components/Setup';
 import LZQ from 'components/LZQ';
 import GameOver from 'components/GameOver';
+import Piece from '../models/Piece';
 
 import { GameContext } from '../contexts/GameContext';
 

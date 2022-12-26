@@ -3,8 +3,8 @@ import React, { useEffect, useContext } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { GameContext } from 'contexts/GameContext';
-import Piece from '../Piece';
-import { pieces } from '../Piece/Piece';
+import Piece from '../../models/Piece';
+import { pieces } from '../../models/Piece/Piece';
 
 const Setup = () => {
   const gameState = useContext(GameContext);
