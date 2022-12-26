@@ -5,6 +5,7 @@ import NavBar from 'components/NavBar';
 import Menu from './views/Menu';
 import Game from './views/Game';
 import Debug from './views/Debug';
+import SetupTest from './views/SetupTest';
 
 const App = () => (
   <>
@@ -13,6 +14,7 @@ const App = () => (
       <Route path="/" element={<Menu />} />
       <Route path="/game" element={<Game />} />
       <Route path="/debug" element={<Debug />} />
+      <Route path="/setup-test" element={<SetupTest />} />
     </Routes>
   </>
 );
