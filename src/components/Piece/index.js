@@ -1,14 +1,14 @@
-import { Box } from '@mantine/core';
+import { Center } from '@mantine/core';
 import React from 'react';
 // eslint-disable-next-line import/no-named-default
 import { default as PieceModel } from '../../models/Piece';
 
 // eslint-disable-next-line react/prop-types
-export default function Piece({ type, affiliation }) {
-  const piece = PieceModel(type, affiliation);
+export default function Piece({ name, affiliation }) {
+  const piece = PieceModel(name, affiliation);
   return (
-    <Box bg="red" px="1em" py=".5em" fz="xl" sx={{ borderRadius: '10%' }}>
+    <Center bg="red" w="4em" h="2em" fz="xl" sx={{ borderRadius: '10%' }}>
       {piece.display}
-    </Box>
+    </Center>
   );
 }
