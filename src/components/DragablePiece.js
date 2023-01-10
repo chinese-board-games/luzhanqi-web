@@ -14,7 +14,8 @@ export default function DragablePiece({ name, affiliation, id, data }) {
     cursor: isDragging ? 'grabbing' : 'grab',
     // transform: `scale(${isDragging ? '1.2' : '1'})`,
     // filter: isDragging ? `drop-shadow(0 0 0.75rem grey)` : ''
-    filter: isDragging ? 'opacity(.8)' : ''
+    filter: isDragging ? 'opacity(.8)' : '',
+    zIndex: 100
   };
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>

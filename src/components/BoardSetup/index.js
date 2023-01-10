@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import { Box, Container, Flex, Stack, Grid } from '@mantine/core';
+import { Box, Container, Flex, Stack, Grid, Center } from '@mantine/core';
 import {
   DragOverlay,
   closestCenter,
@@ -15,10 +15,12 @@ import {
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import SortablePiece from 'components/SortablePiece';
 import DragablePiece from 'components/DragablePiece';
+import LineTo from 'react-lineto';
 import Position from './Position';
 import { setupPieces } from '../../models/Piece';
-import { mapBoard, copyBoard, getPieceLocationById } from '../../utils';
+import { mapBoard, copyBoard, getPieceLocationById, halfBoardConnections } from '../../utils';
 
+console.log('halfboardconnections', halfBoardConnections);
 const emptyBoard = [];
 for (let i = 0; i < 6; i++) {
   emptyBoard.push([null, null, null, null, null]);
@@ -26,17 +28,19 @@ for (let i = 0; i < 6; i++) {
 
 export default function BoardSetup() {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
-  const [unplacedPieces, setUnplacedPieces] = useState([...setupPieces].slice(1, 3));
-  const [halfboard, setHalfboard] = useState([...emptyBoard]);
+  const [unplacedPieces, setUnplacedPieces] = useState(
+    [...setupPieces].sort((a, b) => a.order - b.order)
+  );
+  const [halfBoard, setHalfboard] = useState([...emptyBoard]);
   const [activeId, setActiveId] = useState(null);
   // TODO: refactor this to be more effecient
   const activePiece =
     activeId &&
     (setupPieces.find((piece) => piece.id === activeId) ||
-      halfboard.flatMap((piece) => piece).find((piece) => piece.id === activeId));
+      halfBoard.flatMap((piece) => piece).find((piece) => piece.id === activeId));
 
   console.log('activePiece', activePiece);
-  console.log('halfboard', halfboard);
+  console.log('halfBoard', halfBoard);
   console.log('unplacedPieces', unplacedPieces);
 
   const handleDragStart = (event) => {
@@ -74,9 +78,9 @@ export default function BoardSetup() {
         // board position is empty
         const { row, col } = over.data.current;
         console.log('destructured r c', row, col);
-        if (halfboard[row][col] == null) {
+        if (halfBoard[row][col] == null) {
           console.log('unplace to board (unoccupied)');
-          const newBoard = mapBoard(halfboard, (piece, r, c) => {
+          const newBoard = mapBoard(halfBoard, (piece, r, c) => {
             if (r === row && c === col) {
               return unplacedPieces.find((p) => p.id === active.id);
             }
@@ -88,8 +92,8 @@ export default function BoardSetup() {
           // board position is occupied
         } else {
           console.log('unplaced to board (occupied)');
-          const occupyingPiece = halfboard[row][col];
-          const newBoard = mapBoard(halfboard, (piece, r, c) => {
+          const occupyingPiece = halfBoard[row][col];
+          const newBoard = mapBoard(halfBoard, (piece, r, c) => {
             if (r === row && c === col) {
               return unplacedPieces.find((p) => p.id === active.id);
             }
@@ -106,14 +110,14 @@ export default function BoardSetup() {
     } else {
       let { row: activeRow, col: activeCol } = active.data.current;
       if (activeRow == null || activeCol == null) {
-        [activeRow, activeCol] = getPieceLocationById(halfboard, active.id);
+        [activeRow, activeCol] = getPieceLocationById(halfBoard, active.id);
       }
       console.log('dragging from board');
       // dragging from board to unplaced
       if (over.id === 'unplaced' || unplacedPieces.some((piece) => piece.id === over.id)) {
         console.log('dragging from board to unplaced');
-        setUnplacedPieces([...unplacedPieces, halfboard[activeRow][activeCol]]);
-        const newBoard = copyBoard(halfboard);
+        setUnplacedPieces([...unplacedPieces, halfBoard[activeRow][activeCol]]);
+        const newBoard = copyBoard(halfBoard);
         newBoard[activeRow][activeCol] = null;
         setHalfboard(newBoard);
       } else {
@@ -124,15 +128,15 @@ export default function BoardSetup() {
           throw Error('Error, active or over row/col indexes returned null or undefined.');
         }
 
-        console.log('halfboard', halfboard);
-        const newboard = copyBoard(halfboard);
-        console.log('newboard', newboard);
-        console.log('halfboard[overRow][overCol]', halfboard[overRow][overCol]);
+        console.log('halfBoard', halfBoard);
+        const newBoard = copyBoard(halfBoard);
+        console.log('newBoard', newBoard);
+        console.log('halfBoard[overRow][overCol]', halfBoard[overRow][overCol]);
         console.log('overRow overCol', overRow, overCol);
         console.log('activeRow, activeCol', activeRow, activeCol);
-        newboard[activeRow][activeCol] = halfboard[overRow][overCol];
-        newboard[overRow][overCol] = halfboard[activeRow][activeCol];
-        setHalfboard(newboard);
+        newBoard[activeRow][activeCol] = halfBoard[overRow][overCol];
+        newBoard[overRow][overCol] = halfBoard[activeRow][activeCol];
+        setHalfboard(newBoard);
       }
     }
     setActiveId(null);
@@ -147,19 +151,28 @@ export default function BoardSetup() {
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}>
+        {halfBoardConnections.map(({ start, end }) => (
+          <LineTo
+            from={`${start[0]}-${start[1]}`}
+            to={`${end[0]}-${end[1]}`}
+            borderColor="black"
+            borderWidth={3}
+            toAnchor="center"
+          />
+        ))}
         <Stack>
           <PieceSelector unplacedPieces={unplacedPieces} />
           <Box>Half Board</Box>
           <Grid bg="grape" columns={20}>
-            {halfboard.flatMap((row, r) =>
+            {halfBoard.flatMap((row, r) =>
               row.map((piece, c) => (
-                <Grid.Col span={4}>
+                // eslint-disable-next-line react/no-array-index-key
+                <Grid.Col span={4} key={`${r}-${c}`}>
                   <Position piece={piece} row={r} col={c} activeId={activeId} />
                 </Grid.Col>
               ))
             )}
           </Grid>
-          <ResetZone />
         </Stack>
         <DragOverlay>
           {activeId ? (
@@ -178,10 +191,8 @@ function PieceSelector({ unplacedPieces }) {
   return (
     <>
       <Box>Piece Selection</Box>
-      <Box>
-        <div
-          ref={setNodeRef}
-          style={{ backgroundColor: 'grey', minWidth: '100%', minHeight: '10em' }}>
+      <Center bg="grey" miw="100%" py="1em" mih="3.5em">
+        <div ref={setNodeRef}>
           <SortableContext items={unplacedPieces}>
             <Flex justify="center" align="center" gap="1em" wrap="wrap">
               {unplacedPieces.map((piece) => (
@@ -190,19 +201,7 @@ function PieceSelector({ unplacedPieces }) {
             </Flex>
           </SortableContext>
         </div>
-      </Box>
+      </Center>
     </>
-  );
-}
-
-function ResetZone() {
-  const { setNodeRef } = useDroppable({
-    id: 'reset'
-  });
-
-  return (
-    <Box ref={setNodeRef} style={{ backgroundColor: 'red', minWidth: '100%', minHeight: '5em' }}>
-      Reset
-    </Box>
   );
 }
