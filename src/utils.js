@@ -61,3 +61,46 @@ export const getPieceLocationById = (board, id) => {
   }
   return null;
 };
+
+export const isHalfBoardCamp = (r, c) =>
+  (r === 1 && c === 1) ||
+  (r === 1 && c === 3) ||
+  (r === 2 && c === 2) ||
+  (r === 3 && c === 1) ||
+  (r === 3 && c === 3);
+
+const generateHalfBoardConnections = () => {
+  const connections = [];
+  for (let r = 0; r < 6; r++) {
+    for (let c = 0; c < 4; c++) {
+      connections.push({
+        start: [r, c],
+        end: [r, c + 1]
+      });
+    }
+  }
+  for (let c = 0; c < 5; c++) {
+    for (let r = 0; r < 5; r++) {
+      connections.push({
+        start: [r, c],
+        end: [r + 1, c]
+      });
+    }
+  }
+  const camps = [
+    [1, 1],
+    [1, 3],
+    [3, 1],
+    [3, 3]
+  ];
+  camps.forEach(([r, c]) => {
+    connections.push({ start: [r, c], end: [r - 1, c - 1] });
+    connections.push({ start: [r, c], end: [r - 1, c + 1] });
+    connections.push({ start: [r, c], end: [r + 1, c - 1] });
+    connections.push({ start: [r, c], end: [r + 1, c + 1] });
+  });
+  return connections;
+};
+export const halfBoardConnections = generateHalfBoardConnections();
+
+export const isHalfBoardHQ = (r, c) => r === 5 && (c === 1 || c === 3);
