@@ -42,7 +42,8 @@
       "alias": {
         "map": [
           ["contexts", "./src/contexts"],
-          ["components", "./src/components"]
+          ["components", "./src/components"],
+          ["api", "./src/api"]
         ]
       }
     }

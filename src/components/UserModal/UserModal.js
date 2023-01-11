@@ -4,9 +4,16 @@ import PropTypes from 'prop-types';
 
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { Table } from 'react-bootstrap';
+import { getUser } from 'api/User';
 
 const UserModal = ({ showModal, setShowModal }) => {
   const user = useFirebaseAuth();
+  const [userData, setUserData] = useState({});
+
+  // load user data
+  useEffect(() => {
+    setUserData(getUser(user.uid));
+  }, [setUserData, user.uid]);
 
   return (
     <Modal
@@ -38,7 +45,8 @@ const UserModal = ({ showModal, setShowModal }) => {
       </div>
       <h1>Hi, {user?.displayName}</h1>
       <h2>{user?.uid}</h2>
-      <p>You&apos;ve played x games</p>
+      <p>You&apos;ve played {userData?.games?.length || 0} games</p>
+      <p>Your rank is {userData.rank || '(no rank)'}</p>
       {/* create a table with columns date, opponent, win/loss, detail */}
       <Table>
         <thead>
