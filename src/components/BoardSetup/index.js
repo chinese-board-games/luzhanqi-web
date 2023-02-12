@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Box, Container, Flex, Stack, Grid, Center } from '@mantine/core';
 import {
   DragOverlay,
@@ -16,11 +16,18 @@ import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import SortablePiece from 'components/SortablePiece';
 import DragablePiece from 'components/DragablePiece';
 import LineTo from 'react-lineto';
+import { useResizeDetector } from 'react-resize-detector';
 import Position from './Position';
 import { setupPieces } from '../../models/Piece';
-import { mapBoard, copyBoard, getPieceLocationById, halfBoardConnections } from '../../utils';
+import {
+  mapBoard,
+  copyBoard,
+  getPieceLocationById,
+  halfBoardConnections,
+  isHalfBoardRailroad,
+  isHalfBoardCamp
+} from '../../utils';
 
-console.log('halfboardconnections', halfBoardConnections);
 const emptyBoard = [];
 for (let i = 0; i < 6; i++) {
   emptyBoard.push([null, null, null, null, null]);
@@ -61,6 +68,15 @@ export default function BoardSetup() {
     if (!over || !over.id || !active || !active.id) {
       return;
     }
+
+    // disable dragging to camps
+    if (over?.data?.current?.col && over?.data?.current?.row) {
+      const { row, col } = over.data.current;
+      if (isHalfBoardCamp(row, col)) {
+        return;
+      }
+    }
+
     // dragging from unplaced
     if (unplacedPieces.some((piece) => piece.id === active.id)) {
       console.log('dragging from unplaced');
@@ -142,45 +158,67 @@ export default function BoardSetup() {
     setActiveId(null);
   };
 
+  const { ref } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 10
+  });
+
   return (
-    <Container>
-      <DndContext
-        autoScroll={false}
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}>
-        {halfBoardConnections.map(({ start, end }) => (
+    <div ref={ref}>
+      <Container>
+        <ConnectionLines />
+        <DndContext
+          autoScroll={false}
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}>
+          <Stack>
+            <PieceSelector unplacedPieces={unplacedPieces} />
+            <Box>Half Board</Box>
+            <Grid columns={20}>
+              {halfBoard.flatMap((row, r) =>
+                row.map((piece, c) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <Grid.Col span={4} key={`${r}-${c}`}>
+                    <Position piece={piece} row={r} col={c} activeId={activeId} />
+                  </Grid.Col>
+                ))
+              )}
+            </Grid>
+          </Stack>
+          <DragOverlay>
+            {activeId ? (
+              <DragablePiece name={activePiece.name} affiliation={0} data={activePiece.data} />
+            ) : null}
+          </DragOverlay>
+        </DndContext>
+      </Container>
+    </div>
+  );
+}
+
+function ConnectionLines() {
+  return (
+    <>
+      {halfBoardConnections.map(({ start, end }) => {
+        const isRailroadConnection = !!(
+          isHalfBoardRailroad(start[0], start[1]) && isHalfBoardRailroad(end[0], end[1])
+        );
+        return (
           <LineTo
             from={`${start[0]}-${start[1]}`}
             to={`${end[0]}-${end[1]}`}
             borderColor="black"
-            borderWidth={3}
+            borderWidth={isRailroadConnection ? 8 : 3}
+            borderStyle={isRailroadConnection ? 'dashed' : 'solid'}
             toAnchor="center"
+            delay={0}
           />
-        ))}
-        <Stack>
-          <PieceSelector unplacedPieces={unplacedPieces} />
-          <Box>Half Board</Box>
-          <Grid bg="grape" columns={20}>
-            {halfBoard.flatMap((row, r) =>
-              row.map((piece, c) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Grid.Col span={4} key={`${r}-${c}`}>
-                  <Position piece={piece} row={r} col={c} activeId={activeId} />
-                </Grid.Col>
-              ))
-            )}
-          </Grid>
-        </Stack>
-        <DragOverlay>
-          {activeId ? (
-            <DragablePiece name={activePiece.name} affiliation={0} data={activePiece.data} />
-          ) : null}
-        </DragOverlay>
-      </DndContext>
-    </Container>
+        );
+      })}
+    </>
   );
 }
 

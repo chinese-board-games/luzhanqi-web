@@ -41,7 +41,12 @@ export default function Position({ row, col, piece, activeId }) {
         <Center
           px="1.5em"
           py="0em"
-          sx={{ border: '.15em solid black', fontSize: '16pt', zIndex: 100 }}
+          sx={{
+            border: '.15em solid black',
+            fontSize: '16pt',
+            zIndex: 100,
+            borderRadius: '3em 3em 1em 1em'
+          }}
           bg="whitesmoke">
           <Stack spacing="0em" align="stretch" justify="center">
             <Center sx={{ lineHeight: '1.1' }}>大</Center>
@@ -66,12 +71,11 @@ export default function Position({ row, col, piece, activeId }) {
     data: {
       row,
       col
-    },
-    disabled: isHalfBoardCamp(row, col)
+    }
   });
   return (
     <div ref={setNodeRef} className={`${row}-${col}`}>
-      <Center miw="10em" mih="5em" bg={isHalfBoardCamp(row, col) ? 'orange' : 'green'}>
+      <Center mih="5em" bg={isHalfBoardCamp(row, col) ? 'orange' : 'green'}>
         {getPieceContent()}
       </Center>
     </div>

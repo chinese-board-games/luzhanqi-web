@@ -28,6 +28,7 @@
     "react-lineto": "^3.3.0",
     "react-modal": "^3.16.1",
     "react-phone-input-2": "^2.15.1",
+    "react-resize-detector": "^7.1.2",
     "react-router": "^6.4.3",
     "react-router-dom": "^6.4.3",
     "react-toastify": "^9.1.1",
