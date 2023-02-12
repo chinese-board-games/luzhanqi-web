@@ -72,7 +72,7 @@ const Phone = ({ setShowModal }) => {
         // User signed in successfully.
         const { user } = result;
         // ...
-        console.log(`user: ${user} user.phoneNumber: ${user.phoneNumber}`);
+        console.log(`user: ${JSON.stringify(user)} user.phoneNumber: ${user.phoneNumber}`);
         setShowModal(false);
       })
       .catch((err) => {

@@ -1,19 +1,50 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
 
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { Table } from 'react-bootstrap';
-import { getUser } from 'api/User';
+import { getUser, createUser } from 'api/User';
+import { getGameById } from 'api/Game';
 
 const UserModal = ({ showModal, setShowModal }) => {
   const user = useFirebaseAuth();
   const [userData, setUserData] = useState({});
+  const [gameData, setGameData] = useState([]);
 
   // load user data
-  useEffect(() => {
-    setUserData(getUser(user.uid));
-  }, [setUserData, user.uid]);
+  useEffect(async () => {
+    const fetchUser = async () => {
+      let myUser = await getUser(user.uid);
+      if (isEmpty(myUser)) {
+        console.log('User not found, creating it now');
+        myUser = await createUser(user.uid);
+      }
+      console.log('User loaded');
+      setUserData(myUser);
+      return myUser;
+    };
+
+    const fetchGames = async (fetchedUser) => {
+      console.log(`fetching ${fetchedUser.uid} games`);
+      const myGames = await Promise.all(
+        fetchedUser.games.map(async (gameId) => {
+          const game = await getGameById(gameId);
+          return game;
+        })
+      );
+      console.log('games loaded');
+      setGameData(myGames);
+    };
+
+    if (user) {
+      const myUser = await fetchUser();
+      fetchGames(myUser);
+    }
+  }, [setUserData, user?.uid, showModal]);
 
   return (
     <Modal
@@ -43,36 +74,38 @@ const UserModal = ({ showModal, setShowModal }) => {
           x
         </Button>
       </div>
-      <h1>Hi, {user?.displayName}</h1>
-      <h2>{user?.uid}</h2>
-      <p>You&apos;ve played {userData?.games?.length || 0} games</p>
-      <p>Your rank is {userData.rank || '(no rank)'}</p>
+      <h1>Hi, {user?.displayName || user?.phoneNumber || user?.email}</h1>
+      <p>You&apos;ve played {userData?.games?.length || 'no'} games</p>
+      <p>Your rank is {userData?.rank || '(no rank)'}</p>
       {/* create a table with columns date, opponent, win/loss, detail */}
-      <Table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Opponent</th>
-            <th>Result</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>2021-08-01</td>
-            <td>John Doe</td>
-            <td>
-              <a href="https://www.google.com">Win</a>
-            </td>
-          </tr>
-          <tr>
-            <td>2021-08-02</td>
-            <td>John Doe</td>
-            <td>
-              <a href="https://www.google.com">Loss</a>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
+      {userData?.games?.length > 0 && (
+        <Table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Opponent</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {gameData.map((myGame) => {
+              return (
+                <tr key={myGame._id}>
+                  <td>{new Date(myGame.createdAt).toLocaleDateString()}</td>
+                  <td>{myGame.hostId === user?.uid ? myGame.players[1] : myGame.players[0]}</td>
+                  <td>
+                    <p>
+                      {myGame.winnerId === user?.uid
+                        ? 'Win'
+                        : (myGame.winnerId && 'Loss') ?? 'Indeterminate'}
+                    </p>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      )}
     </Modal>
   );
 };
