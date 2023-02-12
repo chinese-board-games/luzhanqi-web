@@ -12,9 +12,8 @@ const CreateAccount = ({ setExistingAccount, setShowModal }) => {
   const [password, setPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
 
-  const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(
-    auth
-  );
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
 
   const handleCreateAccount = (e) => {
     e.preventDefault();
