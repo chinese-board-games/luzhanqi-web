@@ -10,8 +10,8 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "axios": "^1.2.2",
     "bootstrap": "^4.5.3",
-    "eslint": "^7.14.0",
     "eslint-plugin-prettier": "^3.3.0",
     "firebase": "^9.15.0",
     "jquery": "^3.5.1",
@@ -61,7 +61,7 @@
     ]
   },
   "devDependencies": {
-    "eslint-config-airbnb": "^18.2.1",
+    "eslint": "^8.31.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.26.0",
