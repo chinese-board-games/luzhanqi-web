@@ -1,7 +1,13 @@
 {
-  "extends": ["airbnb", "plugin:jsx-a11y/recommended", "prettier", "prettier/react"],
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "prettier",
+    "prettier/react"
+  ],
   "plugins": ["jsx-a11y", "prettier"],
   "rules": {
+    "react/react-in-jsx-scope": "off",
     "no-unused-vars": "warn",
     "jsx-a11y/label-has-associated-control": 0,
     "semi": 1,
@@ -19,19 +25,26 @@
       }
     ]
   },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
   "env": {
     "browser": true,
+    "es2021": true,
     "jest": true
   },
-  "parserOptions": {
-    "ecmaVersion": 2020
-} ,
+
   "settings": {
     "import/resolver": {
       "alias": {
         "map": [
           ["contexts", "./src/contexts"],
-          ["components", "./src/components"]
+          ["components", "./src/components"],
+          ["api", "./src/api"]
         ]
       }
     }
