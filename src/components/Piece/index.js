@@ -1,6 +1,5 @@
 import { Center } from '@mantine/core';
 import React from 'react';
-// eslint-disable-next-line import/no-named-default
 import { default as PieceModel } from '../../models/Piece';
 
 // eslint-disable-next-line react/prop-types

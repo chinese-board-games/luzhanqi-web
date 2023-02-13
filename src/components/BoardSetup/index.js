@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Box, Container, Flex, Stack, Grid, Center } from '@mantine/core';
 import {
   DragOverlay,
@@ -208,6 +208,7 @@ function ConnectionLines() {
         );
         return (
           <LineTo
+            key={`${start[0]}-${start[1]}-${end[0]}-${end[1]}`}
             from={`${start[0]}-${start[1]}`}
             to={`${end[0]}-${end[1]}`}
             borderColor="black"
