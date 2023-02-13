@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Box, Container, Flex, Stack, Grid, Center } from '@mantine/core';
 import {
   DragOverlay,
@@ -17,6 +17,8 @@ import SortablePiece from 'components/SortablePiece';
 import DragablePiece from 'components/DragablePiece';
 import LineTo from 'react-lineto';
 import { useResizeDetector } from 'react-resize-detector';
+import { GameContext } from 'contexts/GameContext';
+
 import Position from './Position';
 import { setupPieces } from '../../models/Piece';
 import {
@@ -34,9 +36,23 @@ for (let i = 0; i < 6; i++) {
 }
 
 export default function BoardSetup() {
+  const {
+    playerList: { playerList },
+    playerName: { playerName }
+  } = useContext(GameContext);
+
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+
+  console.warn(setupPieces);
+  // TODO: piece affiliation will be -1 if the players are not in game (playerList is [])
+  const affiliatedPieces = setupPieces.map((piece) => ({
+    ...piece,
+    affiliation: playerList.indexOf(playerName)
+  }));
+  console.warn(affiliatedPieces);
+
   const [unplacedPieces, setUnplacedPieces] = useState(
-    [...setupPieces].sort((a, b) => a.order - b.order)
+    [...affiliatedPieces].sort((a, b) => a.order - b.order)
   );
   const [halfBoard, setHalfboard] = useState([...emptyBoard]);
   const [activeId, setActiveId] = useState(null);
@@ -78,6 +94,7 @@ export default function BoardSetup() {
     }
 
     // dragging from unplaced
+    console.warn('unplacedPieces', unplacedPieces);
     if (unplacedPieces.some((piece) => piece.id === active.id)) {
       console.log('dragging from unplaced');
       // dragging from unplaced to unplaced
