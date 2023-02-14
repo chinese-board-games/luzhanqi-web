@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 import React, { useState, useContext } from 'react';
+import Button from 'react-bootstrap/Button';
 import { Box, Container, Flex, Stack, Grid, Center } from '@mantine/core';
 import {
   DragOverlay,
@@ -20,7 +21,7 @@ import { useResizeDetector } from 'react-resize-detector';
 import { GameContext } from 'contexts/GameContext';
 
 import Position from './Position';
-import { setupPieces } from '../../models/Piece';
+import { setupPieces, pieces } from '../../models/Piece';
 import {
   mapBoard,
   copyBoard,
@@ -38,18 +39,19 @@ for (let i = 0; i < 6; i++) {
 export default function BoardSetup() {
   const {
     playerList: { playerList },
-    playerName: { playerName }
+    playerName: { playerName },
+    roomId: { roomId },
+    submittedSide: { submittedSide },
+    socket
   } = useContext(GameContext);
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
-  console.warn(setupPieces);
   // TODO: piece affiliation will be -1 if the players are not in game (playerList is [])
   const affiliatedPieces = setupPieces.map((piece) => ({
     ...piece,
     affiliation: playerList.indexOf(playerName)
   }));
-  console.warn(affiliatedPieces);
 
   const [unplacedPieces, setUnplacedPieces] = useState(
     [...affiliatedPieces].sort((a, b) => a.order - b.order)
@@ -65,6 +67,51 @@ export default function BoardSetup() {
   console.log('activePiece', activePiece);
   console.log('halfBoard', halfBoard);
   console.log('unplacedPieces', unplacedPieces);
+
+  /** Send the starting board to the server (my side) */
+  const sendStartingBoard = (e) => {
+    e.preventDefault();
+    console.log('sendStartingBoard', halfBoard);
+    socket.emit('playerInitialBoard', {
+      playerName,
+      myPositions: halfBoard,
+      room: roomId
+    });
+  };
+
+  const setExampleOne = () => {
+    const example1 = [
+      ['major_general', 'lieutenant', 'colonel', 'engineer', 'major_general'],
+      ['engineer', 'none', 'field_marshall', 'none', 'engineer'],
+      ['colonel', 'lieutenant', 'none', 'bomb', 'major'],
+      ['brigadier_general', 'none', 'brigadier_general', 'none', 'lieutenant'],
+      ['bomb', 'landmine', 'general', 'captain', 'captain'],
+      ['landmine', 'flag', 'major', 'landmine', 'captain']
+    ];
+
+    const exampleBoard = [...emptyBoard];
+    const placedPieces = new Map();
+
+    example1.forEach((row, y) => {
+      row.forEach((pieceName, x) => {
+        if (pieceName === 'none') {
+          return;
+        }
+        const piece = pieces[pieceName];
+        const piece_id = `${pieceName}-${placedPieces.get(pieceName) || 0}`;
+        exampleBoard[y][x] = {
+          name: pieceName,
+          id: `${pieceName}-${piece_id}`,
+          affiliation: playerList.indexOf(playerName),
+          ...piece
+        };
+        placedPieces.set(pieceName, (placedPieces.get(pieceName) || 0) + 1);
+      });
+    });
+    console.log('exampleBoard', exampleBoard);
+    setUnplacedPieces([]);
+    setHalfboard(exampleBoard);
+  };
 
   const handleDragStart = (event) => {
     console.log('start event', event);
@@ -180,7 +227,12 @@ export default function BoardSetup() {
     refreshRate: 10
   });
 
-  return (
+  return submittedSide ? (
+    <>
+      <h2>請等對手</h2>
+      <h2>Waiting for other player</h2>
+    </>
+  ) : (
     <div ref={ref}>
       <Container>
         <ConnectionLines />
@@ -212,6 +264,12 @@ export default function BoardSetup() {
           </DragOverlay>
         </DndContext>
       </Container>
+      <Button type="button" variant="secondary" onClick={setExampleOne}>
+        Set Example 1
+      </Button>
+      <Button type="button" variant="info" onClick={sendStartingBoard}>
+        Send Board Placement
+      </Button>
     </div>
   );
 }
