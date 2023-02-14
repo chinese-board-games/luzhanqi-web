@@ -112,17 +112,18 @@ export const isHalfBoardRailroad = (r, c) => {
   return r === 0 || r === 4 || c === 0 || c === 4;
 };
 
-export const isValidHalfBoardPlacement = (piece, row, col, halfBoard) => {
-  // cannot place into camps
-  if (isHalfBoardCamp(row, col)) {
-    return false;
-  }
+// TODO: add flag and bomb placement restrictions
+// export const isValidHalfBoardPlacement = (piece, row, col, halfBoard) => {
+//   // cannot place into camps
+//   if (isHalfBoardCamp(row, col)) {
+//     return false;
+//   }
 
-  // flag can only go into hq
+//   // flag can only go into hq
 
-  // bomb cannot go into first row
+//   // bomb cannot go into first row
 
-  // landmines can only go into last row
+//   // landmines can only go into last row
 
-  return true;
-};
+//   return true;
+// };

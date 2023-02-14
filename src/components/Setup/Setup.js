@@ -1,3 +1,5 @@
+// no longer in use, use BoardSetup.js instead
+
 /* eslint-disable no-console */
 import React, { useEffect, useContext } from 'react';
 import Form from 'react-bootstrap/Form';

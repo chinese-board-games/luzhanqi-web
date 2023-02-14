@@ -43,6 +43,8 @@ Object.keys(pieces).forEach((name) => {
  * @returns {Piece} A new Piece object.
  */
 const Piece = (name, affiliation) => {
+  if (name === 'none') return null;
+
   const piece = pieces[name];
   if (!piece) {
     throw Error(`Invalid piece name provided: ${name}`);
