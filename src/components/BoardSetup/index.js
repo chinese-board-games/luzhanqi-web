@@ -28,7 +28,7 @@ import {
   getPieceLocationById,
   halfBoardConnections,
   isHalfBoardRailroad,
-  isHalfBoardCamp
+  isValidHalfBoardPlacement
 } from '../../utils';
 
 const emptyBoard = [];
@@ -113,6 +113,10 @@ export default function BoardSetup() {
     setHalfboard(exampleBoard);
   };
 
+  const getActivePiece = (pieceId) =>
+    unplacedPieces.find((p) => p.id === pieceId) ||
+    halfBoard.flatMap((p) => p).find((p) => p && p.id === pieceId);
+
   const handleDragStart = (event) => {
     console.log('start event', event);
     const { active } = event;
@@ -129,13 +133,17 @@ export default function BoardSetup() {
     const { active, over } = event;
     // handle dragging to no where or no selection
     if (!over || !over.id || !active || !active.id) {
+      setActiveId(null);
       return;
     }
 
-    // disable dragging to camps
-    if (over?.data?.current?.col && over?.data?.current?.row) {
+    // validate placement location
+    if (over?.data?.current?.col != null && over?.data?.current?.row != null) {
+      console.log('current over data fired');
       const { row, col } = over.data.current;
-      if (isHalfBoardCamp(row, col)) {
+      const activePiece = getActivePiece(active.id);
+      if (activePiece && !isValidHalfBoardPlacement(activePiece, row, col)) {
+        setActiveId(null);
         return;
       }
     }
