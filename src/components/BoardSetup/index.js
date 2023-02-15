@@ -101,7 +101,7 @@ export default function BoardSetup() {
         const piece_id = `${pieceName}-${placedPieces.get(pieceName) || 0}`;
         exampleBoard[y][x] = {
           name: pieceName,
-          id: `${pieceName}-${piece_id}`,
+          id: piece_id,
           affiliation: playerList.indexOf(playerName),
           ...piece
         };
