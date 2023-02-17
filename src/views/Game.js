@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import { GameContext } from 'contexts/GameContext';
 
 import Lobby from 'components/Lobby';
-import Setup from 'components/Setup';
+import BoardSetup from 'components/BoardSetup';
 import LZQ from 'components/LZQ';
 import GameOver from 'components/GameOver';
 import { ToastContainer, toast } from 'react-toastify';
@@ -76,7 +76,7 @@ const Game = () => {
 
           {
             /** Players set their boards */
-            gamePhase === 1 ? <Setup /> : null
+            gamePhase === 1 ? <BoardSetup /> : null
           }
 
           {
