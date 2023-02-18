@@ -3,7 +3,8 @@
     "baseUrl": "./",
     "paths": {
       "contexts/*": ["./src/contexts/*"],
-      "components/*": ["./src/components/*"]
+      "components/*": ["./src/components/*"],
+      "api/*": ["./src/api/*"]
     }
   },
   "exclude": ["node_modules"]
