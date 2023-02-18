@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, {
   useContext
-  // useState,
+  // useState
   // useEffect
 } from 'react';
 import Form from 'react-bootstrap/Form';
@@ -43,7 +43,7 @@ const Lobby = () => {
   /** Tell the server to create a new game */
   const createNewGame = () => {
     if (playerName) {
-      socket.emit('hostCreateNewGame', { playerName });
+      socket.emit('hostCreateNewGame', { playerName, hostId: user?.uid || null });
       setHost(true);
     } else {
       setErrors((prevErrors) => [...prevErrors, 'You must provide a username.']);
@@ -59,9 +59,10 @@ const Lobby = () => {
   const joinGame = (e) => {
     e.preventDefault();
     if (playerName && roomId) {
-      console.log(`Attempting to join game ${roomId} as ${playerName}`);
+      console.log(`Attempting to join game ${roomId} as ${playerName} with clientId ${user?.uid}`);
       socket.emit('playerJoinGame', {
         playerName,
+        clientId: user?.uid || null,
         joinRoomId: roomId,
         playerList
       });

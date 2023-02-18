@@ -1,4 +1,4 @@
-Luzhanqi Web Edition
+Luzhanqi Web
 
 Ensure that you have ESLint and Prettier installed and enabled in VSCode.  
 If you want to run the client using a local database, install and run MongoDB in the background.
@@ -10,6 +10,7 @@ Run
 ```
 cat > .env << EOF
 PORT=3000
+REACT_APP_API=http://localhost:4000
 EOF
 ```
 
