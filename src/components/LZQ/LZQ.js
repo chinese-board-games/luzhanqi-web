@@ -6,20 +6,23 @@ import Button from 'react-bootstrap/Button';
 import { GameContext } from 'contexts/GameContext';
 import BoardBackground from './BoardBackground';
 import MountainPass from './MountainPass';
+import { useFirebaseAuth } from 'contexts/FirebaseContext';
 
 const LZQ = () => {
   const gameState = useContext(GameContext);
-  const { socket } = gameState;
-  const { playerName } = gameState.playerName;
-  const { roomId } = gameState.roomId;
-  const { host } = gameState.host;
-  const { clientTurn } = gameState.clientTurn;
-  const { playerList } = gameState.playerList;
-  const { myBoard } = gameState.myBoard;
-  const { pendingMove, setPendingMove } = gameState.pendingMove;
-  const { setErrors } = gameState.errors;
-
-  const { successors, setSuccessors } = gameState.successors;
+  const uid = useFirebaseAuth().uid;
+  const {
+    socket,
+    playerName: { playerName },
+    roomId: { roomId },
+    host: { host },
+    clientTurn: { clientTurn },
+    playerList: { playerList },
+    myBoard: { myBoard },
+    pendingMove: { pendingMove, setPendingMove },
+    errors: { setErrors },
+    successors: { successors, setSuccessors }
+  } = gameState;
 
   useEffect(() => {
     const { source, target } = pendingMove;
@@ -40,17 +43,18 @@ const LZQ = () => {
   /**
    * Send a move to the server
    * @param {Object} e the event on the element from which this callback was called
-   * @see makeMove
+   * @see playerMakeMove
    */
-  const makeMove = (e) => {
+  const playerMakeMove = (e) => {
     e.preventDefault();
     const { source, target } = pendingMove;
     console.log(source, target);
     if (source.length && target.length) {
       // if target is in successors, make move
       if (successors.some((successor) => isEqual(successor, target))) {
-        socket.emit('makeMove', {
+        socket.emit('playerMakeMove', {
           playerName,
+          uid,
           room: roomId,
           turn: clientTurn,
           pendingMove
@@ -62,6 +66,15 @@ const LZQ = () => {
     } else {
       setErrors((prevErrors) => [...prevErrors, 'You must have both a source and target tile']);
     }
+  };
+
+  const playerForfeit = (e) => {
+    e.preventDefault();
+    socket.emit('playerForfeit', {
+      playerName,
+      uid,
+      room: roomId
+    });
   };
 
   /**
@@ -255,14 +268,17 @@ const LZQ = () => {
       </h3> */}
 
       {(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1) ? (
-        <Button type="button" variant="primary" onClick={makeMove}>
+        <Button type="button" variant="primary" onClick={playerMakeMove}>
           Make move
         </Button>
       ) : (
-        <Button type="button" variant="secondary" onClick={makeMove}>
+        <Button type="button" variant="secondary" onClick={playerMakeMove}>
           Make move
         </Button>
       )}
+      <Button type="button" variant="secondary" onClick={playerForfeit}>
+        Forfeit
+      </Button>
     </>
   );
 };
