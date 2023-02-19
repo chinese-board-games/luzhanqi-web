@@ -21,7 +21,11 @@ const NavBar = () => {
         height: '3em',
         margin: '1em'
       }}>
-      <h1>陸戰棋</h1>
+      <h1>
+        <a href="https://ancientchess.com/page/play-luzhanqi.htm" target="_blank" rel="noreferrer">
+          陸戰棋
+        </a>
+      </h1>
 
       {/* disabled until fully implemented */}
       {user ? (
