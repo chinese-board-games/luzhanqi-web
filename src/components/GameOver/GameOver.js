@@ -3,12 +3,18 @@ import { GameContext } from 'contexts/GameContext';
 
 const GameOver = () => {
   const gameState = useContext(GameContext);
-  const { winner } = gameState.winner;
-  const { host } = gameState.host;
+  const {
+    winner: { winner },
+    playerName: { playerName },
+    playerList: { playerList }
+  } = gameState;
+  // get player's index from playerName and playerList
+  const playerIndex = playerList.indexOf(playerName);
+
   return (
     <div>
       <h1>Game Over</h1>
-      {!!winner !== host ? <h2>You win!</h2> : <h2>You lost</h2>}
+      {winner === playerIndex ? <h2>You win!</h2> : <h2>You lost</h2>}
     </div>
   );
 };
