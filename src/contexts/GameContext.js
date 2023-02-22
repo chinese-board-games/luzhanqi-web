@@ -58,6 +58,7 @@ export const GameProvider = ({ children }) => {
 
   const [startingBoard, setStartingBoard] = useState(boardPositions);
   const [winner, setWinner] = useState(null);
+  const [gameResults, setGameResults] = useState({ remain: [[], []], lost: [[], []] });
 
   // const [startingBoard, setStartingBoard] = useState();
   const [errors, setErrors] = useState([]);
@@ -81,6 +82,7 @@ export const GameProvider = ({ children }) => {
     gamePhase: { gamePhase, setGamePhase },
     startingBoard: { startingBoard, setStartingBoard },
     winner: { winner, setWinner },
+    gameResults: { gameResults, setGameResults },
     errors: { errors, setErrors }
   };
 
@@ -153,9 +155,10 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling all clients the game has ended */
-    socket.on('endGame', (won) => {
+    socket.on('endGame', ({ winnerIndex, gameStats }) => {
       setGamePhase(3);
-      setWinner(won);
+      setWinner(winnerIndex);
+      setGameResults(gameStats);
     });
 
     /** Server is returning an error message to the client */
