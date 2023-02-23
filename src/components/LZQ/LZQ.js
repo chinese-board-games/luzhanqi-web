@@ -10,7 +10,7 @@ import { useFirebaseAuth } from 'contexts/FirebaseContext';
 
 const LZQ = () => {
   const gameState = useContext(GameContext);
-  const uid = useFirebaseAuth().uid;
+  const uid = useFirebaseAuth()?.uid;
   const {
     socket,
     playerName: { playerName },
