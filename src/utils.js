@@ -124,12 +124,12 @@ export const isValidHalfBoardPlacement = (piece, row, col) => {
   }
 
   // bomb cannot go into first row
-  if (piece.name === 'bomb' && row != 0) {
+  if (piece.name === 'bomb' && row == 0) {
     return false;
   }
 
-  // landmines can only go into last row
-  if (piece.name === 'landmine' && row != 5) {
+  // landmines can only go into last two rows
+  if (piece.name === 'landmine' && row != 5 && row != 4) {
     return false;
   }
 
