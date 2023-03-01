@@ -6,7 +6,12 @@ import { default as PieceModel } from '../../models/Piece';
 export default function Piece({ name, affiliation }) {
   const piece = PieceModel(name, affiliation);
   return (
-    <Center bg="red" w="4em" h="2em" fz="xl" sx={{ borderRadius: '10%' }}>
+    <Center
+      bg="pastel-tan.0"
+      w="4em"
+      h="2em"
+      fz="xl"
+      sx={(theme) => ({ borderRadius: '10%', boxShadow: theme.shadows.sm })}>
       {piece.display}
     </Center>
   );

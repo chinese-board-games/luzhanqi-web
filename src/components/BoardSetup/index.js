@@ -295,7 +295,7 @@ function ConnectionLines() {
             from={`${start[0]}-${start[1]}`}
             to={`${end[0]}-${end[1]}`}
             borderColor="black"
-            borderWidth={isRailroadConnection ? 8 : 3}
+            borderWidth={isRailroadConnection ? 4 : 3}
             borderStyle={isRailroadConnection ? 'dashed' : 'solid'}
             toAnchor="center"
             delay={0}
@@ -313,7 +313,7 @@ function PieceSelector({ unplacedPieces }) {
   return (
     <>
       <Box>Piece Selection</Box>
-      <Center bg="grey" miw="100%" py="1em" mih="3.5em">
+      <Center bg="transparent" miw="100%" py="1em" mih="3.5em">
         <div ref={setNodeRef}>
           <SortableContext items={unplacedPieces}>
             <Flex justify="center" align="center" gap="1em" wrap="wrap">
