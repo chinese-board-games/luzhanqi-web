@@ -23,12 +23,12 @@ export default function Position({ row, col, piece, activeId }) {
         <Center
           sx={{
             borderRadius: '100%',
-            border: '.15em solid black',
+            border: '.1em solid black',
             writingMode: 'vertical-rl',
             fontSize: '16pt',
             zIndex: 100
           }}
-          bg="whitesmoke"
+          bg="pastel-tan.1"
           w="3.5em"
           h="3.5em">
           行營
@@ -42,12 +42,12 @@ export default function Position({ row, col, piece, activeId }) {
           px="1.5em"
           py="0em"
           sx={{
-            border: '.15em solid black',
+            border: '.1em solid black',
             fontSize: '16pt',
             zIndex: 100,
             borderRadius: '3em 3em 1em 1em'
           }}
-          bg="whitesmoke">
+          bg="pastel-tan.1">
           <Stack spacing="0em" align="stretch" justify="center">
             <Center sx={{ lineHeight: '1.1' }}>大</Center>
             <Center sx={{ lineHeight: '1.1' }}>本營</Center>
@@ -59,8 +59,8 @@ export default function Position({ row, col, piece, activeId }) {
       <Center
         px=".8em"
         py=".1em"
-        sx={{ border: '.15em solid black', fontSize: '16pt', zIndex: 100 }}
-        bg="whitesmoke">
+        sx={{ border: '.1em solid black', fontSize: '16pt', zIndex: 100 }}
+        bg="pastel-tan.1">
         後勤
       </Center>
     );
@@ -75,7 +75,8 @@ export default function Position({ row, col, piece, activeId }) {
   });
   return (
     <div ref={setNodeRef} className={`${row}-${col}`}>
-      <Center mih="5em" bg={isHalfBoardCamp(row, col) ? 'orange' : 'green'}>
+      {/* TODO: only show overlay when something is being dragged */}
+      <Center mih="5em" bg={isHalfBoardCamp(row, col) ? 'transparent' : 'transparent'}>
         {getPieceContent()}
       </Center>
     </div>
