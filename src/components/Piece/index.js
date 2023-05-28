@@ -8,8 +8,8 @@ export default function Piece({ name, affiliation }) {
   return (
     <Center
       bg="pastel-tan.0"
-      w="4em"
-      h="2em"
+      w="4.5em"
+      h="2.3em"
       fz="xl"
       sx={(theme) => ({ borderRadius: '10%', boxShadow: theme.shadows.sm })}>
       {piece.display}

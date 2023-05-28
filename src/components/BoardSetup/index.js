@@ -1,8 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 import React, { useState, useContext } from 'react';
-import Button from 'react-bootstrap/Button';
-import { Box, Container, Flex, Stack, Grid, Center } from '@mantine/core';
+import { Container, Flex, Stack, Grid, Center, Title, Group, Button } from '@mantine/core';
 import {
   DragOverlay,
   closestCenter,
@@ -252,8 +251,20 @@ export default function BoardSetup() {
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}>
           <Stack>
+            <Center>
+              <Title>Board Setup</Title>
+            </Center>
+            <Center>
+              <Group>
+                <Button type="button" variant="secondary" onClick={setExampleOne}>
+                  Set Example 1
+                </Button>
+                <Button type="button" variant="info" onClick={sendStartingBoard}>
+                  Send Board Placement
+                </Button>
+              </Group>
+            </Center>
             <PieceSelector unplacedPieces={unplacedPieces} />
-            <Box>Half Board</Box>
             <Grid columns={20}>
               {halfBoard.flatMap((row, r) =>
                 row.map((piece, c) => (
@@ -272,12 +283,6 @@ export default function BoardSetup() {
           </DragOverlay>
         </DndContext>
       </Container>
-      <Button type="button" variant="secondary" onClick={setExampleOne}>
-        Set Example 1
-      </Button>
-      <Button type="button" variant="info" onClick={sendStartingBoard}>
-        Send Board Placement
-      </Button>
     </div>
   );
 }
@@ -294,7 +299,7 @@ function ConnectionLines() {
             key={`${start[0]}-${start[1]}-${end[0]}-${end[1]}`}
             from={`${start[0]}-${start[1]}`}
             to={`${end[0]}-${end[1]}`}
-            borderColor="black"
+            borderColor={isRailroadConnection ? 'gray' : 'black'}
             borderWidth={isRailroadConnection ? 4 : 3}
             borderStyle={isRailroadConnection ? 'dashed' : 'solid'}
             toAnchor="center"
@@ -312,7 +317,6 @@ function PieceSelector({ unplacedPieces }) {
   });
   return (
     <>
-      <Box>Piece Selection</Box>
       <Center bg="transparent" miw="100%" py="1em" mih="3.5em">
         <div ref={setNodeRef}>
           <SortableContext items={unplacedPieces}>
