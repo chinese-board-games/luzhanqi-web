@@ -3,22 +3,21 @@ import React from 'react';
 import DragablePiece from 'components/DragablePiece';
 import { Center, Stack } from '@mantine/core';
 import { useDroppable } from '@dnd-kit/core';
-import { isHalfBoardCamp, isHalfBoardHQ } from '../../utils';
+import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../../utils';
 
-export default function Position({ row, col, piece, activeId }) {
-  const getPieceContent = () => {
-    if (piece && piece.name && activeId !== piece.id) {
-      return (
-        <DragablePiece
-          name={piece.name}
-          affiliation={0}
-          id={piece.id}
-          key={piece.id}
-          data={{ row, col }}
-        />
-      );
-    }
-    if (isHalfBoardCamp(row, col)) {
+export default function Position({ row, col, piece, activeId, isHalfBoard = false }) {
+  const placedPiece = piece && piece.name && activeId !== piece.id && (
+    <DragablePiece
+      name={piece.name}
+      affiliation={0}
+      id={piece.id}
+      key={piece.id}
+      data={{ row, col }}
+    />
+  );
+  console.log(isHalfBoard);
+  const getPositionContent = () => {
+    if (isHalfBoard ? isHalfBoardCamp(row, col) : isCamp(row, col)) {
       return (
         <Center
           sx={{
@@ -31,16 +30,16 @@ export default function Position({ row, col, piece, activeId }) {
           bg="pastel-tan.1"
           w="3.5em"
           h="3.5em">
-          行營
+          {placedPiece || '行營'}
         </Center>
       );
     }
 
-    if (isHalfBoardHQ(row, col)) {
+    if (isHalfBoard ? isHalfBoardHQ(row, col) : isHQ(row, col)) {
       return (
         <Center
-          px="1.5em"
-          py="0em"
+          px={placedPiece ? '.7em' : '1.5em'}
+          py={placedPiece ? '.2em' : '0'}
           sx={{
             border: '.1em solid black',
             fontSize: '16pt',
@@ -49,19 +48,23 @@ export default function Position({ row, col, piece, activeId }) {
           }}
           bg="pastel-tan.1">
           <Stack spacing="0em" align="stretch" justify="center">
-            <Center sx={{ lineHeight: '1.1' }}>大</Center>
-            <Center sx={{ lineHeight: '1.1' }}>本營</Center>
+            {placedPiece || (
+              <>
+                <Center sx={{ lineHeight: '1.1' }}>大</Center>
+                <Center sx={{ lineHeight: '1.1' }}>本營</Center>
+              </>
+            )}
           </Stack>
         </Center>
       );
     }
     return (
       <Center
-        px=".8em"
-        py=".1em"
+        px={placedPiece ? '0' : '.8em'}
+        py={placedPiece ? '0' : '.1em'}
         sx={{ border: '.1em solid black', fontSize: '16pt', zIndex: 100 }}
         bg="pastel-tan.1">
-        後勤
+        {placedPiece || '後勤'}
       </Center>
     );
   };
@@ -77,7 +80,7 @@ export default function Position({ row, col, piece, activeId }) {
     <div ref={setNodeRef} className={`${row}-${col}`}>
       {/* TODO: only show overlay when something is being dragged */}
       <Center mih="5em" bg={isHalfBoardCamp(row, col) ? 'transparent' : 'transparent'}>
-        {getPieceContent()}
+        {getPositionContent()}
       </Center>
     </div>
   );
