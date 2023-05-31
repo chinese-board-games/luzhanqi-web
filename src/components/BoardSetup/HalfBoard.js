@@ -19,7 +19,7 @@ import LineTo from 'react-lineto';
 import { useResizeDetector } from 'react-resize-detector';
 import { GameContext } from 'contexts/GameContext';
 
-import Position from './Position';
+import Position from '../Position';
 import { setupPieces, pieces } from '../../models/Piece';
 import {
   mapBoard,
