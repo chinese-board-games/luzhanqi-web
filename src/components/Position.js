@@ -3,9 +3,17 @@ import React from 'react';
 import DragablePiece from 'components/DragablePiece';
 import { Center, Stack } from '@mantine/core';
 import { useDroppable } from '@dnd-kit/core';
-import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../../utils';
+import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../utils';
 
-export default function Position({ row, col, piece, activeId, isHalfBoard = false }) {
+export default function Position({
+  row,
+  col,
+  piece,
+  activeId,
+  shadeColor,
+  isHalfBoard = false,
+  disabled = false
+}) {
   const placedPiece = piece && piece.name && activeId !== piece.id && (
     <DragablePiece
       name={piece.name}
@@ -15,7 +23,7 @@ export default function Position({ row, col, piece, activeId, isHalfBoard = fals
       data={{ row, col }}
     />
   );
-  console.log(isHalfBoard);
+
   const getPositionContent = () => {
     if (isHalfBoard ? isHalfBoardCamp(row, col) : isCamp(row, col)) {
       return (
@@ -25,7 +33,8 @@ export default function Position({ row, col, piece, activeId, isHalfBoard = fals
             border: '.1em solid black',
             writingMode: 'vertical-rl',
             fontSize: '16pt',
-            zIndex: 100
+            zIndex: 100,
+            filter: disabled && 'grayscale(100%) opacity(60%)'
           }}
           bg="pastel-tan.1"
           w="3.5em"
@@ -44,7 +53,8 @@ export default function Position({ row, col, piece, activeId, isHalfBoard = fals
             border: '.1em solid black',
             fontSize: '16pt',
             zIndex: 100,
-            borderRadius: '3em 3em 1em 1em'
+            borderRadius: '3em 3em 1em 1em',
+            filter: disabled && 'grayscale(100%) opacity(60%)'
           }}
           bg="pastel-tan.1">
           <Stack spacing="0em" align="stretch" justify="center">
@@ -62,7 +72,12 @@ export default function Position({ row, col, piece, activeId, isHalfBoard = fals
       <Center
         px={placedPiece ? '0' : '.8em'}
         py={placedPiece ? '0' : '.1em'}
-        sx={{ border: '.1em solid black', fontSize: '16pt', zIndex: 100 }}
+        sx={{
+          border: '.1em solid black',
+          fontSize: '16pt',
+          zIndex: 100,
+          filter: disabled && 'grayscale(100%) opacity(60%)'
+        }}
         bg="pastel-tan.1">
         {placedPiece || '後勤'}
       </Center>
@@ -79,7 +94,7 @@ export default function Position({ row, col, piece, activeId, isHalfBoard = fals
   return (
     <div ref={setNodeRef} className={`${row}-${col}`}>
       {/* TODO: only show overlay when something is being dragged */}
-      <Center mih="5em" bg={isHalfBoardCamp(row, col) ? 'transparent' : 'transparent'}>
+      <Center mih="5em" bg={(!disabled && shadeColor) || 'transparent'}>
         {getPositionContent()}
       </Center>
     </div>

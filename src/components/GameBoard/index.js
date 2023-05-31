@@ -1,17 +1,67 @@
 /* eslint-disable react/jsx-key */
+import { useState, useEffect } from 'react';
 import { Grid, Container, Center, Text, Stack } from '@mantine/core';
 import { emptyBoard } from 'src/utils';
-import Position from '../BoardSetup/Position';
+import SelectablePosition from '../SelectablePosition';
 import LineTo from 'react-lineto';
 import { isRailroad, boardConnections } from '../../utils';
+import { isEqual } from 'lodash';
+
+const NO_SELECT = [-1, -1];
 
 export default function GameBoard() {
   const board = emptyBoard();
+  const [origin, setOrigin] = useState(NO_SELECT);
+  const [destination, setDestination] = useState(NO_SELECT);
+
+  const originSelected = !isEqual(origin, NO_SELECT);
+  const destinationSelected = !isEqual(destination, NO_SELECT);
+
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        if (destinationSelected) {
+          setDestination(NO_SELECT);
+        } else if (originSelected) {
+          setOrigin(NO_SELECT);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }),
+    [];
 
   const gridCells = board.flatMap((row, r) =>
     row.map((piece, c) => (
       <Grid.Col span={4} key={`${r}-${c}`}>
-        <Position piece={piece} row={r} col={c} />
+        <SelectablePosition
+          piece={piece}
+          row={r}
+          col={c}
+          selected={isEqual(origin, [r, c]) || isEqual(destination, [r, c])}
+          selectionColor={isEqual(origin, [r, c]) ? 'blue.1' : 'yellow.1'}
+          selectionHoverColor={isEqual(origin, [r, c]) ? 'blue.2' : 'yellow.2'}
+          onClick={() => {
+            if (isEqual(origin, [r, c])) {
+              setOrigin(NO_SELECT);
+              setDestination(NO_SELECT);
+              return;
+            }
+            if (isEqual(destination, [r, c])) {
+              setDestination(NO_SELECT);
+              return;
+            }
+            if (originSelected) {
+              setDestination([r, c]);
+              return;
+            }
+            setOrigin([r, c]);
+          }}
+        />
       </Grid.Col>
     ))
   );
@@ -33,7 +83,6 @@ export default function GameBoard() {
     ...divider,
     ...gridCells.slice(gridCells.length / 2, gridCells.length)
   ];
-  console.log('combined', combined);
 
   return (
     <Container>
