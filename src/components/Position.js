@@ -4,6 +4,7 @@ import DragablePiece from 'components/DragablePiece';
 import { Center, Stack } from '@mantine/core';
 import { useDroppable } from '@dnd-kit/core';
 import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../utils';
+import Piece from './Piece';
 
 export default function Position({
   row,
@@ -14,16 +15,18 @@ export default function Position({
   isHalfBoard = false,
   disabled = false
 }) {
-  const placedPiece = piece && piece.name && activeId !== piece.id && (
-    <DragablePiece
-      name={piece.name}
-      affiliation={0}
-      id={piece.id}
-      key={piece.id}
-      data={{ row, col }}
-    />
-  );
-
+  const placedPiece =
+    piece && piece.name && isHalfBoard
+      ? activeId !== piece.id && (
+          <DragablePiece
+            name={piece.name}
+            affiliation={0}
+            id={piece.id}
+            key={piece.id}
+            data={{ row, col }}
+          />
+        )
+      : piece && <Piece name={piece.name} affiliation={piece.affiliation} />;
   const getPositionContent = () => {
     if (isHalfBoard ? isHalfBoardCamp(row, col) : isCamp(row, col)) {
       return (
@@ -34,7 +37,7 @@ export default function Position({
             writingMode: 'vertical-rl',
             fontSize: '16pt',
             zIndex: 100,
-            filter: disabled && 'grayscale(100%) opacity(60%)'
+            filter: disabled && 'grayscale(100%) opacity(90%)'
           }}
           bg="pastel-tan.1"
           w="3.5em"
@@ -54,7 +57,7 @@ export default function Position({
             fontSize: '16pt',
             zIndex: 100,
             borderRadius: '3em 3em 1em 1em',
-            filter: disabled && 'grayscale(100%) opacity(60%)'
+            filter: disabled && 'grayscale(100%) opacity(90%)'
           }}
           bg="pastel-tan.1">
           <Stack spacing="0em" align="stretch" justify="center">
@@ -76,7 +79,7 @@ export default function Position({
           border: '.1em solid black',
           fontSize: '16pt',
           zIndex: 100,
-          filter: disabled && 'grayscale(100%) opacity(60%)'
+          filter: disabled && 'grayscale(100%) opacity(90%)'
         }}
         bg="pastel-tan.1">
         {placedPiece || '後勤'}

@@ -1,4 +1,4 @@
-import { Center } from '@mantine/core';
+import { Center, Text } from '@mantine/core';
 import React from 'react';
 import { default as PieceModel } from '../../models/Piece';
 
@@ -16,7 +16,9 @@ export default function Piece({ name, affiliation }) {
         boxShadow: theme.shadows.sm,
         writingMode: 'horizontal-tb'
       })}>
-      {piece.display}
+      <Text fw={700} color={affiliation === 0 ? 'indigo.7' : 'red.7'}>
+        {piece.display}
+      </Text>
     </Center>
   );
 }
