@@ -6,16 +6,43 @@ import SelectablePosition from '../SelectablePosition';
 import LineTo from 'react-lineto';
 import { isRailroad, boardConnections } from '../../utils';
 import { isEqual } from 'lodash';
+import PieceModel from 'src/models/Piece';
 
 const NO_SELECT = [-1, -1];
+const board = emptyBoard();
+board[1][0] = PieceModel('bomb', 0);
+board[3][0] = PieceModel('enemy', 1);
 
 export default function GameBoard() {
-  const board = emptyBoard();
+  const mockAffiliation = 0;
+  const mockMoves = [
+    [2, 0],
+    [1, 1],
+    [2, 1],
+    [3, 0]
+  ];
+
+  const availibleMoves = new Set(mockMoves.map((move) => JSON.stringify(move)));
+
   const [origin, setOrigin] = useState(NO_SELECT);
   const [destination, setDestination] = useState(NO_SELECT);
 
   const originSelected = !isEqual(origin, NO_SELECT);
   const destinationSelected = !isEqual(destination, NO_SELECT);
+  const nothingSelected = !originSelected && !destinationSelected;
+
+  const positionDisabled = (row, col) => {
+    if (nothingSelected) {
+      return board[row][col]?.affiliation !== mockAffiliation;
+    }
+    if (destinationSelected) {
+      return !isEqual(destination, [row, col]) && !isEqual(origin, [row, col]);
+    }
+    if (originSelected) {
+      return !isEqual(origin, [row, col]) && !availibleMoves.has(JSON.stringify([row, col]));
+    }
+    return true;
+  };
 
   useEffect(() => {
     const handleEsc = (event) => {
@@ -43,8 +70,14 @@ export default function GameBoard() {
           row={r}
           col={c}
           selected={isEqual(origin, [r, c]) || isEqual(destination, [r, c])}
-          selectionColor={isEqual(origin, [r, c]) ? 'blue.1' : 'yellow.1'}
-          selectionHoverColor={isEqual(origin, [r, c]) ? 'blue.2' : 'yellow.2'}
+          originSelected={isEqual(origin, [r, c])}
+          destinationSelected={isEqual(destination, [r, c])}
+          attackable={
+            board[r][c] &&
+            board[r][c].affiliation != mockAffiliation &&
+            availibleMoves.has(JSON.stringify([r, c]))
+          }
+          movable={board[r][c] == null && availibleMoves.has(JSON.stringify([r, c]))}
           onClick={() => {
             if (isEqual(origin, [r, c])) {
               setOrigin(NO_SELECT);
@@ -61,6 +94,7 @@ export default function GameBoard() {
             }
             setOrigin([r, c]);
           }}
+          disabled={positionDisabled(r, c)}
         />
       </Grid.Col>
     ))
