@@ -6,6 +6,8 @@ import { useDroppable } from '@dnd-kit/core';
 import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../utils';
 import Piece from './Piece';
 
+const disabledFilter = 'grayscale(50%) opacity(90%)';
+
 export default function Position({
   row,
   col,
@@ -37,7 +39,7 @@ export default function Position({
             writingMode: 'vertical-rl',
             fontSize: '16pt',
             zIndex: 100,
-            filter: disabled && 'grayscale(100%) opacity(90%)'
+            filter: disabled && disabledFilter
           }}
           bg="pastel-tan.1"
           w="3.5em"
@@ -57,7 +59,7 @@ export default function Position({
             fontSize: '16pt',
             zIndex: 100,
             borderRadius: '3em 3em 1em 1em',
-            filter: disabled && 'grayscale(100%) opacity(90%)'
+            filter: disabled && disabledFilter
           }}
           bg="pastel-tan.1">
           <Stack spacing="0em" align="stretch" justify="center">
@@ -79,7 +81,7 @@ export default function Position({
           border: '.1em solid black',
           fontSize: '16pt',
           zIndex: 100,
-          filter: disabled && 'grayscale(100%) opacity(90%)'
+          filter: disabled && disabledFilter
         }}
         bg="pastel-tan.1">
         {placedPiece || '後勤'}
