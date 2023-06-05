@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { useState, useEffect } from 'react';
-import { Grid, Container, Center, Text, Stack } from '@mantine/core';
+import { Grid, Container, Center, Text, Stack, Title, Button, Group } from '@mantine/core';
 import { emptyBoard } from 'src/utils';
 import SelectablePosition from '../SelectablePosition';
 import LineTo from 'react-lineto';
@@ -120,6 +120,28 @@ export default function GameBoard() {
 
   return (
     <Container>
+      <Center>
+        <Stack>
+          <Stack align="center">
+            <Title order={1}>Player 1 x Player 2</Title>
+          </Stack>
+          <Group align="center" direction="horizontal">
+            <Button
+              disabled={!(originSelected && destinationSelected)}
+              onClick={() => console.log(origin, destination)}>
+              Send Move
+            </Button>
+            <Button
+              onClick={() => {
+                setOrigin(NO_SELECT);
+                setDestination(NO_SELECT);
+              }}>
+              Reset
+            </Button>
+            <Button onClick={() => console.log('you lost')}>Forfeit</Button>
+          </Group>
+        </Stack>
+      </Center>
       <ConnectionLines />
       <Grid columns={20}>{combined.map((cell) => cell)}</Grid>
     </Container>
