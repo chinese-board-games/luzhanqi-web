@@ -4,16 +4,24 @@ import { GameContext } from 'contexts/GameContext';
 
 import Lobby from 'components/Lobby';
 import BoardSetup from 'components/BoardSetup';
-import LZQ from 'components/LZQ';
 import GameOver from 'components/GameOver';
 import { ToastContainer, toast } from 'react-toastify';
+import GameBoard from 'components/GameBoard';
+import { useFirebaseAuth } from 'contexts/FirebaseContext';
 
 const Game = () => {
-  const gameState = useContext(GameContext);
-  const { roomId } = gameState.roomId;
-  const { playerList } = gameState.playerList;
-  const { gamePhase } = gameState.gamePhase;
-  const { errors, setErrors } = gameState.errors;
+  const uid = useFirebaseAuth()?.uid;
+  const {
+    socket,
+    roomId: { roomId },
+    playerList: { playerList },
+    playerName: { playerName },
+    gamePhase: { gamePhase },
+    host: { host },
+    clientTurn: { clientTurn },
+    errors: { errors, setErrors },
+    myBoard: { myBoard }
+  } = useContext(GameContext);
 
   /** Clear errors after 1 second each */
   useEffect(() => {
@@ -24,6 +32,30 @@ const Game = () => {
     });
     setErrors([]);
   }, [JSON.stringify(errors), toast.error]);
+
+  const playerMakeMove = (source, target) => {
+    // console.log(source, target);
+    if (source.length && target.length) {
+      // if target is in successors, make move
+      socket.emit('playerMakeMove', {
+        uid,
+        room: roomId,
+        turn: clientTurn,
+        pendingMove
+      });
+      setErrors((prevErrors) => [...prevErrors, 'You must have both a source and target tile']);
+    }
+  };
+
+  const playerForfeit = (e) => {
+    console.log('Game forfeitted!');
+    e.preventDefault();
+    socket.emit('playerForfeit', {
+      playerName,
+      uid,
+      room: roomId
+    });
+  };
 
   return (
     <>
@@ -81,7 +113,17 @@ const Game = () => {
 
           {
             /** Players play the game */
-            gamePhase === 2 ? <LZQ /> : null
+            gamePhase === 2 ? (
+              <GameBoard
+                isTurn={(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1)}
+                board={myBoard}
+                sendMove={playerMakeMove}
+                forfeit={playerForfeit}
+                player
+                opponent
+                isPlayerTurn
+              />
+            ) : null
           }
 
           {
