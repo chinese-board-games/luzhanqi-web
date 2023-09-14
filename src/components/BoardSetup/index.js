@@ -5,15 +5,23 @@ import { GameContext } from 'contexts/GameContext';
 
 import HalfBoard from './HalfBoard';
 
-const emptyBoard = [];
-for (let i = 0; i < 6; i++) {
-  emptyBoard.push([null, null, null, null, null]);
-}
-
 export default function BoardSetup() {
   const {
+    playerList: { playerList },
+    playerName: { playerName },
+    roomId: { roomId },
+    socket,
     submittedSide: { submittedSide }
   } = useContext(GameContext);
+
+  const sendStartingBoard = (halfBoard) => {
+    console.log('sendStartingBoard', halfBoard);
+    socket.emit('playerInitialBoard', {
+      playerName,
+      myPositions: halfBoard,
+      room: roomId
+    });
+  };
 
   return submittedSide ? (
     <>
@@ -21,6 +29,10 @@ export default function BoardSetup() {
       <h2>Waiting for other player</h2>
     </>
   ) : (
-    <HalfBoard />
+    <HalfBoard
+      sendStartingBoard={sendStartingBoard}
+      playerList={playerList}
+      playerName={playerName}
+    />
   );
 }

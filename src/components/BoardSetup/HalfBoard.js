@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Container, Flex, Stack, Grid, Center, Title, Group, Button } from '@mantine/core';
 import {
   DragOverlay,
@@ -17,7 +17,6 @@ import SortablePiece from 'components/SortablePiece';
 import DragablePiece from 'components/DragablePiece';
 import LineTo from 'react-lineto';
 import { useResizeDetector } from 'react-resize-detector';
-import { GameContext } from 'contexts/GameContext';
 
 import Position from '../Position';
 import { setupPieces, pieces } from '../../models/Piece';
@@ -35,14 +34,8 @@ for (let i = 0; i < 6; i++) {
   emptyBoard.push([null, null, null, null, null]);
 }
 
-export default function HalfBoard() {
-  const {
-    playerList: { playerList },
-    playerName: { playerName },
-    roomId: { roomId },
-    socket
-  } = useContext(GameContext);
-
+export default function HalfBoard({ sendStartingBoard, playerList, playerName }) {
+  console.log(playerList);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   // TODO: piece affiliation will be -1 if the players are not in game (playerList is [])
@@ -65,17 +58,6 @@ export default function HalfBoard() {
   console.log('activePiece', activePiece);
   console.log('halfBoard', halfBoard);
   console.log('unplacedPieces', unplacedPieces);
-
-  /** Send the starting board to the server (my side) */
-  const sendStartingBoard = (e) => {
-    e.preventDefault();
-    console.log('sendStartingBoard', halfBoard);
-    socket.emit('playerInitialBoard', {
-      playerName,
-      myPositions: halfBoard,
-      room: roomId
-    });
-  };
 
   const setExampleOne = () => {
     const example1 = [
@@ -253,7 +235,7 @@ export default function HalfBoard() {
                 <Button type="button" variant="secondary" onClick={setExampleOne}>
                   Set Example 1
                 </Button>
-                <Button type="button" variant="info" onClick={sendStartingBoard}>
+                <Button type="button" variant="info" onClick={() => sendStartingBoard(halfBoard)}>
                   Send Board Placement
                 </Button>
               </Group>

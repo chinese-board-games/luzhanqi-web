@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-key */
 import { useState, useEffect } from 'react';
 import { Grid, Container, Center, Text, Stack, Title, Button, Group } from '@mantine/core';
@@ -13,7 +14,18 @@ const board = emptyBoard();
 board[1][0] = PieceModel('bomb', 0);
 board[3][0] = PieceModel('enemy', 1);
 
-export default function GameBoard() {
+export default function GameBoard({
+  isTurn = false,
+  board = emptyBoard(),
+  sendMove = (move) => {
+    alert('move sent: ', move);
+  },
+  forfeit = () => {
+    alert('please implement forfeit function');
+  },
+  player = 'Joe Biden',
+  opponent = 'Trump'
+}) {
   const mockAffiliation = 0;
   const mockMoves = [
     [2, 0],
@@ -123,13 +135,15 @@ export default function GameBoard() {
       <Center>
         <Stack>
           <Stack align="center">
-            <Title order={1}>Player 1 x Player 2</Title>
+            <Title order={1}>
+              {player} x {opponent}
+            </Title>
           </Stack>
           <Group align="center" direction="horizontal">
             <Button
-              disabled={!(originSelected && destinationSelected)}
-              onClick={() => console.log(origin, destination)}>
-              Send Move
+              disabled={isTurn && !(originSelected && destinationSelected)}
+              onClick={sendMove}>
+              {isTurn ? 'Send move' : 'Waiting for opponent'}
             </Button>
             <Button
               onClick={() => {
@@ -138,7 +152,7 @@ export default function GameBoard() {
               }}>
               Reset
             </Button>
-            <Button onClick={() => console.log('you lost')}>Forfeit</Button>
+            <Button onClick={forfeit}>Forfeit</Button>
           </Group>
         </Stack>
       </Center>
