@@ -24,9 +24,9 @@ export default function GameBoard({
     alert('please implement forfeit function');
   },
   player = 'Joe Biden',
-  opponent = 'Trump'
+  opponent = 'Trump',
+  affiliation = 0
 }) {
-  const mockAffiliation = 0;
   const mockMoves = [
     [2, 0],
     [1, 1],
@@ -45,7 +45,7 @@ export default function GameBoard({
 
   const positionDisabled = (row, col) => {
     if (nothingSelected) {
-      return board[row][col]?.affiliation !== mockAffiliation;
+      return board[row][col]?.affiliation !== affiliation;
     }
     if (destinationSelected) {
       return !isEqual(destination, [row, col]) && !isEqual(origin, [row, col]);
@@ -86,7 +86,7 @@ export default function GameBoard({
           destinationSelected={isEqual(destination, [r, c])}
           attackable={
             board[r][c] &&
-            board[r][c].affiliation != mockAffiliation &&
+            board[r][c].affiliation != affiliation &&
             availibleMoves.has(JSON.stringify([r, c]))
           }
           movable={board[r][c] == null && availibleMoves.has(JSON.stringify([r, c]))}

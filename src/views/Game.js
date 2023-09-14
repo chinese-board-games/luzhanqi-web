@@ -23,6 +23,8 @@ const Game = () => {
     myBoard: { myBoard }
   } = useContext(GameContext);
 
+  const affiliation = playerList.indexOf(playerName);
+
   /** Clear errors after 1 second each */
   useEffect(() => {
     errors.forEach((error) => {
@@ -119,9 +121,9 @@ const Game = () => {
                 board={myBoard}
                 sendMove={playerMakeMove}
                 forfeit={playerForfeit}
-                player
-                opponent
-                isPlayerTurn
+                playerName={playerName}
+                opponentName={playerList[1 - affiliation]}
+                affiliation={affiliation}
               />
             ) : null
           }
