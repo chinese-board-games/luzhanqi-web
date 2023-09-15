@@ -7,6 +7,7 @@ function Menu() {
       <Link to="/game">Create Match</Link>
       <Link to="/game">Join/Rejoin Match</Link>
       <Link to="/setup-test">Test Setup</Link>
+      <Link to="/gameboard-test">Test New Board</Link>
     </div>
   );
 }
