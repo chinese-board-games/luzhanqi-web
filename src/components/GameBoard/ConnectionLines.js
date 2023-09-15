@@ -1,5 +1,5 @@
 import LineTo from 'react-lineto';
-import { isRailroad, boardConnections } from '../../utils';
+import { isRailroad, boardConnections } from '../../utils/core';
 
 export default function ConnectionLines() {
   return (

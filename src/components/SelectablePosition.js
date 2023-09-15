@@ -57,7 +57,7 @@ export default function SelectablePosition({
         cursor: disabled ? 'not-allowed' : 'pointer'
       }}
       ref={ref}
-      onClick={!disabled && onClick}>
+      onClick={disabled ? undefined : onClick}>
       <Position row={row} col={col} piece={piece} disabled={disabled} shadeColor={shadeColor} />
     </Box>
   );

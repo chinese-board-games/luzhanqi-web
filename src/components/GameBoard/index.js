@@ -1,43 +1,34 @@
 import { useState, useEffect } from 'react';
-import { Grid, Container, Center, Text, Stack, Title, Button, Group } from '@mantine/core';
-import { emptyBoard } from 'src/utils';
+import { Grid, Container, Center, Stack, Title, Button, Group } from '@mantine/core';
+import { emptyBoard } from 'src/utils/core';
 import SelectablePosition from '../SelectablePosition';
 import { isEqual } from 'lodash';
-import PieceModel from 'src/models/Piece';
 import FrontLines from './FrontLines';
 import Mountain from './Mountain';
 import ConnectionLines from './ConnectionLines';
+import PropTypes from 'prop-types';
+import { getSuccessors } from 'src/utils';
 
 const NO_SELECT = [-1, -1];
-const board = emptyBoard();
-board[1][0] = PieceModel('bomb', 0);
-board[3][0] = PieceModel('enemy', 1);
-import PropTypes from 'prop-types';
 
 export default function GameBoard({
   isTurn,
-  board,
+  board = emptyBoard(),
   sendMove,
   forfeit,
   player = 'Player',
   opponent = 'Opponent',
   affiliation
 }) {
-  const mockMoves = [
-    [2, 0],
-    [1, 1],
-    [2, 1],
-    [3, 0]
-  ];
-
-  const availibleMoves = new Set(mockMoves.map((move) => JSON.stringify(move)));
-
   const [origin, setOrigin] = useState(NO_SELECT);
   const [destination, setDestination] = useState(NO_SELECT);
 
   const originSelected = !isEqual(origin, NO_SELECT);
   const destinationSelected = !isEqual(destination, NO_SELECT);
   const nothingSelected = !originSelected && !destinationSelected;
+
+  const moves = originSelected ? getSuccessors(board, origin[0], origin[1], affiliation) : [];
+  const availibleMoves = new Set(moves.map((move) => JSON.stringify(move)));
 
   const positionDisabled = (row, col) => {
     if (nothingSelected) {
@@ -138,7 +129,9 @@ export default function GameBoard({
           <Group align="center" direction="horizontal">
             <Button
               disabled={isTurn && !(originSelected && destinationSelected)}
-              onClick={sendMove}>
+              onClick={() => {
+                sendMove(origin, destination);
+              }}>
               {isTurn ? 'Send move' : 'Waiting for opponent'}
             </Button>
             <Button
