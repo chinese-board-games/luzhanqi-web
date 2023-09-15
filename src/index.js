@@ -15,7 +15,23 @@ ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
       <FirebaseAuthProvider>
-        <MantineProvider>
+        <MantineProvider
+          theme={{
+            colors: {
+              'pastel-tan': [
+                '#f6f5ef',
+                '#e3e1d3',
+                '#d0cdb5',
+                '#beb995',
+                '#aca576',
+                '#938b5c',
+                '#726c49',
+                '#514d35',
+                '#312e1f',
+                '#100f09'
+              ]
+            }
+          }}>
           <GameProvider>
             <App />
           </GameProvider>

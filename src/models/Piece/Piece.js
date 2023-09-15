@@ -11,7 +11,8 @@ export const pieces = {
   landmine: { count: 3, order: -1, display: '地雷', kills: 0 },
   lieutenant: { count: 3, order: 2, display: '排長', kills: 0 },
   major_general: { count: 2, order: 7, display: '師長', kills: 0 },
-  major: { count: 2, order: 4, display: '營長', kills: 0 }
+  major: { count: 2, order: 4, display: '營長', kills: 0 },
+  enemy: { count: 0, order: -1, display: '敵軍', kills: 0 }
 };
 
 export const setupPieces = [];

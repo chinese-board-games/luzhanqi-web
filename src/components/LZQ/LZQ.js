@@ -25,6 +25,7 @@ const LZQ = () => {
   } = gameState;
 
   useEffect(() => {
+    // use to get successors (deprecated)
     const { source, target } = pendingMove;
     if (source && source.length === 2) {
       socket.emit('pieceSelection', {
