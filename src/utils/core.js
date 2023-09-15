@@ -193,3 +193,29 @@ export const emptyBoard = () => {
 };
 
 export const isHQ = (r, c) => (c == 1 || c == 3) && (r == 0 || r == 11);
+
+/**
+ * Checks validity of row index
+ *
+ * @function
+ * @param r The row index of a coordinate pair.
+ * @see isValidRow
+ * @returns Whether the row index is within board bounds.
+ */
+export const isValidRow = (r) => r >= 0 && r < 12;
+/**
+ * Checks validity of column index
+ *
+ * @function
+ * @param {number} c The column index of a coordinate pair.
+ * @see isValidCol
+ * @returns {boolean} Whether the column index is within board bounds.
+ */
+export const isValidCol = (c) => c >= 0 && c < 5;
+
+export const isOccupied = (board, r, c) => {
+  if (!isValidRow(r) || !isValidCol(c)) {
+    return false;
+  }
+  return board[r][c] !== null;
+};

@@ -43,8 +43,9 @@ const Game = () => {
         uid,
         room: roomId,
         turn: clientTurn,
-        pendingMove
+        pendingMove: [source, target]
       });
+    } else {
       setErrors((prevErrors) => [...prevErrors, 'You must have both a source and target tile']);
     }
   };

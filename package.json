@@ -19,6 +19,7 @@
     "firebase": "^9.15.0",
     "jquery": "^3.5.1",
     "lodash": "^4.17.20",
+    "lodash.isequal": "^4.5.0",
     "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",

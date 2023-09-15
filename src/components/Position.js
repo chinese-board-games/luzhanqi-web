@@ -3,7 +3,7 @@ import React from 'react';
 import DragablePiece from 'components/DragablePiece';
 import { Center, Stack } from '@mantine/core';
 import { useDroppable } from '@dnd-kit/core';
-import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../utils';
+import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../utils/core';
 import Piece from './Piece';
 
 const disabledFilter = 'grayscale(50%) opacity(90%)';

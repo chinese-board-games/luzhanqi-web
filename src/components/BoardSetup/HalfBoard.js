@@ -27,7 +27,7 @@ import {
   halfBoardConnections,
   isHalfBoardRailroad,
   isValidHalfBoardPlacement
-} from '../../utils';
+} from '../../utils/core';
 
 const emptyBoard = [];
 for (let i = 0; i < 6; i++) {
