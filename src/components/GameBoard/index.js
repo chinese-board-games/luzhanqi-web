@@ -12,6 +12,7 @@ import { getSuccessors } from 'src/utils';
 const NO_SELECT = [-1, -1];
 
 export default function GameBoard({
+  host,
   isTurn,
   board = emptyBoard(),
   sendMove,
@@ -130,7 +131,7 @@ export default function GameBoard({
             <Button
               disabled={isTurn && !(originSelected && destinationSelected)}
               onClick={() => {
-                sendMove(origin, destination);
+                sendMove(origin, destination, host);
               }}>
               {isTurn ? 'Send move' : 'Waiting for opponent'}
             </Button>
@@ -152,6 +153,7 @@ export default function GameBoard({
 }
 
 GameBoard.propTypes = {
+  host: PropTypes.bool,
   isTurn: PropTypes.bool,
   board: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
   sendMove: PropTypes.func,

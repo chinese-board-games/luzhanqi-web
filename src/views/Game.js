@@ -35,8 +35,11 @@ const Game = () => {
     setErrors([]);
   }, [JSON.stringify(errors), toast.error]);
 
-  const playerMakeMove = (source, target) => {
-    // console.log(source, target);
+  const rotateMove = ([row, col]) => {
+    return [11 - row, 4 - col];
+  };
+
+  const playerMakeMove = (source, target, host) => {
     if (source.length && target.length) {
       // if target is in successors, make move
       socket.emit('playerMakeMove', {
@@ -44,7 +47,10 @@ const Game = () => {
         uid,
         room: roomId,
         turn: clientTurn,
-        pendingMove: { source, target }
+        pendingMove: {
+          source: host ? source : rotateMove(source),
+          target: host ? target : rotateMove(target)
+        }
       });
     } else {
       setErrors((prevErrors) => [...prevErrors, 'You must have both a source and target tile']);
@@ -60,6 +66,16 @@ const Game = () => {
       room: roomId
     });
   };
+
+  /**
+   * Rotates the board values 180 degrees
+   * @param {Object} board a 2D array representing the game board
+   * @returns {Object}
+   * @see transformBoard
+   */
+
+  const transformBoard = (board) =>
+    board.map((row, y) => row.map((piece, x) => board[board.length - 1 - y][row.length - 1 - x]));
 
   return (
     <>
@@ -119,8 +135,9 @@ const Game = () => {
             /** Players play the game */
             gamePhase === 2 ? (
               <GameBoard
+                host={host}
                 isTurn={(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1)}
-                board={myBoard}
+                board={host ? myBoard : transformBoard(myBoard)}
                 sendMove={playerMakeMove}
                 forfeit={playerForfeit}
                 playerName={playerName}
