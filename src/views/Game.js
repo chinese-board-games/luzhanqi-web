@@ -40,10 +40,11 @@ const Game = () => {
     if (source.length && target.length) {
       // if target is in successors, make move
       socket.emit('playerMakeMove', {
+        playerName,
         uid,
         room: roomId,
         turn: clientTurn,
-        pendingMove: [source, target]
+        pendingMove: { source, target }
       });
     } else {
       setErrors((prevErrors) => [...prevErrors, 'You must have both a source and target tile']);
