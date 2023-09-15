@@ -1,31 +1,27 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-key */
 import { useState, useEffect } from 'react';
 import { Grid, Container, Center, Text, Stack, Title, Button, Group } from '@mantine/core';
 import { emptyBoard } from 'src/utils';
 import SelectablePosition from '../SelectablePosition';
-import LineTo from 'react-lineto';
-import { isRailroad, boardConnections } from '../../utils';
 import { isEqual } from 'lodash';
 import PieceModel from 'src/models/Piece';
+import FrontLines from './FrontLines';
+import Mountain from './Mountain';
+import ConnectionLines from './ConnectionLines';
 
 const NO_SELECT = [-1, -1];
 const board = emptyBoard();
 board[1][0] = PieceModel('bomb', 0);
 board[3][0] = PieceModel('enemy', 1);
+import PropTypes from 'prop-types';
 
 export default function GameBoard({
-  isTurn = false,
-  board = emptyBoard(),
-  sendMove = (move) => {
-    alert('move sent: ', move);
-  },
-  forfeit = () => {
-    alert('please implement forfeit function');
-  },
-  player = 'Joe Biden',
-  opponent = 'Trump',
-  affiliation = 0
+  isTurn,
+  board,
+  sendMove,
+  forfeit,
+  player = 'Player',
+  opponent = 'Opponent',
+  affiliation
 }) {
   const mockMoves = [
     [2, 0],
@@ -113,11 +109,11 @@ export default function GameBoard({
   );
 
   const divider = [
-    <FrontLines />,
-    <Mountain rotation="-90deg" />,
-    <FrontLines />,
-    <Mountain rotation="90deg" />,
-    <FrontLines />
+    <FrontLines key="1" />,
+    <Mountain rotation="-90deg" key="2" />,
+    <FrontLines key="3" />,
+    <Mountain rotation="90deg" key="4" />,
+    <FrontLines key="5" />
   ].map((content, i) => (
     <Grid.Col key={`divider-${i}`} span={4}>
       <Center mih="5em">{content}</Center>
@@ -162,65 +158,12 @@ export default function GameBoard({
   );
 }
 
-function ConnectionLines() {
-  return (
-    <>
-      {boardConnections.map(({ start, end }) => {
-        const isRailroadConnection = !!(
-          isRailroad(start[0], start[1]) && isRailroad(end[0], end[1])
-        );
-        return (
-          <LineTo
-            key={`${start[0]}-${start[1]}-${end[0]}-${end[1]}`}
-            from={`${start[0]}-${start[1]}`}
-            to={`${end[0]}-${end[1]}`}
-            borderColor={isRailroadConnection ? 'gray' : 'black'}
-            borderWidth={isRailroadConnection ? 4 : 3}
-            borderStyle={isRailroadConnection ? 'dashed' : 'solid'}
-            toAnchor="center"
-            delay={0}
-          />
-        );
-      })}
-    </>
-  );
-}
-
-function FrontLines() {
-  return (
-    <Center
-      sx={{
-        border: '.1em solid gray',
-        fontSize: '18pt',
-        zIndex: 100
-      }}
-      bg="whitesmoke"
-      w="4em"
-      h="4em">
-      <Stack sx={{ gap: '0' }}>
-        <Text sx={{ rotate: '180deg' }}>前綫</Text>
-        <Text>前綫</Text>
-      </Stack>
-    </Center>
-  );
-}
-
-// eslint-disable-next-line react/prop-types
-function Mountain({ rotation }) {
-  return (
-    <Center
-      sx={{
-        borderRadius: '100%',
-        border: '.1em solid gray',
-        writingMode: 'vertical-rl',
-        fontSize: '18pt',
-        zIndex: 100,
-        rotate: rotation || '0deg'
-      }}
-      bg="whitesmoke"
-      w="4em"
-      h="4em">
-      山界
-    </Center>
-  );
-}
+GameBoard.propTypes = {
+  isTurn: PropTypes.bool,
+  board: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
+  sendMove: PropTypes.func,
+  forfeit: PropTypes.func,
+  player: PropTypes.string,
+  opponent: PropTypes.string,
+  affiliation: PropTypes.number
+};
