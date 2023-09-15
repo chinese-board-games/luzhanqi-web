@@ -35,7 +35,6 @@ for (let i = 0; i < 6; i++) {
 }
 
 export default function HalfBoard({ sendStartingBoard, playerList, playerName }) {
-  console.log(playerList);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   // TODO: piece affiliation will be -1 if the players are not in game (playerList is [])
