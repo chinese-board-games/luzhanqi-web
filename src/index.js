@@ -8,6 +8,7 @@ import { GameProvider } from 'contexts/GameContext';
 import { FirebaseAuthProvider } from 'contexts/FirebaseContext';
 import { MantineProvider } from '@mantine/core';
 import App from './App';
+import { CustomFonts } from './CustomFonts';
 
 axios.defaults.baseURL = `${process.env.REACT_APP_API}`;
 
@@ -32,6 +33,7 @@ ReactDOM.render(
               ]
             }
           }}>
+          <CustomFonts />
           <GameProvider>
             <App />
           </GameProvider>
