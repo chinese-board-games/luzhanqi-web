@@ -10,7 +10,8 @@ export default function Mountain({ rotation }) {
         writingMode: 'vertical-rl',
         fontSize: '18pt',
         zIndex: 100,
-        rotate: rotation || '0deg'
+        rotate: rotation || '0deg',
+        fontFamily: 'SentyWEN2017'
       }}
       bg="whitesmoke"
       w="4em"

@@ -16,7 +16,7 @@ export default function Piece({ name, affiliation }) {
         boxShadow: theme.shadows.sm,
         writingMode: 'horizontal-tb'
       })}>
-      <Text fw={700} color={affiliation === 0 ? 'indigo.7' : 'red.7'}>
+      <Text sx={{ fontFamily: 'SentyWEN2017' }} color={affiliation === 0 ? 'indigo.7' : 'red.7'}>
         {piece.display}
       </Text>
     </Center>

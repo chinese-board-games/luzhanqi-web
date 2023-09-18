@@ -5,6 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 import AuthModal from 'components/AuthModal';
 import UserModal from 'components/UserModal';
+import { Link } from 'react-router-dom';
 
 const NavBar = () => {
   // state variable to set modal to open or closed
@@ -22,9 +23,7 @@ const NavBar = () => {
         margin: '1em'
       }}>
       <h1>
-        <a href="https://ancientchess.com/page/play-luzhanqi.htm" target="_blank" rel="noreferrer">
-          陸戰棋
-        </a>
+        <Link to="/">陸戰棋</Link>
       </h1>
 
       {/* disabled until fully implemented */}
