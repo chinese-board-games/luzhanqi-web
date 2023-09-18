@@ -129,11 +129,13 @@ export default function GameBoard({
           </Stack>
           <Group align="center" direction="horizontal">
             <Button
-              disabled={isTurn && !(originSelected && destinationSelected)}
+              disabled={!isTurn || !(originSelected && destinationSelected)}
               onClick={() => {
                 sendMove(origin, destination, host);
+                setOrigin(NO_SELECT);
+                setDestination(NO_SELECT);
               }}>
-              {isTurn ? 'Send move' : 'Waiting for opponent'}
+              {isTurn ? 'Send move' : 'Opponent turn'}
             </Button>
             <Button
               onClick={() => {
