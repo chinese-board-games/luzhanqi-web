@@ -1,7 +1,9 @@
 import LineTo from 'react-lineto';
 import { isRailroad, boardConnections } from '../../utils/core';
+import useWindowSize from 'src/hooks/useWindowSize';
 
 export default function ConnectionLines() {
+  useWindowSize(); // rerender on window resize for lines to update
   return (
     <>
       {boardConnections.map(({ start, end }) => {

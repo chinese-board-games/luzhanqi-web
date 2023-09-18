@@ -39,11 +39,12 @@ export default function Position({
             writingMode: 'vertical-rl',
             fontSize: '16pt',
             zIndex: 100,
-            filter: disabled && disabledFilter
+            filter: disabled && disabledFilter,
+            fontFamily: 'SentyWEN2017'
           }}
           bg="pastel-tan.1"
-          w="3.5em"
-          h="3.5em">
+          w="4em"
+          h="4em">
           {placedPiece || '行營'}
         </Center>
       );
@@ -59,7 +60,8 @@ export default function Position({
             fontSize: '16pt',
             zIndex: 100,
             borderRadius: '3em 3em 1em 1em',
-            filter: disabled && disabledFilter
+            filter: disabled && disabledFilter,
+            fontFamily: 'SentyWEN2017'
           }}
           bg="pastel-tan.1">
           <Stack spacing="0em" align="stretch" justify="center">
@@ -81,7 +83,8 @@ export default function Position({
           border: '.1em solid black',
           fontSize: '16pt',
           zIndex: 100,
-          filter: disabled && disabledFilter
+          filter: disabled && disabledFilter,
+          fontFamily: 'SentyWEN2017'
         }}
         bg="pastel-tan.1">
         {placedPiece || '後勤'}
