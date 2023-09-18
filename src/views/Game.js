@@ -20,7 +20,8 @@ const Game = () => {
     host: { host },
     clientTurn: { clientTurn },
     errors: { errors, setErrors },
-    myBoard: { myBoard }
+    myBoard: { myBoard },
+    isEnglish: { isEnglish }
   } = useContext(GameContext);
 
   const affiliation = playerList.indexOf(playerName);
@@ -143,6 +144,7 @@ const Game = () => {
                 playerName={playerName}
                 opponentName={playerList[1 - affiliation]}
                 affiliation={affiliation}
+                isEnglish={isEnglish}
               />
             ) : null
           }

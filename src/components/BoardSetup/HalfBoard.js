@@ -33,7 +33,7 @@ for (let i = 0; i < 6; i++) {
   emptyBoard.push([null, null, null, null, null]);
 }
 
-export default function HalfBoard({ sendStartingBoard, playerList, playerName }) {
+export default function HalfBoard({ sendStartingBoard, playerList, playerName, isEnglish }) {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   // TODO: piece affiliation will be -1 if the players are not in game (playerList is [])
@@ -233,7 +233,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName })
                 </Button>
               </Group>
             </Center>
-            <PieceSelector unplacedPieces={unplacedPieces} />
+            <PieceSelector unplacedPieces={unplacedPieces} isEnglish={isEnglish} />
             <Grid columns={20}>
               {halfBoard.flatMap((row, r) =>
                 row.map((piece, c) => (
@@ -245,6 +245,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName })
                       col={c}
                       activeId={activeId}
                       isHalfBoard={true}
+                      isEnglish={isEnglish}
                     />
                   </Grid.Col>
                 ))
@@ -253,7 +254,12 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName })
           </Stack>
           <DragOverlay>
             {activeId ? (
-              <DragablePiece name={activePiece.name} affiliation={0} data={activePiece.data} />
+              <DragablePiece
+                name={activePiece.name}
+                affiliation={0}
+                data={activePiece.data}
+                isEnglish={isEnglish}
+              />
             ) : null}
           </DragOverlay>
         </DndContext>
@@ -287,7 +293,7 @@ function HalfBoardConnectionLines() {
   );
 }
 
-function PieceSelector({ unplacedPieces }) {
+function PieceSelector({ unplacedPieces, isEnglish }) {
   const { setNodeRef } = useDroppable({
     id: 'unplaced'
   });
@@ -306,7 +312,13 @@ function PieceSelector({ unplacedPieces }) {
           <SortableContext items={unplacedPieces}>
             <Flex justify="center" align="center" gap="1em" wrap="wrap">
               {unplacedPieces.map((piece) => (
-                <SortablePiece name={piece.name} affiliation={0} id={piece.id} key={piece.id} />
+                <SortablePiece
+                  name={piece.name}
+                  affiliation={0}
+                  id={piece.id}
+                  key={piece.id}
+                  isEnglish={isEnglish}
+                />
               ))}
             </Flex>
           </SortableContext>

@@ -40,6 +40,7 @@ export default function SelectablePosition({
   destinationSelected = false,
   attackable = false,
   movable = false,
+  isEnglish,
   disabled = false
 }) {
   const { hovered, ref } = useHover();
@@ -58,7 +59,14 @@ export default function SelectablePosition({
       }}
       ref={ref}
       onClick={disabled ? undefined : onClick}>
-      <Position row={row} col={col} piece={piece} disabled={disabled} shadeColor={shadeColor} />
+      <Position
+        row={row}
+        col={col}
+        piece={piece}
+        disabled={disabled}
+        shadeColor={shadeColor}
+        isEnglish={isEnglish}
+      />
     </Box>
   );
 }

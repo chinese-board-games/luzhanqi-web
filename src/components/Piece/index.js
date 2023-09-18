@@ -3,7 +3,7 @@ import React from 'react';
 import { default as PieceModel } from '../../models/Piece';
 
 // eslint-disable-next-line react/prop-types
-export default function Piece({ name, affiliation }) {
+export default function Piece({ name, affiliation, isEnglish }) {
   const piece = PieceModel(name, affiliation);
   return (
     <Center
@@ -17,7 +17,7 @@ export default function Piece({ name, affiliation }) {
         writingMode: 'horizontal-tb'
       })}>
       <Text sx={{ fontFamily: 'SentyWEN2017' }} color={affiliation === 0 ? 'indigo.7' : 'red.7'}>
-        {piece.display}
+        {isEnglish ? piece.english : piece.display}
       </Text>
     </Center>
   );

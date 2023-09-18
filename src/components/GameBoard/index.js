@@ -19,7 +19,8 @@ export default function GameBoard({
   forfeit,
   player = 'Player',
   opponent = 'Opponent',
-  affiliation
+  affiliation,
+  isEnglish = false
 }) {
   const [origin, setOrigin] = useState(NO_SELECT);
   const [destination, setDestination] = useState(NO_SELECT);
@@ -94,6 +95,7 @@ export default function GameBoard({
             }
             setOrigin([r, c]);
           }}
+          isEnglish={isEnglish}
           disabled={positionDisabled(r, c)}
         />
       </Grid.Col>
@@ -162,5 +164,6 @@ GameBoard.propTypes = {
   forfeit: PropTypes.func,
   player: PropTypes.string,
   opponent: PropTypes.string,
-  affiliation: PropTypes.number
+  affiliation: PropTypes.number,
+  isEnglish: PropTypes.bool
 };
