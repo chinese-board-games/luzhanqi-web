@@ -15,6 +15,7 @@ export default function Position({
   activeId,
   shadeColor,
   isHalfBoard = false,
+  isEnglish,
   disabled = false
 }) {
   const placedPiece =
@@ -26,9 +27,10 @@ export default function Position({
             id={piece.id}
             key={piece.id}
             data={{ row, col }}
+            isEnglish={isEnglish}
           />
         )
-      : piece && <Piece name={piece.name} affiliation={piece.affiliation} />;
+      : piece && <Piece name={piece.name} affiliation={piece.affiliation} isEnglish={isEnglish} />;
   const getPositionContent = () => {
     if (isHalfBoard ? isHalfBoardCamp(row, col) : isCamp(row, col)) {
       return (

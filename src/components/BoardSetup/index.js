@@ -11,7 +11,8 @@ export default function BoardSetup() {
     playerName: { playerName },
     roomId: { roomId },
     socket,
-    submittedSide: { submittedSide }
+    submittedSide: { submittedSide },
+    isEnglish: { isEnglish }
   } = useContext(GameContext);
 
   const sendStartingBoard = (halfBoard) => {
@@ -33,6 +34,7 @@ export default function BoardSetup() {
       sendStartingBoard={sendStartingBoard}
       playerList={playerList}
       playerName={playerName}
+      isEnglish={isEnglish}
     />
   );
 }

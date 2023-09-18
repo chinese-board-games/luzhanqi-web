@@ -5,7 +5,7 @@ import { CSS } from '@dnd-kit/utilities';
 import Piece from './Piece';
 
 // eslint-disable-next-line react/prop-types
-export default function SortablePiece({ name, affiliation, id }) {
+export default function SortablePiece({ name, affiliation, id, isEnglish }) {
   const { attributes, listeners, setNodeRef, transition, transform } = useSortable({
     id
   });
@@ -16,7 +16,7 @@ export default function SortablePiece({ name, affiliation, id }) {
   };
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Piece name={name} affiliation={affiliation} />
+      <Piece name={name} affiliation={affiliation} isEnglish={isEnglish} />
     </div>
   );
 }

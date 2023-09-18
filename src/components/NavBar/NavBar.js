@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+import { GameContext } from 'contexts/GameContext';
 import AuthModal from 'components/AuthModal';
 import UserModal from 'components/UserModal';
 import { Link } from 'react-router-dom';
@@ -12,6 +13,11 @@ const NavBar = () => {
   const [showAuthModal, setShowAuthModal] = React.useState(false);
   const [showUserModal, setShowUserModal] = React.useState(false);
   const [user] = useAuthState(getAuth());
+
+  const gameState = React.useContext(GameContext);
+  const {
+    isEnglish: { isEnglish, setIsEnglish }
+  } = gameState;
 
   return (
     <div
@@ -26,7 +32,6 @@ const NavBar = () => {
         <Link to="/">陸戰棋</Link>
       </h1>
 
-      {/* disabled until fully implemented */}
       {user ? (
         <>
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -67,6 +72,10 @@ const NavBar = () => {
           Sign In/Sign Up
         </Button>
       )}
+
+      <Button variant="info" onClick={() => setIsEnglish(!isEnglish)}>
+        {isEnglish ? 'CN' : 'EN'}
+      </Button>
 
       <AuthModal showModal={showAuthModal} setShowModal={setShowAuthModal} />
       <UserModal showModal={showUserModal} setShowModal={setShowUserModal} />
