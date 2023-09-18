@@ -16,8 +16,6 @@ import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import SortablePiece from 'components/SortablePiece';
 import DragablePiece from 'components/DragablePiece';
 import LineTo from 'react-lineto';
-import { useResizeDetector } from 'react-resize-detector';
-
 import Position from '../Position';
 import { setupPieces, pieces } from '../../models/Piece';
 import {
@@ -28,6 +26,7 @@ import {
   isHalfBoardRailroad,
   isValidHalfBoardPlacement
 } from '../../utils/core';
+import useWindowSize from 'src/hooks/useWindowSize';
 
 const emptyBoard = [];
 for (let i = 0; i < 6; i++) {
@@ -209,13 +208,8 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName })
     setActiveId(null);
   };
 
-  const { ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 10
-  });
-
   return (
-    <div ref={ref} style={{ background: '#e0e0e0' }}>
+    <div style={{ background: '#e0e0e0' }}>
       <Container>
         <HalfBoardConnectionLines />
         <DndContext
@@ -269,6 +263,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName })
 }
 
 function HalfBoardConnectionLines() {
+  useWindowSize(); // rerender on window resize for lines to update
   return (
     <>
       {halfBoardConnections.map(({ start, end }) => {
