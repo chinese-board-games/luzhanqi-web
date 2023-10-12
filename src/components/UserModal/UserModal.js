@@ -53,7 +53,8 @@ const UserModal = ({ showModal, setShowModal }) => {
       contentLabel="User Modal"
       style={{
         overlay: {
-          backgroundColor: '#00000080'
+          backgroundColor: '#00000080',
+          zIndex: 110
         },
         // 50% of the screen width and height
         content: {
