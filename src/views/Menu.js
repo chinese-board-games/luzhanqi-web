@@ -3,6 +3,13 @@ import { Link } from 'react-router-dom';
 import { Button, Container } from '@mantine/core';
 
 function Menu() {
+  const viewStyle = {
+    height: '100vh',
+    backgroundColor: '#d0edf5',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '1em 1em'
+  };
   const stackStyle = {
     display: 'flex',
     flexDirection: 'column',
@@ -22,7 +29,7 @@ function Menu() {
   const linkStyle = { color: 'white' };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', margin: '1em 1em' }}>
+    <div style={viewStyle}>
       <Container style={stackStyle}>
         <Container style={cardStyle}>
           <h2>Host a New Game</h2>

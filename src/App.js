@@ -7,6 +7,7 @@ import Game from './views/Game';
 import Debug from './views/Debug';
 import SetupTest from './views/SetupTest';
 import GameBoardTest from './views/GameBoardTest';
+import './App.css';
 
 const App = () => (
   <>
