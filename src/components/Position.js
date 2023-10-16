@@ -5,6 +5,7 @@ import { Center, Stack } from '@mantine/core';
 import { useDroppable } from '@dnd-kit/core';
 import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../utils/core';
 import Piece from './Piece';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const disabledFilter = 'grayscale(50%) opacity(90%)';
 
@@ -30,7 +31,18 @@ export default function Position({
             isEnglish={isEnglish}
           />
         )
-      : piece && <Piece name={piece.name} affiliation={piece.affiliation} isEnglish={isEnglish} />;
+      : piece && (
+          <AnimatePresence>
+            <motion.div
+              key={piece.id}
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 20 }}>
+              <Piece name={piece.name} affiliation={piece.affiliation} isEnglish={isEnglish} />
+            </motion.div>
+          </AnimatePresence>
+        );
   const getPositionContent = () => {
     if (isHalfBoard ? isHalfBoardCamp(row, col) : isCamp(row, col)) {
       return (
