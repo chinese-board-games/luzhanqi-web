@@ -24,7 +24,7 @@ function Menu() {
   };
   const cardContentStyle = {
     display: 'flex',
-    gap: '0.3em 0.3em'
+    gap: '0.4em 0.4em'
   };
   const linkStyle = { color: 'white' };
 

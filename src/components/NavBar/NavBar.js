@@ -1,6 +1,7 @@
 import { getAuth } from 'firebase/auth';
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button } from '@mantine/core';
+
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { GameContext } from 'contexts/GameContext';
@@ -47,21 +48,22 @@ const NavBar = () => {
                 borderRadius: '0.25em',
                 height: '2em'
               }}>
-              <button
+              <Button
                 style={{
                   backgroundColor: 'transparent',
-                  border: 'none'
+                  border: 'none',
+                  color: '#007bff'
                 }}
-                type="button"
                 onClick={() => {
                   setShowUserModal(true);
                 }}>
                 {user.displayName || user.email || user.phoneNumber}
-              </button>
+              </Button>
             </h5>
 
             <Button
-              variant="danger"
+              variant="filled"
+              color="red"
               onClick={() => {
                 getAuth().signOut();
                 window.location.reload();
@@ -71,12 +73,16 @@ const NavBar = () => {
           </div>
         </>
       ) : (
-        <Button variant="info" onClick={() => setShowAuthModal(true)}>
+        <Button style={{ width: '11em' }} onClick={() => setShowAuthModal(true)}>
           Sign In/Sign Up
         </Button>
       )}
 
-      <Button variant="info" onClick={() => setIsEnglish(!isEnglish)}>
+      <Button
+        style={{ width: '4.5em' }}
+        variant="filled"
+        color="green"
+        onClick={() => setIsEnglish(!isEnglish)}>
         {isEnglish ? 'CN' : 'EN'}
       </Button>
 
