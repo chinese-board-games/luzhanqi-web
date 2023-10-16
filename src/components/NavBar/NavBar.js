@@ -25,8 +25,11 @@ const NavBar = () => {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        height: '3em',
-        margin: '1em'
+        height: '4em',
+        margin: '1em',
+        backgroundColor: '#bcddff',
+        margin: 0,
+        padding: '0.5em'
       }}>
       <h1>
         <Link to="/">陸戰棋</Link>
