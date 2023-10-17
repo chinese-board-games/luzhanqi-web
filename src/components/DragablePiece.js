@@ -4,7 +4,7 @@ import { useDraggable } from '@dnd-kit/core';
 import Piece from './Piece';
 
 // eslint-disable-next-line react/prop-types
-export default function DragablePiece({ name, affiliation, id, data }) {
+export default function DragablePiece({ name, affiliation, id, data, isEnglish }) {
   const { setNodeRef, attributes, listeners, transition, isDragging } = useDraggable({
     id,
     data
@@ -19,7 +19,7 @@ export default function DragablePiece({ name, affiliation, id, data }) {
   };
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Piece name={name} affiliation={affiliation} />
+      <Piece name={name} affiliation={affiliation} isEnglish={isEnglish} />
     </div>
   );
 }

@@ -1,18 +1,14 @@
 /* eslint-disable no-console */
-import React, {
-  useContext
-  // useState
-  // useEffect
-} from 'react';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import React, { useContext } from 'react';
+import { useForm } from '@mantine/form';
+import { Button, TextInput, Container } from '@mantine/core';
 import { GameContext } from 'contexts/GameContext';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 
 const Lobby = () => {
   const gameState = useContext(GameContext);
   const { socket } = gameState;
-  const { playerName, setPlayerName } = gameState.playerName;
+  const { playerName } = gameState.playerName;
   const { roomId, setRoomId } = gameState.roomId;
   const { host, setHost } = gameState.host;
   const { joinedGame } = gameState.joinedGame;
@@ -56,8 +52,7 @@ const Lobby = () => {
   };
 
   /** Attempt to join a game by game ID */
-  const joinGame = (e) => {
-    e.preventDefault();
+  const joinGame = ({ playerName, roomId }) => {
     if (playerName && roomId) {
       console.log(`Attempting to join game ${roomId} as ${playerName} with clientId ${user?.uid}`);
       socket.emit('playerJoinGame', {
@@ -66,6 +61,7 @@ const Lobby = () => {
         joinRoomId: roomId,
         playerList
       });
+      setRoomId(roomId);
     } else {
       setErrors((prevErrors) => [
         ...prevErrors,
@@ -89,12 +85,27 @@ const Lobby = () => {
   //   }
   // };
 
+  const form = useForm({
+    initialValues: {
+      // these keys must match the input keys for joinGame
+      playerName,
+      roomId
+    }
+  });
+
+  // eslint-disable-next-line no-unused-vars
+  const handleError = (_errors) => {
+    console.log('Form error handled serverside');
+  };
+  const handleSubmit = (values) => {
+    joinGame(values);
+  };
   return (
-    <>
+    <Container style={{ backgroundColor: '#d0edf5' }}>
       {
         /** There is no assigned room, give option to create room */
         roomId ? null : (
-          <Button variant="success" onClick={createNewGame} style={{ width: '10em' }}>
+          <Button variant="success" onClick={createNewGame} style={{ width: '12em' }}>
             Create New Game
           </Button>
         )
@@ -116,7 +127,7 @@ const Lobby = () => {
           <>
             <h3>按 &quot;Room Full&quot; 開始遊戲</h3>
             <h3>Click &quot;Room Full&quot; to begin the game</h3>
-            <Button type="button" variant="success" onClick={roomFull} style={{ width: '7em' }}>
+            <Button type="button" variant="success" onClick={roomFull} style={{ width: '8em' }}>
               Room Full
             </Button>
           </>
@@ -140,31 +151,26 @@ const Lobby = () => {
             ) : (
               <div />
             )}
-            <Form onSubmit={joinGame}>
-              <Form.Label>Player name:</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
+            <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
+              <TextInput
+                label="Player name:"
                 placeholder="Ex. Ian"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
+                {...form.getInputProps('playerName')}
               />
-              <Form.Label>Join game:</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
+              <TextInput
+                label="Join game:"
                 placeholder="Ex. 12345"
-                onChange={(e) => setRoomId(e.target.value.toString())}
+                {...form.getInputProps('roomId')}
               />
               <br />
               <Button variant="info" type="submit">
                 Submit
               </Button>
-            </Form>
+            </form>
           </>
         )
       }
-    </>
+    </Container>
   );
 };
 

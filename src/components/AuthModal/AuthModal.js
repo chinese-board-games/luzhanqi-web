@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
+import { Button } from '@mantine/core';
 import Modal from 'react-modal';
 import Login from 'components/Login';
 import PropTypes from 'prop-types';
@@ -11,7 +11,8 @@ const AuthModal = ({ showModal, setShowModal }) => (
     contentLabel="Login Modal"
     style={{
       overlay: {
-        backgroundColor: '#00000080'
+        backgroundColor: '#00000080',
+        zIndex: 110
       },
       // 50% of the screen width and height
       content: {
@@ -28,8 +29,8 @@ const AuthModal = ({ showModal, setShowModal }) => (
         flexDirection: 'row',
         justifyContent: 'flex-end'
       }}>
-      <Button variant="clear" onClick={() => setShowModal(false)}>
-        x
+      <Button variant="subtle" color="red" onClick={() => setShowModal(false)}>
+        X
       </Button>
     </div>
 

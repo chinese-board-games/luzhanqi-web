@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
+import { Button } from '@mantine/core';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
-import { Table } from 'react-bootstrap';
+import { Table } from '@mantine/core';
 import { getUser, createUser } from 'api/User';
 import { getGameById } from 'api/Game';
 
@@ -53,7 +53,8 @@ const UserModal = ({ showModal, setShowModal }) => {
       contentLabel="User Modal"
       style={{
         overlay: {
-          backgroundColor: '#00000080'
+          backgroundColor: '#00000080',
+          zIndex: 110
         },
         // 50% of the screen width and height
         content: {
@@ -70,8 +71,8 @@ const UserModal = ({ showModal, setShowModal }) => {
           flexDirection: 'row',
           justifyContent: 'flex-end'
         }}>
-        <Button variant="clear" onClick={() => setShowModal(false)}>
-          x
+        <Button variant="subtle" color="red" onClick={() => setShowModal(false)}>
+          X
         </Button>
       </div>
       <h1>Hi, {user?.displayName || user?.phoneNumber || user?.email}</h1>
@@ -97,7 +98,7 @@ const UserModal = ({ showModal, setShowModal }) => {
                     <p>
                       {myGame.winnerId === user?.uid
                         ? 'Win'
-                        : (myGame.winnerId && 'Loss') ?? 'Indeterminate'}
+                        : (myGame.winnerId && 'Loss') ?? 'Loss or Tie'}
                     </p>
                   </td>
                 </tr>

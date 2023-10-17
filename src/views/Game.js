@@ -4,16 +4,27 @@ import { GameContext } from 'contexts/GameContext';
 
 import Lobby from 'components/Lobby';
 import BoardSetup from 'components/BoardSetup';
-import LZQ from 'components/LZQ';
 import GameOver from 'components/GameOver';
 import { ToastContainer, toast } from 'react-toastify';
+import GameBoard from 'components/GameBoard';
+import { useFirebaseAuth } from 'contexts/FirebaseContext';
 
 const Game = () => {
-  const gameState = useContext(GameContext);
-  const { roomId } = gameState.roomId;
-  const { playerList } = gameState.playerList;
-  const { gamePhase } = gameState.gamePhase;
-  const { errors, setErrors } = gameState.errors;
+  const uid = useFirebaseAuth()?.uid;
+  const {
+    socket,
+    roomId: { roomId },
+    playerList: { playerList },
+    playerName: { playerName },
+    gamePhase: { gamePhase },
+    host: { host },
+    clientTurn: { clientTurn },
+    errors: { errors, setErrors },
+    myBoard: { myBoard },
+    isEnglish: { isEnglish }
+  } = useContext(GameContext);
+
+  const affiliation = playerList.indexOf(playerName);
 
   /** Clear errors after 1 second each */
   useEffect(() => {
@@ -25,14 +36,57 @@ const Game = () => {
     setErrors([]);
   }, [JSON.stringify(errors), toast.error]);
 
+  const rotateMove = ([row, col]) => {
+    return [11 - row, 4 - col];
+  };
+
+  const playerMakeMove = (source, target, host) => {
+    if (source.length && target.length) {
+      // if target is in successors, make move
+      socket.emit('playerMakeMove', {
+        playerName,
+        uid,
+        room: roomId,
+        turn: clientTurn,
+        pendingMove: {
+          source: host ? source : rotateMove(source),
+          target: host ? target : rotateMove(target)
+        }
+      });
+    } else {
+      setErrors((prevErrors) => [...prevErrors, 'You must have both a source and target tile']);
+    }
+  };
+
+  const playerForfeit = (e) => {
+    console.log('Game forfeitted!');
+    e.preventDefault();
+    socket.emit('playerForfeit', {
+      playerName,
+      uid,
+      room: roomId
+    });
+  };
+
+  /**
+   * Rotates the board values 180 degrees
+   * @param {Object} board a 2D array representing the game board
+   * @returns {Object}
+   * @see transformBoard
+   */
+
+  const transformBoard = (board) =>
+    board.map((row, y) => row.map((_piece, x) => board[board.length - 1 - y][row.length - 1 - x]));
+
   return (
     <>
       <div
         style={{
-          margin: '2em',
+          padding: '2em',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
+          backgroundColor: '#d0edf5'
         }}>
         <div style={{ width: '35em' }}>
           {roomId ? (
@@ -81,7 +135,19 @@ const Game = () => {
 
           {
             /** Players play the game */
-            gamePhase === 2 ? <LZQ /> : null
+            gamePhase === 2 ? (
+              <GameBoard
+                host={host}
+                isTurn={(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1)}
+                board={host ? myBoard : transformBoard(myBoard)}
+                sendMove={playerMakeMove}
+                forfeit={playerForfeit}
+                playerName={playerName}
+                opponentName={playerList[1 - affiliation]}
+                affiliation={affiliation}
+                isEnglish={isEnglish}
+              />
+            ) : null
           }
 
           {
