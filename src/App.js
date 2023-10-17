@@ -6,6 +6,8 @@ import Menu from './views/Menu';
 import Game from './views/Game';
 import Debug from './views/Debug';
 import SetupTest from './views/SetupTest';
+import GameBoardTest from './views/GameBoardTest';
+import './App.css';
 
 const App = () => (
   <>
@@ -15,6 +17,7 @@ const App = () => (
       <Route path="/game" element={<Game />} />
       <Route path="/debug" element={<Debug />} />
       <Route path="/setup-test" element={<SetupTest />} />
+      <Route path="/gameboard-test" element={<GameBoardTest />} />
     </Routes>
   </>
 );

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
+import { Button } from '@mantine/core';
 
 import Lobby from 'components/Lobby';
 import Setup from 'components/Setup';
@@ -77,9 +77,7 @@ const Game = () => {
         alignItems: 'center'
       }}>
       <div style={{ width: '35em' }}>
-        <Button type="button" variant="primary" onClick={showBoardDebug}>
-          Show Board Debug
-        </Button>
+        <Button onClick={showBoardDebug}>Show Board Debug</Button>
         {roomId ? (
           <div>
             <h1>{`Your game ID is: ${roomId}`}</h1>

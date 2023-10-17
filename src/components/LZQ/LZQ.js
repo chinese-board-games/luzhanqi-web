@@ -2,7 +2,7 @@
 /* eslint-disable no-param-reassign */
 import React, { useContext, useEffect } from 'react';
 import { isEqual } from 'lodash';
-import Button from 'react-bootstrap/Button';
+import { Button } from '@mantine/core';
 import { GameContext } from 'contexts/GameContext';
 import BoardBackground from './BoardBackground';
 import MountainPass from './MountainPass';
@@ -25,6 +25,7 @@ const LZQ = () => {
   } = gameState;
 
   useEffect(() => {
+    // use to get successors (deprecated)
     const { source, target } = pendingMove;
     if (source && source.length === 2) {
       socket.emit('pieceSelection', {
@@ -268,17 +269,11 @@ const LZQ = () => {
       </h3> */}
 
       {(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1) ? (
-        <Button type="button" variant="primary" onClick={playerMakeMove}>
-          Make move
-        </Button>
+        <Button onClick={playerMakeMove}>Make move</Button>
       ) : (
-        <Button type="button" variant="secondary" onClick={playerMakeMove}>
-          Make move
-        </Button>
+        <Button onClick={playerMakeMove}>Make move</Button>
       )}
-      <Button type="button" variant="secondary" onClick={playerForfeit}>
-        Forfeit
-      </Button>
+      <Button onClick={playerForfeit}>Forfeit</Button>
     </>
   );
 };

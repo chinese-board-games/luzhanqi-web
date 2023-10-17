@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
+import { Button } from '@mantine/core';
 import SignIn from './SignIn';
 import CreateAccount from './CreateAccount';
 import Google from './Google';
@@ -24,7 +24,7 @@ const LoginComponent = ({ setShowModal }) => {
   // return a component that allows the user to either log in or create an account with email and password
   return (
     <div>
-      <Button variant="link" onClick={() => setUsePhone(!usePhone)}>
+      <Button variant="light" onClick={() => setUsePhone(!usePhone)}>
         {usePhone ? 'Use Email' : 'Use Phone'}
       </Button>
       {usePhone ? <Phone setShowModal={setShowModal} /> : displayEmail}

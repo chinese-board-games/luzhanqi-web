@@ -1,10 +1,13 @@
 import { getAuth } from 'firebase/auth';
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button } from '@mantine/core';
+
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+import { GameContext } from 'contexts/GameContext';
 import AuthModal from 'components/AuthModal';
 import UserModal from 'components/UserModal';
+import { Link } from 'react-router-dom';
 
 const NavBar = () => {
   // state variable to set modal to open or closed
@@ -12,22 +15,27 @@ const NavBar = () => {
   const [showUserModal, setShowUserModal] = React.useState(false);
   const [user] = useAuthState(getAuth());
 
+  const gameState = React.useContext(GameContext);
+  const {
+    isEnglish: { isEnglish, setIsEnglish }
+  } = gameState;
+
   return (
     <div
       style={{
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        height: '3em',
-        margin: '1em'
+        height: '4em',
+        margin: '1em',
+        backgroundColor: '#afdfff',
+        margin: 0,
+        padding: '0.5em'
       }}>
       <h1>
-        <a href="https://ancientchess.com/page/play-luzhanqi.htm" target="_blank" rel="noreferrer">
-          陸戰棋
-        </a>
+        <Link to="/">陸戰棋</Link>
       </h1>
 
-      {/* disabled until fully implemented */}
       {user ? (
         <>
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -40,21 +48,22 @@ const NavBar = () => {
                 borderRadius: '0.25em',
                 height: '2em'
               }}>
-              <button
+              <Button
                 style={{
                   backgroundColor: 'transparent',
-                  border: 'none'
+                  border: 'none',
+                  color: '#007bff'
                 }}
-                type="button"
                 onClick={() => {
                   setShowUserModal(true);
                 }}>
                 {user.displayName || user.email || user.phoneNumber}
-              </button>
+              </Button>
             </h5>
 
             <Button
-              variant="danger"
+              variant="filled"
+              color="red"
               onClick={() => {
                 getAuth().signOut();
                 window.location.reload();
@@ -64,10 +73,18 @@ const NavBar = () => {
           </div>
         </>
       ) : (
-        <Button variant="info" onClick={() => setShowAuthModal(true)}>
+        <Button style={{ width: '11em' }} onClick={() => setShowAuthModal(true)}>
           Sign In/Sign Up
         </Button>
       )}
+
+      <Button
+        style={{ width: '4.5em' }}
+        variant="filled"
+        color="green"
+        onClick={() => setIsEnglish(!isEnglish)}>
+        {isEnglish ? 'CN' : 'EN'}
+      </Button>
 
       <AuthModal showModal={showAuthModal} setShowModal={setShowAuthModal} />
       <UserModal showModal={showUserModal} setShowModal={setShowUserModal} />
