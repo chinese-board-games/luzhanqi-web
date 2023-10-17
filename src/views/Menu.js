@@ -33,33 +33,25 @@ function Menu() {
       <Container style={stackStyle}>
         <Container style={cardStyle}>
           <h2>Host a New Game</h2>
-          <Button>
-            <Link to="/game" style={linkStyle}>
-              Create Match
-            </Link>
-          </Button>
+          <Link to="/game" style={linkStyle}>
+            <Button>Create Match</Button>
+          </Link>
         </Container>
         <Container style={cardStyle}>
           <h2>Join an Existing Game</h2>
-          <Button>
-            <Link to="/game" style={linkStyle}>
-              Join Match
-            </Link>
-          </Button>
+          <Link to="/game" style={linkStyle}>
+            <Button>Join Match</Button>
+          </Link>
         </Container>
         <Container style={cardStyle}>
           <h2>For Developers</h2>
           <Container style={cardContentStyle}>
-            <Button>
-              <Link to="/setup-test" style={linkStyle}>
-                Test Setup
-              </Link>
-            </Button>
-            <Button>
-              <Link to="/gameboard-test" style={linkStyle}>
-                Test New Board
-              </Link>
-            </Button>
+            <Link to="/setup-test" style={linkStyle}>
+              <Button>Test Setup</Button>
+            </Link>
+            <Link to="/gameboard-test" style={linkStyle}>
+              <Button>Test New Board</Button>
+            </Link>
           </Container>
         </Container>
       </Container>
