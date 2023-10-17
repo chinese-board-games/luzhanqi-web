@@ -140,13 +140,17 @@ export default function GameBoard({
               {isTurn ? 'Send move' : 'Opponent turn'}
             </Button>
             <Button
+              variant="outline"
+              color="red"
               onClick={() => {
                 setOrigin(NO_SELECT);
                 setDestination(NO_SELECT);
               }}>
               Reset
             </Button>
-            <Button onClick={forfeit}>Forfeit</Button>
+            <Button variant="filled" color="red" onClick={forfeit}>
+              Forfeit
+            </Button>
           </Group>
         </Stack>
       </Center>

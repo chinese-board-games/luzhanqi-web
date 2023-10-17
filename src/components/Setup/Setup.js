@@ -2,8 +2,7 @@
 
 /* eslint-disable no-console */
 import React, { useEffect, useContext } from 'react';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import { Button, Container, Select } from '@mantine/core';
 import { GameContext } from 'contexts/GameContext';
 import Piece from '../../models/Piece';
 import { pieces } from '../../models/Piece/Piece';
@@ -74,7 +73,7 @@ const Setup = () => {
   ) : (
     <>
       <h2>前線</h2>
-      <Form
+      <form
         style={{
           display: 'flex',
           flexDirection: 'row',
@@ -82,8 +81,8 @@ const Setup = () => {
           width: '25em'
         }}>
         {Object.keys(startingBoard).map((pos) => (
-          <Form.Group style={{ width: '5em' }} key={pos}>
-            <Form.Control
+          <Container style={{ width: '5em' }} key={pos}>
+            <Select
               as="select"
               size="sm"
               value={startingBoard[pos]}
@@ -102,10 +101,10 @@ const Setup = () => {
                   </option>
                 ))}
               <option>none</option>
-            </Form.Control>
-          </Form.Group>
+            </Select>
+          </Container>
         ))}
-      </Form>
+      </form>
       <Button type="button" variant="secondary" onClick={setExampleOne}>
         Set Example 1
       </Button>

@@ -76,16 +76,17 @@ const Game = () => {
    */
 
   const transformBoard = (board) =>
-    board.map((row, y) => row.map((piece, x) => board[board.length - 1 - y][row.length - 1 - x]));
+    board.map((row, y) => row.map((_piece, x) => board[board.length - 1 - y][row.length - 1 - x]));
 
   return (
     <>
       <div
         style={{
-          margin: '2em',
+          padding: '2em',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
+          backgroundColor: '#d0edf5'
         }}>
         <div style={{ width: '35em' }}>
           {roomId ? (
