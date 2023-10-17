@@ -1,20 +1,40 @@
 /* eslint-disable no-console */
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Button, Container, Title } from '@mantine/core';
 import { GameContext } from 'contexts/GameContext';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Lobby = () => {
-  const gameState = useContext(GameContext);
-  const { socket } = gameState;
-  const { roomId } = gameState.roomId;
-  const { host } = gameState.host;
-  const { joinedGame } = gameState.joinedGame;
+  const {
+    socket,
+    roomId: { roomId },
+    playerList: { playerList },
+    host: { host },
+    joinedGame: { joinedGame },
+    errors: { errors, setErrors }
+  } = useContext(GameContext);
+
   const user = useFirebaseAuth();
+
+  /** Clear errors after 1 second each */
+  useEffect(() => {
+    errors.forEach((error) => {
+      toast.error(error, {
+        toastId: `${Date.now()}`
+      });
+    });
+    setErrors([]);
+  }, [JSON.stringify(errors), toast.error]);
 
   /** Tell server to begin game */
   const roomFull = () => {
-    socket.emit('hostRoomFull', roomId);
+    // the game requires two players to begin
+    if (playerList.length >= 2) {
+      socket.emit('hostRoomFull', roomId);
+    } else {
+      setErrors((prevErrors) => [...prevErrors, 'There must be two players in the lobby']);
+    }
   };
 
   return (
@@ -56,6 +76,7 @@ const Lobby = () => {
           </>
         )
       }
+      <ToastContainer />
     </Container>
   );
 };
