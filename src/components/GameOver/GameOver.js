@@ -42,6 +42,7 @@ const GameOver = () => {
         <tbody>
           {remain[host ? 0 : 1]
             .sort((a, b) => b.order - a.order)
+            .filter((c) => c.name != 'enemy')
             .map(({ name, count }) => {
               return (
                 <tr key={name}>
@@ -64,11 +65,13 @@ const GameOver = () => {
         <tbody>
           {remain[host ? 1 : 0]
             .sort((a, b) => b.order - a.order)
-            .map(({ name, count }) => {
+            .filter((c) => c.name != 'enemy')
+            .map((obj) => {
+              console.log(obj);
               return (
-                <tr key={name}>
-                  <td>{getCleanName(name)}</td>
-                  <td>{count}</td>
+                <tr key={obj.name}>
+                  <td>{getCleanName(obj.name)}</td>
+                  <td>{obj.count}</td>
                 </tr>
               );
             })}

@@ -47,6 +47,9 @@
           ["api", "./src/api"]
         ]
       }
+    },
+    "react": {
+      "version": "detect"
     }
   }
 }
