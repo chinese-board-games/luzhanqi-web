@@ -2,7 +2,7 @@
 import { getAuth } from 'firebase/auth';
 import React from 'react';
 import { useForm } from '@mantine/form';
-import { Button, TextInput, Container, PasswordInput } from '@mantine/core';
+import { Button, TextInput, PasswordInput } from '@mantine/core';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { ToastContainer, toast } from 'react-toastify';
 
