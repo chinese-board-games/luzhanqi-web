@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from 'react';
 import { GameContext } from 'contexts/GameContext';
+import { ToastContainer, toast } from 'react-toastify';
 
 import Lobby from 'components/Lobby';
 import BoardSetup from 'components/BoardSetup';
 import GameOver from 'components/GameOver';
-import { ToastContainer, toast } from 'react-toastify';
 import GameBoard from 'components/GameBoard';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 
