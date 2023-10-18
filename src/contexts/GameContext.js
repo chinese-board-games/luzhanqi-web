@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { createContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { io } from 'socket.io-client';
 import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
 
@@ -11,6 +12,8 @@ export const GameContext = createContext({});
 
 // eslint-disable-next-line react/prop-types
 export const GameProvider = ({ children }) => {
+  const navigate = useNavigate();
+
   /** user-input: the user's name */
   const defaultName = uniqueNamesGenerator({
     dictionaries: [colors, animals],
@@ -61,7 +64,6 @@ export const GameProvider = ({ children }) => {
   const [winner, setWinner] = useState(null);
   const [gameResults, setGameResults] = useState({ remain: [[], []], lost: [[], []] });
 
-  // const [startingBoard, setStartingBoard] = useState();
   const [errors, setErrors] = useState([]);
 
   const gameState = {
@@ -107,8 +109,8 @@ export const GameProvider = ({ children }) => {
     socket.on('newGameCreated', ({ gameId, mySocketId, players }) => {
       console.log(`GameID: ${gameId}, SocketID: ${mySocketId}`);
       setRoomId(gameId);
-      // setJoinRoomId(gameId);
       setPlayerList(players);
+      navigate('/game');
     });
 
     /** Server is telling all clients the game has started  */
@@ -129,6 +131,7 @@ export const GameProvider = ({ children }) => {
     socket.on('youHaveJoinedTheRoom', (data) => {
       setJoinedGame(true);
       setPlayerList(data.players);
+      navigate('/game');
       window.sessionStorage.setItem('playerName', playerName);
       window.sessionStorage.setItem('roomId', roomId);
       window.sessionStorage.setItem('playerList', data.players);
