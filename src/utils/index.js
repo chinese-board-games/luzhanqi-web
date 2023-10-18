@@ -6,10 +6,10 @@ export {
   getPieceLocationById,
   isHalfBoardCamp,
   boardConnections,
+  halfBoardConnections,
   isHalfBoardHQ,
   isHalfBoardRailroad,
   isRailroad,
-  isValidHalfBoardPlacement,
   emptyBoard,
   isHQ,
   isValidRow,
@@ -18,3 +18,5 @@ export {
 } from './core';
 
 export { getSuccessors } from './getSuccessors';
+
+export { isValidHalfBoardPlacement } from './custom';

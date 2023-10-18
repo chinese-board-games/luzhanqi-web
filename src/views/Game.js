@@ -88,7 +88,7 @@ const Game = () => {
           alignItems: 'center',
           backgroundColor: '#d0edf5'
         }}>
-        <div style={{ width: '35em' }}>
+        <div style={{ width: '100%' }}>
           {roomId ? (
             <div>
               <h1>{`Your game ID is: ${roomId}`}</h1>
