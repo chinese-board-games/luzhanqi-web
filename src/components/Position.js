@@ -7,7 +7,7 @@ import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../utils/core';
 import Piece from './Piece';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const disabledFilter = 'grayscale(50%) opacity(90%)';
+const disabledFilter = 'grayscale(50%)';
 
 export default function Position({
   row,
@@ -34,6 +34,7 @@ export default function Position({
       : piece && (
           <AnimatePresence>
             <motion.div
+              style={{ filter: 'drop-shadow(0 0 0.75rem grey)' }}
               key={piece.id}
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}

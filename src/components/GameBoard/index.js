@@ -80,6 +80,9 @@ export default function GameBoard({
           }
           movable={board[r][c] == null && availibleMoves.has(JSON.stringify([r, c]))}
           onClick={() => {
+            // disallow selection if not your turn
+            if (!isTurn) return;
+
             if (isEqual(origin, [r, c])) {
               setOrigin(NO_SELECT);
               setDestination(NO_SELECT);
@@ -121,7 +124,7 @@ export default function GameBoard({
   ];
 
   return (
-    <Container>
+    <Container bg="rgb(224, 224, 224)" sx={{ borderRadius: '1em' }} p="1em 2em" maw="40em">
       <Center>
         <Stack>
           <Stack align="center">
