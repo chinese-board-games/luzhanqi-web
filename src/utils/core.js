@@ -160,30 +160,6 @@ export const isRailroad = (r, c) => {
   return r === 1 || r === 5 || r === 6 || r === 10;
 };
 
-export const isValidHalfBoardPlacement = (piece, row, col) => {
-  // cannot place into camps
-  if (isHalfBoardCamp(row, col)) {
-    return false;
-  }
-
-  // flag can only go into hq
-  if (piece.name === 'flag' && !isHalfBoardHQ(row, col)) {
-    return false;
-  }
-
-  // bomb cannot go into first row
-  if (piece.name === 'bomb' && row == 0) {
-    return false;
-  }
-
-  // landmines can only go into last two rows
-  if (piece.name === 'landmine' && row != 5 && row != 4) {
-    return false;
-  }
-
-  return true;
-};
-
 export const emptyBoard = () => {
   const board = [];
   for (let i = 0; i < 12; i++) {

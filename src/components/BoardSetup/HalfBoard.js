@@ -25,7 +25,7 @@ import {
   halfBoardConnections,
   isHalfBoardRailroad,
   isValidHalfBoardPlacement
-} from '../../utils/core';
+} from '../../utils';
 import useWindowSize from 'src/hooks/useWindowSize';
 
 const emptyBoard = [];
@@ -209,62 +209,60 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
   };
 
   return (
-    <div style={{ background: '#e0e0e0' }}>
-      <Container>
-        <HalfBoardConnectionLines />
-        <DndContext
-          autoScroll={false}
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
-          onDragEnd={handleDragEnd}>
-          <Stack>
-            <Center>
-              <Title>Board Setup</Title>
-            </Center>
-            <Center>
-              <Group>
-                <Button type="button" variant="secondary" onClick={setExampleOne}>
-                  Set Example 1
-                </Button>
-                <Button type="button" variant="info" onClick={() => sendStartingBoard(halfBoard)}>
-                  Send Board Placement
-                </Button>
-              </Group>
-            </Center>
-            <PieceSelector unplacedPieces={unplacedPieces} isEnglish={isEnglish} />
-            <Grid columns={20}>
-              {halfBoard.flatMap((row, r) =>
-                row.map((piece, c) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <Grid.Col span={4} key={`${r}-${c}`}>
-                    <Position
-                      piece={piece}
-                      row={r}
-                      col={c}
-                      activeId={activeId}
-                      isHalfBoard={true}
-                      isEnglish={isEnglish}
-                    />
-                  </Grid.Col>
-                ))
-              )}
-            </Grid>
-          </Stack>
-          <DragOverlay>
-            {activeId ? (
-              <DragablePiece
-                name={activePiece.name}
-                affiliation={0}
-                data={activePiece.data}
-                isEnglish={isEnglish}
-              />
-            ) : null}
-          </DragOverlay>
-        </DndContext>
-      </Container>
-    </div>
+    <Container bg="#e0e0e0" maw="46em" p="1em 2em">
+      <HalfBoardConnectionLines />
+      <DndContext
+        autoScroll={false}
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}>
+        <Stack>
+          <Center>
+            <Title>Board Setup</Title>
+          </Center>
+          <Center>
+            <Group>
+              <Button type="button" variant="secondary" onClick={setExampleOne}>
+                Set Example 1
+              </Button>
+              <Button type="button" variant="info" onClick={() => sendStartingBoard(halfBoard)}>
+                Send Board Placement
+              </Button>
+            </Group>
+          </Center>
+          <PieceSelector unplacedPieces={unplacedPieces} isEnglish={isEnglish} />
+          <Grid columns={20}>
+            {halfBoard.flatMap((row, r) =>
+              row.map((piece, c) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Grid.Col span={4} key={`${r}-${c}`}>
+                  <Position
+                    piece={piece}
+                    row={r}
+                    col={c}
+                    activeId={activeId}
+                    isHalfBoard={true}
+                    isEnglish={isEnglish}
+                  />
+                </Grid.Col>
+              ))
+            )}
+          </Grid>
+        </Stack>
+        <DragOverlay>
+          {activeId ? (
+            <DragablePiece
+              name={activePiece.name}
+              affiliation={0}
+              data={activePiece.data}
+              isEnglish={isEnglish}
+            />
+          ) : null}
+        </DragOverlay>
+      </DndContext>
+    </Container>
   );
 }
 
@@ -299,15 +297,7 @@ function PieceSelector({ unplacedPieces, isEnglish }) {
   });
   return (
     <>
-      <Center
-        bg="#e0e0e0"
-        miw="100%"
-        py="1em"
-        h="14em"
-        sx={{
-          borderRadius: '2em',
-          boxShadow: '15px 15px 30px #cecece, -15px -15px 30px #f2f2f2;'
-        }}>
+      <Center bg="#e0e0e0" miw="100%" py="1em" h="14em">
         <div ref={setNodeRef}>
           <SortableContext items={unplacedPieces}>
             <Flex justify="center" align="center" gap="1em" wrap="wrap">
