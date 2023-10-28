@@ -37,7 +37,11 @@ const UserModal = ({ showModal, setShowModal }) => {
         })
       );
       console.log('games loaded');
-      setGameData(myGames);
+      // do not load a game with a certain _id more than once
+      const myUniqueGames = myGames.filter(
+        (v, i, a) => a.findIndex((v2) => v2._id === v._id) === i
+      );
+      setGameData(myUniqueGames);
     };
 
     if (user) {
@@ -46,6 +50,7 @@ const UserModal = ({ showModal, setShowModal }) => {
     }
   }, [setUserData, user?.uid, showModal]);
 
+  console.log(gameData);
   return (
     <Modal
       ariaHideApp={false}
@@ -93,7 +98,11 @@ const UserModal = ({ showModal, setShowModal }) => {
               return (
                 <tr key={myGame._id}>
                   <td>{new Date(myGame.createdAt).toLocaleDateString()}</td>
-                  <td>{myGame.hostId === user?.uid ? myGame.players[1] : myGame.players[0]}</td>
+                  {myGame.hostId && myGame.hostId === myGame.clientId ? (
+                    <td>Yourself</td>
+                  ) : (
+                    <td>{myGame.hostId === user?.uid ? myGame.players[1] : myGame.players[0]}</td>
+                  )}
                   <td>
                     <p>
                       {myGame.winnerId === user?.uid
