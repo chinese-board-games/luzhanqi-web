@@ -8,6 +8,7 @@ import BoardSetup from 'components/BoardSetup';
 import GameOver from 'components/GameOver';
 import GameBoard from 'components/GameBoard';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
+import { Container } from '@mantine/core';
 
 const Game = () => {
   const uid = useFirebaseAuth()?.uid;
@@ -80,7 +81,7 @@ const Game = () => {
 
   return (
     <>
-      <div
+      <Container
         style={{
           padding: '2em',
           display: 'flex',
@@ -88,22 +89,21 @@ const Game = () => {
           alignItems: 'center',
           backgroundColor: '#d0edf5'
         }}>
-        <div style={{ width: '100%' }}>
+        <Container style={{ width: '100%' }}>
           {roomId ? (
-            <div>
+            <Container>
               <h1>{`Your game ID is: ${roomId}`}</h1>
               <h4>
                 Give this ID to your opponent, who will use it to join the game under their own
                 username
               </h4>
-            </div>
+              {playerList.length > 0 ? <h2>Players:</h2> : null}
+            </Container>
           ) : null}
 
-          {playerList.length > 0 ? <h2>Players</h2> : null}
-
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <Container style={{ display: 'flex', flexDirection: 'row' }}>
             {playerList.map((name) => (
-              <div
+              <Container
                 key={name}
                 style={{
                   display: 'inline-flex',
@@ -118,9 +118,9 @@ const Game = () => {
                   borderRadius: '0.5em'
                 }}>
                 <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
-              </div>
+              </Container>
             ))}
-          </div>
+          </Container>
           <br />
 
           {
@@ -164,8 +164,8 @@ const Game = () => {
             /** Display an error */
             // error ? <Alert variant="danger">{error}</Alert> : null
           }
-        </div>
-      </div>
+        </Container>
+      </Container>
       <ToastContainer />
     </>
   );
