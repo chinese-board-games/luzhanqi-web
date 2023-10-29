@@ -10,7 +10,7 @@ import {
   useSensor,
   useSensors,
   DndContext,
-  useDroppable
+  useDroppable,
 } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import SortablePiece from 'components/SortablePiece';
@@ -24,7 +24,7 @@ import {
   getPieceLocationById,
   halfBoardConnections,
   isHalfBoardRailroad,
-  isValidHalfBoardPlacement
+  isValidHalfBoardPlacement,
 } from '../../utils';
 import useWindowSize from 'src/hooks/useWindowSize';
 
@@ -39,7 +39,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
   // TODO: piece affiliation will be -1 if the players are not in game (playerList is [])
   const affiliatedPieces = setupPieces.map((piece) => ({
     ...piece,
-    affiliation: playerList.indexOf(playerName)
+    affiliation: playerList.indexOf(playerName),
   }));
 
   const [unplacedPieces, setUnplacedPieces] = useState(
@@ -64,7 +64,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
       ['colonel', 'lieutenant', 'none', 'bomb', 'major'],
       ['brigadier_general', 'none', 'brigadier_general', 'none', 'lieutenant'],
       ['bomb', 'landmine', 'general', 'captain', 'captain'],
-      ['landmine', 'flag', 'major', 'landmine', 'captain']
+      ['landmine', 'flag', 'major', 'landmine', 'captain'],
     ];
 
     const exampleBoard = [...emptyBoard];
@@ -81,7 +81,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
           name: pieceName,
           id: piece_id,
           affiliation: playerList.indexOf(playerName),
-          ...piece
+          ...piece,
         };
         placedPieces.set(pieceName, (placedPieces.get(pieceName) || 0) + 1);
       });
@@ -168,7 +168,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
           setHalfboard(newBoard);
           setUnplacedPieces([
             ...unplacedPieces.filter((piece) => piece.id !== active.id),
-            occupyingPiece
+            occupyingPiece,
           ]);
         }
       }
@@ -293,27 +293,25 @@ function HalfBoardConnectionLines() {
 
 function PieceSelector({ unplacedPieces, isEnglish }) {
   const { setNodeRef } = useDroppable({
-    id: 'unplaced'
+    id: 'unplaced',
   });
   return (
-    <>
-      <Center bg="#e0e0e0" miw="100%" py="1em" h="14em">
-        <div ref={setNodeRef}>
-          <SortableContext items={unplacedPieces}>
-            <Flex justify="center" align="center" gap="1em" wrap="wrap">
-              {unplacedPieces.map((piece) => (
-                <SortablePiece
-                  name={piece.name}
-                  affiliation={0}
-                  id={piece.id}
-                  key={piece.id}
-                  isEnglish={isEnglish}
-                />
-              ))}
-            </Flex>
-          </SortableContext>
-        </div>
-      </Center>
-    </>
+    <Center bg="#e0e0e0" miw="100%" py="1em" mih="14em">
+      <div ref={setNodeRef}>
+        <SortableContext items={unplacedPieces}>
+          <Flex justify="center" align="center" gap="1em" wrap="wrap">
+            {unplacedPieces.map((piece) => (
+              <SortablePiece
+                name={piece.name}
+                affiliation={0}
+                id={piece.id}
+                key={piece.id}
+                isEnglish={isEnglish}
+              />
+            ))}
+          </Flex>
+        </SortableContext>
+      </div>
+    </Center>
   );
 }
