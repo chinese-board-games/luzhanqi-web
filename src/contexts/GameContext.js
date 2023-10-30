@@ -110,7 +110,7 @@ export const GameProvider = ({ children }) => {
       console.log(`GameID: ${gameId}, SocketID: ${mySocketId}`);
       setRoomId(gameId);
       setPlayerList(players);
-      navigate('/game');
+      navigate(`/game/${gameId}`);
     });
 
     /** Server is telling all clients the game has started  */
@@ -131,7 +131,7 @@ export const GameProvider = ({ children }) => {
     socket.on('youHaveJoinedTheRoom', (data) => {
       setJoinedGame(true);
       setPlayerList(data.players);
-      navigate('/game');
+      navigate(`/game/${roomId}`);
       window.sessionStorage.setItem('playerName', playerName);
       window.sessionStorage.setItem('roomId', roomId);
       window.sessionStorage.setItem('playerList', data.players);

@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from 'react';
+import { useParams } from 'react-router';
 import { GameContext } from 'contexts/GameContext';
 import { ToastContainer, toast } from 'react-toastify';
 
 import Lobby from 'components/Lobby';
+import Menu from './Menu';
 import BoardSetup from 'components/BoardSetup';
 import GameOver from 'components/GameOver';
 import GameBoard from 'components/GameBoard';
@@ -11,10 +13,12 @@ import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { Container } from '@mantine/core';
 
 const Game = () => {
+  let { roomId } = useParams();
+  console.log('roomId: ', roomId);
   const uid = useFirebaseAuth()?.uid;
   const {
     socket,
-    roomId: { roomId },
+    // roomId,
     playerList: { playerList },
     playerName: { playerName },
     gamePhase: { gamePhase },
@@ -93,14 +97,17 @@ const Game = () => {
           {roomId ? (
             <Container>
               <h1>{`Your game ID is: ${roomId}`}</h1>
-              <h4>
-                Give this ID to your opponent, who will use it to join the game under their own
-                username
-              </h4>
+              {/* if the playerList is empty, the user must have gotten here via a urlRoomId */}
+              {playerList.length > 0 ? (
+                <h4>
+                  Give this ID to your opponent, who will use it to join the game under their own
+                  username
+                </h4>
+              ) : null}
               {playerList.length > 0 ? <h2>Players:</h2> : null}
             </Container>
           ) : null}
-
+          {playerList.length ? null : <Menu joinedRoom={true} urlRoomId={roomId} />}
           <Container style={{ display: 'flex', flexDirection: 'row' }}>
             {playerList.map((name) => (
               <Container
@@ -122,17 +129,14 @@ const Game = () => {
             ))}
           </Container>
           <br />
-
           {
             /** Players join the game */
             gamePhase === 0 ? <Lobby /> : null
           }
-
           {
             /** Players set their boards */
             gamePhase === 1 ? <BoardSetup /> : null
           }
-
           {
             /** Players play the game */
             gamePhase === 2 ? (
@@ -149,17 +153,14 @@ const Game = () => {
               />
             ) : null
           }
-
           {
             /** End of game */
             gamePhase === 3 ? <GameOver /> : null
           }
-
           {
             /** Indicate current turn */
             // clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null
           }
-
           {
             /** Display an error */
             // error ? <Alert variant="danger">{error}</Alert> : null
