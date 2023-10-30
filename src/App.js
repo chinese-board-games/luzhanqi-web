@@ -13,11 +13,11 @@ const App = () => (
   <>
     <NavBar />
     <Routes>
-      <Route path="/" element={<Menu />} />
-      <Route path="/game" element={<Game />} />
+      <Route path="/game/:roomId" element={<Game />} />
       <Route path="/debug" element={<Debug />} />
       <Route path="/setup-test" element={<SetupTest />} />
       <Route path="/gameboard-test" element={<GameBoardTest />} />
+      <Route path="/*" element={<Menu />} />
     </Routes>
   </>
 );

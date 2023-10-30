@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import './index.css';
@@ -14,7 +14,7 @@ axios.defaults.baseURL = `${process.env.REACT_APP_API}`;
 
 ReactDOM.render(
   <React.StrictMode>
-    <HashRouter>
+    <BrowserRouter>
       <FirebaseAuthProvider>
         <MantineProvider
           theme={{
@@ -39,7 +39,7 @@ ReactDOM.render(
           </GameProvider>
         </MantineProvider>
       </FirebaseAuthProvider>
-    </HashRouter>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
