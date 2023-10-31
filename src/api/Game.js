@@ -4,7 +4,7 @@ import axios from 'axios';
 export const getGameById = async (gameId) => {
   console.log(`getGame: ${gameId} `);
   return axios
-    .get(`/game/${gameId}`)
+    .get(`/gameRecord/${gameId}`)
     .then((res) => {
       return res.data;
     })
