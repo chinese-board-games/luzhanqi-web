@@ -62,20 +62,6 @@ const Lobby = () => {
         ) : null
       }
 
-      {
-        /** Not host and haven't joined a game, give option to join game */
-        host || joinedGame ? null : (
-          <>
-            {user ? (
-              <>
-                <Title order={2}>Hello {user.email}</Title>
-              </>
-            ) : (
-              <Container />
-            )}
-          </>
-        )
-      }
       <ToastContainer />
     </Container>
   );
