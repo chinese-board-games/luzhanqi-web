@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { GameContext } from 'contexts/GameContext';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -7,7 +8,7 @@ import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { useForm } from '@mantine/form';
 import { Title } from '@mantine/core';
 
-function Menu() {
+function Menu({ joinedRoom = false, urlRoomId = '' }) {
   const {
     socket,
     playerName: { playerName },
@@ -16,18 +17,6 @@ function Menu() {
     host: { setHost },
     errors: { errors, setErrors }
   } = useContext(GameContext);
-
-  const createForm = useForm({
-    initialValues: { playerName }
-  });
-
-  const joinForm = useForm({
-    initialValues: {
-      // these keys must match the input keys for joinGame
-      playerName,
-      roomId
-    }
-  });
 
   const user = useFirebaseAuth();
 
@@ -40,6 +29,12 @@ function Menu() {
     });
     setErrors([]);
   }, [JSON.stringify(errors), toast.error]);
+
+  useEffect(() => {
+    if (urlRoomId) {
+      setRoomId(urlRoomId);
+    }
+  });
 
   const viewStyle = {
     backgroundColor: '#d0edf5',
@@ -105,46 +100,71 @@ function Menu() {
     setErrors((prevErrors) => [...prevErrors, 'Unable to connect to server.']);
   };
 
+  const CreateForm = () => {
+    const createForm = useForm({
+      initialValues: { playerName }
+    });
+
+    return (
+      <Container style={cardStyle}>
+        <Title order={3}>Host a New Game</Title>
+        <form onSubmit={createForm.onSubmit(handleCreateSubmit)}>
+          <TextInput
+            label="Player name:"
+            placeholder="Ex. Ian"
+            {...createForm.getInputProps('playerName')}
+          />
+          <br />
+          <Button variant="info" type="submit">
+            Create Match
+          </Button>
+        </form>
+      </Container>
+    );
+  };
+
+  const JoinForm = ({ urlRoomId }) => {
+    const joinForm = useForm({
+      initialValues: {
+        // these keys must match the input keys for joinGame
+        playerName,
+        roomId: urlRoomId || roomId
+      }
+    });
+    return (
+      <Container style={cardStyle}>
+        <Title order={3}>Join a Game</Title>
+        <form onSubmit={joinForm.onSubmit(handleJoinSubmit)}>
+          <TextInput
+            label="Player name:"
+            placeholder="Ex. Ian"
+            {...joinForm.getInputProps('playerName')}
+          />
+          <TextInput
+            label="Join game:"
+            placeholder="Ex. 12345"
+            {...joinForm.getInputProps('roomId')}
+            disabled={!!urlRoomId}
+          />
+          <br />
+          <Button variant="info" type="submit">
+            Submit
+          </Button>
+        </form>
+      </Container>
+    );
+  };
+
+  JoinForm.propTypes = {
+    urlRoomId: PropTypes.string
+  };
+
   return (
     <>
       <Container style={viewStyle}>
         <Container style={stackStyle}>
-          <Container style={cardStyle}>
-            <Title order={3}>Host a New Game</Title>
-            <form onSubmit={createForm.onSubmit(handleCreateSubmit)}>
-              <TextInput
-                label="Player name:"
-                placeholder="Ex. Ian"
-                {...createForm.getInputProps('playerName')}
-              />
-              <br />
-              <Button variant="info" type="submit">
-                Create Match
-              </Button>
-            </form>
-          </Container>
-          <Container style={cardStyle}>
-            <Title order={3}>Join a Game</Title>
-            {/* <Link to="/game" style={linkStyle}>
-              <Button>Join Match</Button>
-            </Link> */}
-            <form onSubmit={joinForm.onSubmit(handleJoinSubmit)}>
-              <TextInput
-                label="Player name:"
-                placeholder="Ex. Ian"
-                {...joinForm.getInputProps('playerName')}
-              />
-              <TextInput
-                label="Join game:"
-                placeholder="Ex. 12345"
-                {...joinForm.getInputProps('roomId')}
-              />
-              <br />
-              <Button variant="info" type="submit">
-                Submit
-              </Button>
-            </form>
-          </Container>
+          {joinedRoom ? null : <CreateForm />}
+          <JoinForm urlRoomId={urlRoomId} />
           <Container style={cardStyle}>
             <Title order={3}>For developers</Title>
             <Container style={cardContentStyle}>
@@ -162,5 +182,10 @@ function Menu() {
     </>
   );
 }
+
+Menu.propTypes = {
+  joinedRoom: PropTypes.bool,
+  urlRoomId: PropTypes.string
+};
 
 export default Menu;
