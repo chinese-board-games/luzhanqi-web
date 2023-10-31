@@ -27,6 +27,6 @@
   PORT = 3000
 
 [[redirects]]
-from = "/*
-to= "/index.html
+from = "/*"
+to= "/index.html"
 status = 200
