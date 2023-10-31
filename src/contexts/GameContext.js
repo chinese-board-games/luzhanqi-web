@@ -106,7 +106,8 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server has created a new game, only host receives this message */
-    socket.on('newGameCreated', ({ serverRoomId, mySocketId, players }) => {
+    socket.on('newGameCreated', ({ gameId, mySocketId, players }) => {
+      const serverRoomId = gameId;
       console.log(`GameID: ${serverRoomId}, SocketID: ${mySocketId}`);
       setRoomId(serverRoomId);
       setPlayerList(players);
