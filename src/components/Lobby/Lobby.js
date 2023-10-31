@@ -2,7 +2,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Button, Container, Title } from '@mantine/core';
 import { GameContext } from 'contexts/GameContext';
-import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { ToastContainer, toast } from 'react-toastify';
 
 const Lobby = () => {
@@ -14,8 +13,6 @@ const Lobby = () => {
     joinedGame: { joinedGame },
     errors: { errors, setErrors }
   } = useContext(GameContext);
-
-  const user = useFirebaseAuth();
 
   /** Clear errors after 1 second each */
   useEffect(() => {
