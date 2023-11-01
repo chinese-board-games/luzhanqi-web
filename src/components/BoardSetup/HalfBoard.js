@@ -241,7 +241,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
               </Button>
             </Group>
           </Center>
-          <Box sx={{ position: 'sticky', top: 0, zIndex: 1000 }}>
+          <Box sx={{ position: 'sticky', top: 0, zIndex: 110 }}>
             <PieceSelector unplacedPieces={unplacedPieces} isEnglish={isEnglish} />
           </Box>
           <Grid columns={20}>

@@ -1,6 +1,7 @@
 import { getAuth } from 'firebase/auth';
 import React from 'react';
-import { Button } from '@mantine/core';
+import { Button, ActionIcon } from '@mantine/core';
+import { IconUserSquareRounded } from '@tabler/icons-react';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 
@@ -36,33 +37,26 @@ const NavBar = () => {
         <Link to="/">陸戰棋</Link>
       </h1>
 
-      {user ? (
-        <>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <h5
-              style={{
-                display: 'flex',
-                margin: '0.5em',
-                marginRight: '0.25em',
-                border: '1px solid #000000',
-                borderRadius: '0.25em',
-                height: '2em',
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '0.25em',
+        }}>
+        {user ? (
+          <>
+            <ActionIcon
+              size="lg"
+              onClick={() => {
+                setShowUserModal(true);
               }}>
-              <Button
-                style={{
-                  backgroundColor: 'transparent',
-                  border: 'none',
-                  color: '#007bff',
-                }}
-                onClick={() => {
-                  setShowUserModal(true);
-                }}>
-                {user.displayName || user.email || user.phoneNumber}
-              </Button>
-            </h5>
+              <IconUserSquareRounded />
+            </ActionIcon>
+            {/* </h5> */}
 
             <Button
-              variant="filled"
+              size="compact-sm"
               color="red"
               onClick={() => {
                 getAuth().signOut();
@@ -70,21 +64,20 @@ const NavBar = () => {
               }}>
               Logout
             </Button>
-          </div>
-        </>
-      ) : (
-        <Button style={{ width: '11em' }} onClick={() => setShowAuthModal(true)}>
-          Sign In/Sign Up
+          </>
+        ) : (
+          <Button style={{ width: '11em' }} onClick={() => setShowAuthModal(true)}>
+            Sign In/Sign Up
+          </Button>
+        )}
+        <Button
+          size="compact-sm"
+          color="green"
+          style={{ width: '3em' }}
+          onClick={() => setIsEnglish(!isEnglish)}>
+          {isEnglish ? '中文' : 'en'}
         </Button>
-      )}
-
-      <Button
-        style={{ width: '4.5em' }}
-        variant="filled"
-        color="green"
-        onClick={() => setIsEnglish(!isEnglish)}>
-        {isEnglish ? 'CN' : 'EN'}
-      </Button>
+      </div>
 
       <AuthModal showModal={showAuthModal} setShowModal={setShowAuthModal} />
       <UserModal showModal={showUserModal} setShowModal={setShowUserModal} />

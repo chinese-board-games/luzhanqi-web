@@ -24,8 +24,8 @@ export const other = {
       fontSize: '15pt',
     },
     sm: {
-      width: '3.5em',
-      height: '1.75em',
+      width: '3em',
+      height: '1.4em',
       fontSize: '13pt',
     },
     xs: {
@@ -53,17 +53,17 @@ export const other = {
   },
   hqSizing: {
     md: {
-      width: '4em',
-      height: '4em',
+      width: '6em',
+      height: '3em',
       fontSize: '16pt',
     },
     sm: {
-      width: '3em',
+      width: '4.25em',
       height: '3em',
       fontSize: '12pt',
     },
     xs: {
-      width: '2.75em',
+      width: '4.5em',
       height: '3em',
       fontSize: '10pt',
     },

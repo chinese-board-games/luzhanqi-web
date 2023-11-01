@@ -12,7 +12,7 @@ const AuthModal = ({ showModal, setShowModal }) => (
     style={{
       overlay: {
         backgroundColor: '#00000080',
-        zIndex: 110,
+        zIndex: 120,
       },
       // 50% of the screen width and height
       content: {
