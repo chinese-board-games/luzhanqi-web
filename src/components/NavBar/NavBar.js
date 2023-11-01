@@ -56,7 +56,7 @@ const NavBar = () => {
             {/* </h5> */}
 
             <Button
-              size="compact-sm"
+              size="compact-md"
               color="red"
               onClick={() => {
                 getAuth().signOut();
@@ -66,7 +66,10 @@ const NavBar = () => {
             </Button>
           </>
         ) : (
-          <Button style={{ width: '11em' }} onClick={() => setShowAuthModal(true)}>
+          <Button
+            // style={{ width: '11em' }}
+            size="compact-md"
+            onClick={() => setShowAuthModal(true)}>
             Sign In/Sign Up
           </Button>
         )}
