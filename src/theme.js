@@ -46,7 +46,7 @@ export const other = {
       fontSize: '13pt',
     },
     xs: {
-      width: '3.75em',
+      width: '3.5em',
       height: '2em',
       fontSize: '10pt',
     },
@@ -78,6 +78,28 @@ export const other = {
       width: '3.5em',
       height: '3.5em',
       fontSize: '12pt',
+    },
+  },
+  fontLinesSizing: {
+    md: {
+      fontSize: '18pt',
+    },
+    sm: {
+      fontSize: '14pt',
+    },
+    xs: {
+      fontSize: '12pt',
+    },
+  },
+  mountainSizing: {
+    md: {
+      fontSize: '18pt',
+    },
+    sm: {
+      fontSize: '12pt',
+    },
+    xs: {
+      fontSize: '10pt',
     },
   },
 };

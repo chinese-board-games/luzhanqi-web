@@ -20,7 +20,7 @@ export default function GameBoard({
   player = 'Player',
   opponent = 'Opponent',
   affiliation,
-  isEnglish = false
+  isEnglish = false,
 }) {
   const [origin, setOrigin] = useState(NO_SELECT);
   const [destination, setDestination] = useState(NO_SELECT);
@@ -110,7 +110,7 @@ export default function GameBoard({
     <Mountain rotation="-90deg" key="2" />,
     <FrontLines key="3" />,
     <Mountain rotation="90deg" key="4" />,
-    <FrontLines key="5" />
+    <FrontLines key="5" />,
   ].map((content, i) => (
     <Grid.Col key={`divider-${i}`} span={4}>
       <Center mih="5em">{content}</Center>
@@ -120,12 +120,12 @@ export default function GameBoard({
   const combined = [
     ...gridCells.slice(0, gridCells.length / 2),
     ...divider,
-    ...gridCells.slice(gridCells.length / 2, gridCells.length)
+    ...gridCells.slice(gridCells.length / 2, gridCells.length),
   ];
 
   return (
     <Container bg="rgb(224, 224, 224)" sx={{ borderRadius: '1em' }} p="1em 2em" maw="40em">
-      <Center>
+      <Center py="1em">
         <Stack>
           <Stack align="center">
             <Title order={1}>
@@ -172,5 +172,5 @@ GameBoard.propTypes = {
   player: PropTypes.string,
   opponent: PropTypes.string,
   affiliation: PropTypes.number,
-  isEnglish: PropTypes.bool
+  isEnglish: PropTypes.bool,
 };
