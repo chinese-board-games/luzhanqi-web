@@ -10,7 +10,7 @@ import BoardSetup from 'components/BoardSetup';
 import GameOver from 'components/GameOver';
 import GameBoard from 'components/GameBoard';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
-import { Container, Flex, Center, Box } from '@mantine/core';
+import { Container, Flex, Center } from '@mantine/core';
 
 const Game = () => {
   let { roomId } = useParams();

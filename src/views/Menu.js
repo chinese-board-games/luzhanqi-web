@@ -15,7 +15,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     roomId: { roomId, setRoomId },
     playerList: { playerList },
     host: { setHost },
-    errors: { errors, setErrors }
+    errors: { errors, setErrors },
   } = useContext(GameContext);
 
   const user = useFirebaseAuth();
@@ -24,7 +24,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   useEffect(() => {
     errors.forEach((error) => {
       toast.error(error, {
-        toastId: `${Date.now()}`
+        toastId: `${Date.now()}`,
       });
     });
     setErrors([]);
@@ -40,23 +40,23 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     backgroundColor: '#d0edf5',
     display: 'flex',
     flexDirection: 'column',
-    padding: '1em 1em'
+    padding: '1em 1em',
   };
   const stackStyle = {
     display: 'flex',
     flexDirection: 'column',
-    gap: '0.5em 0.5em'
+    gap: '0.5em 0.5em',
   };
   const cardStyle = {
     backgroundColor: '#adcdff',
     padding: '1em',
     width: '20em',
     borderRadius: '0.5em',
-    boxShadow: '0.3em 0.3em 0.1em #69a2ff'
+    boxShadow: '0.3em 0.3em 0.1em #69a2ff',
   };
   const cardContentStyle = {
     display: 'flex',
-    gap: '0.4em 0.4em'
+    gap: '0.4em 0.4em',
   };
   const linkStyle = { color: 'white' };
 
@@ -79,13 +79,13 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
         playerName,
         clientId: user?.uid || null,
         joinRoomId: roomId,
-        playerList
+        playerList,
       });
       setRoomId(roomId);
     } else {
       setErrors((prevErrors) => [
         ...prevErrors,
-        'You must provide both a game number and a player name.'
+        'You must provide both a game number and a player name.',
       ]);
     }
   };
@@ -102,7 +102,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
 
   const CreateForm = () => {
     const createForm = useForm({
-      initialValues: { playerName }
+      initialValues: { playerName },
     });
 
     return (
@@ -128,8 +128,8 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
       initialValues: {
         // these keys must match the input keys for joinGame
         playerName,
-        roomId: urlRoomId || roomId
-      }
+        roomId: urlRoomId || roomId,
+      },
     });
     return (
       <Container style={cardStyle}>
@@ -156,7 +156,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   };
 
   JoinForm.propTypes = {
-    urlRoomId: PropTypes.string
+    urlRoomId: PropTypes.string,
   };
 
   return (
@@ -185,7 +185,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
 
 Menu.propTypes = {
   joinedRoom: PropTypes.bool,
-  urlRoomId: PropTypes.string
+  urlRoomId: PropTypes.string,
 };
 
 export default Menu;

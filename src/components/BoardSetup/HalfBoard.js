@@ -27,7 +27,6 @@ import {
   isValidHalfBoardPlacement,
 } from '../../utils';
 import useWindowSize from 'src/hooks/useWindowSize';
-import { set } from 'lodash';
 
 const emptyBoard = [];
 for (let i = 0; i < 6; i++) {

@@ -13,8 +13,8 @@ import 'react-toastify/dist/ReactToastify.css';
 const Phone = ({ setShowModal }) => {
   const confirmForm = useForm({
     initialValues: {
-      confirmationCode: ''
-    }
+      confirmationCode: '',
+    },
   });
 
   // state variable to display confirmation code input
@@ -52,7 +52,7 @@ const Phone = ({ setShowModal }) => {
           // Response expired. Ask user to solve reCAPTCHA again.
           // ...
           console.log('expired-callback');
-        }
+        },
       },
       getAuth()
     );
