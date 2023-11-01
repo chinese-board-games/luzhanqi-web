@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import { Container, Flex, Stack, Grid, Center, Title, Group, Button } from '@mantine/core';
+import { Container, Flex, Stack, Grid, Center, Title, Group, Button, Box } from '@mantine/core';
 import {
   DragOverlay,
   closestCenter,
@@ -27,6 +27,7 @@ import {
   isValidHalfBoardPlacement,
 } from '../../utils';
 import useWindowSize from 'src/hooks/useWindowSize';
+import { set } from 'lodash';
 
 const emptyBoard = [];
 for (let i = 0; i < 6; i++) {
@@ -230,9 +231,20 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
               <Button type="button" variant="info" onClick={() => sendStartingBoard(halfBoard)}>
                 Send Board Placement
               </Button>
+              <Button
+                type="button"
+                color="red.6"
+                onClick={() => {
+                  setHalfboard([...emptyBoard]);
+                  setUnplacedPieces([...affiliatedPieces].sort((a, b) => a.order - b.order));
+                }}>
+                Reset Board
+              </Button>
             </Group>
           </Center>
-          <PieceSelector unplacedPieces={unplacedPieces} isEnglish={isEnglish} />
+          <Box sx={{ position: 'sticky', top: 0, zIndex: 1000 }}>
+            <PieceSelector unplacedPieces={unplacedPieces} isEnglish={isEnglish} />
+          </Box>
           <Grid columns={20}>
             {halfBoard.flatMap((row, r) =>
               row.map((piece, c) => (
@@ -296,7 +308,12 @@ function PieceSelector({ unplacedPieces, isEnglish }) {
     id: 'unplaced',
   });
   return (
-    <Center bg="#e0e0e0" miw="100%" py="1em" mih="14em">
+    <Center
+      bg="linear-gradient(180deg, rgba(224,224,224,1) 0%, rgba(224,224,224,.5) 100%);"
+      miw="100%"
+      py="1em"
+      mih="14em"
+      sx={{ borderRadius: '1em' }}>
       <div ref={setNodeRef}>
         <SortableContext items={unplacedPieces}>
           <Flex justify="center" align="center" gap="1em" wrap="wrap">

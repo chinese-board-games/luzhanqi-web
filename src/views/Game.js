@@ -10,7 +10,7 @@ import BoardSetup from 'components/BoardSetup';
 import GameOver from 'components/GameOver';
 import GameBoard from 'components/GameBoard';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
-import { Container } from '@mantine/core';
+import { Container, Flex, Center, Box } from '@mantine/core';
 
 const Game = () => {
   let { roomId } = useParams();
@@ -26,7 +26,7 @@ const Game = () => {
     clientTurn: { clientTurn },
     errors: { errors, setErrors },
     myBoard: { myBoard },
-    isEnglish: { isEnglish }
+    isEnglish: { isEnglish },
   } = useContext(GameContext);
 
   const affiliation = playerList.indexOf(playerName);
@@ -35,7 +35,7 @@ const Game = () => {
   useEffect(() => {
     errors.forEach((error) => {
       toast.error(error, {
-        toastId: `${Date.now()}`
+        toastId: `${Date.now()}`,
       });
     });
     setErrors([]);
@@ -55,8 +55,8 @@ const Game = () => {
         turn: clientTurn,
         pendingMove: {
           source: host ? source : rotateMove(source),
-          target: host ? target : rotateMove(target)
-        }
+          target: host ? target : rotateMove(target),
+        },
       });
     } else {
       setErrors((prevErrors) => [...prevErrors, 'You must have both a source and target tile']);
@@ -69,7 +69,7 @@ const Game = () => {
     socket.emit('playerForfeit', {
       playerName,
       uid,
-      room: roomId
+      room: roomId,
     });
   };
 
@@ -86,14 +86,14 @@ const Game = () => {
   return (
     <>
       <Container
-        style={{
-          padding: '2em',
+        sx={{
+          padding: '0',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          backgroundColor: '#d0edf5'
+          backgroundColor: '#d0edf5',
         }}>
-        <Container style={{ width: '100%' }}>
+        <Container sx={{ padding: 0 }}>
           {roomId ? (
             <Container>
               <h1>{`Your game ID is: ${roomId}`}</h1>
@@ -108,26 +108,22 @@ const Game = () => {
             </Container>
           ) : null}
           {playerList.length ? null : <Menu joinedRoom={true} urlRoomId={roomId} />}
-          <Container style={{ display: 'flex', flexDirection: 'row' }}>
+          <Flex>
             {playerList.map((name) => (
-              <Container
+              <Center
                 key={name}
-                style={{
-                  display: 'inline-flex',
+                sx={{
                   alignItems: 'center',
                   justifyContent: 'center',
-                  paddingTop: '0.5em',
-                  paddingBottom: '0.5em',
-                  paddingLeft: '0.5em',
-                  paddingRight: '0.5em',
-                  margin: '0.5em',
+                  margin: '0.2em',
+                  padding: '0.2em',
                   border: '0.2em solid green',
-                  borderRadius: '0.5em'
+                  borderRadius: '0.5em',
                 }}>
                 <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
-              </Container>
+              </Center>
             ))}
-          </Container>
+          </Flex>
           <br />
           {
             /** Players join the game */

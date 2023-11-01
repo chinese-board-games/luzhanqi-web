@@ -17,7 +17,7 @@ const NavBar = () => {
 
   const gameState = React.useContext(GameContext);
   const {
-    isEnglish: { isEnglish, setIsEnglish }
+    isEnglish: { isEnglish, setIsEnglish },
   } = gameState;
 
   return (
@@ -30,7 +30,7 @@ const NavBar = () => {
         margin: '1em',
         backgroundColor: '#afdfff',
         margin: 0,
-        padding: '0.5em'
+        padding: '0.5em',
       }}>
       <h1>
         <Link to="/">陸戰棋</Link>
@@ -46,13 +46,13 @@ const NavBar = () => {
                 marginRight: '0.25em',
                 border: '1px solid #000000',
                 borderRadius: '0.25em',
-                height: '2em'
+                height: '2em',
               }}>
               <Button
                 style={{
                   backgroundColor: 'transparent',
                   border: 'none',
-                  color: '#007bff'
+                  color: '#007bff',
                 }}
                 onClick={() => {
                   setShowUserModal(true);
