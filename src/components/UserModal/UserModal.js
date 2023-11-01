@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState, useEffect } from 'react';
-import { Button } from '@mantine/core';
+import { Button, Title, Text } from '@mantine/core';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
@@ -59,12 +59,12 @@ const UserModal = ({ showModal, setShowModal }) => {
       style={{
         overlay: {
           backgroundColor: '#00000080',
-          zIndex: 110,
+          zIndex: 120,
         },
         // 50% of the screen width and height
         content: {
           width: '80%',
-          maxWidth: '500px',
+          maxWidth: '600px',
           height: '70%',
           margin: 'auto',
           backgroundColor: '#ffffff',
@@ -80,9 +80,16 @@ const UserModal = ({ showModal, setShowModal }) => {
           X
         </Button>
       </div>
-      <h1>Hi, {user?.displayName || user?.phoneNumber || user?.email}</h1>
-      <p>You&apos;ve played {userData?.games?.length || 'no'} games</p>
-      <p>Your rank is {userData?.rank || '(no rank)'}</p>
+      <Title size={25}>Hi, {user?.displayName || user?.phoneNumber || user?.email}</Title>
+      <Text>
+        You&apos;ve played{' '}
+        <Text span fw={700}>
+          {userData?.games?.length || 'no'}
+        </Text>{' '}
+        games
+      </Text>
+
+      <Text>Your rank is {userData?.rank || '(no rank)'}</Text>
       {/* create a table with columns date, opponent, win/loss, detail */}
       {userData?.games?.length > 0 && (
         <Table>
@@ -104,11 +111,11 @@ const UserModal = ({ showModal, setShowModal }) => {
                     <td>{myGame.hostId === user?.uid ? myGame.players[1] : myGame.players[0]}</td>
                   )}
                   <td>
-                    <p>
+                    <Text>
                       {myGame.winnerId === user?.uid
                         ? 'Win'
                         : (myGame.winnerId && 'Loss') ?? 'Loss or Tie'}
-                    </p>
+                    </Text>
                   </td>
                 </tr>
               );
