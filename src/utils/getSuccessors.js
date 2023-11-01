@@ -46,7 +46,7 @@ export const generateAdjList = () => {
         [-1, 0],
         [0, -1],
         [1, 0],
-        [0, 1]
+        [0, 1],
       ];
       if (isCamp(originR, originC)) {
         // add diagonal connections
@@ -55,7 +55,7 @@ export const generateAdjList = () => {
             [-1, -1],
             [1, -1],
             [-1, 1],
-            [1, 1]
+            [1, 1],
           ]
         );
       }
@@ -98,7 +98,7 @@ export function _getEngineerRailroadMoves(board, r, c, affiliation) {
     [-1, 0],
     [0, -1],
     [1, 0],
-    [0, 1]
+    [0, 1],
   ];
   while (stack.length > 0) {
     const [curRow, curCol] = stack.pop();
@@ -138,7 +138,7 @@ export function _getNormalRailroadMoves(board, r, c, affiliation) {
     [-1, 0],
     [0, -1],
     [1, 0],
-    [0, 1]
+    [0, 1],
   ];
   directions.forEach((direction) => {
     const [incRow, incCol] = direction;
@@ -212,7 +212,7 @@ export function getSuccessors(board, r, c, affiliation) {
 export function isBlockedPath(origin, destination) {
   const blockedPaths = [
     { origin: [5, 1], destination: [6, 1] },
-    { origin: [5, 3], destination: [6, 3] }
+    { origin: [5, 3], destination: [6, 3] },
   ];
   for (const blockedPath of blockedPaths) {
     if (

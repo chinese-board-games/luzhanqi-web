@@ -14,7 +14,7 @@ export {
   isHQ,
   isValidRow,
   isValidCol,
-  isOccupied
+  isOccupied,
 } from './core';
 
 export { getSuccessors } from './getSuccessors';

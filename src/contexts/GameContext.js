@@ -17,7 +17,7 @@ export const GameProvider = ({ children }) => {
   /** user-input: the user's name */
   const defaultName = uniqueNamesGenerator({
     dictionaries: [colors, animals],
-    length: 2
+    length: 2,
   });
   const [playerName, setPlayerName] = useState(defaultName);
   /** game ID assigned to host, or user-input: game Id entered by player */
@@ -37,7 +37,7 @@ export const GameProvider = ({ children }) => {
   const [submittedSide, setSubmittedSide] = useState(false);
   const [pendingMove, setPendingMove] = useState({
     source: [],
-    target: []
+    target: [],
   });
   const [successors, setSuccessors] = useState([]);
   const [isEnglish, setIsEnglish] = useState(false);
@@ -87,7 +87,7 @@ export const GameProvider = ({ children }) => {
     winner: { winner, setWinner },
     gameResults: { gameResults, setGameResults },
     isEnglish: { isEnglish, setIsEnglish },
-    errors: { errors, setErrors }
+    errors: { errors, setErrors },
   };
 
   // extend error (list of errors) to include new errors

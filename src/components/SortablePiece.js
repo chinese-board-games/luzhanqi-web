@@ -7,12 +7,12 @@ import Piece from './Piece';
 // eslint-disable-next-line react/prop-types
 export default function SortablePiece({ name, affiliation, id, isEnglish }) {
   const { attributes, listeners, setNodeRef, transition, transform } = useSortable({
-    id
+    id,
   });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    cursor: 'grab'
+    cursor: 'grab',
   };
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
