@@ -73,7 +73,6 @@ const LZQ = () => {
     e.preventDefault();
     socket.emit('playerForfeit', {
       playerName,
-      uid,
       room: roomId,
     });
   };
