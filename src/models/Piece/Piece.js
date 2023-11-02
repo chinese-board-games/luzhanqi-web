@@ -12,7 +12,7 @@ export const pieces = {
   lieutenant: { count: 3, order: 2, display: '排長', english: 'LT', kills: 0 },
   major_general: { count: 2, order: 7, display: '師長', english: 'MG', kills: 0 },
   major: { count: 2, order: 4, display: '營長', english: 'MAJ', kills: 0 },
-  enemy: { count: 0, order: -1, display: '敵軍', english: 'ENY', kills: 0 }
+  enemy: { count: 0, order: -1, display: '敵軍', english: 'ENY', kills: 0 },
 };
 
 export const setupPieces = [];
@@ -54,7 +54,7 @@ const Piece = (name, affiliation) => {
     ...piece,
     name,
     affiliation,
-    kills: 0
+    kills: 0,
   };
 };
 

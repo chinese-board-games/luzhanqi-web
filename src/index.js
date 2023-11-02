@@ -9,6 +9,7 @@ import { FirebaseAuthProvider } from 'contexts/FirebaseContext';
 import { MantineProvider } from '@mantine/core';
 import App from './App';
 import { CustomFonts } from './CustomFonts';
+import theme, { other } from './theme';
 
 axios.defaults.baseURL = `${process.env.REACT_APP_API}`;
 
@@ -18,20 +19,8 @@ ReactDOM.render(
       <FirebaseAuthProvider>
         <MantineProvider
           theme={{
-            colors: {
-              'pastel-tan': [
-                '#f6f5ef',
-                '#e3e1d3',
-                '#d0cdb5',
-                '#beb995',
-                '#aca576',
-                '#938b5c',
-                '#726c49',
-                '#514d35',
-                '#312e1f',
-                '#100f09'
-              ]
-            }
+            ...theme,
+            other,
           }}>
           <CustomFonts />
           <GameProvider>

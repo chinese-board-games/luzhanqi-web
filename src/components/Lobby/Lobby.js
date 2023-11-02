@@ -11,14 +11,14 @@ const Lobby = () => {
     playerList: { playerList },
     host: { host },
     joinedGame: { joinedGame },
-    errors: { errors, setErrors }
+    errors: { errors, setErrors },
   } = useContext(GameContext);
 
   /** Clear errors after 1 second each */
   useEffect(() => {
     errors.forEach((error) => {
       toast.error(error, {
-        toastId: `${Date.now()}`
+        toastId: `${Date.now()}`,
       });
     });
     setErrors([]);

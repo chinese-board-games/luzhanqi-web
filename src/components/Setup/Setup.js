@@ -41,7 +41,7 @@ const Setup = () => {
     socket.emit('playerInitialBoard', {
       playerName,
       myPositions,
-      room: roomId
+      room: roomId,
     });
   };
 
@@ -52,7 +52,7 @@ const Setup = () => {
       ['colonel', 'lieutenant', 'none', 'bomb', 'major'],
       ['brigadier_general', 'none', 'brigadier_general', 'none', 'lieutenant'],
       ['bomb', 'landmine', 'general', 'captain', 'captain'],
-      ['landmine', 'flag', 'major', 'landmine', 'captain']
+      ['landmine', 'flag', 'major', 'landmine', 'captain'],
     ];
 
     const exampleBoard = {};
@@ -78,7 +78,7 @@ const Setup = () => {
           display: 'flex',
           flexDirection: 'row',
           flexWrap: 'wrap',
-          width: '25em'
+          width: '25em',
         }}>
         {Object.keys(startingBoard).map((pos) => (
           <Container style={{ width: '5em' }} key={pos}>
@@ -89,7 +89,7 @@ const Setup = () => {
               onChange={(e) => {
                 setStartingBoard({
                   ...startingBoard,
-                  [pos]: e.target.value
+                  [pos]: e.target.value,
                 });
               }}>
               {Object.keys(pieces)

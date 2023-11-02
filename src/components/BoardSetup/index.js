@@ -12,7 +12,7 @@ export default function BoardSetup() {
     roomId: { roomId },
     socket,
     submittedSide: { submittedSide },
-    isEnglish: { isEnglish }
+    isEnglish: { isEnglish },
   } = useContext(GameContext);
 
   const sendStartingBoard = (halfBoard) => {
@@ -20,7 +20,7 @@ export default function BoardSetup() {
     socket.emit('playerInitialBoard', {
       playerName,
       myPositions: halfBoard,
-      room: roomId
+      room: roomId,
     });
   };
 
