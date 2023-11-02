@@ -21,7 +21,7 @@ const LZQ = () => {
     myBoard: { myBoard },
     pendingMove: { pendingMove, setPendingMove },
     errors: { setErrors },
-    successors: { successors, setSuccessors }
+    successors: { successors, setSuccessors },
   } = gameState;
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const LZQ = () => {
         board: myBoard,
         piece: source,
         playerName,
-        room: roomId
+        room: roomId,
       });
     }
 
@@ -58,7 +58,7 @@ const LZQ = () => {
           uid,
           room: roomId,
           turn: clientTurn,
-          pendingMove
+          pendingMove,
         });
       } else {
         setErrors((prevErrors) => [...prevErrors, 'Invalid move']);
@@ -73,7 +73,7 @@ const LZQ = () => {
     e.preventDefault();
     socket.emit('playerForfeit', {
       playerName,
-      room: roomId
+      room: roomId,
     });
   };
 
@@ -93,7 +93,7 @@ const LZQ = () => {
       if (isEqual(pendingMove.source, [y, x])) {
         setPendingMove({
           source: [],
-          target: []
+          target: [],
         });
       } else if (myBoard[y][x] && myBoard[y][x].affiliation === sourcePiece.affiliation) {
         setPendingMove({ source: [y, x], target: [] });
@@ -131,7 +131,7 @@ const LZQ = () => {
     if (y === source[0] && x === source[1]) {
       return {
         transform: 'scale(1.2)',
-        filter: 'drop-shadow(0 0 1em black)'
+        filter: 'drop-shadow(0 0 1em black)',
       };
     }
     if (y === target[0] && x === target[1]) {
@@ -140,7 +140,7 @@ const LZQ = () => {
     if (successors.some((successor) => successor[0] === y && successor[1] === x)) {
       return {
         outline: '3px dashed orange',
-        outlineOffset: '-3px'
+        outlineOffset: '-3px',
       };
     }
     return {};
@@ -161,7 +161,7 @@ const LZQ = () => {
           display: 'flex',
           flexDirection: 'row',
           flexWrap: 'nowrap',
-          zIndex: 0
+          zIndex: 0,
         }}>
         {row.map((piece, x) => (
           <div
@@ -202,7 +202,7 @@ const LZQ = () => {
           display: 'flex',
           flexDirection: 'row',
           flexWrap: 'nowrap',
-          zIndex: 0
+          zIndex: 0,
         }}>
         {row.map((piece, x) => (
           <div
@@ -254,7 +254,7 @@ const LZQ = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '1em'
+          padding: '1em',
         }}>
         {displayPieces()}
       </div>

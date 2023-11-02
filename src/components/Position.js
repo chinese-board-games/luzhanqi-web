@@ -17,7 +17,7 @@ export default function Position({
   shadeColor,
   isHalfBoard = false,
   isEnglish,
-  disabled = false
+  disabled = false,
 }) {
   const placedPiece =
     piece && piece.name && isHalfBoard
@@ -46,38 +46,59 @@ export default function Position({
         );
   const getPositionContent = () => {
     if (isHalfBoard ? isHalfBoardCamp(row, col) : isCamp(row, col)) {
+      // camp position
       return (
         <Center
-          sx={{
+          bg="pastel-tan.1"
+          sx={(theme) => ({
             borderRadius: '100%',
             border: '.1em solid black',
             writingMode: 'vertical-rl',
-            fontSize: '16pt',
             zIndex: 100,
             filter: disabled && disabledFilter,
-            fontFamily: 'SentyWEN2017'
-          }}
-          bg="pastel-tan.1"
-          w="4em"
-          h="4em">
+            whiteSpace: 'nowrap',
+            fontFamily: 'SentyWEN2017',
+            width: theme.other.campSizing.md.width,
+            height: theme.other.campSizing.md.height,
+            fontSize: theme.other.campSizing.md.fontSize,
+            '@media (max-width: 450px)': {
+              width: theme.other.campSizing.sm.width,
+              height: theme.other.campSizing.sm.height,
+              fontSize: theme.other.campSizing.sm.fontSize,
+            },
+          })}>
           {placedPiece || '行營'}
         </Center>
       );
     }
 
     if (isHalfBoard ? isHalfBoardHQ(row, col) : isHQ(row, col)) {
+      // HQ position
       return (
         <Center
           px={placedPiece ? '.7em' : '1.5em'}
           py={placedPiece ? '.2em' : '0'}
-          sx={{
+          sx={(theme) => ({
             border: '.1em solid black',
-            fontSize: '16pt',
             zIndex: 100,
             borderRadius: '3em 3em 1em 1em',
             filter: disabled && disabledFilter,
-            fontFamily: 'SentyWEN2017'
-          }}
+            fontFamily: 'SentyWEN2017',
+            whiteSpace: 'nowrap',
+            width: theme.other.hqSizing.md.width,
+            height: theme.other.hqSizing.md.height,
+            fontSize: theme.other.hqSizing.md.fontSize,
+            '@media (max-width: 450px)': {
+              width: theme.other.hqSizing.sm.width,
+              height: theme.other.hqSizing.sm.height,
+              fontSize: theme.other.hqSizing.sm.fontSize,
+            },
+            '@media (max-width: 375px)': {
+              width: theme.other.hqSizing.xs.width,
+              height: theme.other.hqSizing.xs.height,
+              fontSize: theme.other.hqSizing.xs.fontSize,
+            },
+          })}
           bg="pastel-tan.1">
           <Stack spacing="0em" align="stretch" justify="center">
             {placedPiece || (
@@ -90,17 +111,31 @@ export default function Position({
         </Center>
       );
     }
+    // RR position
     return (
       <Center
-        px={placedPiece ? '0' : '.8em'}
-        py={placedPiece ? '0' : '.1em'}
-        sx={{
+        w="4.5em"
+        h="2.5em"
+        sx={(theme) => ({
           border: '.1em solid black',
-          fontSize: '16pt',
           zIndex: 100,
           filter: disabled && disabledFilter,
-          fontFamily: 'SentyWEN2017'
-        }}
+          fontFamily: 'SentyWEN2017',
+          whiteSpace: 'nowrap',
+          width: theme.other.positionSizing.md.width,
+          height: theme.other.positionSizing.md.height,
+          fontSize: theme.other.positionSizing.md.fontSize,
+          '@media (max-width: 450px)': {
+            minWidth: theme.other.positionSizing.sm.width,
+            minHeight: theme.other.positionSizing.sm.height,
+            fontSize: theme.other.positionSizing.sm.fontSize,
+          },
+          '@media (max-width: 375px)': {
+            minWidth: theme.other.positionSizing.xs.width,
+            minHeight: theme.other.positionSizing.xs.height,
+            fontSize: theme.other.positionSizing.xs.fontSize,
+          },
+        })}
         bg="pastel-tan.1">
         {placedPiece || '後勤'}
       </Center>
@@ -111,8 +146,8 @@ export default function Position({
     id: `halfBoard-${row}-${col}`,
     data: {
       row,
-      col
-    }
+      col,
+    },
   });
   return (
     <div ref={setNodeRef} className={`${row}-${col}`}>
