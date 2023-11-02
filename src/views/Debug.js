@@ -45,7 +45,7 @@ const Game = () => {
       ['colonel', 'lieutenant', 'none', 'bomb', 'major'],
       ['brigadier_general', 'none', 'brigadier_general', 'none', 'lieutenant'],
       ['bomb', 'landmine', 'general', 'captain', 'captain'],
-      ['landmine', 'flag', 'major', 'landmine', 'captain']
+      ['landmine', 'flag', 'major', 'landmine', 'captain'],
     ];
 
     const exampleBoard = {};
@@ -74,7 +74,7 @@ const Game = () => {
         margin: '2em',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
       }}>
       <div style={{ width: '35em' }}>
         <Button onClick={showBoardDebug}>Show Board Debug</Button>
@@ -104,7 +104,7 @@ const Game = () => {
                 paddingRight: '0.5em',
                 margin: '0.5em',
                 border: '0.2em solid green',
-                borderRadius: '0.5em'
+                borderRadius: '0.5em',
               }}>
               <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
             </div>

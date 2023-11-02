@@ -12,7 +12,7 @@ const AuthModal = ({ showModal, setShowModal }) => (
     style={{
       overlay: {
         backgroundColor: '#00000080',
-        zIndex: 110
+        zIndex: 120,
       },
       // 50% of the screen width and height
       content: {
@@ -20,14 +20,14 @@ const AuthModal = ({ showModal, setShowModal }) => (
         maxWidth: '500px',
         height: '70%',
         margin: 'auto',
-        backgroundColor: '#ffffff'
-      }
+        backgroundColor: '#ffffff',
+      },
     }}>
     <div
       style={{
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
       }}>
       <Button variant="subtle" color="red" onClick={() => setShowModal(false)}>
         X
@@ -40,7 +40,7 @@ const AuthModal = ({ showModal, setShowModal }) => (
 
 AuthModal.propTypes = {
   showModal: PropTypes.bool.isRequired,
-  setShowModal: PropTypes.func.isRequired
+  setShowModal: PropTypes.func.isRequired,
 };
 
 export default AuthModal;

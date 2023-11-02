@@ -9,7 +9,7 @@ const GameOver = () => {
     playerName: { playerName },
     playerList: { playerList },
     gameResults: { gameResults },
-    host: { host }
+    host: { host },
   } = gameState;
 
   console.log(gameResults);
