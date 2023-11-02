@@ -7,7 +7,7 @@ const shadeMap = {
   origin: { color: 'blue.1', hover: 'blue.2' },
   destination: { color: 'orange.1', hover: 'orange.2' },
   attackable: { color: 'red.1', hover: 'red.2' },
-  movable: { color: 'green.1', hover: 'green.2' }
+  movable: { color: 'green.1', hover: 'green.2' },
 };
 
 const getShadeColor = (hovered, originSelected, destinationSelected, attackable, movable) => {
@@ -41,7 +41,7 @@ export default function SelectablePosition({
   attackable = false,
   movable = false,
   isEnglish,
-  disabled = false
+  disabled = false,
 }) {
   const { hovered, ref } = useHover();
   const shadeColor = getShadeColor(
@@ -55,7 +55,7 @@ export default function SelectablePosition({
   return (
     <Box
       sx={{
-        cursor: disabled ? 'not-allowed' : 'pointer'
+        cursor: disabled ? 'not-allowed' : 'pointer',
       }}
       ref={ref}
       onClick={disabled ? undefined : onClick}>

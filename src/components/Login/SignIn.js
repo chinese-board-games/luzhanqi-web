@@ -13,8 +13,8 @@ const SignIn = ({ setExistingAccount, setShowModal }) => {
   const form = useForm({
     initialValues: {
       email: '',
-      password: ''
-    }
+      password: '',
+    },
   });
 
   const auth = getAuth();

@@ -8,13 +8,23 @@ export default function Piece({ name, affiliation, isEnglish }) {
   return (
     <Center
       bg="pastel-tan.0"
-      w="4em"
-      h="2em"
-      fz="xl"
       sx={(theme) => ({
         borderRadius: '10%',
         boxShadow: theme.shadows.sm,
-        writingMode: 'horizontal-tb'
+        writingMode: 'horizontal-tb',
+        width: theme.other.pieceSizing.md.width,
+        height: theme.other.pieceSizing.md.height,
+        fontSize: theme.other.pieceSizing.md.fontSize,
+        '@media (max-width: 450px)': {
+          width: theme.other.pieceSizing.sm.width,
+          height: theme.other.pieceSizing.sm.height,
+          fontSize: theme.other.pieceSizing.sm.fontSize,
+        },
+        '@media (max-width: 375px)': {
+          width: theme.other.pieceSizing.xs.width,
+          height: theme.other.pieceSizing.xs.height,
+          fontSize: theme.other.pieceSizing.xs.fontSize,
+        },
       })}>
       <Text sx={{ fontFamily: 'SentyWEN2017' }} color={affiliation === 0 ? 'indigo.7' : 'red.7'}>
         {isEnglish ? piece.english : piece.display}

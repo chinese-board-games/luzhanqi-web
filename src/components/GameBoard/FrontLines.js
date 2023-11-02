@@ -3,11 +3,18 @@ import { Center, Stack, Text } from '@mantine/core';
 export default function FrontLines() {
   return (
     <Center
-      sx={{
+      sx={(theme) => ({
         border: '.1em solid gray',
-        fontSize: '18pt',
-        zIndex: 100
-      }}
+        fontSize: theme.other.fontLinesSizing.md.fontSize,
+        zIndex: 100,
+        whiteSpace: 'nowrap',
+        '@media (max-width: 450px)': {
+          fontSize: theme.other.fontLinesSizing.sm.fontSize,
+        },
+        '@media (max-width: 375px)': {
+          fontSize: theme.other.fontLinesSizing.xs.fontSize,
+        },
+      })}
       bg="whitesmoke"
       w="4em"
       h="4em">
