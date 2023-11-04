@@ -3,16 +3,20 @@ import React, { useContext, useEffect } from 'react';
 import { Button, Container, Title } from '@mantine/core';
 import { GameContext } from 'contexts/GameContext';
 import { ToastContainer, toast } from 'react-toastify';
+import { useFirebaseAuth } from 'contexts/FirebaseContext';
 
 const Lobby = () => {
   const {
     socket,
     roomId: { roomId },
+    playerName: { playerName },
     playerList: { playerList },
     host: { host },
     joinedGame: { joinedGame },
     errors: { errors, setErrors },
   } = useContext(GameContext);
+
+  const user = useFirebaseAuth();
 
   /** Clear errors after 1 second each */
   useEffect(() => {
@@ -34,6 +38,14 @@ const Lobby = () => {
     }
   };
 
+  const playerLeaveRoom = () => {
+    socket.emit('playerLeaveRoom', {
+      playerName,
+      uid: user?.uid || null,
+      leaveRoomId: roomId,
+    });
+  };
+
   return (
     <Container style={{ backgroundColor: '#d0edf5' }}>
       {
@@ -42,6 +54,9 @@ const Lobby = () => {
           <>
             <Title order={3}>請等主持人</Title>
             <Title order={3}>Waiting for the host</Title>
+            <Button variant="outline" color="red" onClick={playerLeaveRoom}>
+              Leave Room
+            </Button>
           </>
         ) : null
       }
@@ -52,9 +67,14 @@ const Lobby = () => {
           <>
             <Title order={3}>按 &quot;Room Full&quot; 開始遊戲</Title>
             <Title order={3}>Click &quot;Room Full&quot; to begin the game</Title>
-            <Button type="button" variant="success" onClick={roomFull} style={{ width: '8em' }}>
-              Room Full
-            </Button>
+            <Container style={{ display: 'flex', gap: '0.5em' }}>
+              <Button variant="filled" color="green" onClick={roomFull} style={{ width: '8em' }}>
+                Room Full
+              </Button>
+              <Button variant="outline" color="red" onClick={playerLeaveRoom}>
+                Delete Room
+              </Button>
+            </Container>
           </>
         ) : null
       }

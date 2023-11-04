@@ -13,7 +13,6 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     socket,
     playerName: { playerName },
     roomId: { roomId, setRoomId },
-    playerList: { playerList },
     host: { setHost },
     errors: { errors, setErrors },
   } = useContext(GameContext);
@@ -71,15 +70,14 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     }
   };
 
-  /** Attempt to join a game by game ID */
+  /** Attempt to join a room by game ID */
   const joinGame = (playerName, roomId) => {
     if (playerName && roomId) {
       console.log(`Attempting to join game ${roomId} as ${playerName} with clientId ${user?.uid}`);
-      socket.emit('playerJoinGame', {
+      socket.emit('playerJoinRoom', {
         playerName,
         clientId: user?.uid || null,
         joinRoomId: roomId,
-        playerList,
       });
       setRoomId(roomId);
     } else {
@@ -142,7 +140,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
           />
           <TextInput
             label="Join game:"
-            placeholder="Ex. 12345"
+            placeholder="Ex. 6543eb06e81d62019d596562"
             {...joinForm.getInputProps('roomId')}
             disabled={!!urlRoomId}
           />

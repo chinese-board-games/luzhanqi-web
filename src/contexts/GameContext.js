@@ -115,27 +115,42 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling all clients the game has started  */
-    socket.on('beginNewGame', ({ mySocketId, gameId, turn }) => {
-      console.log(`Starting game ${gameId} on socket ${mySocketId}`);
+    socket.on('beginNewGame', ({ mySocketId, roomId, turn }) => {
+      console.log(`Starting game for room ${roomId} on socket ${mySocketId}`);
       // setDisplayTimer(true);
       setClientTurn(turn);
       setGamePhase(1);
     });
 
     /** Server is telling all clients someone has joined the room */
-    socket.on('playerJoinedRoom', (data) => {
-      console.log(`${data.playerName} has joined the room!`);
-      setPlayerList(data.players);
+    socket.on('playerJoinedRoom', ({ playerName: returnedPlayerName, players }) => {
+      console.log(`${returnedPlayerName} has joined the room!`);
+      setPlayerList(players);
     });
 
     /** Server is telling this socket that it has joined a room */
     socket.on('youHaveJoinedTheRoom', (data) => {
       setJoinedGame(true);
-      setPlayerList(data.players);
+      // setPlayerList(data.players);
       navigate(`/game/${roomId}`);
       window.sessionStorage.setItem('playerName', playerName);
       window.sessionStorage.setItem('roomId', roomId);
       window.sessionStorage.setItem('playerList', data.players);
+    });
+
+    socket.on('playerLeftRoom', ({ playerName: returnedPlayerName, players }) => {
+      console.log(`${returnedPlayerName} has left the room!`);
+      setPlayerList(players);
+    });
+
+    /** Server is telling this socket that it has left a room */
+    socket.on('youHaveLeftTheRoom', (data) => {
+      setJoinedGame(false);
+      setPlayerList(data.players);
+      navigate(`/`);
+      window.sessionStorage.removeItem('playerName');
+      window.sessionStorage.removeItem('roomId');
+      window.sessionStorage.removeItem('playerList');
     });
 
     /** Server is sending the starting board with all placed pieces */
