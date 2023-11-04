@@ -125,7 +125,6 @@ export default function GameBoard({
     <Container bg="rgb(224, 224, 224)" sx={{ borderRadius: '1em' }} p="1em 2em" maw="40em">
       <Center py="1em">
         <Stack>
-          <Stack align="center"></Stack>
           <Group align="center" direction="horizontal">
             <Button
               disabled={!isTurn || !(originSelected && destinationSelected)}
