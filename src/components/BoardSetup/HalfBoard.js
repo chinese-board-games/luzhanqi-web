@@ -1,18 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import {
-  Container,
-  Flex,
-  Stack,
-  Grid,
-  Center,
-  Title,
-  Group,
-  Button,
-  Box,
-  Tooltip,
-} from '@mantine/core';
+import { Container, Flex, Stack, Grid, Center, Title, Group, Button, Box } from '@mantine/core';
 import {
   DragOverlay,
   closestCenter,
@@ -238,17 +227,9 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
               <Button type="button" variant="secondary" onClick={setExampleOne}>
                 Set Example 1
               </Button>
-              <Tooltip label="You still have unplaced pieces!">
-                <span>
-                  <Button
-                    disabled={unplacedPieces.length > 0}
-                    type="button"
-                    variant="info"
-                    onClick={() => sendStartingBoard(halfBoard)}>
-                    Send Board Placement
-                  </Button>
-                </span>
-              </Tooltip>
+              <Button type="button" variant="info" onClick={() => sendStartingBoard(halfBoard)}>
+                Send Board Placement
+              </Button>
               <Button
                 type="button"
                 color="red.6"
