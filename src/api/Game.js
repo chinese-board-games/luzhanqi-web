@@ -2,7 +2,6 @@
 import axios from 'axios';
 
 export const getGameById = async (gameId) => {
-  console.log(`getGame: ${gameId} `);
   return axios
     .get(`/games/${gameId}`)
     .then((res) => {
