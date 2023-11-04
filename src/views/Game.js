@@ -10,7 +10,7 @@ import BoardSetup from 'components/BoardSetup';
 import GameOver from 'components/GameOver';
 import GameBoard from 'components/GameBoard';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
-import { Container, Flex, Center } from '@mantine/core';
+import { Container, Flex, Center, Button, CopyButton } from '@mantine/core';
 
 const Game = () => {
   let { roomId } = useParams();
@@ -96,34 +96,40 @@ const Game = () => {
         <Container sx={{ padding: 0 }}>
           {roomId ? (
             <Container>
-              <h1>{`Your game ID is: ${roomId}`}</h1>
               {/* if the playerList is empty, the user must have gotten here via a urlRoomId */}
               {playerList.length > 0 ? (
-                <h4>
-                  Give this ID to your opponent, who will use it to join the game under their own
-                  username
-                </h4>
+                <Container>
+                  <h2>Players:</h2>
+                  <Flex>
+                    {playerList.map((name) => (
+                      <Center
+                        key={name}
+                        sx={{
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          margin: '0.2em',
+                          padding: '0.2em',
+                          border: '0.2em solid green',
+                          borderRadius: '0.5em',
+                        }}>
+                        <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
+                      </Center>
+                    ))}
+                  </Flex>
+                  <br />
+                  <CopyButton value={window.location.href}>
+                    {({ copied, copy }) => (
+                      <Button color={copied ? 'green' : 'blue'} onClick={copy}>
+                        {copied ? 'Copied' : 'Copy URL'}
+                      </Button>
+                    )}
+                  </CopyButton>
+                </Container>
               ) : null}
-              {playerList.length > 0 ? <h2>Players:</h2> : null}
             </Container>
           ) : null}
+
           {playerList.length ? null : <Menu joinedRoom={true} urlRoomId={roomId} />}
-          <Flex>
-            {playerList.map((name) => (
-              <Center
-                key={name}
-                sx={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0.2em',
-                  padding: '0.2em',
-                  border: '0.2em solid green',
-                  borderRadius: '0.5em',
-                }}>
-                <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
-              </Center>
-            ))}
-          </Flex>
           <br />
           {
             /** Players join the game */
