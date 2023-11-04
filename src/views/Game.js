@@ -151,14 +151,6 @@ const Game = () => {
           /** End of game */
           gamePhase === 3 ? <GameOver /> : null
         }
-        {
-          /** Indicate current turn */
-          // clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null
-        }
-        {
-          /** Display an error */
-          // error ? <Alert variant="danger">{error}</Alert> : null
-        }
       </Container>
       <ToastContainer />
     </>
