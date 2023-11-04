@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState, useEffect } from 'react';
-import { Button } from '@mantine/core';
+import { Button, Title, Text } from '@mantine/core';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
@@ -33,11 +33,18 @@ const UserModal = ({ showModal, setShowModal }) => {
       const myGames = await Promise.all(
         fetchedUser.games.map(async (gameId) => {
           const game = await getGameById(gameId);
+          if (!game.players) {
+            console.warn(`Error fetching game ${gameId}`);
+          }
           return game;
         })
       );
-      console.log('games loaded');
-      setGameData(myGames);
+      console.log('Games loaded');
+      // do not load a game with a certain _id more than once
+      const myUniqueGames = myGames.filter(
+        (v, i, a) => a.findIndex((v2) => v2._id === v._id) === i
+      );
+      setGameData(myUniqueGames);
     };
 
     if (user) {
@@ -54,30 +61,37 @@ const UserModal = ({ showModal, setShowModal }) => {
       style={{
         overlay: {
           backgroundColor: '#00000080',
-          zIndex: 110
+          zIndex: 120,
         },
         // 50% of the screen width and height
         content: {
           width: '80%',
-          maxWidth: '500px',
+          maxWidth: '600px',
           height: '70%',
           margin: 'auto',
-          backgroundColor: '#ffffff'
-        }
+          backgroundColor: '#ffffff',
+        },
       }}>
       <div
         style={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'flex-end'
+          justifyContent: 'flex-end',
         }}>
         <Button variant="subtle" color="red" onClick={() => setShowModal(false)}>
           X
         </Button>
       </div>
-      <h1>Hi, {user?.displayName || user?.phoneNumber || user?.email}</h1>
-      <p>You&apos;ve played {userData?.games?.length || 'no'} games</p>
-      <p>Your rank is {userData?.rank || '(no rank)'}</p>
+      <Title size={25}>Hi, {user?.displayName || user?.phoneNumber || user?.email}</Title>
+      <Text>
+        You&apos;ve played{' '}
+        <Text span fw={700}>
+          {userData?.games?.length || 'no'}
+        </Text>{' '}
+        games
+      </Text>
+
+      <Text>Your rank is {userData?.rank || '(no rank)'}</Text>
       {/* create a table with columns date, opponent, win/loss, detail */}
       {userData?.games?.length > 0 && (
         <Table>
@@ -90,15 +104,21 @@ const UserModal = ({ showModal, setShowModal }) => {
           </thead>
           <tbody>
             {gameData.map((myGame) => {
+              if (!myGame.players) {
+                console.warn(`Failure to fetch a game:`, myGame);
+                return;
+              }
               return (
                 <tr key={myGame._id}>
                   <td>{new Date(myGame.createdAt).toLocaleDateString()}</td>
-                  <td>{myGame.hostId === user?.uid ? myGame.players[1] : myGame.players[0]}</td>
+                  {myGame.hostId && myGame.hostId === myGame.clientId ? (
+                    <td>Yourself</td>
+                  ) : (
+                    <td>{myGame.hostId === user?.uid ? myGame.players[1] : myGame.players[0]}</td>
+                  )}
                   <td>
                     <p>
-                      {myGame.winnerId === user?.uid
-                        ? 'Win'
-                        : (myGame.winnerId && 'Loss') ?? 'Loss or Tie'}
+                      {myGame.winnerId === user?.uid ? 'Win' : (myGame.winnerId && 'Loss') ?? 'Tie'}
                     </p>
                   </td>
                 </tr>
@@ -113,7 +133,7 @@ const UserModal = ({ showModal, setShowModal }) => {
 
 UserModal.propTypes = {
   showModal: PropTypes.bool.isRequired,
-  setShowModal: PropTypes.func.isRequired
+  setShowModal: PropTypes.func.isRequired,
 };
 
 export default UserModal;
