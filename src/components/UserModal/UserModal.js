@@ -33,10 +33,13 @@ const UserModal = ({ showModal, setShowModal }) => {
       const myGames = await Promise.all(
         fetchedUser.games.map(async (gameId) => {
           const game = await getGameById(gameId);
+          if (!game.players) {
+            console.warn(`Error fetching game ${gameId}`);
+          }
           return game;
         })
       );
-      console.log('games loaded');
+      console.log('Games loaded');
       // do not load a game with a certain _id more than once
       const myUniqueGames = myGames.filter(
         (v, i, a) => a.findIndex((v2) => v2._id === v._id) === i
@@ -50,7 +53,6 @@ const UserModal = ({ showModal, setShowModal }) => {
     }
   }, [setUserData, user?.uid, showModal]);
 
-  console.log(gameData);
   return (
     <Modal
       ariaHideApp={false}
@@ -102,6 +104,10 @@ const UserModal = ({ showModal, setShowModal }) => {
           </thead>
           <tbody>
             {gameData.map((myGame) => {
+              if (!myGame.players) {
+                console.warn(`Failure to fetch a game:`, myGame);
+                return;
+              }
               return (
                 <tr key={myGame._id}>
                   <td>{new Date(myGame.createdAt).toLocaleDateString()}</td>
