@@ -1,19 +1,24 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from 'react';
+import { useParams } from 'react-router';
 import { GameContext } from 'contexts/GameContext';
+import { ToastContainer, toast } from 'react-toastify';
 
 import Lobby from 'components/Lobby';
+import Menu from './Menu';
 import BoardSetup from 'components/BoardSetup';
 import GameOver from 'components/GameOver';
-import { ToastContainer, toast } from 'react-toastify';
 import GameBoard from 'components/GameBoard';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
+import { Container, Flex, Center, Button, CopyButton } from '@mantine/core';
 
 const Game = () => {
+  let { roomId } = useParams();
+  console.log('roomId: ', roomId);
   const uid = useFirebaseAuth()?.uid;
   const {
     socket,
-    roomId: { roomId },
+    // roomId,
     playerList: { playerList },
     playerName: { playerName },
     gamePhase: { gamePhase },
@@ -21,7 +26,7 @@ const Game = () => {
     clientTurn: { clientTurn },
     errors: { errors, setErrors },
     myBoard: { myBoard },
-    isEnglish: { isEnglish }
+    isEnglish: { isEnglish },
   } = useContext(GameContext);
 
   const affiliation = playerList.indexOf(playerName);
@@ -30,7 +35,7 @@ const Game = () => {
   useEffect(() => {
     errors.forEach((error) => {
       toast.error(error, {
-        toastId: `${Date.now()}`
+        toastId: `${Date.now()}`,
       });
     });
     setErrors([]);
@@ -50,8 +55,8 @@ const Game = () => {
         turn: clientTurn,
         pendingMove: {
           source: host ? source : rotateMove(source),
-          target: host ? target : rotateMove(target)
-        }
+          target: host ? target : rotateMove(target),
+        },
       });
     } else {
       setErrors((prevErrors) => [...prevErrors, 'You must have both a source and target tile']);
@@ -64,7 +69,7 @@ const Game = () => {
     socket.emit('playerForfeit', {
       playerName,
       uid,
-      room: roomId
+      room: roomId,
     });
   };
 
@@ -80,59 +85,60 @@ const Game = () => {
 
   return (
     <>
-      <div
-        style={{
-          padding: '2em',
+      <Container
+        sx={{
+          padding: '0',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          backgroundColor: '#d0edf5'
+          backgroundColor: '#d0edf5',
         }}>
-        <div style={{ width: '35em' }}>
+        <Container sx={{ padding: 0 }}>
           {roomId ? (
-            <div>
-              <h1>{`Your game ID is: ${roomId}`}</h1>
-              <h4>
-                Give this ID to your opponent, who will use it to join the game under their own
-                username
-              </h4>
-            </div>
+            <Container>
+              {/* if the playerList is empty, the user must have gotten here via a urlRoomId */}
+              {playerList.length > 0 ? (
+                <Container>
+                  <h2>Players:</h2>
+                  <Flex>
+                    {playerList.map((name) => (
+                      <Center
+                        key={name}
+                        sx={{
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          margin: '0.2em',
+                          padding: '0.2em',
+                          border: '0.2em solid green',
+                          borderRadius: '0.5em',
+                        }}>
+                        <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
+                      </Center>
+                    ))}
+                  </Flex>
+                  <br />
+                  <CopyButton value={window.location.href}>
+                    {({ copied, copy }) => (
+                      <Button color={copied ? 'green' : 'blue'} onClick={copy}>
+                        {copied ? 'Copied' : 'Copy URL'}
+                      </Button>
+                    )}
+                  </CopyButton>
+                </Container>
+              ) : null}
+            </Container>
           ) : null}
 
-          {playerList.length > 0 ? <h2>Players</h2> : null}
-
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            {playerList.map((name) => (
-              <div
-                key={name}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  paddingTop: '0.5em',
-                  paddingBottom: '0.5em',
-                  paddingLeft: '0.5em',
-                  paddingRight: '0.5em',
-                  margin: '0.5em',
-                  border: '0.2em solid green',
-                  borderRadius: '0.5em'
-                }}>
-                <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
-              </div>
-            ))}
-          </div>
+          {playerList.length ? null : <Menu joinedRoom={true} urlRoomId={roomId} />}
           <br />
-
           {
             /** Players join the game */
             gamePhase === 0 ? <Lobby /> : null
           }
-
           {
             /** Players set their boards */
             gamePhase === 1 ? <BoardSetup /> : null
           }
-
           {
             /** Players play the game */
             gamePhase === 2 ? (
@@ -149,23 +155,20 @@ const Game = () => {
               />
             ) : null
           }
-
           {
             /** End of game */
             gamePhase === 3 ? <GameOver /> : null
           }
-
           {
             /** Indicate current turn */
             // clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null
           }
-
           {
             /** Display an error */
             // error ? <Alert variant="danger">{error}</Alert> : null
           }
-        </div>
-      </div>
+        </Container>
+      </Container>
       <ToastContainer />
     </>
   );

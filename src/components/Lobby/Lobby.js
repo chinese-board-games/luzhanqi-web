@@ -1,122 +1,62 @@
 /* eslint-disable no-console */
-import React, { useContext } from 'react';
-import { useForm } from '@mantine/form';
-import { Button, TextInput, Container } from '@mantine/core';
+import React, { useContext, useEffect } from 'react';
+import { Button, Container, Title } from '@mantine/core';
 import { GameContext } from 'contexts/GameContext';
+import { ToastContainer, toast } from 'react-toastify';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 
 const Lobby = () => {
-  const gameState = useContext(GameContext);
-  const { socket } = gameState;
-  const { playerName } = gameState.playerName;
-  const { roomId, setRoomId } = gameState.roomId;
-  const { host, setHost } = gameState.host;
-  const { joinedGame } = gameState.joinedGame;
-  const { playerList } = gameState.playerList;
-  const { setErrors } = gameState.errors;
-  // const { storedPlayerName, setStoredPlayerName } = gameState.storedPlayerName;
-  // const { storedRoomId, setStoredRoomId } = gameState.storedRoomId;
-  // const { storedPlayerList, setStoredPlayerList } = gameState.storedPlayerList;
+  const {
+    socket,
+    roomId: { roomId },
+    playerName: { playerName },
+    playerList: { playerList },
+    host: { host },
+    joinedGame: { joinedGame },
+    errors: { errors, setErrors },
+  } = useContext(GameContext);
+
   const user = useFirebaseAuth();
 
-  // const [rejoin, setRejoin] = useState(false);
-
-  // useEffect(() => {
-  //   setStoredPlayerName(window.sessionStorage.getItem('playerName'));
-  //   setStoredRoomId(window.sessionStorage.getItem('roomId'));
-  //   setStoredPlayerList(window.sessionStorage.getItem('playerList') || []);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (storedPlayerName && storedRoomId && storedPlayerList.length) {
-  //     setRejoin(true);
-  //   }
-  //   return () => {
-  //     setRejoin(false);
-  //   };
-  // }, [storedPlayerName, storedRoomId, storedPlayerList]);
-
-  /** Tell the server to create a new game */
-  const createNewGame = () => {
-    if (playerName) {
-      socket.emit('hostCreateNewGame', { playerName, hostId: user?.uid || null });
-      setHost(true);
-    } else {
-      setErrors((prevErrors) => [...prevErrors, 'You must provide a username.']);
-    }
-  };
+  /** Clear errors after 1 second each */
+  useEffect(() => {
+    errors.forEach((error) => {
+      toast.error(error, {
+        toastId: `${Date.now()}`,
+      });
+    });
+    setErrors([]);
+  }, [JSON.stringify(errors), toast.error]);
 
   /** Tell server to begin game */
   const roomFull = () => {
-    socket.emit('hostRoomFull', roomId);
-  };
-
-  /** Attempt to join a game by game ID */
-  const joinGame = ({ playerName, roomId }) => {
-    if (playerName && roomId) {
-      console.log(`Attempting to join game ${roomId} as ${playerName} with clientId ${user?.uid}`);
-      socket.emit('playerJoinGame', {
-        playerName,
-        clientId: user?.uid || null,
-        joinRoomId: roomId,
-        playerList
-      });
-      setRoomId(roomId);
+    // the game requires two players to begin
+    if (playerList.length >= 2) {
+      socket.emit('hostRoomFull', roomId);
     } else {
-      setErrors((prevErrors) => [
-        ...prevErrors,
-        'You must provide both a game number and a player name.'
-      ]);
+      setErrors((prevErrors) => [...prevErrors, 'There must be two players in the lobby']);
     }
   };
 
-  // /** Attempt to rejoin a game by game ID */
-  // const rejoinGame = (e) => {
-  //   e.preventDefault();
-  //   if (storedPlayerName && storedRoomId) {
-  //     console.log(`Attempting to rejoin game ${roomId} as ${playerName}`);
-  //     socket.emit('playerRejoinGame', {
-  //       storedPlayerName,
-  //       storedRoomId,
-  //       storedPlayerList
-  //     });
-  //   } else {
-  //     console.error('playerName and storedRoomId not stored, cannot rejoin game.');
-  //   }
-  // };
-
-  const form = useForm({
-    initialValues: {
-      // these keys must match the input keys for joinGame
+  const playerLeaveRoom = () => {
+    socket.emit('playerLeaveRoom', {
       playerName,
-      roomId
-    }
-  });
+      uid: user?.uid || null,
+      leaveRoomId: roomId,
+    });
+  };
 
-  // eslint-disable-next-line no-unused-vars
-  const handleError = (_errors) => {
-    console.log('Form error handled serverside');
-  };
-  const handleSubmit = (values) => {
-    joinGame(values);
-  };
   return (
     <Container style={{ backgroundColor: '#d0edf5' }}>
-      {
-        /** There is no assigned room, give option to create room */
-        roomId ? null : (
-          <Button variant="success" onClick={createNewGame} style={{ width: '12em' }}>
-            Create New Game
-          </Button>
-        )
-      }
-
       {
         /** You have joined the game and are waiting for the host to start */
         joinedGame && !host ? (
           <>
-            <h3>請等主持人</h3>
-            <h3>Waiting for the host</h3>
+            <Title order={3}>請等主持人</Title>
+            <Title order={3}>Waiting for the host</Title>
+            <Button variant="outline" color="red" onClick={playerLeaveRoom}>
+              Leave Room
+            </Button>
           </>
         ) : null
       }
@@ -125,51 +65,21 @@ const Lobby = () => {
         /** Give host ability to start game */
         host ? (
           <>
-            <h3>按 &quot;Room Full&quot; 開始遊戲</h3>
-            <h3>Click &quot;Room Full&quot; to begin the game</h3>
-            <Button type="button" variant="success" onClick={roomFull} style={{ width: '8em' }}>
-              Room Full
-            </Button>
+            <Title order={3}>按 &quot;Room Full&quot; 開始遊戲</Title>
+            <Title order={3}>Click &quot;Room Full&quot; to begin the game</Title>
+            <Container style={{ display: 'flex', gap: '0.5em' }}>
+              <Button variant="filled" color="green" onClick={roomFull} style={{ width: '8em' }}>
+                Room Full
+              </Button>
+              <Button variant="outline" color="red" onClick={playerLeaveRoom}>
+                Delete Room
+              </Button>
+            </Container>
           </>
         ) : null
       }
 
-      {
-        /** Not host and haven't joined a game, give option to join game */
-        host || joinedGame ? null : (
-          <>
-            {/* disabled until fully implemented */}
-            {/* {rejoin ? (
-              <Button variant="warning" onClick={rejoinGame}>
-                Rejoin
-              </Button>
-            ) : null} */}
-            {user ? (
-              <>
-                <h2>Hello {user.email}</h2>
-              </>
-            ) : (
-              <div />
-            )}
-            <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
-              <TextInput
-                label="Player name:"
-                placeholder="Ex. Ian"
-                {...form.getInputProps('playerName')}
-              />
-              <TextInput
-                label="Join game:"
-                placeholder="Ex. 12345"
-                {...form.getInputProps('roomId')}
-              />
-              <br />
-              <Button variant="info" type="submit">
-                Submit
-              </Button>
-            </form>
-          </>
-        )
-      }
+      <ToastContainer />
     </Container>
   );
 };

@@ -75,7 +75,7 @@ const generateHalfBoardConnections = () => {
     for (let c = 0; c < 4; c++) {
       connections.push({
         start: [r, c],
-        end: [r, c + 1]
+        end: [r, c + 1],
       });
     }
   }
@@ -83,7 +83,7 @@ const generateHalfBoardConnections = () => {
     for (let r = 0; r < 5; r++) {
       connections.push({
         start: [r, c],
-        end: [r + 1, c]
+        end: [r + 1, c],
       });
     }
   }
@@ -91,7 +91,7 @@ const generateHalfBoardConnections = () => {
     [1, 1],
     [1, 3],
     [3, 1],
-    [3, 3]
+    [3, 3],
   ];
   camps.forEach(([r, c]) => {
     connections.push({ start: [r, c], end: [r - 1, c - 1] });
@@ -109,7 +109,7 @@ const generateBoardConnections = () => {
     for (let c = 0; c < 4; c++) {
       connections.push({
         start: [r, c],
-        end: [r, c + 1]
+        end: [r, c + 1],
       });
     }
   }
@@ -119,7 +119,7 @@ const generateBoardConnections = () => {
         // no connection through mountains
         connections.push({
           start: [r, c],
-          end: [r + 1, c]
+          end: [r + 1, c],
         });
       }
     }
@@ -132,7 +132,7 @@ const generateBoardConnections = () => {
     [7, 1],
     [7, 3],
     [9, 1],
-    [9, 3]
+    [9, 3],
   ];
   camps.forEach(([r, c]) => {
     connections.push({ start: [r, c], end: [r - 1, c - 1] });
@@ -158,30 +158,6 @@ export const isRailroad = (r, c) => {
     return r >= 1 && r <= 10;
   }
   return r === 1 || r === 5 || r === 6 || r === 10;
-};
-
-export const isValidHalfBoardPlacement = (piece, row, col) => {
-  // cannot place into camps
-  if (isHalfBoardCamp(row, col)) {
-    return false;
-  }
-
-  // flag can only go into hq
-  if (piece.name === 'flag' && !isHalfBoardHQ(row, col)) {
-    return false;
-  }
-
-  // bomb cannot go into first row
-  if (piece.name === 'bomb' && row == 0) {
-    return false;
-  }
-
-  // landmines can only go into last two rows
-  if (piece.name === 'landmine' && row != 5 && row != 4) {
-    return false;
-  }
-
-  return true;
 };
 
 export const emptyBoard = () => {

@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { createContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { io } from 'socket.io-client';
 import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
 
@@ -11,10 +12,12 @@ export const GameContext = createContext({});
 
 // eslint-disable-next-line react/prop-types
 export const GameProvider = ({ children }) => {
+  const navigate = useNavigate();
+
   /** user-input: the user's name */
   const defaultName = uniqueNamesGenerator({
     dictionaries: [colors, animals],
-    length: 2
+    length: 2,
   });
   const [playerName, setPlayerName] = useState(defaultName);
   /** game ID assigned to host, or user-input: game Id entered by player */
@@ -34,7 +37,7 @@ export const GameProvider = ({ children }) => {
   const [submittedSide, setSubmittedSide] = useState(false);
   const [pendingMove, setPendingMove] = useState({
     source: [],
-    target: []
+    target: [],
   });
   const [successors, setSuccessors] = useState([]);
   const [isEnglish, setIsEnglish] = useState(false);
@@ -61,7 +64,6 @@ export const GameProvider = ({ children }) => {
   const [winner, setWinner] = useState(null);
   const [gameResults, setGameResults] = useState({ remain: [[], []], lost: [[], []] });
 
-  // const [startingBoard, setStartingBoard] = useState();
   const [errors, setErrors] = useState([]);
 
   const gameState = {
@@ -85,7 +87,7 @@ export const GameProvider = ({ children }) => {
     winner: { winner, setWinner },
     gameResults: { gameResults, setGameResults },
     isEnglish: { isEnglish, setIsEnglish },
-    errors: { errors, setErrors }
+    errors: { errors, setErrors },
   };
 
   // extend error (list of errors) to include new errors
@@ -105,33 +107,50 @@ export const GameProvider = ({ children }) => {
 
     /** Server has created a new game, only host receives this message */
     socket.on('newGameCreated', ({ gameId, mySocketId, players }) => {
-      console.log(`GameID: ${gameId}, SocketID: ${mySocketId}`);
-      setRoomId(gameId);
-      // setJoinRoomId(gameId);
+      const serverRoomId = gameId;
+      console.log(`GameID: ${serverRoomId}, SocketID: ${mySocketId}`);
+      setRoomId(serverRoomId);
       setPlayerList(players);
+      navigate(`/game/${serverRoomId}`);
     });
 
     /** Server is telling all clients the game has started  */
-    socket.on('beginNewGame', ({ mySocketId, gameId, turn }) => {
-      console.log(`Starting game ${gameId} on socket ${mySocketId}`);
+    socket.on('beginNewGame', ({ mySocketId, roomId, turn }) => {
+      console.log(`Starting game for room ${roomId} on socket ${mySocketId}`);
       // setDisplayTimer(true);
       setClientTurn(turn);
       setGamePhase(1);
     });
 
     /** Server is telling all clients someone has joined the room */
-    socket.on('playerJoinedRoom', (data) => {
-      console.log(`${data.playerName} has joined the room!`);
-      setPlayerList(data.players);
+    socket.on('playerJoinedRoom', ({ playerName: returnedPlayerName, players }) => {
+      console.log(`${returnedPlayerName} has joined the room!`);
+      setPlayerList(players);
     });
 
     /** Server is telling this socket that it has joined a room */
     socket.on('youHaveJoinedTheRoom', (data) => {
       setJoinedGame(true);
-      setPlayerList(data.players);
+      // setPlayerList(data.players);
+      navigate(`/game/${roomId}`);
       window.sessionStorage.setItem('playerName', playerName);
       window.sessionStorage.setItem('roomId', roomId);
       window.sessionStorage.setItem('playerList', data.players);
+    });
+
+    socket.on('playerLeftRoom', ({ playerName: returnedPlayerName, players }) => {
+      console.log(`${returnedPlayerName} has left the room!`);
+      setPlayerList(players);
+    });
+
+    /** Server is telling this socket that it has left a room */
+    socket.on('youHaveLeftTheRoom', (data) => {
+      setJoinedGame(false);
+      setPlayerList(data.players);
+      navigate(`/`);
+      window.sessionStorage.removeItem('playerName');
+      window.sessionStorage.removeItem('roomId');
+      window.sessionStorage.removeItem('playerList');
     });
 
     /** Server is sending the starting board with all placed pieces */

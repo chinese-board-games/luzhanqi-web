@@ -12,8 +12,8 @@ const CreateAccount = ({ setExistingAccount, setShowModal }) => {
     initialValues: {
       email: '',
       password: '',
-      confirmPassword: ''
-    }
+      confirmPassword: '',
+    },
   });
 
   const auth = getAuth();

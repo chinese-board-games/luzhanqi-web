@@ -10,9 +10,9 @@ export function CustomFonts() {
             fontFamily: 'SentyWEN2017',
             src: `url('${senty}') format("truetype")`,
             fontWeight: 400,
-            fontStyle: 'normal'
-          }
-        }
+            fontStyle: 'normal',
+          },
+        },
       ]}
     />
   );
