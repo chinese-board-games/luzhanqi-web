@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Grid, Container, Center, Stack, Title, Button, Group } from '@mantine/core';
+import { Grid, Container, Center, Stack, Button, Group } from '@mantine/core';
 import { emptyBoard } from 'src/utils/core';
 import SelectablePosition from '../SelectablePosition';
 import { isEqual } from 'lodash';
@@ -17,8 +17,6 @@ export default function GameBoard({
   board = emptyBoard(),
   sendMove,
   forfeit,
-  player = 'Player',
-  opponent = 'Opponent',
   affiliation,
   isEnglish = false,
 }) {
@@ -127,11 +125,7 @@ export default function GameBoard({
     <Container bg="rgb(224, 224, 224)" sx={{ borderRadius: '1em' }} p="1em 2em" maw="40em">
       <Center py="1em">
         <Stack>
-          <Stack align="center">
-            <Title order={1}>
-              {player} x {opponent}
-            </Title>
-          </Stack>
+          <Stack align="center"></Stack>
           <Group align="center" direction="horizontal">
             <Button
               disabled={!isTurn || !(originSelected && destinationSelected)}
@@ -149,7 +143,7 @@ export default function GameBoard({
                 setOrigin(NO_SELECT);
                 setDestination(NO_SELECT);
               }}>
-              Reset
+              Reset move
             </Button>
             <Button variant="filled" color="red" onClick={forfeit}>
               Forfeit

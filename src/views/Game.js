@@ -10,7 +10,7 @@ import BoardSetup from 'components/BoardSetup';
 import GameOver from 'components/GameOver';
 import GameBoard from 'components/GameBoard';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
-import { Container, Flex, Center, Button, CopyButton } from '@mantine/core';
+import { Container, Flex, Center, Button, CopyButton, Title } from '@mantine/core';
 
 const Game = () => {
   let { roomId } = useParams();
@@ -85,89 +85,80 @@ const Game = () => {
 
   return (
     <>
-      <Container
-        sx={{
-          padding: '0',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          backgroundColor: '#d0edf5',
-        }}>
-        <Container sx={{ padding: 0 }}>
-          {roomId ? (
-            <Container>
-              {/* if the playerList is empty, the user must have gotten here via a urlRoomId */}
-              {playerList.length > 0 ? (
-                <Container>
-                  <h2>Players:</h2>
-                  <Flex>
-                    {playerList.map((name) => (
-                      <Center
-                        key={name}
-                        sx={{
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          margin: '0.2em',
-                          padding: '0.2em',
-                          border: '0.2em solid green',
-                          borderRadius: '0.5em',
-                        }}>
-                        <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
-                      </Center>
-                    ))}
-                  </Flex>
-                  <br />
-                  <CopyButton value={window.location.href}>
-                    {({ copied, copy }) => (
-                      <Button color={copied ? 'green' : 'blue'} onClick={copy}>
-                        {copied ? 'Copied' : 'Copy URL'}
-                      </Button>
-                    )}
-                  </CopyButton>
-                </Container>
-              ) : null}
-            </Container>
-          ) : null}
+      <Container style={{ minWidth: '23em', width: '90%' }}>
+        {roomId ? (
+          <Container>
+            {/* if the playerList is empty, the user must have gotten here via a urlRoomId */}
+            {playerList.length > 0 ? (
+              <Container>
+                <Title order={2}>Players:</Title>
+                <Flex wrap="wrap">
+                  {playerList.map((name, i) => (
+                    <Center
+                      key={name}
+                      sx={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0.2em',
+                        padding: '0.2em',
+                        border: `0.2em solid ${i ? 'darkgreen' : 'darkred'}`,
+                        borderRadius: '0.5em',
+                      }}>
+                      <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
+                    </Center>
+                  ))}
+                </Flex>
+                <br />
+                <CopyButton value={window.location.href}>
+                  {({ copied, copy }) => (
+                    <Button color={copied ? 'green' : 'blue'} onClick={copy}>
+                      {copied ? 'Copied' : 'Copy URL'}
+                    </Button>
+                  )}
+                </CopyButton>
+              </Container>
+            ) : null}
+          </Container>
+        ) : null}
 
-          {playerList.length ? null : <Menu joinedRoom={true} urlRoomId={roomId} />}
-          <br />
-          {
-            /** Players join the game */
-            gamePhase === 0 ? <Lobby /> : null
-          }
-          {
-            /** Players set their boards */
-            gamePhase === 1 ? <BoardSetup /> : null
-          }
-          {
-            /** Players play the game */
-            gamePhase === 2 ? (
-              <GameBoard
-                host={host}
-                isTurn={(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1)}
-                board={host ? myBoard : transformBoard(myBoard)}
-                sendMove={playerMakeMove}
-                forfeit={playerForfeit}
-                playerName={playerName}
-                opponentName={playerList[1 - affiliation]}
-                affiliation={affiliation}
-                isEnglish={isEnglish}
-              />
-            ) : null
-          }
-          {
-            /** End of game */
-            gamePhase === 3 ? <GameOver /> : null
-          }
-          {
-            /** Indicate current turn */
-            // clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null
-          }
-          {
-            /** Display an error */
-            // error ? <Alert variant="danger">{error}</Alert> : null
-          }
-        </Container>
+        {playerList.length ? null : <Menu joinedRoom={true} urlRoomId={roomId} />}
+        <br />
+        {
+          /** Players join the game */
+          gamePhase === 0 ? <Lobby /> : null
+        }
+        {
+          /** Players set their boards */
+          gamePhase === 1 ? <BoardSetup /> : null
+        }
+        {
+          /** Players play the game */
+          gamePhase === 2 ? (
+            <GameBoard
+              host={host}
+              isTurn={(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1)}
+              board={host ? myBoard : transformBoard(myBoard)}
+              sendMove={playerMakeMove}
+              forfeit={playerForfeit}
+              playerName={playerName}
+              opponentName={playerList[1 - affiliation]}
+              affiliation={affiliation}
+              isEnglish={isEnglish}
+            />
+          ) : null
+        }
+        {
+          /** End of game */
+          gamePhase === 3 ? <GameOver /> : null
+        }
+        {
+          /** Indicate current turn */
+          // clientTurn > -1 ? <h1>The turn is {clientTurn}</h1> : null
+        }
+        {
+          /** Display an error */
+          // error ? <Alert variant="danger">{error}</Alert> : null
+        }
       </Container>
       <ToastContainer />
     </>
