@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import Login from 'components/Login';
 import PropTypes from 'prop-types';
 
-const AuthModal = ({ showModal, setShowModal }) => (
+const AuthModal = ({ showModal, setShowModal, roomId, playerName }) => (
   <Modal
     ariaHideApp={false}
     isOpen={showModal}
@@ -34,13 +34,15 @@ const AuthModal = ({ showModal, setShowModal }) => (
       </Button>
     </div>
 
-    <Login setShowModal={setShowModal} />
+    <Login setShowModal={setShowModal} roomId={roomId} playerName={playerName} />
   </Modal>
 );
 
 AuthModal.propTypes = {
   showModal: PropTypes.bool.isRequired,
   setShowModal: PropTypes.func.isRequired,
+  roomId: PropTypes.string.isRequired,
+  playerName: PropTypes.string.isRequired,
 };
 
 export default AuthModal;

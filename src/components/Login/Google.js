@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // eslint-disable-next-line react/prop-types
-const Google = ({ setShowModal }) => {
+const Google = ({ setShowModal, roomId }) => {
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
 
@@ -18,7 +18,11 @@ const Google = ({ setShowModal }) => {
         const token = credential.accessToken;
         // The signed-in user info.
         const { user } = result;
-        // ...
+        if (roomId) {
+          // already joined a room
+          addGame(user.uid, roomId);
+          updateUidMap(roomId, playerName, user.uid);
+        }
         console.log(`credential: ${JSON.stringify(credential)}`);
         console.log(`token: ${token}`);
         console.log(`user: ${JSON.stringify(user)}`);
