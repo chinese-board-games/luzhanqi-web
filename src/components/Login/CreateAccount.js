@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { addGame, createUser } from 'api/User';
 
 // eslint-disable-next-line react/prop-types
-const CreateAccount = ({ setExistingAccount, setShowModal, roomId }) => {
+const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
   const form = useForm({
     initialValues: {
       email: '',

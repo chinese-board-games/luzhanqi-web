@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // eslint-disable-next-line react/prop-types
-const Google = ({ setShowModal, roomId }) => {
+const Google = ({ setShowModal, roomId, playerName }) => {
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
 
