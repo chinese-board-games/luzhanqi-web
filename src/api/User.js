@@ -30,6 +30,7 @@ export const getUser = async (userId) => {
 };
 
 export const addGame = async (userId, gameId) => {
+  console.log(`addGame, game: ${userId}, user: ${gameId}`);
   return axios
     .post(`/user/${userId}/games/${gameId}`)
     .then((res) => {
