@@ -144,9 +144,9 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling this socket that it has left a room */
-    socket.on('youHaveLeftTheRoom', (data) => {
+    socket.on('youHaveLeftTheRoom', () => {
       setJoinedGame(false);
-      setPlayerList(data.players);
+      setPlayerList([]);
       navigate(`/`);
       window.sessionStorage.removeItem('playerName');
       window.sessionStorage.removeItem('roomId');
