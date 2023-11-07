@@ -16,10 +16,11 @@ const NavBar = () => {
   const [showUserModal, setShowUserModal] = React.useState(false);
   const [user] = useAuthState(getAuth());
 
-  const gameState = React.useContext(GameContext);
   const {
     isEnglish: { isEnglish, setIsEnglish },
-  } = gameState;
+    roomId: { roomId },
+    playerName: { playerName },
+  } = React.useContext(GameContext);
 
   return (
     <div
@@ -82,7 +83,12 @@ const NavBar = () => {
         </Button>
       </div>
 
-      <AuthModal showModal={showAuthModal} setShowModal={setShowAuthModal} />
+      <AuthModal
+        showModal={showAuthModal}
+        setShowModal={setShowAuthModal}
+        roomId={roomId}
+        playerName={playerName}
+      />
       <UserModal showModal={showUserModal} setShowModal={setShowUserModal} />
     </div>
   );

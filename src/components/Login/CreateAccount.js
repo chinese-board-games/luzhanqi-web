@@ -5,9 +5,10 @@ import { useForm } from '@mantine/form';
 import { Button, TextInput, PasswordInput } from '@mantine/core';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { ToastContainer, toast } from 'react-toastify';
+import { addGame, createUser } from 'api/User';
 
 // eslint-disable-next-line react/prop-types
-const CreateAccount = ({ setExistingAccount, setShowModal }) => {
+const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
   const form = useForm({
     initialValues: {
       email: '',
@@ -44,17 +45,22 @@ const CreateAccount = ({ setExistingAccount, setShowModal }) => {
     }
 
     createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
+      .then(async ({ user }) => {
         // Signed in
-        console.log(`userCredential: ${userCredential}`);
-        // ...
+        console.log(`user: ${JSON.stringify(user)}`);
+        await createUser(user.uid);
+        if (roomId) {
+          // already joined a room
+          addGame(user.uid, roomId);
+          updateUidMap(roomId, playerName, user.uid);
+        }
+        setShowModal(false);
       })
       .catch((err) => {
         const errorCode = err.code;
         const errorMessage = err.message;
         console.log(`errorCode: ${errorCode}`);
         console.log(`errorMessage: ${errorMessage}`);
-        setShowModal(false);
       });
   };
   if (error) {

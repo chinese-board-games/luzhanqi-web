@@ -8,9 +8,11 @@ import PhoneInput from 'react-phone-input-2';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-phone-input-2/lib/style.css';
 import 'react-toastify/dist/ReactToastify.css';
+import { addGame } from 'api/User';
+import { updateUidMap } from 'api/Game';
 
 // eslint-disable-next-line react/prop-types
-const Phone = ({ setShowModal }) => {
+const Phone = ({ setShowModal, roomId, playerName }) => {
   const confirmForm = useForm({
     initialValues: {
       confirmationCode: '',
@@ -76,7 +78,11 @@ const Phone = ({ setShowModal }) => {
       .then((result) => {
         // User signed in successfully.
         const { user } = result;
-        // ...
+        if (roomId) {
+          // already joined a room
+          addGame(user.uid, roomId);
+          updateUidMap(roomId, playerName, user.uid);
+        }
         console.log(`user: ${JSON.stringify(user)} user.phoneNumber: ${user.phoneNumber}`);
         setShowModal(false);
       })
