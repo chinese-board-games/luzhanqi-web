@@ -12,7 +12,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   const {
     socket,
     playerName: { playerName },
-    roomId: { roomId, setRoomId },
+    roomId: { setRoomId },
     host: { setHost },
     errors: { errors, setErrors },
   } = useContext(GameContext);
@@ -126,7 +126,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
       initialValues: {
         // these keys must match the input keys for joinGame
         playerName,
-        roomId: urlRoomId || roomId,
+        roomId: urlRoomId,
       },
     });
     return (

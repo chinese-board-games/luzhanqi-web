@@ -25,7 +25,7 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import SortablePiece from 'components/SortablePiece';
-import DragablePiece from 'components/DragablePiece';
+import DraggablePiece from 'components/DraggablePiece';
 import LineTo from 'react-lineto';
 import Position from '../Position';
 import { setupPieces, pieces } from '../../models/Piece';
@@ -283,7 +283,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
         </Stack>
         <DragOverlay>
           {activeId ? (
-            <DragablePiece
+            <DraggablePiece
               name={activePiece.name}
               affiliation={0}
               data={activePiece.data}

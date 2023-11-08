@@ -14,7 +14,6 @@ const AuthModal = ({ showModal, setShowModal, roomId, playerName }) => (
         backgroundColor: '#00000080',
         zIndex: 120,
       },
-      // 50% of the screen width and height
       content: {
         width: '80%',
         maxWidth: '500px',
