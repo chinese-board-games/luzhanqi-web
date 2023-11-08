@@ -109,13 +109,15 @@ const Game = () => {
                   ))}
                 </Flex>
                 <br />
-                <CopyButton value={window.location.href}>
-                  {({ copied, copy }) => (
-                    <Button color={copied ? 'green' : 'blue'} onClick={copy}>
-                      {copied ? 'Copied' : 'Copy URL'}
-                    </Button>
-                  )}
-                </CopyButton>
+                {gamePhase == 0 ? (
+                  <CopyButton value={window.location.href}>
+                    {({ copied, copy }) => (
+                      <Button color={copied ? 'green' : 'blue'} onClick={copy}>
+                        {copied ? 'Copied' : 'Copy URL'}
+                      </Button>
+                    )}
+                  </CopyButton>
+                ) : null}
               </Container>
             ) : null}
           </Container>
