@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { GameContext } from 'contexts/GameContext';
 
 import HalfBoard from './HalfBoard';
+import { Title } from '@mantine/core';
 
 export default function BoardSetup() {
   const {
@@ -26,8 +27,8 @@ export default function BoardSetup() {
 
   return submittedSide ? (
     <>
-      <h2>請等對手</h2>
-      <h2>Waiting for other player</h2>
+      <Title order={2}>請等對手</Title>
+      <Title order={2}>Waiting for other player</Title>
     </>
   ) : (
     <HalfBoard
