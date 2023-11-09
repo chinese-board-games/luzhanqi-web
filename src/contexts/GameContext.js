@@ -141,6 +141,9 @@ export const GameProvider = ({ children }) => {
     socket.on('playerLeftRoom', ({ playerName: returnedPlayerName, players }) => {
       console.log(`${returnedPlayerName} has left the room!`);
       setPlayerList(players);
+      setClientTurn(-1);
+      setGamePhase(0);
+      setSubmittedSide(false);
     });
 
     /** Server is telling this socket that it has left a room */
