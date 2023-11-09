@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import DragablePiece from 'components/DragablePiece';
+import DraggablePiece from 'components/DraggablePiece';
 import { Center, Stack } from '@mantine/core';
 import { useDroppable } from '@dnd-kit/core';
 import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../utils/core';
@@ -22,7 +22,7 @@ export default function Position({
   const placedPiece =
     piece && piece.name && isHalfBoard
       ? activeId !== piece.id && (
-          <DragablePiece
+          <DraggablePiece
             name={piece.name}
             affiliation={0}
             id={piece.id}
