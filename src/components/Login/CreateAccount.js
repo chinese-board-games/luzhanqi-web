@@ -6,6 +6,7 @@ import { Button, TextInput, PasswordInput } from '@mantine/core';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import { addGame, createUser } from 'api/User';
+import { updateUidMap } from 'api/Game';
 
 // eslint-disable-next-line react/prop-types
 const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName }) => {

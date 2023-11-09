@@ -4,6 +4,8 @@ import { Button } from '@mantine/core';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { addGame } from 'api/User';
+import { updateUidMap } from 'api/Game';
 
 // eslint-disable-next-line react/prop-types
 const Google = ({ setShowModal, roomId, playerName }) => {
@@ -32,14 +34,12 @@ const Google = ({ setShowModal, roomId, playerName }) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
-        const { email } = error.customData;
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
         console.log(`errorCode: ${errorCode}`);
         console.log(`errorMessage: ${errorMessage}`);
-        console.log(`email: ${email}`);
+        console.log(`email: ${error.customData?.email}`);
         console.log(`credential: ${JSON.stringify(credential)}`);
         toast.error(errorMessage);
       });
