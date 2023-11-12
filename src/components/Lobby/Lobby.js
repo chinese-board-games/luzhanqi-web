@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
 import React, { useContext, useEffect } from 'react';
-import { Button, Container, Title } from '@mantine/core';
+import { Button, Checkbox, Container, Title } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { GameContext } from 'contexts/GameContext';
 import { ToastContainer, toast } from 'react-toastify';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
+import { useParams } from 'react-router';
 
 const Lobby = () => {
   const {
@@ -17,6 +19,13 @@ const Lobby = () => {
   } = useContext(GameContext);
 
   const user = useFirebaseAuth();
+  const { roomId: gameId } = useParams();
+
+  const configForm = useForm({
+    initialValues: {
+      fogOfWar: true,
+    },
+  });
 
   /** Clear errors after 1 second each */
   useEffect(() => {
@@ -29,10 +38,10 @@ const Lobby = () => {
   }, [JSON.stringify(errors), toast.error]);
 
   /** Tell server to begin game */
-  const roomFull = () => {
+  const roomFull = (gameId, gameConfig) => {
     // the game requires two players to begin
     if (playerList.length >= 2) {
-      socket.emit('hostRoomFull', roomId);
+      socket.emit('hostRoomFull', roomId, gameId, gameConfig);
     } else {
       setErrors((prevErrors) => [...prevErrors, 'There must be two players in the lobby']);
     }
@@ -68,13 +77,25 @@ const Lobby = () => {
             <Title order={3}>按 &quot;Room Full&quot; 開始遊戲</Title>
             <Title order={3}>Click &quot;Room Full&quot; to begin the game</Title>
             <Container style={{ display: 'flex', gap: '0.5em' }}>
-              <Button variant="filled" color="green" onClick={roomFull} style={{ width: '8em' }}>
+              <Button
+                variant="filled"
+                color="green"
+                onClick={() => roomFull(gameId, configForm.values)}
+                style={{ width: '8em' }}>
                 Room Full
               </Button>
               <Button variant="outline" color="red" onClick={playerLeaveRoom}>
                 Delete Room
               </Button>
             </Container>
+            <Title order={4}>Rules</Title>
+            <form>
+              <Checkbox
+                mt="md"
+                label="Enable fog of war"
+                {...configForm.getInputProps('fogOfWar', { type: 'checkbox' })}
+              />
+            </form>
           </>
         ) : null
       }
