@@ -64,6 +64,8 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
     (setupPieces.find((piece) => piece.id === activeId) ||
       halfBoard.flatMap((piece) => piece).find((piece) => piece.id === activeId));
 
+  const boardCompleted = unplacedPieces.length === 0;
+
   console.log('activePiece', activePiece);
   console.log('halfBoard', halfBoard);
   console.log('unplacedPieces', unplacedPieces);
@@ -238,10 +240,10 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
               <Button type="button" variant="secondary" onClick={setExampleOne}>
                 Set Example 1
               </Button>
-              <Tooltip label="You still have unplaced pieces!">
+              <Tooltip disabled={boardCompleted} label="You still have unplaced pieces!">
                 <span>
                   <Button
-                    disabled={unplacedPieces.length > 0}
+                    disabled={!boardCompleted}
                     type="button"
                     variant="info"
                     onClick={() => sendStartingBoard(halfBoard)}>
