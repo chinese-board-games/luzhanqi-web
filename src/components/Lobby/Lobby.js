@@ -5,7 +5,6 @@ import { useForm } from '@mantine/form';
 import { GameContext } from 'contexts/GameContext';
 import { ToastContainer, toast } from 'react-toastify';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
-import { useParams } from 'react-router';
 
 const Lobby = () => {
   const {
@@ -19,8 +18,6 @@ const Lobby = () => {
   } = useContext(GameContext);
 
   const user = useFirebaseAuth();
-  const { roomId: gameId } = useParams();
-
   const configForm = useForm({
     initialValues: {
       fogOfWar: true,
@@ -38,10 +35,10 @@ const Lobby = () => {
   }, [JSON.stringify(errors), toast.error]);
 
   /** Tell server to begin game */
-  const roomFull = (gameId, gameConfig) => {
+  const roomFull = (gameConfig) => {
     // the game requires two players to begin
     if (playerList.length >= 2) {
-      socket.emit('hostRoomFull', roomId, gameId, gameConfig);
+      socket.emit('hostRoomFull', roomId, gameConfig);
     } else {
       setErrors((prevErrors) => [...prevErrors, 'There must be two players in the lobby']);
     }
@@ -80,7 +77,7 @@ const Lobby = () => {
               <Button
                 variant="filled"
                 color="green"
-                onClick={() => roomFull(gameId, configForm.values)}
+                onClick={() => roomFull(configForm.values)}
                 style={{ width: '8em' }}>
                 Room Full
               </Button>
