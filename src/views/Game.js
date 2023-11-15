@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { GameContext } from 'contexts/GameContext';
@@ -18,7 +17,6 @@ const Game = () => {
   const uid = useFirebaseAuth()?.uid;
   const {
     socket,
-    // roomId,
     playerList: { playerList },
     playerName: { playerName },
     gamePhase: { gamePhase },

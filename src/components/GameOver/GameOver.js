@@ -8,15 +8,12 @@ const GameOver = () => {
     winner: { winner },
     playerName: { playerName },
     playerList: { playerList },
-    gameResults: { gameResults },
+    gameResults: {
+      gameResults: { remain },
+    },
     host: { host },
   } = gameState;
 
-  console.log(gameResults);
-  const { remain } = gameResults;
-  console.log(remain);
-
-  // get player's index from playerName and playerList
   const playerIndex = playerList.indexOf(playerName);
   console.log(gameState);
 
