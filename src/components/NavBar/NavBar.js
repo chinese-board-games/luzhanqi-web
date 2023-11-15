@@ -106,17 +106,17 @@ const NavBar = () => {
         backgroundColor: '#afdfff',
         padding: '0.5em',
       }}>
-      <Title order={1} color="darkred">
-        陸戰棋
-      </Title>
-
       {playerList.length ? (
         <Flex style={{ display: 'flex', alignItems: 'center' }}>
           <Button variant="filled" color="violet" size="compact-lg" onClick={resetToLanding}>
             Return home
           </Button>
         </Flex>
-      ) : null}
+      ) : (
+        <Title order={1} color="darkred">
+          陸戰棋
+        </Title>
+      )}
 
       <Flex
         style={{
