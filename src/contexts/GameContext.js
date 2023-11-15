@@ -1,8 +1,8 @@
-/* eslint-disable no-console */
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { io } from 'socket.io-client';
 import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
+import PropTypes from 'prop-types';
 
 const socket = io(process.env.REACT_APP_API);
 // const socket = io('localhost:4000');
@@ -10,7 +10,6 @@ const socket = io(process.env.REACT_APP_API);
 
 export const GameContext = createContext({});
 
-// eslint-disable-next-line react/prop-types
 export const GameProvider = ({ children }) => {
   const navigate = useNavigate();
 
@@ -199,4 +198,8 @@ export const GameProvider = ({ children }) => {
   }, [roomId, JSON.stringify(errors)]);
 
   return <GameContext.Provider value={gameState}>{children}</GameContext.Provider>;
+};
+
+GameProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

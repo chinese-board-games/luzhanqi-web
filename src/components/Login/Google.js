@@ -1,13 +1,12 @@
-/* eslint-disable no-console */
 import React from 'react';
-import { Button } from '@mantine/core';
+import { Container, Image } from '@mantine/core';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { addGame } from 'api/User';
 import { updateUidMap } from 'api/Game';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
 const Google = ({ setShowModal, roomId, playerName }) => {
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
@@ -15,7 +14,7 @@ const Google = ({ setShowModal, roomId, playerName }) => {
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
+        // Google access token
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
@@ -31,28 +30,39 @@ const Google = ({ setShowModal, roomId, playerName }) => {
         setShowModal(false);
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
         console.log(`errorCode: ${errorCode}`);
         console.log(`errorMessage: ${errorMessage}`);
         console.log(`email: ${error.customData?.email}`);
         console.log(`credential: ${JSON.stringify(credential)}`);
-        toast.error(errorMessage);
+        if (errorCode !== 'auth/popup-closed-by-user') {
+          toast.error(errorMessage);
+        }
       });
   };
 
   return (
-    <div style={{ margin: '0.5em' }}>
-      <Button variant="outline-primary" onClick={handleGoogleSignIn}>
-        Sign in with Google
-      </Button>
+    <Container style={{ marginTop: '0.5em', padding: 0 }}>
+      <Image
+        src="google-signin-button.png"
+        onClick={handleGoogleSignIn}
+        style={{
+          width: '11em',
+          cursor: 'pointer',
+        }}
+      />
       <ToastContainer />
-    </div>
+    </Container>
   );
+};
+
+Google.propTypes = {
+  setShowModal: PropTypes.func.isRequired,
+  roomId: PropTypes.string.isRequired,
+  playerName: PropTypes.string.isRequired,
 };
 
 export default Google;

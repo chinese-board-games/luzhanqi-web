@@ -9,9 +9,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { addGame } from 'api/User';
 import { updateUidMap } from 'api/Game';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
-const SignIn = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
+const EmailAndPasswordSignIn = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
   const form = useForm({
     initialValues: {
       email: '',
@@ -96,4 +96,11 @@ const SignIn = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
   );
 };
 
-export default SignIn;
+EmailAndPasswordSignIn.propTypes = {
+  setExistingAccount: PropTypes.func.isRequired,
+  setShowModal: PropTypes.func.isRequired,
+  roomId: PropTypes.string.isRequired,
+  playerName: PropTypes.string.isRequired,
+};
+
+export default EmailAndPasswordSignIn;

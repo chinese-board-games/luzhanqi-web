@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState, useEffect } from 'react';
 import { Button, Title, Text } from '@mantine/core';
 import Modal from 'react-modal';
@@ -15,7 +14,6 @@ const UserModal = ({ showModal, setShowModal }) => {
   const [userData, setUserData] = useState({});
   const [gameData, setGameData] = useState([]);
 
-  // load user data
   useEffect(async () => {
     const fetchUser = async () => {
       let myUser = await getUser(user.uid);
@@ -63,7 +61,6 @@ const UserModal = ({ showModal, setShowModal }) => {
           backgroundColor: '#00000080',
           zIndex: 120,
         },
-        // 50% of the screen width and height
         content: {
           width: '80%',
           maxWidth: '600px',

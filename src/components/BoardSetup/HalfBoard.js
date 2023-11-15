@@ -1,5 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import {
   Container,
@@ -38,6 +36,7 @@ import {
   isValidHalfBoardPlacement,
 } from '../../utils';
 import useWindowSize from 'src/hooks/useWindowSize';
+import PropTypes from 'prop-types';
 
 const emptyBoard = [];
 for (let i = 0; i < 6; i++) {
@@ -298,6 +297,13 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
   );
 }
 
+HalfBoard.propTypes = {
+  sendStartingBoard: PropTypes.func.isRequired,
+  playerList: PropTypes.array.isRequired,
+  playerName: PropTypes.string.isRequired,
+  isEnglish: PropTypes.bool.isRequired,
+};
+
 function HalfBoardConnectionLines() {
   useWindowSize(); // rerender on window resize for lines to update
   return (
@@ -352,3 +358,8 @@ function PieceSelector({ unplacedPieces, isEnglish }) {
     </Center>
   );
 }
+
+PieceSelector.propTypes = {
+  unplacedPieces: PropTypes.array.isRequired,
+  isEnglish: PropTypes.bool.isRequired,
+};
