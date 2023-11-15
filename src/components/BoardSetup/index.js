@@ -1,5 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable react/prop-types */
 import { useContext } from 'react';
 import { GameContext } from 'contexts/GameContext';
 
