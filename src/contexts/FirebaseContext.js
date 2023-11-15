@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { getAuth } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-// import { getAnalytics } from 'firebase/analytics';
+import PropTypes from 'prop-types';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -15,7 +15,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 
 // set firebase User
 const User = null;
@@ -24,7 +23,6 @@ const ContextState = { user: User };
 
 const FirebaseAuthContext = createContext(ContextState);
 
-// eslint-disable-next-line react/prop-types
 const FirebaseAuthProvider = ({ children }) => {
   const [user, setUser] = useState(User);
   const value = { user, app };
@@ -43,6 +41,10 @@ const useFirebaseAuth = () => {
     throw new Error('useFirebaseAuth must be used within a FirebaseAuthProvider');
   }
   return context.user;
+};
+
+FirebaseAuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export { FirebaseAuthProvider, useFirebaseAuth };

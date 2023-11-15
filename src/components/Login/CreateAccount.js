@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { getAuth } from 'firebase/auth';
 import React from 'react';
 import { useForm } from '@mantine/form';
@@ -7,8 +6,8 @@ import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import { addGame, createUser } from 'api/User';
 import { updateUidMap } from 'api/Game';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
 const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
   const form = useForm({
     initialValues: {
@@ -120,6 +119,13 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName })
       </form>
     </div>
   );
+};
+
+CreateAccount.propTypes = {
+  setExistingAccount: PropTypes.func.isRequired,
+  setShowModal: PropTypes.func.isRequired,
+  roomId: PropTypes.string.isRequired,
+  playerName: PropTypes.string.isRequired,
 };
 
 export default CreateAccount;
