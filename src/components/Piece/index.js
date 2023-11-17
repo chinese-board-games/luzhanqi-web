@@ -1,8 +1,8 @@
 import { Center, Text } from '@mantine/core';
 import React from 'react';
 import { default as PieceModel } from '../../models/Piece';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
 export default function Piece({ name, affiliation, isEnglish }) {
   const piece = PieceModel(name, affiliation);
   return (
@@ -32,3 +32,9 @@ export default function Piece({ name, affiliation, isEnglish }) {
     </Center>
   );
 }
+
+Piece.propTypes = {
+  name: PropTypes.string.isRequired,
+  affiliation: PropTypes.number.isRequired,
+  isEnglish: PropTypes.bool.isRequired,
+};

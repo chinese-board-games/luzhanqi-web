@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Button } from '@mantine/core';
-import SignIn from './SignIn';
+import { Button, Container } from '@mantine/core';
+import EmailAndPasswordSignIn from './EmailAndPasswordSignIn';
 import CreateAccount from './CreateAccount';
 import Google from './Google';
 import Phone from './Phone';
+import PropTypes from 'prop-types';
 
 const LoginComponent = ({ setShowModal, roomId, playerName }) => {
   const [existingAccount, setExistingAccount] = React.useState(false);
@@ -13,7 +13,7 @@ const LoginComponent = ({ setShowModal, roomId, playerName }) => {
   const displayEmail = (
     <>
       {existingAccount ? (
-        <SignIn
+        <EmailAndPasswordSignIn
           setExistingAccount={setExistingAccount}
           setShowModal={setShowModal}
           roomId={roomId}
@@ -31,9 +31,8 @@ const LoginComponent = ({ setShowModal, roomId, playerName }) => {
     </>
   );
 
-  // return a component that allows the user to either log in or create an account with email and password
   return (
-    <div>
+    <Container>
       <Button variant="light" onClick={() => setUsePhone(!usePhone)}>
         {usePhone ? 'Use Email' : 'Use Phone'}
       </Button>
@@ -42,7 +41,7 @@ const LoginComponent = ({ setShowModal, roomId, playerName }) => {
       ) : (
         displayEmail
       )}
-    </div>
+    </Container>
   );
 };
 
