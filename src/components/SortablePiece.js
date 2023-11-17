@@ -1,10 +1,9 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import Piece from './Piece';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
 export default function SortablePiece({ name, affiliation, id, isEnglish }) {
   const { attributes, listeners, setNodeRef, transition, transform } = useSortable({
     id,
@@ -20,3 +19,10 @@ export default function SortablePiece({ name, affiliation, id, isEnglish }) {
     </div>
   );
 }
+
+SortablePiece.propTypes = {
+  name: PropTypes.string.isRequired,
+  affiliation: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
+  isEnglish: PropTypes.bool.isRequired,
+};

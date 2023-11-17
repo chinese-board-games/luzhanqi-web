@@ -1,17 +1,16 @@
-/* eslint-disable no-console */
 import React from 'react';
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 import { useForm } from '@mantine/form';
-import { Button, TextInput } from '@mantine/core';
+import { Button, Container, Text, TextInput, Title } from '@mantine/core';
 import PhoneInput from 'react-phone-input-2';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-phone-input-2/lib/style.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { addGame } from 'api/User';
 import { updateUidMap } from 'api/Game';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
 const Phone = ({ setShowModal, roomId, playerName }) => {
   const confirmForm = useForm({
     initialValues: {
@@ -19,12 +18,10 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
     },
   });
 
-  // state variable to display confirmation code input
   const [displayConfirmationCodePrompt, setDisplayConfirmationCodePrompt] = React.useState(false);
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [final, setFinal] = React.useState('');
 
-  // create a ref to the recaptcha container
   const recaptchaContainerRef = React.useRef();
 
   const handleSubmitPhoneNumber = (e) => {
@@ -76,7 +73,6 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
     final
       .confirm(confirmationCode)
       .then((result) => {
-        // User signed in successfully.
         const { user } = result;
         if (roomId) {
           // already joined a room
@@ -97,8 +93,8 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
   const handleConfirmationCodeError = () => {};
 
   return (
-    <div>
-      <h2>Phone</h2>
+    <Container>
+      <Title order={2}>Phone</Title>
       {displayConfirmationCodePrompt ? (
         <form
           onSubmit={confirmForm.onSubmit(
@@ -114,25 +110,31 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
         </form>
       ) : (
         <>
-          <div ref={recaptchaContainerRef}>
-            <div id="recaptcha-container" />
-          </div>
-          {/* Kept old format because we use a special component to handle phone numbers */}
+          <Container ref={recaptchaContainerRef}>
+            <Container id="recaptcha-container" />
+          </Container>
+          {/* Do not change to Mantine Form because we use a special component to handle phone numbers */}
           <form onSubmit={handleSubmitPhoneNumber}>
-            <p>Phone Number</p>
+            <Text>Phone Number</Text>
             <PhoneInput
               country="us"
               value={phoneNumber}
               onChange={(phone) => setPhoneNumber(phone)}
             />
-            <p>We&#39;ll never share your phone number with anyone else.</p>
+            <Text>We&#39;ll never share your phone number with anyone else.</Text>
             <Button type="submit">Login</Button>
           </form>
         </>
       )}
       <ToastContainer />
-    </div>
+    </Container>
   );
+};
+
+Phone.propTypes = {
+  setShowModal: PropTypes.func.isRequired,
+  roomId: PropTypes.string.isRequired,
+  playerName: PropTypes.string.isRequired,
 };
 
 export default Phone;

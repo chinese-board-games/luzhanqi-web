@@ -1,9 +1,8 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import Piece from './Piece';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
 export default function DraggablePiece({ name, affiliation, id, data, isEnglish }) {
   const { setNodeRef, attributes, listeners, transition, isDragging } = useDraggable({
     id,
@@ -12,8 +11,6 @@ export default function DraggablePiece({ name, affiliation, id, data, isEnglish 
   const style = {
     transition,
     cursor: isDragging ? 'grabbing' : 'grab',
-    // transform: `scale(${isDragging ? '1.2' : '1'})`,
-    // filter: isDragging ? `drop-shadow(0 0 0.75rem grey)` : ''
     filter: isDragging ? 'opacity(.8)' : '',
     zIndex: 100,
   };
@@ -23,3 +20,11 @@ export default function DraggablePiece({ name, affiliation, id, data, isEnglish 
     </div>
   );
 }
+
+DraggablePiece.propTypes = {
+  name: PropTypes.string.isRequired,
+  affiliation: PropTypes.number.isRequired,
+  id: PropTypes.string,
+  data: PropTypes.object,
+  isEnglish: PropTypes.bool.isRequired,
+};

@@ -1,7 +1,7 @@
-/* eslint-disable react/prop-types */
 import Position from './Position';
 import { Box } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
+import PropTypes from 'prop-types';
 
 const shadeMap = {
   origin: { color: 'blue.1', hover: 'blue.2' },
@@ -65,8 +65,22 @@ export default function SelectablePosition({
         piece={piece}
         disabled={disabled}
         shadeColor={shadeColor}
+        isHalfBoard={false}
         isEnglish={isEnglish}
       />
     </Box>
   );
 }
+
+SelectablePosition.propTypes = {
+  row: PropTypes.number.isRequired,
+  col: PropTypes.number.isRequired,
+  piece: PropTypes.object,
+  onClick: PropTypes.func.isRequired,
+  originSelected: PropTypes.bool.isRequired,
+  destinationSelected: PropTypes.bool.isRequired,
+  attackable: PropTypes.bool,
+  movable: PropTypes.bool.isRequired,
+  isEnglish: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
+};

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useContext, useEffect } from 'react';
 import { Button, Checkbox, Container, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';

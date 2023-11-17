@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import DraggablePiece from 'components/DraggablePiece';
 import { Center, Stack } from '@mantine/core';
@@ -6,6 +5,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../utils/core';
 import Piece from './Piece';
 import { motion, AnimatePresence } from 'framer-motion';
+import PropTypes from 'prop-types';
 
 const disabledFilter = 'grayscale(50%)';
 
@@ -158,3 +158,14 @@ export default function Position({
     </div>
   );
 }
+
+Position.propTypes = {
+  row: PropTypes.number.isRequired,
+  col: PropTypes.number.isRequired,
+  piece: PropTypes.object,
+  activeId: PropTypes.string,
+  shadeColor: PropTypes.string,
+  isHalfBoard: PropTypes.bool.isRequired,
+  isEnglish: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
+};
