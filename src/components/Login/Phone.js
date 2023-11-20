@@ -36,7 +36,7 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
       window.verifier.clear();
       recaptchaContainerRef.current.innerHTML = `<div id="recaptcha-container" />`;
     }
-    console.log(`phoneNumber: ${phoneNumber}`);
+    console.info(`phoneNumber: ${phoneNumber}`);
 
     window.verifier = new RecaptchaVerifier(
       'recaptcha-container',
@@ -45,12 +45,12 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
         callback: (response) => {
           // reCAPTCHA solved, allow signInWithPhoneNumber.
           // ...
-          console.log(`response: ${response}`);
+          console.info(`response: ${response}`);
         },
         'expired-callback': () => {
           // Response expired. Ask user to solve reCAPTCHA again.
           // ...
-          console.log('expired-callback');
+          console.warning('expired-callback');
         },
       },
       getAuth()
@@ -58,12 +58,10 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
 
     signInWithPhoneNumber(getAuth(), `+${phoneNumber}`, window.verifier)
       .then((result) => {
-        console.log(`result: ${JSON.stringify(result)}`);
         setDisplayConfirmationCodePrompt(true);
         setFinal(result);
       })
       .catch((err) => {
-        console.error(err);
         toast.error(err.message);
       });
   };
@@ -79,13 +77,13 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
           addGame(user.uid, roomId);
           updateUidMap(roomId, playerName, user.uid);
         }
-        console.log(`user: ${JSON.stringify(user)} user.phoneNumber: ${user.phoneNumber}`);
+        console.info(`user: ${JSON.stringify(user)} user.phoneNumber: ${user.phoneNumber}`);
         setShowModal(false);
       })
       .catch((err) => {
         // User couldn't sign in (bad verification code?)
         // ...
-        console.log(`error: ${err} error.message: ${err.message}`);
+        console.error(`error: ${err} error.message: ${err.message}`);
         toast.error(err.message);
       });
   };

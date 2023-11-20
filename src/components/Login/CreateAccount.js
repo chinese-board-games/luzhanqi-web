@@ -23,7 +23,6 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName })
     useCreateUserWithEmailAndPassword(auth);
 
   const createAccount = ({ email, password, confirmPassword }) => {
-    console.log(`email: ${email}`, `password: ${password}`, `confirmPassword: ${confirmPassword}`);
     let errors = new Set();
     const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     // present error if email invalid
@@ -47,7 +46,7 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName })
     createUserWithEmailAndPassword(email, password)
       .then(async ({ user }) => {
         // Signed in
-        console.log(`user: ${JSON.stringify(user)}`);
+        console.info(`user: ${JSON.stringify(user)}`);
         await createUser(user.uid);
         if (roomId) {
           // already joined a room
@@ -59,12 +58,12 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName })
       .catch((err) => {
         const errorCode = err.code;
         const errorMessage = err.message;
-        console.log(`errorCode: ${errorCode}`);
-        console.log(`errorMessage: ${errorMessage}`);
+        console.error(`errorCode: ${errorCode}`);
+        console.error(`errorMessage: ${errorMessage}`);
       });
   };
   if (error) {
-    console.log('Error in user creation');
+    console.error('Error in user creation');
     return (
       <div>
         <p>Error: {error.message}</p>
@@ -88,7 +87,7 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName })
 
   // eslint-disable-next-line no-unused-vars
   const handleError = (_errors) => {
-    console.log('Form error handled serverside');
+    console.error('Form error handled serverside');
   };
   return (
     <div>
