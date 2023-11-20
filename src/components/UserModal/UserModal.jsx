@@ -18,7 +18,7 @@ const UserModal = ({ showModal, setShowModal }) => {
     const fetchUser = async () => {
       let myUser = await getUser(user.uid);
       if (isEmpty(myUser)) {
-        console.warning('User not found, creating it now');
+        console.warn('User not found, creating it now');
         myUser = await createUser(user.uid);
       }
       setUserData(myUser);
@@ -66,13 +66,15 @@ const UserModal = ({ showModal, setShowModal }) => {
           margin: 'auto',
           backgroundColor: '#ffffff',
         },
-      }}>
+      }}
+    >
       <div
         style={{
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'flex-end',
-        }}>
+        }}
+      >
         <Button variant="subtle" color="red" onClick={() => setShowModal(false)}>
           X
         </Button>

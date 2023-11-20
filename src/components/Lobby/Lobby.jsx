@@ -77,7 +77,8 @@ const Lobby = () => {
                 variant="filled"
                 color="green"
                 onClick={() => roomFull(configForm.values)}
-                style={{ width: '8em' }}>
+                style={{ width: '8em' }}
+              >
                 Room Full
               </Button>
               <Button variant="outline" color="red" onClick={playerLeaveRoom}>

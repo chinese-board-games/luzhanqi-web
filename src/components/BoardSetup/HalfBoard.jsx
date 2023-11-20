@@ -35,7 +35,7 @@ import {
   isHalfBoardRailroad,
   isValidHalfBoardPlacement,
 } from '../../utils';
-import useWindowSize from 'src/hooks/useWindowSize';
+import useWindowSize from 'hooks/useWindowSize';
 import PropTypes from 'prop-types';
 
 const emptyBoard = [];
@@ -200,7 +200,8 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
         collisionDetection={closestCenter}
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}>
+        onDragEnd={handleDragEnd}
+      >
         <Stack>
           <Center>
             <Title>Board Setup</Title>
@@ -216,7 +217,8 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
                     disabled={!boardCompleted}
                     type="button"
                     variant="info"
-                    onClick={() => sendStartingBoard(halfBoard)}>
+                    onClick={() => sendStartingBoard(halfBoard)}
+                  >
                     Send Board Placement
                   </Button>
                 </span>
@@ -227,7 +229,8 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
                 onClick={() => {
                   setHalfboard([...emptyBoard]);
                   setUnplacedPieces([...affiliatedPieces].sort((a, b) => a.order - b.order));
-                }}>
+                }}
+              >
                 Reset Board
               </Button>
             </Group>
@@ -310,7 +313,8 @@ function PieceSelector({ unplacedPieces, isEnglish }) {
       miw="100%"
       py="1em"
       mih="14em"
-      sx={{ borderRadius: '1em' }}>
+      sx={{ borderRadius: '1em' }}
+    >
       <div ref={setNodeRef}>
         <SortableContext items={unplacedPieces}>
           <Flex justify="center" align="center" gap="1em" wrap="wrap">

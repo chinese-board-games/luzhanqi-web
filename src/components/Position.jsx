@@ -39,7 +39,8 @@ export default function Position({
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 20 }}>
+              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+            >
               <Piece name={piece.name} affiliation={piece.affiliation} isEnglish={isEnglish} />
             </motion.div>
           </AnimatePresence>
@@ -66,7 +67,8 @@ export default function Position({
               height: theme.other.campSizing.sm.height,
               fontSize: theme.other.campSizing.sm.fontSize,
             },
-          })}>
+          })}
+        >
           {placedPiece || '行營'}
         </Center>
       );
@@ -99,7 +101,8 @@ export default function Position({
               fontSize: theme.other.hqSizing.xs.fontSize,
             },
           })}
-          bg="pastel-tan.1">
+          bg="pastel-tan.1"
+        >
           <Stack spacing="0em" align="stretch" justify="center">
             {placedPiece || (
               <>
@@ -136,7 +139,8 @@ export default function Position({
             fontSize: theme.other.positionSizing.xs.fontSize,
           },
         })}
-        bg="pastel-tan.1">
+        bg="pastel-tan.1"
+      >
         {placedPiece || '後勤'}
       </Center>
     );

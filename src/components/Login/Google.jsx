@@ -47,7 +47,7 @@ const Google = ({ setShowModal, roomId, playerName }) => {
   return (
     <Container style={{ marginTop: '0.5em', padding: 0 }}>
       <Image
-        src="google-signin-button.png"
+        src="/google-signin-button.png"
         onClick={handleGoogleSignIn}
         style={{
           width: '11em',

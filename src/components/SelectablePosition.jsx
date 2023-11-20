@@ -58,7 +58,8 @@ export default function SelectablePosition({
         cursor: disabled ? 'not-allowed' : 'pointer',
       }}
       ref={ref}
-      onClick={disabled ? undefined : onClick}>
+      onClick={disabled ? undefined : onClick}
+    >
       <Position
         row={row}
         col={col}

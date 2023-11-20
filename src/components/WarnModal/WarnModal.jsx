@@ -20,11 +20,13 @@ const WarnModal = ({ showModal, setShowModal, forfeit }) => (
         margin: 'auto',
         backgroundColor: '#ffffff',
       },
-    }}>
+    }}
+  >
     <Flex
       style={{
         justifyContent: 'flex-end',
-      }}>
+      }}
+    >
       <Button variant="subtle" color="red" onClick={() => setShowModal(false)}>
         X
       </Button>
@@ -38,7 +40,8 @@ const WarnModal = ({ showModal, setShowModal, forfeit }) => (
         onClick={() => {
           forfeit();
           setShowModal(false);
-        }}>
+        }}
+      >
         Forfeit
       </Button>
       <Button color="green" onClick={() => setShowModal(false)}>
