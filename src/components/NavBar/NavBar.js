@@ -51,7 +51,6 @@ const NavBar = () => {
   };
 
   const resetToLanding = () => {
-    console.log(gamePhase);
     if (gamePhase == 2) {
       setShowWarnModal(true);
       return;

@@ -12,13 +12,10 @@ const GameOver = () => {
     host: { host },
   } = gameState;
 
-  console.log(gameResults);
   const { remain } = gameResults;
-  console.log(remain);
 
   // get player's index from playerName and playerList
   const playerIndex = playerList.indexOf(playerName);
-  console.log(gameState);
 
   const getCleanName = (name) => {
     return name
@@ -67,7 +64,6 @@ const GameOver = () => {
             .sort((a, b) => b.order - a.order)
             .filter((c) => c.name != 'enemy')
             .map((obj) => {
-              console.log(obj);
               return (
                 <tr key={obj.name}>
                   <td>{getCleanName(obj.name)}</td>
