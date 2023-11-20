@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
 import PropTypes from 'prop-types';
 
-const socket = io(process.env.REACT_APP_API);
+const socket = io(import.meta.env.VITE_API);
 // const socket = io('localhost:4000');
 // const socket = io('https://luzhanqi.herokuapp.com/');
 

@@ -100,7 +100,8 @@ const Game = () => {
                         padding: '0.2em',
                         border: `0.2em solid ${i ? 'darkgreen' : 'darkred'}`,
                         borderRadius: '0.5em',
-                      }}>
+                      }}
+                    >
                       <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
                     </Center>
                   ))}

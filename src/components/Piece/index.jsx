@@ -25,7 +25,8 @@ export default function Piece({ name, affiliation, isEnglish }) {
           height: theme.other.pieceSizing.xs.height,
           fontSize: theme.other.pieceSizing.xs.fontSize,
         },
-      })}>
+      })}
+    >
       <Text sx={{ fontFamily: 'SentyWEN2017' }} color={affiliation === 0 ? 'indigo.7' : 'red.7'}>
         {isEnglish ? piece.english : piece.display}
       </Text>
