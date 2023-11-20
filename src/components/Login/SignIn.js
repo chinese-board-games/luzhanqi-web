@@ -26,7 +26,7 @@ const SignIn = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
     signInWithEmailAndPassword(email, password)
       .then(({ user }) => {
         // Signed in
-        console.log(`user: ${JSON.stringify(user)}`);
+        console.info(`user: ${JSON.stringify(user)}`);
         if (roomId) {
           // already joined a room
           addGame(user.uid, roomId);
@@ -37,8 +37,8 @@ const SignIn = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
       .catch((err) => {
         const errorCode = err.code;
         const errorMessage = err.message;
-        console.log(`errorCode: ${errorCode}`);
-        console.log(`errorMessage: ${errorMessage}`);
+        console.error(`errorCode: ${errorCode}`);
+        console.error(`errorMessage: ${errorMessage}`);
         toast.error(errorMessage);
       });
   };
@@ -49,7 +49,7 @@ const SignIn = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
 
   // eslint-disable-next-line no-unused-vars
   const handleError = (_errors) => {
-    console.log('Form error handled serverside');
+    console.error('Form error handled serverside');
   };
 
   if (error) {

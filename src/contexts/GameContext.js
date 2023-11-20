@@ -101,14 +101,14 @@ export const GameProvider = ({ children }) => {
    */
   useEffect(() => {
     socket.on('connect', () => {
-      console.log(`SocketID: ${socket.id}`);
-      console.log(`Connected: ${socket.connected}`);
+      console.info(`SocketID: ${socket.id}`);
+      console.info(`Connected: ${socket.connected}`);
     });
 
     /** Server has created a new game, only host receives this message */
     socket.on('newGameCreated', ({ gameId, mySocketId, players }) => {
       const serverRoomId = gameId;
-      console.log(`GameID: ${serverRoomId}, SocketID: ${mySocketId}`);
+      console.info(`GameID: ${serverRoomId}, SocketID: ${mySocketId}`);
       setRoomId(serverRoomId);
       setPlayerList(players);
       navigate(`/game/${serverRoomId}`);
@@ -116,7 +116,7 @@ export const GameProvider = ({ children }) => {
 
     /** Server is telling all clients the game has started  */
     socket.on('beginNewGame', ({ mySocketId, roomId, turn }) => {
-      console.log(`Starting game for room ${roomId} on socket ${mySocketId}`);
+      console.info(`Starting game for room ${roomId} on socket ${mySocketId}`);
       // setDisplayTimer(true);
       setClientTurn(turn);
       setGamePhase(1);
@@ -124,7 +124,7 @@ export const GameProvider = ({ children }) => {
 
     /** Server is telling all clients someone has joined the room */
     socket.on('playerJoinedRoom', ({ playerName: returnedPlayerName, players }) => {
-      console.log(`${returnedPlayerName} has joined the room!`);
+      console.info(`${returnedPlayerName} has joined the room!`);
       setPlayerList(players);
     });
 
@@ -139,7 +139,7 @@ export const GameProvider = ({ children }) => {
     });
 
     socket.on('playerLeftRoom', ({ playerName: returnedPlayerName, players }) => {
-      console.log(`${returnedPlayerName} has left the room!`);
+      console.info(`${returnedPlayerName} has left the room!`);
       setPlayerList(players);
       setClientTurn(-1);
       setGamePhase(0);
@@ -168,12 +168,10 @@ export const GameProvider = ({ children }) => {
 
     socket.on('pieceSelected', (pieces) => {
       setSuccessors(pieces);
-      console.log('successors: ', pieces);
     });
 
     /** Server is telling all clients a move has been made */
     socket.on('playerMadeMove', (data) => {
-      console.log('Move has been made', data);
       setClientTurn(data.turn);
       setMyBoard(data.board);
     });
@@ -192,8 +190,8 @@ export const GameProvider = ({ children }) => {
 
     return () => {
       socket.on('disconnect', () => {
-        console.log(`SocketID: ${socket.id}`);
-        console.log(`Connected: ${socket.connected}`);
+        console.info(`SocketID: ${socket.id}`);
+        console.info(`Connected: ${socket.connected}`);
       });
     };
   }, [roomId, JSON.stringify(errors)]);
