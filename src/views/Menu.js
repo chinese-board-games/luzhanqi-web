@@ -73,7 +73,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   /** Attempt to join a room by game ID */
   const joinGame = (playerName, roomId) => {
     if (playerName && roomId) {
-      console.log(`Attempting to join game ${roomId} as ${playerName} with clientId ${user?.uid}`);
+      console.info(`Attempting to join game ${roomId} as ${playerName} with clientId ${user?.uid}`);
       socket.emit('playerJoinRoom', {
         playerName,
         clientId: user?.uid || null,

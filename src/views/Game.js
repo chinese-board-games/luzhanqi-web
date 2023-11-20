@@ -13,7 +13,6 @@ import { Container, Flex, Center, Button, CopyButton, Title } from '@mantine/cor
 
 const Game = () => {
   let { roomId } = useParams();
-  console.log('roomId: ', roomId);
   const uid = useFirebaseAuth()?.uid;
   const {
     socket,
@@ -62,7 +61,7 @@ const Game = () => {
   };
 
   const playerForfeit = (e) => {
-    console.log('Game forfeitted!');
+    console.info('Game forfeitted!');
     e.preventDefault();
     socket.emit('playerForfeit', {
       playerName,

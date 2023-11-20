@@ -18,16 +18,15 @@ const UserModal = ({ showModal, setShowModal }) => {
     const fetchUser = async () => {
       let myUser = await getUser(user.uid);
       if (isEmpty(myUser)) {
-        console.log('User not found, creating it now');
+        console.warning('User not found, creating it now');
         myUser = await createUser(user.uid);
       }
-      console.log('User loaded');
       setUserData(myUser);
       return myUser;
     };
 
     const fetchGames = async (fetchedUser) => {
-      console.log(`fetching ${fetchedUser.uid} games`);
+      console.info(`fetching ${fetchedUser.uid} games`);
       const myGames = await Promise.all(
         fetchedUser.games.map(async (gameId) => {
           const game = await getGameById(gameId);
@@ -37,7 +36,6 @@ const UserModal = ({ showModal, setShowModal }) => {
           return game;
         })
       );
-      console.log('Games loaded');
       // do not load a game with a certain _id more than once
       const myUniqueGames = myGames.filter(
         (v, i, a) => a.findIndex((v2) => v2._id === v._id) === i

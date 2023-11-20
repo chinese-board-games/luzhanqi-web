@@ -15,7 +15,6 @@ export default function BoardSetup() {
   } = useContext(GameContext);
 
   const sendStartingBoard = (halfBoard) => {
-    console.log('sendStartingBoard', halfBoard);
     socket.emit('playerInitialBoard', {
       playerName,
       myPositions: halfBoard,
