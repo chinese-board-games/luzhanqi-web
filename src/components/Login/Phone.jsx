@@ -50,7 +50,7 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
         'expired-callback': () => {
           // Response expired. Ask user to solve reCAPTCHA again.
           // ...
-          console.warning('expired-callback');
+          console.warn('expired-callback');
         },
       },
       getAuth()
@@ -95,10 +95,8 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
       <Title order={2}>Phone</Title>
       {displayConfirmationCodePrompt ? (
         <form
-          onSubmit={confirmForm.onSubmit(
-            handleSubmitConfirmationCode,
-            handleConfirmationCodeError
-          )}>
+          onSubmit={confirmForm.onSubmit(handleSubmitConfirmationCode, handleConfirmationCodeError)}
+        >
           <TextInput
             label="Confirmation code"
             placeholder="000000"

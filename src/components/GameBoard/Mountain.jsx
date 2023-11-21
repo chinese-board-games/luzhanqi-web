@@ -22,7 +22,8 @@ export default function Mountain({ rotation }) {
       })}
       bg="whitesmoke"
       w="4em"
-      h="4em">
+      h="4em"
+    >
       山界
     </Center>
   );

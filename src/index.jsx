@@ -11,7 +11,7 @@ import App from './App';
 import { CustomFonts } from './CustomFonts';
 import theme, { other } from './theme';
 
-axios.defaults.baseURL = `${process.env.REACT_APP_API}`;
+axios.defaults.baseURL = `${import.meta.env.VITE_API}`;
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,7 +21,8 @@ ReactDOM.render(
           theme={{
             ...theme,
             other,
-          }}>
+          }}
+        >
           <CustomFonts />
           <GameProvider>
             <App />

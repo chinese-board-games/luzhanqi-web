@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Grid, Container, Center, Stack, Button, Group } from '@mantine/core';
-import { emptyBoard } from 'src/utils/core';
+import { emptyBoard } from 'utils/core';
 import SelectablePosition from '../SelectablePosition';
 import { isEqual } from 'lodash';
 import FrontLines from './FrontLines';
 import Mountain from './Mountain';
 import ConnectionLines from './ConnectionLines';
 import PropTypes from 'prop-types';
-import { getSuccessors } from 'src/utils';
+import { getSuccessors } from 'utils';
 
 const NO_SELECT = [-1, -1];
 
@@ -132,7 +132,8 @@ export default function GameBoard({
                 sendMove(origin, destination, host);
                 setOrigin(NO_SELECT);
                 setDestination(NO_SELECT);
-              }}>
+              }}
+            >
               {isTurn ? 'Send move' : 'Opponent turn'}
             </Button>
             <Button
@@ -141,7 +142,8 @@ export default function GameBoard({
               onClick={() => {
                 setOrigin(NO_SELECT);
                 setDestination(NO_SELECT);
-              }}>
+              }}
+            >
               Reset move
             </Button>
             <Button variant="filled" color="red" onClick={forfeit}>
