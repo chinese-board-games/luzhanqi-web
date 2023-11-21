@@ -21,13 +21,15 @@ const AuthModal = ({ showModal, setShowModal, roomId, playerName }) => (
         margin: 'auto',
         backgroundColor: '#ffffff',
       },
-    }}>
+    }}
+  >
     <div
       style={{
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-end',
-      }}>
+      }}
+    >
       <Button variant="subtle" color="red" onClick={() => setShowModal(false)}>
         X
       </Button>

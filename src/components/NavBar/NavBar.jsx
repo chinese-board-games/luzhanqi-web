@@ -104,7 +104,8 @@ const NavBar = () => {
         height: '4em',
         backgroundColor: '#afdfff',
         padding: '0.5em',
-      }}>
+      }}
+    >
       {playerList.length ? (
         <Flex style={{ display: 'flex', alignItems: 'center' }}>
           <Button variant="filled" color="violet" size="compact-lg" onClick={resetToLanding}>
@@ -121,14 +122,16 @@ const NavBar = () => {
         style={{
           alignItems: 'center',
           gap: '0.25em',
-        }}>
+        }}
+      >
         {user ? (
           <>
             <ActionIcon
               size="lg"
               onClick={() => {
                 setShowUserModal(true);
-              }}>
+              }}
+            >
               <IconUserSquareRounded />
             </ActionIcon>
 
@@ -138,7 +141,8 @@ const NavBar = () => {
               onClick={() => {
                 getAuth().signOut();
                 window.location.reload();
-              }}>
+              }}
+            >
               Logout
             </Button>
           </>
@@ -151,7 +155,8 @@ const NavBar = () => {
           size="compact-sm"
           color="green"
           style={{ width: '3em' }}
-          onClick={() => setIsEnglish(!isEnglish)}>
+          onClick={() => setIsEnglish(!isEnglish)}
+        >
           {isEnglish ? '中文' : 'en'}
         </Button>
       </Flex>

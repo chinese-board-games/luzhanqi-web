@@ -10,7 +10,7 @@ Run
 ```
 cat > .env << EOF
 PORT=3000
-REACT_APP_API=http://localhost:4000
+VITE_API=http://localhost:4000
 EOF
 ```
 
