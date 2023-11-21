@@ -4,7 +4,9 @@
     "paths": {
       "contexts/*": ["./src/contexts/*"],
       "components/*": ["./src/components/*"],
-      "api/*": ["./src/api/*"]
+      "api/*": ["./src/api/*"],
+      "hooks/*": ["./src/hooks/*"],
+      "utils/*": ["./src/utils/*"]
     }
   },
   "exclude": ["node_modules"]
