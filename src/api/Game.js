@@ -8,6 +8,12 @@ export const getGameById = async (gameId) => {
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
+};
+
+export const updateUidMap = async (gameId, playerName, uid) => {
+  return axios.post(`/games/${gameId}/${playerName}/${uid}`).catch((err) => {
+    console.error(err);
+  });
 };

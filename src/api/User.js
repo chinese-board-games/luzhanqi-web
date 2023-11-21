@@ -5,16 +5,15 @@ export const createUser = async (userId) => {
   return axios
     .post(`/user/${userId}`)
     .then((res) => {
-      console.log(res);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 };
 
 export const getUser = async (userId) => {
-  console.log(`getUser: ${userId} `);
+  console.info(`getUser: ${userId} `);
   return axios
     .get(`/user/${userId}`)
     .then((res) => {
@@ -25,61 +24,37 @@ export const getUser = async (userId) => {
       }
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 };
 
 export const addGame = async (userId, gameId) => {
-  return axios
-    .post(`/user/${userId}/games/${gameId}`)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  console.info(`addGame, game: ${userId}, user: ${gameId}`);
+  return axios.post(`/user/${userId}/games/${gameId}`).catch((err) => {
+    console.error(err);
+  });
 };
 
 export const removeGame = async (userId, gameId) => {
-  return axios
-    .delete(`/user/${userId}/games/${gameId}`)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  return axios.delete(`/user/${userId}/games/${gameId}`).catch((err) => {
+    console.error(err);
+  });
 };
 
 export const getGames = async (userId) => {
-  return axios
-    .get(`/user/${userId}/games`)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  return axios.get(`/user/${userId}/games`).catch((err) => {
+    console.error(err);
+  });
 };
 
 export const getRank = async (userId) => {
-  return axios
-    .get(`/user/${userId}/rank`)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  return axios.get(`/user/${userId}/rank`).catch((err) => {
+    console.error(err);
+  });
 };
 
 export const setRank = async (userId, rank) => {
-  return axios
-    .post(`/user/${userId}/rank/${rank}`)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  return axios.post(`/user/${userId}/rank/${rank}`).catch((err) => {
+    console.error(err);
+  });
 };
