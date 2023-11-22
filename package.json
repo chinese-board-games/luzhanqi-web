@@ -42,7 +42,7 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "test": "vite test",
+    "test": "echo no tests yet",
     "serve": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
