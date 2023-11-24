@@ -6,13 +6,17 @@ import { Title } from '@mantine/core';
 
 export default function BoardSetup() {
   const {
-    playerList: { playerList },
     playerName: { playerName },
+    playerList: { playerList },
+    spectatorName: { spectatorName },
+    spectatorList: { spectatorList },
     roomId: { roomId },
     socket,
     submittedSide: { submittedSide },
     isEnglish: { isEnglish },
   } = useContext(GameContext);
+
+  const isSpectator = spectatorList.includes(spectatorName);
 
   const sendStartingBoard = (halfBoard) => {
     socket.emit('playerInitialBoard', {
@@ -21,6 +25,15 @@ export default function BoardSetup() {
       room: roomId,
     });
   };
+
+  if (isSpectator) {
+    return (
+      <>
+        <Title order={2}>Waiting for players to set the board</Title>
+        <Title order={2}>等待玩家設定棋盤</Title>
+      </>
+    );
+  }
 
   return submittedSide ? (
     <>
