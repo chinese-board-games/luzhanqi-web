@@ -24,9 +24,9 @@ const Google = ({ setShowModal, roomId, playerName }) => {
           addGame(user.uid, roomId);
           updateUidMap(roomId, playerName, user.uid);
         }
-        console.log(`credential: ${JSON.stringify(credential)}`);
-        console.log(`token: ${token}`);
-        console.log(`user: ${JSON.stringify(user)}`);
+        console.info(`credential: ${JSON.stringify(credential)}`);
+        console.info(`token: ${token}`);
+        console.info(`user: ${JSON.stringify(user)}`);
         setShowModal(false);
       })
       .catch((error) => {
@@ -34,10 +34,10 @@ const Google = ({ setShowModal, roomId, playerName }) => {
         const errorMessage = error.message;
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
-        console.log(`errorCode: ${errorCode}`);
-        console.log(`errorMessage: ${errorMessage}`);
-        console.log(`email: ${error.customData?.email}`);
-        console.log(`credential: ${JSON.stringify(credential)}`);
+        console.info(`errorCode: ${errorCode}`);
+        console.info(`errorMessage: ${errorMessage}`);
+        console.info(`email: ${error.customData?.email}`);
+        console.info(`credential: ${JSON.stringify(credential)}`);
         if (errorCode !== 'auth/popup-closed-by-user') {
           toast.error(errorMessage);
         }

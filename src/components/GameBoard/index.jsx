@@ -125,7 +125,6 @@ export default function GameBoard({
     ...gridCells.slice(gridCells.length / 2, gridCells.length),
   ];
 
-  console.log(deadPieces);
   return (
     <>
       <Container bg="rgb(224, 224, 224)" sx={{ borderRadius: '1em' }} p="1em 2em" maw="40em">
