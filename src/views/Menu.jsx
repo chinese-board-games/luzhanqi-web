@@ -12,6 +12,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   const {
     socket,
     playerName: { playerName },
+    spectatorName: { spectatorName },
     roomId: { setRoomId },
     host: { setHost },
     errors: { errors, setErrors },
@@ -71,9 +72,9 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   };
 
   /** Attempt to join a room by game ID */
-  const joinGame = (playerName, roomId) => {
+  const playerJoinGame = (playerName, roomId) => {
     if (playerName && roomId) {
-      console.info(`Attempting to join game ${roomId} as ${playerName} with clientId ${user?.uid}`);
+      console.info(`Attempting to JOIN game ${roomId} as ${playerName} with clientId ${user?.uid}`);
       socket.emit('playerJoinRoom', {
         playerName,
         clientId: user?.uid || null,
@@ -88,14 +89,36 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     }
   };
 
+  /** Attempt to spectate a room by game ID */
+  const spectateGame = (spectatorName, roomId) => {
+    if (playerName && roomId) {
+      console.info(
+        `Attempting to SPECTATE game ${roomId} as ${spectatorName} with clientId ${user?.uid}`
+      );
+      socket.emit('spectateRoom', {
+        spectatorName,
+        clientId: user?.uid || null,
+        joinRoomId: roomId,
+      });
+      setRoomId(roomId);
+    } else {
+      setErrors((prevErrors) => [
+        ...prevErrors,
+        'You must provide both a game number and a spectator name.',
+      ]);
+    }
+  };
+
   const handleCreateSubmit = ({ playerName }) => {
     createNewGame(playerName);
-    setErrors((prevErrors) => [...prevErrors, 'Unable to connect to server.']);
   };
 
   const handleJoinSubmit = ({ playerName, roomId }) => {
-    joinGame(playerName, roomId);
-    setErrors((prevErrors) => [...prevErrors, 'Unable to connect to server.']);
+    playerJoinGame(playerName, roomId);
+  };
+
+  const handleSpectateSubmit = ({ spectatorName, roomId }) => {
+    spectateGame(spectatorName, roomId);
   };
 
   const CreateForm = () => {
@@ -124,7 +147,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   const JoinForm = ({ urlRoomId }) => {
     const joinForm = useForm({
       initialValues: {
-        // these keys must match the input keys for joinGame
+        // these keys must match the input keys for handlejoinSubmit
         playerName,
         roomId: urlRoomId,
       },
@@ -157,12 +180,45 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     urlRoomId: PropTypes.string,
   };
 
+  const SpectateForm = ({ urlRoomId }) => {
+    const spectateForm = useForm({
+      initialValues: {
+        // these keys must match the input keys for handleSpectateSubmit
+        spectatorName,
+        roomId: urlRoomId,
+      },
+    });
+    return (
+      <Container style={cardStyle}>
+        <Title order={3}>Spectate a Game</Title>
+        <form onSubmit={spectateForm.onSubmit(handleSpectateSubmit)}>
+          <TextInput
+            label="Spectator name:"
+            placeholder="Ex. Ian"
+            {...spectateForm.getInputProps('spectatorName')}
+          />
+          <TextInput
+            label="Spectate game:"
+            placeholder="Ex. 6543eb06e81d62019d596562"
+            {...spectateForm.getInputProps('roomId')}
+            disabled={!!urlRoomId}
+          />
+          <br />
+          <Button variant="info" type="submit">
+            Submit
+          </Button>
+        </form>
+      </Container>
+    );
+  };
+
   return (
     <>
       <Container style={viewStyle}>
         <Container style={stackStyle}>
           {joinedRoom ? null : <CreateForm />}
           <JoinForm urlRoomId={urlRoomId} />
+          <SpectateForm urlRoomId={urlRoomId} />
           <Container style={cardStyle}>
             <Title order={3}>For developers</Title>
             <Container style={cardContentStyle}>

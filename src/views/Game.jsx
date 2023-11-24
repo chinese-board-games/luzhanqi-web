@@ -16,6 +16,8 @@ const Game = () => {
   const uid = useFirebaseAuth()?.uid;
   const {
     socket,
+    spectatorName: { spectatorName },
+    spectatorList: { spectatorList },
     playerList: { playerList },
     playerName: { playerName },
     gamePhase: { gamePhase },
@@ -23,6 +25,7 @@ const Game = () => {
     clientTurn: { clientTurn },
     errors: { errors, setErrors },
     myBoard: { myBoard },
+    myDeadPieces: { myDeadPieces },
     isEnglish: { isEnglish },
   } = useContext(GameContext);
 
@@ -106,6 +109,24 @@ const Game = () => {
                     </Center>
                   ))}
                 </Flex>
+                <Title order={2}>Spectators:</Title>
+                <Flex wrap="wrap">
+                  {spectatorList.map((name) => (
+                    <Center
+                      key={name}
+                      sx={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0.2em',
+                        padding: '0.2em',
+                        border: `0.2em solid darkblue`,
+                        borderRadius: '0.5em',
+                      }}
+                    >
+                      <h5 style={{ fontWeight: 'bold', margin: 0 }}>{name}</h5>
+                    </Center>
+                  ))}
+                </Flex>
                 <br />
                 {gamePhase == 0 ? (
                   <CopyButton value={window.location.href}>
@@ -132,24 +153,28 @@ const Game = () => {
           gamePhase === 1 ? <BoardSetup /> : null
         }
         {
+          /** End of game */
+          gamePhase === 3 ? <GameOver /> : null
+        }
+        <br />
+        {
           /** Players play the game */
-          gamePhase === 2 ? (
+          gamePhase === 2 || gamePhase === 3 ? (
             <GameBoard
               host={host}
               isTurn={(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1)}
               board={host ? myBoard : transformBoard(myBoard)}
+              deadPieces={myDeadPieces}
               sendMove={playerMakeMove}
               forfeit={playerForfeit}
               playerName={playerName}
               opponentName={playerList[1 - affiliation]}
               affiliation={affiliation}
               isEnglish={isEnglish}
+              isSpectator={spectatorList.includes(spectatorName)}
+              gamePhase={gamePhase}
             />
           ) : null
-        }
-        {
-          /** End of game */
-          gamePhase === 3 ? <GameOver /> : null
         }
       </Container>
       <ToastContainer />
