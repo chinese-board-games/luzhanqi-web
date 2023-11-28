@@ -113,7 +113,7 @@ const NavBar = () => {
           </Button>
         </Flex>
       ) : (
-        <Title order={1} color="darkred">
+        <Title order={1} color="darkred" style={{ cursor: 'pointer' }} onClick={resetToLanding}>
           陸戰棋
         </Title>
       )}
