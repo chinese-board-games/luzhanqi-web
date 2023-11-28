@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Grid, Container, Center, Stack, Button, Group } from '@mantine/core';
+import { Grid, Container, Center, Stack, Button, Group, Flex } from '@mantine/core';
 import { emptyBoard } from 'utils/core';
 import SelectablePosition from '../SelectablePosition';
 import { isEqual } from 'lodash';
@@ -108,11 +108,11 @@ export default function GameBoard({
   );
 
   const divider = [
-    <FrontLines key="1" />,
-    <Mountain rotation="-90deg" key="2" />,
-    <FrontLines key="3" />,
-    <Mountain rotation="90deg" key="4" />,
-    <FrontLines key="5" />,
+    <FrontLines key="1" isEnglish={isEnglish} />,
+    <Mountain rotation="-90deg" key="2" isEnglish={isEnglish} />,
+    <FrontLines key="3" isEnglish={isEnglish} />,
+    <Mountain rotation="90deg" key="4" isEnglish={isEnglish} />,
+    <FrontLines key="5" isEnglish={isEnglish} />,
   ].map((content, i) => (
     <Grid.Col key={`divider-${i}`} span={4}>
       <Center mih="5em">{content}</Center>
@@ -126,8 +126,8 @@ export default function GameBoard({
   ];
 
   return (
-    <>
-      <Container bg="rgb(224, 224, 224)" sx={{ borderRadius: '1em' }} p="1em 2em" maw="40em">
+    <Flex wrap={'wrap'} align={'center'}>
+      <Container bg="#f0f8ff" sx={{ borderRadius: '1em' }} p="1em 2em" maw="40em">
         {isSpectator || gamePhase > 2 ? null : (
           <Center py="1em">
             <Stack>
@@ -163,8 +163,8 @@ export default function GameBoard({
         <ConnectionLines />
         <Grid columns={20}>{combined.map((cell) => cell)}</Grid>
       </Container>
-      <DeadPieces deadPieces={deadPieces} isEnglish={isEnglish} />
-    </>
+      <DeadPieces deadPieces={deadPieces} affiliation={affiliation} isEnglish={isEnglish} />
+    </Flex>
   );
 }
 

@@ -210,11 +210,14 @@ export const GameProvider = ({ children }) => {
       setWinner(winnerIndex);
       setGameResults(gameStats);
       setMyBoard(finalGame.board);
+      setMyDeadPieces(finalGame.deadPieces);
     });
 
     /** Server is returning an error message to the client */
     socket.on('error', (errMsg) => {
-      pushErrors(errMsg);
+      if (!errors.includes(errMsg)) {
+        pushErrors(errMsg);
+      }
     });
 
     return () => {

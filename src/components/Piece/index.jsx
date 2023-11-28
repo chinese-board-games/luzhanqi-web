@@ -27,7 +27,7 @@ export default function Piece({ name, affiliation, isEnglish }) {
         },
       })}
     >
-      <Text sx={{ fontFamily: 'SentyWEN2017' }} color={affiliation === 0 ? 'indigo.7' : 'red.7'}>
+      <Text sx={{ fontFamily: 'SentyWEN2017' }} color={affiliation === 0 ? '#047495' : '#900000'}>
         {isEnglish ? piece.english : piece.display}
       </Text>
     </Center>

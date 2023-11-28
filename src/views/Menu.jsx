@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { GameContext } from 'contexts/GameContext';
 import { Link } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
 import { Button, Container, TextInput } from '@mantine/core';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { useForm } from '@mantine/form';
@@ -15,20 +14,10 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     spectatorName: { spectatorName },
     roomId: { setRoomId },
     host: { setHost },
-    errors: { errors, setErrors },
+    errors: { setErrors },
   } = useContext(GameContext);
 
   const user = useFirebaseAuth();
-
-  /** Clear errors after 1 second each */
-  useEffect(() => {
-    errors.forEach((error) => {
-      toast.error(error, {
-        toastId: `${Date.now()}`,
-      });
-    });
-    setErrors([]);
-  }, [JSON.stringify(errors), toast.error]);
 
   useEffect(() => {
     if (urlRoomId) {
@@ -232,7 +221,6 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
           </Container>
         </Container>
       </Container>
-      <ToastContainer />
     </>
   );
 }

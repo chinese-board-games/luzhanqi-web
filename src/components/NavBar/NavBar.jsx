@@ -51,6 +51,9 @@ const NavBar = () => {
   };
 
   const resetToLanding = () => {
+    if (!roomId) {
+      return;
+    }
     if (gamePhase == 2) {
       setShowWarnModal(true);
       return;
@@ -136,7 +139,7 @@ const NavBar = () => {
             </ActionIcon>
 
             <Button
-              size="compact-md"
+              size="compact-lg"
               color="red"
               onClick={() => {
                 getAuth().signOut();
@@ -147,17 +150,17 @@ const NavBar = () => {
             </Button>
           </>
         ) : (
-          <Button size="compact-md" onClick={() => setShowAuthModal(true)}>
+          <Button size="compact-lg" onClick={() => setShowAuthModal(true)}>
             Sign In/Sign Up
           </Button>
         )}
         <Button
-          size="compact-sm"
+          size="compact-lg"
           color="green"
-          style={{ width: '3em' }}
+          style={{ width: '3.7em' }}
           onClick={() => setIsEnglish(!isEnglish)}
         >
-          {isEnglish ? '中文' : 'en'}
+          {isEnglish ? '中文' : 'ENG'}
         </Button>
       </Flex>
 

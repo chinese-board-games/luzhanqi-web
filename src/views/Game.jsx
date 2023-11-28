@@ -1,7 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router';
 import { GameContext } from 'contexts/GameContext';
-import { ToastContainer, toast } from 'react-toastify';
 
 import Lobby from 'components/Lobby';
 import Menu from './Menu';
@@ -23,23 +22,13 @@ const Game = () => {
     gamePhase: { gamePhase },
     host: { host },
     clientTurn: { clientTurn },
-    errors: { errors, setErrors },
+    errors: { setErrors },
     myBoard: { myBoard },
     myDeadPieces: { myDeadPieces },
     isEnglish: { isEnglish },
   } = useContext(GameContext);
 
   const affiliation = playerList.indexOf(playerName);
-
-  /** Clear errors after 1 second each */
-  useEffect(() => {
-    errors.forEach((error) => {
-      toast.error(error, {
-        toastId: `${Date.now()}`,
-      });
-    });
-    setErrors([]);
-  }, [JSON.stringify(errors), toast.error]);
 
   const rotateMove = ([row, col]) => {
     return [11 - row, 4 - col];
@@ -109,7 +98,7 @@ const Game = () => {
                     </Center>
                   ))}
                 </Flex>
-                <Title order={2}>Spectators:</Title>
+                {spectatorList.length ? <Title order={2}>Spectators:</Title> : null}
                 <Flex wrap="wrap">
                   {spectatorList.map((name) => (
                     <Center
@@ -177,7 +166,6 @@ const Game = () => {
           ) : null
         }
       </Container>
-      <ToastContainer />
     </>
   );
 };
