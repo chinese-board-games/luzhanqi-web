@@ -14,6 +14,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     spectatorName: { spectatorName },
     roomId: { setRoomId },
     host: { setHost },
+    developmentMode: { developmentMode, setDevelopmentMode },
     errors: { setErrors },
   } = useContext(GameContext);
 
@@ -208,17 +209,23 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
           {joinedRoom ? null : <CreateForm />}
           <JoinForm urlRoomId={urlRoomId} />
           <SpectateForm urlRoomId={urlRoomId} />
-          <Container style={cardStyle}>
-            <Title order={3}>For developers</Title>
-            <Container style={cardContentStyle}>
-              <Link to="/setup-test" style={linkStyle}>
-                <Button>Test Setup</Button>
-              </Link>
-              <Link to="/gameboard-test" style={linkStyle}>
-                <Button>Test New Board</Button>
-              </Link>
+          <Button
+            style={{ background: 'transparent' }}
+            onClick={() => setDevelopmentMode(!developmentMode)}
+          ></Button>
+          {developmentMode ? (
+            <Container style={cardStyle}>
+              <Title order={3}>For developers</Title>
+              <Container style={cardContentStyle}>
+                <Link to="/setup-test" style={linkStyle}>
+                  <Button>Test Setup</Button>
+                </Link>
+                <Link to="/gameboard-test" style={linkStyle}>
+                  <Button>Test New Board</Button>
+                </Link>
+              </Container>
             </Container>
-          </Container>
+          ) : null}
         </Container>
       </Container>
     </>

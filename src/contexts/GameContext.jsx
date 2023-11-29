@@ -44,6 +44,7 @@ export const GameProvider = ({ children }) => {
   });
   const [successors, setSuccessors] = useState([]);
   const [isEnglish, setIsEnglish] = useState(false);
+  const [developmentMode, setDevelopmentMode] = useState(false);
 
   /**
    * Game phases:
@@ -93,6 +94,7 @@ export const GameProvider = ({ children }) => {
     winner: { winner, setWinner },
     gameResults: { gameResults, setGameResults },
     isEnglish: { isEnglish, setIsEnglish },
+    developmentMode: { developmentMode, setDevelopmentMode },
     errors: { errors, setErrors },
   };
 
