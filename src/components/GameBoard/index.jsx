@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Grid, Container, Center, Stack, Button, Group, Flex } from '@mantine/core';
 import { emptyBoard } from 'utils/core';
+import WarnModal from 'components/WarnModal';
 import SelectablePosition from '../SelectablePosition';
 import { isEqual } from 'lodash';
 import FrontLines from './FrontLines';
@@ -26,6 +27,8 @@ export default function GameBoard({
 }) {
   const [origin, setOrigin] = useState(NO_SELECT);
   const [destination, setDestination] = useState(NO_SELECT);
+
+  const [showWarnModal, setShowWarnModal] = useState(false);
 
   const originSelected = !isEqual(origin, NO_SELECT);
   const destinationSelected = !isEqual(destination, NO_SELECT);
@@ -152,7 +155,7 @@ export default function GameBoard({
                 >
                   Reset move
                 </Button>
-                <Button variant="filled" color="red" onClick={forfeit}>
+                <Button variant="filled" color="red" onClick={() => setShowWarnModal(true)}>
                   Forfeit
                 </Button>
               </Group>
@@ -164,6 +167,7 @@ export default function GameBoard({
         <Grid columns={20}>{combined.map((cell) => cell)}</Grid>
       </Container>
       <DeadPieces deadPieces={deadPieces} affiliation={affiliation} isEnglish={isEnglish} />
+      <WarnModal showModal={showWarnModal} setShowModal={setShowWarnModal} forfeit={forfeit} />
     </Flex>
   );
 }

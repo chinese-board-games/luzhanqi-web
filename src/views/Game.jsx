@@ -52,9 +52,8 @@ const Game = () => {
     }
   };
 
-  const playerForfeit = (e) => {
+  const playerForfeit = () => {
     console.info('Game forfeitted!');
-    e.preventDefault();
     socket.emit('playerForfeit', {
       playerName,
       uid,

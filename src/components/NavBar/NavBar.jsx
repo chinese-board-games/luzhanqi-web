@@ -4,6 +4,7 @@ import { Button, ActionIcon, Flex, Title } from '@mantine/core';
 import { IconUserSquareRounded } from '@tabler/icons-react';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useBeforeunload } from 'react-beforeunload';
 
 import { GameContext } from 'contexts/GameContext';
 import AuthModal from 'components/AuthModal';
@@ -42,6 +43,14 @@ const NavBar = () => {
     isEnglish: { isEnglish, setIsEnglish },
     errors: { setErrors },
   } = React.useContext(GameContext);
+
+  useBeforeunload((event) => {
+    if (gamePhase == 2) {
+      setShowWarnModal(true);
+      event.preventDefault();
+    }
+    return;
+  });
 
   const forfeit = () => {
     socket.emit('playerForfeit', {
