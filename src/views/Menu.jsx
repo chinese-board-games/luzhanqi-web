@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { GameContext } from 'contexts/GameContext';
 import { Link } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
 import { Button, Container, TextInput } from '@mantine/core';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { useForm } from '@mantine/form';
@@ -15,20 +14,11 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     spectatorName: { spectatorName },
     roomId: { setRoomId },
     host: { setHost },
-    errors: { errors, setErrors },
+    developmentMode: { developmentMode, setDevelopmentMode },
+    errors: { setErrors },
   } = useContext(GameContext);
 
   const user = useFirebaseAuth();
-
-  /** Clear errors after 1 second each */
-  useEffect(() => {
-    errors.forEach((error) => {
-      toast.error(error, {
-        toastId: `${Date.now()}`,
-      });
-    });
-    setErrors([]);
-  }, [JSON.stringify(errors), toast.error]);
 
   useEffect(() => {
     if (urlRoomId) {
@@ -219,20 +209,25 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
           {joinedRoom ? null : <CreateForm />}
           <JoinForm urlRoomId={urlRoomId} />
           <SpectateForm urlRoomId={urlRoomId} />
-          <Container style={cardStyle}>
-            <Title order={3}>For developers</Title>
-            <Container style={cardContentStyle}>
-              <Link to="/setup-test" style={linkStyle}>
-                <Button>Test Setup</Button>
-              </Link>
-              <Link to="/gameboard-test" style={linkStyle}>
-                <Button>Test New Board</Button>
-              </Link>
+          <Button
+            style={{ background: 'transparent' }}
+            onClick={() => setDevelopmentMode(!developmentMode)}
+          ></Button>
+          {developmentMode ? (
+            <Container style={cardStyle}>
+              <Title order={3}>For developers</Title>
+              <Container style={cardContentStyle}>
+                <Link to="/setup-test" style={linkStyle}>
+                  <Button>Test Setup</Button>
+                </Link>
+                <Link to="/gameboard-test" style={linkStyle}>
+                  <Button>Test New Board</Button>
+                </Link>
+              </Container>
             </Container>
-          </Container>
+          ) : null}
         </Container>
       </Container>
-      <ToastContainer />
     </>
   );
 }

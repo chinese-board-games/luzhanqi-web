@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
 import { Center, Stack, Text } from '@mantine/core';
 
-export default function FrontLines() {
+export default function FrontLines({ isEnglish }) {
   return (
     <Center
       sx={(theme) => ({
@@ -20,9 +21,15 @@ export default function FrontLines() {
       h="4em"
     >
       <Stack sx={{ gap: '0' }}>
-        <Text sx={{ rotate: '180deg', fontFamily: 'SentyWEN2017' }}>前綫</Text>
-        <Text sx={{ fontFamily: 'SentyWEN2017' }}>前綫</Text>
+        <Text sx={{ rotate: '180deg', fontFamily: 'SentyWEN2017' }}>
+          {isEnglish ? 'FRONT' : '前綫'}
+        </Text>
+        <Text sx={{ fontFamily: 'SentyWEN2017' }}>{isEnglish ? 'FRONT' : '前綫'}</Text>
       </Stack>
     </Center>
   );
 }
+
+FrontLines.propTypes = {
+  isEnglish: PropTypes.bool.isRequired,
+};

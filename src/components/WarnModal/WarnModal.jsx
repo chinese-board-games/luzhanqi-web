@@ -32,7 +32,7 @@ const WarnModal = ({ showModal, setShowModal, forfeit }) => (
       </Button>
     </Flex>
     <Title order={2}>Are you sure?</Title>
-    <Text>To leave a game in-progress is to forfeit the game.</Text>
+    <Text>You will forfeit the game.</Text>
     <br />
     <Flex style={{ gap: '0.25em', justifyContent: 'flex-end' }}>
       <Button
@@ -45,7 +45,7 @@ const WarnModal = ({ showModal, setShowModal, forfeit }) => (
         Forfeit
       </Button>
       <Button color="green" onClick={() => setShowModal(false)}>
-        Return to game
+        Keep playing
       </Button>
     </Flex>
   </Modal>

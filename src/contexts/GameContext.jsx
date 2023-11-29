@@ -44,6 +44,7 @@ export const GameProvider = ({ children }) => {
   });
   const [successors, setSuccessors] = useState([]);
   const [isEnglish, setIsEnglish] = useState(false);
+  const [developmentMode, setDevelopmentMode] = useState(false);
 
   /**
    * Game phases:
@@ -93,6 +94,7 @@ export const GameProvider = ({ children }) => {
     winner: { winner, setWinner },
     gameResults: { gameResults, setGameResults },
     isEnglish: { isEnglish, setIsEnglish },
+    developmentMode: { developmentMode, setDevelopmentMode },
     errors: { errors, setErrors },
   };
 
@@ -210,11 +212,14 @@ export const GameProvider = ({ children }) => {
       setWinner(winnerIndex);
       setGameResults(gameStats);
       setMyBoard(finalGame.board);
+      setMyDeadPieces(finalGame.deadPieces);
     });
 
     /** Server is returning an error message to the client */
     socket.on('error', (errMsg) => {
-      pushErrors(errMsg);
+      if (!errors.includes(errMsg)) {
+        pushErrors(errMsg);
+      }
     });
 
     return () => {

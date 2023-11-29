@@ -1,8 +1,7 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Button, Checkbox, Container, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { GameContext } from 'contexts/GameContext';
-import { ToastContainer, toast } from 'react-toastify';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 
 const Lobby = () => {
@@ -15,7 +14,7 @@ const Lobby = () => {
     spectatorList: { spectatorList },
     host: { host },
     joinedGame: { joinedGame },
-    errors: { errors, setErrors },
+    errors: { setErrors },
   } = useContext(GameContext);
 
   const user = useFirebaseAuth();
@@ -24,16 +23,6 @@ const Lobby = () => {
       fogOfWar: true,
     },
   });
-
-  /** Clear errors after 1 second each */
-  useEffect(() => {
-    errors.forEach((error) => {
-      toast.error(error, {
-        toastId: `${Date.now()}`,
-      });
-    });
-    setErrors([]);
-  }, [JSON.stringify(errors), toast.error]);
 
   /** Tell server to begin game */
   const roomFull = (gameConfig) => {
@@ -114,8 +103,6 @@ const Lobby = () => {
           </>
         ) : null
       }
-
-      <ToastContainer />
     </Container>
   );
 };
