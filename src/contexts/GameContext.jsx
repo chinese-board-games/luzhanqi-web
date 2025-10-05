@@ -129,9 +129,10 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling all clients someone has joined the room */
-    socket.on('playerJoinedRoom', ({ playerName: returnedPlayerName, players }) => {
+    socket.on('playerJoinedRoom', ({ playerName: returnedPlayerName, players, spectators }) => {
       console.info(`${returnedPlayerName} has joined the room!`);
       setPlayerList(players);
+      if (Array.isArray(spectators)) setSpectatorList(spectators);
     });
 
     /** Server is telling this socket that it has joined a room */
@@ -142,6 +143,7 @@ export const GameProvider = ({ children }) => {
       window.sessionStorage.setItem('playerName', playerName);
       window.sessionStorage.setItem('roomId', roomId);
       window.sessionStorage.setItem('playerList', data.players);
+      if (Array.isArray(data.spectators)) setSpectatorList(data.spectators);
     });
 
     socket.on('playerLeftRoom', ({ playerName: returnedPlayerName, players }) => {
