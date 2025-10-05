@@ -8,6 +8,8 @@ const GameOver = () => {
     winner: { winner },
     playerName: { playerName },
     playerList: { playerList },
+    spectatorName: { spectatorName },
+    spectatorList: { spectatorList },
     gameResults: {
       gameResults: { remain },
     },
@@ -15,6 +17,9 @@ const GameOver = () => {
   } = gameState;
 
   const playerIndex = playerList.indexOf(playerName);
+  const isSpectator = spectatorList.includes(spectatorName);
+  const hostName = playerList[0] || 'Host';
+  const guestName = playerList[1] || 'Guest';
 
   const getCleanName = (name) => {
     return name
@@ -26,8 +31,14 @@ const GameOver = () => {
   return (
     <Container style={{ backgroundColor: 'white', borderRadius: '0.5em', padding: '1em' }}>
       <h1>Game Over</h1>
-      {winner === playerIndex ? <h2>You win!</h2> : <h2>You lost</h2>}
-      <h4>Your pieces</h4>
+      {isSpectator ? (
+        <h2>Winner: {winner === 0 ? hostName : guestName}</h2>
+      ) : winner === playerIndex ? (
+        <h2>You win!</h2>
+      ) : (
+        <h2>You lost</h2>
+      )}
+      <h4>{isSpectator ? `${hostName} (Host)` : host ? 'Your pieces' : `${hostName} (Host)`}</h4>
       <Table striped highlightOnHover withBorder withColumnBorders>
         <thead>
           <tr>
@@ -36,7 +47,7 @@ const GameOver = () => {
           </tr>
         </thead>
         <tbody>
-          {remain[host ? 0 : 1]
+          {remain[0]
             .sort((a, b) => b.order - a.order)
             .filter((c) => c.name != 'enemy')
             .map(({ name, count }) => {
@@ -50,7 +61,9 @@ const GameOver = () => {
         </tbody>
       </Table>
       <br />
-      <h4>Opponent&apos;s pieces</h4>
+      <h4>
+        {isSpectator ? `${guestName} (Guest)` : host ? `${guestName} (Guest)` : 'Your pieces'}
+      </h4>
       <Table striped highlightOnHover withBorder withColumnBorders>
         <thead>
           <tr>
@@ -59,7 +72,7 @@ const GameOver = () => {
           </tr>
         </thead>
         <tbody>
-          {remain[host ? 1 : 0]
+          {remain[1]
             .sort((a, b) => b.order - a.order)
             .filter((c) => c.name != 'enemy')
             .map((obj) => {
