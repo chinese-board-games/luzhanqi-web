@@ -11,6 +11,8 @@ const Lobby = () => {
     roomId: { roomId },
     playerName: { playerName },
     playerList: { playerList },
+    spectatorName: { spectatorName },
+    spectatorList: { spectatorList },
     host: { host },
     joinedGame: { joinedGame },
     errors: { errors, setErrors },
@@ -51,6 +53,22 @@ const Lobby = () => {
     });
   };
 
+  const spectatorLeaveRoom = () => {
+    socket.emit('spectatorLeaveRoom', {
+      spectatorName,
+      uid: user?.uid || null,
+      leaveRoomId: roomId,
+    });
+  };
+
+  const memberLeaveRoom = () => {
+    if (spectatorList.includes(spectatorName)) {
+      spectatorLeaveRoom();
+    } else {
+      playerLeaveRoom();
+    }
+  };
+
   return (
     <Container style={{ backgroundColor: '#d0edf5' }}>
       {
@@ -59,7 +77,7 @@ const Lobby = () => {
           <>
             <Title order={3}>請等主持人</Title>
             <Title order={3}>Waiting for the host</Title>
-            <Button variant="outline" color="red" onClick={playerLeaveRoom}>
+            <Button variant="outline" color="red" onClick={memberLeaveRoom}>
               Leave Room
             </Button>
           </>

@@ -6,6 +6,7 @@ import { isEqual } from 'lodash';
 import FrontLines from './FrontLines';
 import Mountain from './Mountain';
 import ConnectionLines from './ConnectionLines';
+import DeadPieces from './DeadPieces';
 import PropTypes from 'prop-types';
 import { getSuccessors } from 'utils';
 
@@ -15,10 +16,13 @@ export default function GameBoard({
   host,
   isTurn,
   board = emptyBoard(),
+  deadPieces = [],
   sendMove,
   forfeit,
   affiliation,
   isEnglish = false,
+  isSpectator = false,
+  gamePhase = 2,
 }) {
   const [origin, setOrigin] = useState(NO_SELECT);
   const [destination, setDestination] = useState(NO_SELECT);
@@ -122,39 +126,45 @@ export default function GameBoard({
   ];
 
   return (
-    <Container bg="rgb(224, 224, 224)" sx={{ borderRadius: '1em' }} p="1em 2em" maw="40em">
-      <Center py="1em">
-        <Stack>
-          <Group align="center" direction="horizontal">
-            <Button
-              disabled={!isTurn || !(originSelected && destinationSelected)}
-              onClick={() => {
-                sendMove(origin, destination, host);
-                setOrigin(NO_SELECT);
-                setDestination(NO_SELECT);
-              }}
-            >
-              {isTurn ? 'Send move' : 'Opponent turn'}
-            </Button>
-            <Button
-              variant="outline"
-              color="red"
-              onClick={() => {
-                setOrigin(NO_SELECT);
-                setDestination(NO_SELECT);
-              }}
-            >
-              Reset move
-            </Button>
-            <Button variant="filled" color="red" onClick={forfeit}>
-              Forfeit
-            </Button>
-          </Group>
-        </Stack>
-      </Center>
-      <ConnectionLines />
-      <Grid columns={20}>{combined.map((cell) => cell)}</Grid>
-    </Container>
+    <>
+      <Container bg="rgb(224, 224, 224)" sx={{ borderRadius: '1em' }} p="1em 2em" maw="40em">
+        {isSpectator || gamePhase > 2 ? null : (
+          <Center py="1em">
+            <Stack>
+              <Group align="center" direction="horizontal">
+                <Button
+                  disabled={!isTurn || !(originSelected && destinationSelected)}
+                  onClick={() => {
+                    sendMove(origin, destination, host);
+                    setOrigin(NO_SELECT);
+                    setDestination(NO_SELECT);
+                  }}
+                >
+                  {isTurn ? 'Send move' : 'Opponent turn'}
+                </Button>
+                <Button
+                  variant="outline"
+                  color="red"
+                  onClick={() => {
+                    setOrigin(NO_SELECT);
+                    setDestination(NO_SELECT);
+                  }}
+                >
+                  Reset move
+                </Button>
+                <Button variant="filled" color="red" onClick={forfeit}>
+                  Forfeit
+                </Button>
+              </Group>
+            </Stack>
+          </Center>
+        )}
+
+        <ConnectionLines />
+        <Grid columns={20}>{combined.map((cell) => cell)}</Grid>
+      </Container>
+      <DeadPieces deadPieces={deadPieces} isEnglish={isEnglish} />
+    </>
   );
 }
 
@@ -162,10 +172,13 @@ GameBoard.propTypes = {
   host: PropTypes.bool,
   isTurn: PropTypes.bool,
   board: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
+  deadPieces: PropTypes.arrayOf(PropTypes.object),
   sendMove: PropTypes.func,
   forfeit: PropTypes.func,
   player: PropTypes.string,
   opponent: PropTypes.string,
   affiliation: PropTypes.number,
   isEnglish: PropTypes.bool,
+  isSpectator: PropTypes.bool,
+  gamePhase: PropTypes.number,
 };

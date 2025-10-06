@@ -19,6 +19,7 @@ export const GameProvider = ({ children }) => {
     length: 2,
   });
   const [playerName, setPlayerName] = useState(defaultName);
+  const [spectatorName, setSpectatorName] = useState(defaultName);
   /** game ID assigned to host, or user-input: game Id entered by player */
   const [roomId, setRoomId] = useState('');
   const [storedPlayerName, setStoredPlayerName] = useState(null);
@@ -30,8 +31,11 @@ export const GameProvider = ({ children }) => {
 
   const [clientTurn, setClientTurn] = useState(-1);
   const [playerList, setPlayerList] = useState([]);
+
+  const [spectatorList, setSpectatorList] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [myBoard, setMyBoard] = useState(Array(12).fill(Array(5).fill(null)));
+  const [myDeadPieces, setMyDeadPieces] = useState([]);
   const [myPositions, setMyPositions] = useState(Array(6).fill(Array(5).fill(null)));
   const [submittedSide, setSubmittedSide] = useState(false);
   const [pendingMove, setPendingMove] = useState({
@@ -68,6 +72,7 @@ export const GameProvider = ({ children }) => {
   const gameState = {
     socket,
     playerName: { playerName, setPlayerName },
+    spectatorName: { spectatorName, setSpectatorName },
     roomId: { roomId, setRoomId },
     storedPlayerName: { storedPlayerName, setStoredPlayerName },
     storedRoomId: { storedRoomId, setStoredRoomId },
@@ -76,7 +81,9 @@ export const GameProvider = ({ children }) => {
     joinedGame: { joinedGame, setJoinedGame },
     clientTurn: { clientTurn, setClientTurn },
     playerList: { playerList, setPlayerList },
+    spectatorList: { spectatorList, setSpectatorList },
     myBoard: { myBoard, setMyBoard },
+    myDeadPieces: { myDeadPieces, setMyDeadPieces },
     myPositions: { myPositions, setMyPositions },
     submittedSide: { submittedSide, setSubmittedSide },
     pendingMove: { pendingMove, setPendingMove },
@@ -122,9 +129,10 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling all clients someone has joined the room */
-    socket.on('playerJoinedRoom', ({ playerName: returnedPlayerName, players }) => {
+    socket.on('playerJoinedRoom', ({ playerName: returnedPlayerName, players, spectators }) => {
       console.info(`${returnedPlayerName} has joined the room!`);
       setPlayerList(players);
+      if (Array.isArray(spectators)) setSpectatorList(spectators);
     });
 
     /** Server is telling this socket that it has joined a room */
@@ -135,6 +143,7 @@ export const GameProvider = ({ children }) => {
       window.sessionStorage.setItem('playerName', playerName);
       window.sessionStorage.setItem('roomId', roomId);
       window.sessionStorage.setItem('playerList', data.players);
+      if (Array.isArray(data.spectators)) setSpectatorList(data.spectators);
     });
 
     socket.on('playerLeftRoom', ({ playerName: returnedPlayerName, players }) => {
@@ -145,6 +154,11 @@ export const GameProvider = ({ children }) => {
       setSubmittedSide(false);
     });
 
+    socket.on('spectatorLeftRoom', ({ spectatorName: returnedSpectatorName, spectators }) => {
+      console.info(`${returnedSpectatorName} has left the room!`);
+      setSpectatorList(spectators);
+    });
+
     /** Server is telling this socket that it has left a room */
     socket.on('youHaveLeftTheRoom', () => {
       setJoinedGame(false);
@@ -153,6 +167,22 @@ export const GameProvider = ({ children }) => {
       window.sessionStorage.removeItem('playerName');
       window.sessionStorage.removeItem('roomId');
       window.sessionStorage.removeItem('playerList');
+    });
+
+    /** Server is telling all clients someone is spectating the room */
+    socket.on(
+      'spectatorJoinedRoom',
+      ({ spectatorName: returnedSpectatorName, spectators, players }) => {
+        console.info(`${returnedSpectatorName} has joined the room!`);
+        setPlayerList(players);
+        setSpectatorList(spectators);
+      }
+    );
+
+    /** Server is telling this socket that it has joined a room */
+    socket.on('youAreSpectatingTheRoom', () => {
+      setJoinedGame(true);
+      navigate(`/game/${roomId}`);
     });
 
     /** Server is sending the starting board with all placed pieces */
@@ -170,16 +200,18 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling all clients a move has been made */
-    socket.on('playerMadeMove', (data) => {
-      setClientTurn(data.turn);
-      setMyBoard(data.board);
+    socket.on('playerMadeMove', ({ turn, board, deadPieces }) => {
+      setClientTurn(turn);
+      setMyBoard(board);
+      setMyDeadPieces(deadPieces);
     });
 
     /** Server is telling all clients the game has ended */
-    socket.on('endGame', ({ winnerIndex, gameStats }) => {
+    socket.on('endGame', ({ winnerIndex, gameStats, finalGame }) => {
       setGamePhase(3);
       setWinner(winnerIndex);
       setGameResults(gameStats);
+      setMyBoard(finalGame.board);
     });
 
     /** Server is returning an error message to the client */
