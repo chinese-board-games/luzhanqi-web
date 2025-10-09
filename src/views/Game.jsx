@@ -8,6 +8,7 @@ import Menu from './Menu';
 import BoardSetup from 'components/BoardSetup';
 import GameOver from 'components/GameOver';
 import GameBoard from 'components/GameBoard';
+import HelpButton from 'components/HelpButton';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { Container, Flex, Center, Button, CopyButton, Title } from '@mantine/core';
 
@@ -177,6 +178,7 @@ const Game = () => {
           ) : null
         }
       </Container>
+      <HelpButton gamePhase={gamePhase} isEnglish={isEnglish} />
       <ToastContainer />
     </>
   );

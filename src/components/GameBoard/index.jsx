@@ -102,6 +102,7 @@ export default function GameBoard({
           }}
           isEnglish={isEnglish}
           disabled={positionDisabled(r, c)}
+          gamePhase={gamePhase}
         />
       </Grid.Col>
     ))

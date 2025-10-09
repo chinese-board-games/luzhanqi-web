@@ -1,4 +1,5 @@
 import Position from './Position';
+import GameTooltip from 'components/GameTooltip';
 import { Box } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import PropTypes from 'prop-types';
@@ -42,6 +43,7 @@ export default function SelectablePosition({
   movable = false,
   isEnglish,
   disabled = false,
+  gamePhase = 2,
 }) {
   const { hovered, ref } = useHover();
   const shadeColor = getShadeColor(
@@ -52,7 +54,7 @@ export default function SelectablePosition({
     movable
   );
 
-  return (
+  const positionContent = (
     <Box
       sx={{
         cursor: disabled ? 'not-allowed' : 'pointer',
@@ -71,6 +73,23 @@ export default function SelectablePosition({
       />
     </Box>
   );
+
+  // Only show tooltip for pieces, not empty spaces
+  if (piece && piece.name) {
+    return (
+      <GameTooltip
+        pieceName={piece.name}
+        gamePhase={gamePhase}
+        isEnglish={isEnglish}
+        placement="top"
+        disabled={disabled}
+      >
+        {positionContent}
+      </GameTooltip>
+    );
+  }
+
+  return positionContent;
 }
 
 SelectablePosition.propTypes = {
@@ -84,4 +103,5 @@ SelectablePosition.propTypes = {
   movable: PropTypes.bool.isRequired,
   isEnglish: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
+  gamePhase: PropTypes.number,
 };

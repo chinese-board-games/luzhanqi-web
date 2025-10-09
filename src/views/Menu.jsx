@@ -7,6 +7,7 @@ import { Button, Container, TextInput } from '@mantine/core';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { useForm } from '@mantine/form';
 import { Title } from '@mantine/core';
+import HelpButton from '../components/HelpButton';
 
 function Menu({ joinedRoom = false, urlRoomId = '' }) {
   const {
@@ -16,6 +17,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     roomId: { setRoomId },
     host: { setHost },
     errors: { errors, setErrors },
+    isEnglish: { isEnglish },
   } = useContext(GameContext);
 
   const user = useFirebaseAuth();
@@ -232,6 +234,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
           </Container>
         </Container>
       </Container>
+      <HelpButton gamePhase={0} isEnglish={isEnglish} />
       <ToastContainer />
     </>
   );

@@ -6,7 +6,8 @@
       "components/*": ["./src/components/*"],
       "api/*": ["./src/api/*"],
       "hooks/*": ["./src/hooks/*"],
-      "utils/*": ["./src/utils/*"]
+      "utils/*": ["./src/utils/*"],
+      "data/*": ["./src/data/*"]
     }
   },
   "exclude": ["node_modules"]
