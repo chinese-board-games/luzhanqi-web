@@ -10,7 +10,7 @@ import GameOver from 'components/GameOver';
 import GameBoard from 'components/GameBoard';
 import HelpButton from 'components/HelpButton';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
-import { Container, Flex, Center, Button, CopyButton, Title } from '@mantine/core';
+import { Container, Flex, Center, Button, CopyButton, Title, Loader } from '@mantine/core';
 
 const Game = () => {
   let { roomId } = useParams();
@@ -28,9 +28,22 @@ const Game = () => {
     myBoard: { myBoard },
     myDeadPieces: { myDeadPieces },
     isEnglish: { isEnglish },
+    joinedGame: { joinedGame },
+    rejoining: { rejoining },
+    disconnectedPlayer: { disconnectedPlayer },
+    attemptRejoin,
   } = useContext(GameContext);
 
   const affiliation = playerList.indexOf(playerName);
+
+  /** On mount (or a hard reload), silently try to reclaim a seat using a
+   * locally-stored session before falling back to the normal join form. */
+  useEffect(() => {
+    if (roomId && !joinedGame && playerList.length === 0) {
+      attemptRejoin(roomId);
+    }
+    // only re-run when the room in the URL changes, not on every state update
+  }, [roomId]);
 
   /** Clear errors after 1 second each */
   useEffect(() => {
@@ -143,7 +156,21 @@ const Game = () => {
           </Container>
         ) : null}
 
-        {playerList.length ? null : <Menu joinedRoom={true} urlRoomId={roomId} />}
+        {disconnectedPlayer ? (
+          <Center>
+            <Title order={4}>
+              {disconnectedPlayer} disconnected — waiting for them to reconnect…
+            </Title>
+          </Center>
+        ) : null}
+
+        {playerList.length ? null : rejoining ? (
+          <Center style={{ padding: '2em' }}>
+            <Loader />
+          </Center>
+        ) : (
+          <Menu joinedRoom={true} urlRoomId={roomId} />
+        )}
         <br />
         {
           /** Players join the game */
