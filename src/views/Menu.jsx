@@ -283,7 +283,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
           />
           <TextInput
             label="Join game:"
-            placeholder="Ex. 6543eb06e81d62019d596562"
+            placeholder="Ex. 7K4X2P"
             {...joinForm.getInputProps('roomId')}
             disabled={!!urlRoomId}
           />
@@ -319,7 +319,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
           />
           <TextInput
             label="Spectate game:"
-            placeholder="Ex. 6543eb06e81d62019d596562"
+            placeholder="Ex. 7K4X2P"
             {...spectateForm.getInputProps('roomId')}
             disabled={!!urlRoomId}
           />
