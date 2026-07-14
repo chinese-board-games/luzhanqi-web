@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Grid, Container, Center, Stack, Button, Group } from '@mantine/core';
+import { Grid, Container, Center, Stack, Button, Group, Flex } from '@mantine/core';
 import { emptyBoard } from 'utils/core';
 import SelectablePosition from '../SelectablePosition';
+import PieceInfoPanel from '../PieceInfoPanel';
 import { isEqual } from 'lodash';
 import FrontLines from './FrontLines';
 import Mountain from './Mountain';
@@ -9,8 +10,13 @@ import ConnectionLines from './ConnectionLines';
 import DeadPieces from './DeadPieces';
 import PropTypes from 'prop-types';
 import { getSuccessors } from 'utils';
+import useWindowSize from 'hooks/useWindowSize';
 
 const NO_SELECT = [-1, -1];
+// the info panel needs real estate beside the board - below this width
+// there's no room for it, and it's a hover-driven feature that doesn't
+// translate to touch devices anyway
+const DESKTOP_PANEL_BREAKPOINT = 900;
 
 export default function GameBoard({
   host,
@@ -27,10 +33,16 @@ export default function GameBoard({
 }) {
   const [origin, setOrigin] = useState(NO_SELECT);
   const [destination, setDestination] = useState(NO_SELECT);
+  const [hoveredPiece, setHoveredPiece] = useState(null);
+  const [width] = useWindowSize();
+  const showInfoPanel = width >= DESKTOP_PANEL_BREAKPOINT;
 
   const originSelected = !isEqual(origin, NO_SELECT);
   const destinationSelected = !isEqual(destination, NO_SELECT);
   const nothingSelected = !originSelected && !destinationSelected;
+
+  const originPiece = originSelected ? board[origin[0]][origin[1]] : null;
+  const destinationPiece = destinationSelected ? board[destination[0]][destination[1]] : null;
 
   const moves = originSelected ? getSuccessors(board, origin[0], origin[1], affiliation) : [];
   const availibleMoves = new Set(moves.map((move) => JSON.stringify(move)));
@@ -106,7 +118,7 @@ export default function GameBoard({
           }}
           isEnglish={isEnglish}
           disabled={positionDisabled(r, c)}
-          gamePhase={gamePhase}
+          onHoverPiece={setHoveredPiece}
         />
       </Grid.Col>
     ))
@@ -132,58 +144,67 @@ export default function GameBoard({
 
   return (
     <>
-      <Container
-        bg="rgb(224, 224, 224)"
-        maw="40em"
-        sx={{
-          borderRadius: '1em',
-          padding: '1em 2em',
-          overflowX: 'auto',
-          '@media (max-width: 450px)': {
-            padding: '1em 0.5em',
-          },
-          '@media (max-width: 375px)': {
-            padding: '0.75em 0.25em',
-          },
-        }}
-      >
-        {isSpectator || gamePhase > 2 ? null : (
-          <Center py="1em">
-            <Stack>
-              <Group align="center" direction="horizontal">
-                <Button
-                  disabled={!isTurn || !(originSelected && destinationSelected)}
-                  onClick={() => {
-                    sendMove(origin, destination, host);
-                    setOrigin(NO_SELECT);
-                    setDestination(NO_SELECT);
-                  }}
-                >
-                  {isTurn ? 'Send move' : 'Opponent turn'}
-                </Button>
-                <Button
-                  variant="outline"
-                  color="red"
-                  onClick={() => {
-                    setOrigin(NO_SELECT);
-                    setDestination(NO_SELECT);
-                  }}
-                >
-                  Reset move
-                </Button>
-                <Button variant="filled" color="red" onClick={forfeit}>
-                  Forfeit
-                </Button>
-              </Group>
-            </Stack>
-          </Center>
-        )}
+      <Flex gap="1em" justify="center" wrap="wrap" align="flex-start">
+        <Container
+          bg="rgb(224, 224, 224)"
+          maw="40em"
+          sx={{
+            borderRadius: '1em',
+            padding: '1em 2em',
+            overflowX: 'auto',
+            '@media (max-width: 450px)': {
+              padding: '1em 0.5em',
+            },
+            '@media (max-width: 375px)': {
+              padding: '0.75em 0.25em',
+            },
+          }}
+        >
+          {isSpectator || gamePhase > 2 ? null : (
+            <Center py="1em">
+              <Stack>
+                <Group align="center" direction="horizontal">
+                  <Button
+                    disabled={!isTurn || !(originSelected && destinationSelected)}
+                    onClick={() => {
+                      sendMove(origin, destination, host);
+                      setOrigin(NO_SELECT);
+                      setDestination(NO_SELECT);
+                    }}
+                  >
+                    {isTurn ? 'Send move' : 'Opponent turn'}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    color="red"
+                    onClick={() => {
+                      setOrigin(NO_SELECT);
+                      setDestination(NO_SELECT);
+                    }}
+                  >
+                    Reset move
+                  </Button>
+                  <Button variant="filled" color="red" onClick={forfeit}>
+                    Forfeit
+                  </Button>
+                </Group>
+              </Stack>
+            </Center>
+          )}
 
-        <ConnectionLines />
-        <Grid columns={20} gutter={6}>
-          {combined.map((cell) => cell)}
-        </Grid>
-      </Container>
+          <ConnectionLines />
+          <Grid columns={20} gutter={6}>
+            {combined.map((cell) => cell)}
+          </Grid>
+        </Container>
+        {showInfoPanel ? (
+          <PieceInfoPanel
+            hoveredPiece={hoveredPiece}
+            originPiece={originPiece}
+            destinationPiece={destinationPiece}
+          />
+        ) : null}
+      </Flex>
       <DeadPieces deadPieces={deadPieces} isEnglish={isEnglish} />
     </>
   );
