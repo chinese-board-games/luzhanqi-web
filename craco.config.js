@@ -5,7 +5,8 @@ module.exports = {
     alias: {
       contexts: path.resolve(__dirname, 'src/contexts/'),
       components: path.resolve(__dirname, 'src/components/'),
-      api: path.resolve(__dirname, 'src/api/')
-    }
-  }
+      api: path.resolve(__dirname, 'src/api/'),
+      data: path.resolve(__dirname, 'src/data/'),
+    },
+  },
 };

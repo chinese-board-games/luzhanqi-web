@@ -44,7 +44,8 @@
         "map": [
           ["contexts", "./src/contexts"],
           ["components", "./src/components"],
-          ["api", "./src/api"]
+          ["api", "./src/api"],
+          ["data", "./src/data"]
         ]
       }
     },

@@ -1,0 +1,94 @@
+[
+    {
+      "id": "flag",
+      "icon": "IconFlag",
+      "title": "Flag",
+      "description": "The most important piece. If captured, you lose the game.",
+      "rules": ["Cannot move", "Cannot attack", "Must be protected at all costs"]
+    },
+    {
+      "id": "landmine",
+      "icon": "IconShieldHalfFilled",
+      "title": "Landmine",
+      "description": "Hidden explosive. Only Engineer can defuse safely.",
+      "rules": ["Cannot move", "Cannot attack", "Only Engineer can capture safely"]
+    },
+    {
+      "id": "bomb",
+      "icon": "IconBomb",
+      "title": "Bomb",
+      "description": "Explodes when attacked. Both pieces destroyed.",
+      "rules": ["Cannot move", "Cannot attack", "Destroys any attacker except Engineer"]
+    },
+    {
+      "id": "engineer",
+      "icon": "IconTool",
+      "title": "Engineer",
+      "description": "Can safely defuse landmines and bombs.",
+      "rules": ["Can move", "Can attack", "Only piece that can capture landmines safely"]
+    },
+    {
+      "id": "sergeant",
+      "icon": "IconUserCircle",
+      "title": "Sergeant",
+      "description": "Low-ranking NCO with basic combat abilities.",
+      "rules": ["Can move", "Can attack", "Rank 2"]
+    },
+    {
+      "id": "lieutenant",
+      "icon": "IconUser",
+      "title": "Lieutenant",
+      "description": "Junior officer commanding small units.",
+      "rules": ["Can move", "Can attack", "Rank 3"]
+    },
+    {
+      "id": "captain",
+      "icon": "IconUserShield",
+      "title": "Captain",
+      "description": "Commands a company; strong leadership.",
+      "rules": ["Can move", "Can attack", "Rank 4"]
+    },
+    {
+      "id": "major",
+      "icon": "IconChevronUp",
+      "title": "Major",
+      "description": "Mid-level field officer.",
+      "rules": ["Can move", "Can attack", "Rank 5"]
+    },
+    {
+      "id": "colonel",
+      "icon": "IconBadge",
+      "title": "Colonel",
+      "description": "Senior officer commanding regiments.",
+      "rules": ["Can move", "Can attack", "Rank 6"]
+    },
+    {
+      "id": "brigadier_general",
+      "icon": "IconStar",
+      "title": "Brigadier General",
+      "description": "Commands a brigade.",
+      "rules": ["Can move", "Can attack", "Rank 7"]
+    },
+    {
+      "id": "major_general",
+      "icon": "IconMedal",
+      "title": "Major General",
+      "description": "High-ranking general, decorated for leadership.",
+      "rules": ["Can move", "Can attack", "Rank 8"]
+    },
+    {
+      "id": "general",
+      "icon": "IconShieldStar",
+      "title": "General",
+      "description": "Senior general officer commanding corps-level forces.",
+      "rules": ["Can move", "Can attack", "Rank 9"]
+    },
+    {
+      "id": "field_marshall",
+      "icon": "IconCrown",
+      "title": "Field Marshal",
+      "description": "Supreme commander of all forces.",
+      "rules": ["Can move", "Can attack", "Highest rank (10)"]
+    }
+  ]
+  

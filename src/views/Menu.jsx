@@ -3,19 +3,21 @@ import PropTypes from 'prop-types';
 import { GameContext } from 'contexts/GameContext';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { Button, Container, TextInput } from '@mantine/core';
+import { Button, Checkbox, Container, TextInput } from '@mantine/core';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { useForm } from '@mantine/form';
 import { Title } from '@mantine/core';
+import HelpButton from '../components/HelpButton';
 
 function Menu({ joinedRoom = false, urlRoomId = '' }) {
   const {
     socket,
-    playerName: { playerName },
+    playerName: { playerName, setPlayerName },
     spectatorName: { spectatorName },
     roomId: { setRoomId },
     host: { setHost },
     errors: { errors, setErrors },
+    isEnglish: { isEnglish },
   } = useContext(GameContext);
 
   const user = useFirebaseAuth();
@@ -61,9 +63,14 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   const linkStyle = { color: 'white' };
 
   /** Tell the server to create a new game */
-  const createNewGame = (name) => {
+  const createNewGame = (name, vsAi) => {
     if (name) {
-      socket.emit('hostCreateNewGame', { playerName: name, hostId: user?.uid || null });
+      setPlayerName(name);
+      socket.emit('hostCreateNewGame', {
+        playerName: name,
+        hostId: user?.uid || null,
+        gameConfig: vsAi ? { opponentType: 'ai' } : undefined,
+      });
       setHost(true);
       // GameContext will redirect to /game when socket starts the game
     } else {
@@ -72,11 +79,12 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   };
 
   /** Attempt to join a room by game ID */
-  const playerJoinGame = (playerName, roomId) => {
-    if (playerName && roomId) {
-      console.info(`Attempting to JOIN game ${roomId} as ${playerName} with clientId ${user?.uid}`);
+  const playerJoinGame = (name, roomId) => {
+    if (name && roomId) {
+      console.info(`Attempting to JOIN game ${roomId} as ${name} with clientId ${user?.uid}`);
+      setPlayerName(name);
       socket.emit('playerJoinRoom', {
-        playerName,
+        playerName: name,
         clientId: user?.uid || null,
         joinRoomId: roomId,
       });
@@ -109,8 +117,8 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     }
   };
 
-  const handleCreateSubmit = ({ playerName }) => {
-    createNewGame(playerName);
+  const handleCreateSubmit = ({ playerName, vsAi }) => {
+    createNewGame(playerName, vsAi);
   };
 
   const handleJoinSubmit = ({ playerName, roomId }) => {
@@ -123,7 +131,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
 
   const CreateForm = () => {
     const createForm = useForm({
-      initialValues: { playerName },
+      initialValues: { playerName, vsAi: false },
     });
 
     return (
@@ -134,6 +142,11 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
             label="Player name:"
             placeholder="Ex. Ian"
             {...createForm.getInputProps('playerName')}
+          />
+          <Checkbox
+            mt="md"
+            label="Play against the computer"
+            {...createForm.getInputProps('vsAi', { type: 'checkbox' })}
           />
           <br />
           <Button variant="info" type="submit">
@@ -232,6 +245,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
           </Container>
         </Container>
       </Container>
+      <HelpButton gamePhase={0} isEnglish={isEnglish} />
       <ToastContainer />
     </>
   );

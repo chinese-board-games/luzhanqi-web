@@ -24,6 +24,7 @@ import {
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import SortablePiece from 'components/SortablePiece';
 import DraggablePiece from 'components/DraggablePiece';
+import GameTooltip from 'components/GameTooltip';
 import LineTo from 'react-lineto';
 import Position from '../Position';
 import { setupPieces, pieces } from '../../models/Piece';
@@ -319,13 +320,20 @@ function PieceSelector({ unplacedPieces, isEnglish }) {
         <SortableContext items={unplacedPieces}>
           <Flex justify="center" align="center" gap="1em" wrap="wrap">
             {unplacedPieces.map((piece) => (
-              <SortablePiece
-                name={piece.name}
-                affiliation={0}
-                id={piece.id}
+              <GameTooltip
                 key={piece.id}
+                pieceName={piece.name}
+                gamePhase={1}
                 isEnglish={isEnglish}
-              />
+                placement="top"
+              >
+                <SortablePiece
+                  name={piece.name}
+                  affiliation={0}
+                  id={piece.id}
+                  isEnglish={isEnglish}
+                />
+              </GameTooltip>
             ))}
           </Flex>
         </SortableContext>

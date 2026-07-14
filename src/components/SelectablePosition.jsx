@@ -1,4 +1,5 @@
 import Position from './Position';
+import GameTooltip from 'components/GameTooltip';
 import { Box } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import PropTypes from 'prop-types';
@@ -8,9 +9,17 @@ const shadeMap = {
   destination: { color: 'orange.1', hover: 'orange.2' },
   attackable: { color: 'red.1', hover: 'red.2' },
   movable: { color: 'green.1', hover: 'green.2' },
+  lastMove: { color: 'yellow.2', hover: 'yellow.3' },
 };
 
-const getShadeColor = (hovered, originSelected, destinationSelected, attackable, movable) => {
+const getShadeColor = (
+  hovered,
+  originSelected,
+  destinationSelected,
+  attackable,
+  movable,
+  isLastMove
+) => {
   let state = null;
 
   if (originSelected) {
@@ -21,6 +30,8 @@ const getShadeColor = (hovered, originSelected, destinationSelected, attackable,
     state = 'attackable';
   } else if (movable) {
     state = 'movable';
+  } else if (isLastMove) {
+    state = 'lastMove';
   }
 
   if (!state) {
@@ -40,8 +51,10 @@ export default function SelectablePosition({
   destinationSelected = false,
   attackable = false,
   movable = false,
+  isLastMove = false,
   isEnglish,
   disabled = false,
+  gamePhase = 2,
 }) {
   const { hovered, ref } = useHover();
   const shadeColor = getShadeColor(
@@ -49,10 +62,11 @@ export default function SelectablePosition({
     originSelected,
     destinationSelected,
     attackable,
-    movable
+    movable,
+    isLastMove
   );
 
-  return (
+  const positionContent = (
     <Box
       sx={{
         cursor: disabled ? 'not-allowed' : 'pointer',
@@ -71,6 +85,23 @@ export default function SelectablePosition({
       />
     </Box>
   );
+
+  // Only show tooltip for pieces, not empty spaces
+  if (piece && piece.name) {
+    return (
+      <GameTooltip
+        pieceName={piece.name}
+        gamePhase={gamePhase}
+        isEnglish={isEnglish}
+        placement="top"
+        disabled={disabled}
+      >
+        {positionContent}
+      </GameTooltip>
+    );
+  }
+
+  return positionContent;
 }
 
 SelectablePosition.propTypes = {
@@ -82,6 +113,8 @@ SelectablePosition.propTypes = {
   destinationSelected: PropTypes.bool.isRequired,
   attackable: PropTypes.bool,
   movable: PropTypes.bool.isRequired,
+  isLastMove: PropTypes.bool,
   isEnglish: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
+  gamePhase: PropTypes.number,
 };

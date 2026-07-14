@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { io } from 'socket.io-client';
 import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
@@ -10,6 +10,26 @@ const socket = io(import.meta.env.VITE_API);
 
 export const GameContext = createContext({});
 
+const sessionKey = (gameId) => `luzhanqi:session:${gameId}`;
+
+const saveSession = (gameId, name, token) => {
+  if (!gameId || !token) return;
+  window.localStorage.setItem(sessionKey(gameId), JSON.stringify({ playerName: name, token }));
+};
+
+const loadSession = (gameId) => {
+  try {
+    const raw = window.localStorage.getItem(sessionKey(gameId));
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
+const clearSession = (gameId) => {
+  window.localStorage.removeItem(sessionKey(gameId));
+};
+
 export const GameProvider = ({ children }) => {
   const navigate = useNavigate();
 
@@ -19,6 +39,13 @@ export const GameProvider = ({ children }) => {
     length: 2,
   });
   const [playerName, setPlayerName] = useState(defaultName);
+  // socket handlers below are registered in an effect that doesn't
+  // re-run on every playerName change (see its dependency array) - this
+  // ref lets them always read the latest name instead of a stale closure
+  const playerNameRef = useRef(playerName);
+  useEffect(() => {
+    playerNameRef.current = playerName;
+  }, [playerName]);
   const [spectatorName, setSpectatorName] = useState(defaultName);
   /** game ID assigned to host, or user-input: game Id entered by player */
   const [roomId, setRoomId] = useState('');
@@ -36,6 +63,9 @@ export const GameProvider = ({ children }) => {
   // eslint-disable-next-line no-unused-vars
   const [myBoard, setMyBoard] = useState(Array(12).fill(Array(5).fill(null)));
   const [myDeadPieces, setMyDeadPieces] = useState([]);
+  /** the most recent move's { source, target } coordinates (host-perspective,
+   * unrotated), or null before any move has been made */
+  const [lastMove, setLastMove] = useState(null);
   const [myPositions, setMyPositions] = useState(Array(6).fill(Array(5).fill(null)));
   const [submittedSide, setSubmittedSide] = useState(false);
   const [pendingMove, setPendingMove] = useState({
@@ -69,6 +99,29 @@ export const GameProvider = ({ children }) => {
 
   const [errors, setErrors] = useState([]);
 
+  /** whether a silent rejoin attempt is in flight for the current game ID */
+  const [rejoining, setRejoining] = useState(false);
+  /** name of the opponent whose socket most recently disconnected, or null */
+  const [disconnectedPlayer, setDisconnectedPlayer] = useState(null);
+
+  /** Attempts to silently reclaim a seat using a locally-stored session token. Returns
+   * false immediately if no stored session exists for this game ID. */
+  const attemptRejoin = (gameId) => {
+    const session = loadSession(gameId);
+    if (!session) {
+      setRejoining(false);
+      return false;
+    }
+    setRejoining(true);
+    setPlayerName(session.playerName);
+    socket.emit('playerRejoinRoom', {
+      gameId,
+      playerName: session.playerName,
+      token: session.token,
+    });
+    return true;
+  };
+
   const gameState = {
     socket,
     playerName: { playerName, setPlayerName },
@@ -84,6 +137,7 @@ export const GameProvider = ({ children }) => {
     spectatorList: { spectatorList, setSpectatorList },
     myBoard: { myBoard, setMyBoard },
     myDeadPieces: { myDeadPieces, setMyDeadPieces },
+    lastMove: { lastMove, setLastMove },
     myPositions: { myPositions, setMyPositions },
     submittedSide: { submittedSide, setSubmittedSide },
     pendingMove: { pendingMove, setPendingMove },
@@ -94,6 +148,9 @@ export const GameProvider = ({ children }) => {
     gameResults: { gameResults, setGameResults },
     isEnglish: { isEnglish, setIsEnglish },
     errors: { errors, setErrors },
+    rejoining: { rejoining, setRejoining },
+    disconnectedPlayer: { disconnectedPlayer, setDisconnectedPlayer },
+    attemptRejoin,
   };
 
   // extend error (list of errors) to include new errors
@@ -112,11 +169,13 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server has created a new game, only host receives this message */
-    socket.on('newGameCreated', ({ gameId, mySocketId, players }) => {
+    socket.on('newGameCreated', ({ gameId, mySocketId, players, phase, token }) => {
       const serverRoomId = gameId;
       console.info(`GameID: ${serverRoomId}, SocketID: ${mySocketId}`);
       setRoomId(serverRoomId);
       setPlayerList(players);
+      saveSession(serverRoomId, playerNameRef.current, token);
+      if (typeof phase === 'number') setGamePhase(phase);
       navigate(`/game/${serverRoomId}`);
     });
 
@@ -139,11 +198,49 @@ export const GameProvider = ({ children }) => {
     socket.on('youHaveJoinedTheRoom', (data) => {
       setJoinedGame(true);
       // setPlayerList(data.players);
-      navigate(`/game/${roomId}`);
-      window.sessionStorage.setItem('playerName', playerName);
-      window.sessionStorage.setItem('roomId', roomId);
-      window.sessionStorage.setItem('playerList', data.players);
+      const joinedRoomId = data.joinRoomId || roomId;
+      navigate(`/game/${joinedRoomId}`);
+      saveSession(joinedRoomId, playerNameRef.current, data.token);
+      if (typeof data.phase === 'number') setGamePhase(data.phase);
       if (Array.isArray(data.spectators)) setSpectatorList(data.spectators);
+    });
+
+    /** A stored session successfully reclaimed a seat after a disconnect/reload */
+    socket.on('youHaveRejoinedTheRoom', (data) => {
+      setRejoining(false);
+      setJoinedGame(true);
+      setPlayerList(data.players || []);
+      setSpectatorList(data.spectators || []);
+      setHost(data.players?.[0] === data.playerName);
+      setClientTurn(typeof data.turn === 'number' ? data.turn : -1);
+      setGamePhase(typeof data.phase === 'number' ? data.phase : 0);
+      setSubmittedSide(!!data.submittedSide);
+      if (data.board) setMyBoard(data.board);
+      if (Array.isArray(data.deadPieces)) setMyDeadPieces(data.deadPieces);
+      if (Array.isArray(data.moves) && data.moves.length) {
+        setLastMove(data.moves[data.moves.length - 1]);
+      }
+      if (data.phase === 3) {
+        setWinner(data.winnerIndex);
+        if (data.gameStats) setGameResults(data.gameStats);
+      }
+      setRoomId(data.gameId);
+      navigate(`/game/${data.gameId}`);
+    });
+
+    /** The stored session token was rejected - fall back to the normal join form */
+    socket.on('rejoinFailed', (data) => {
+      setRejoining(false);
+      clearSession(data.gameId);
+    });
+
+    /** An opponent's socket dropped - their seat is still reserved, they may reconnect */
+    socket.on('playerDisconnected', ({ playerName: droppedName }) => {
+      setDisconnectedPlayer(droppedName);
+    });
+
+    socket.on('playerReconnected', ({ playerName: returnedName }) => {
+      setDisconnectedPlayer((current) => (current === returnedName ? null : current));
     });
 
     socket.on('playerLeftRoom', ({ playerName: returnedPlayerName, players }) => {
@@ -189,6 +286,10 @@ export const GameProvider = ({ children }) => {
     socket.on('boardSet', (game) => {
       setMyBoard(game.board);
       setGamePhase(2);
+      setLastMove(null);
+      // normally set by beginNewGame, but that event never fires for AI
+      // games since they skip the Lobby's "Room Full" step entirely
+      if (typeof game.turn === 'number') setClientTurn(game.turn);
     });
 
     socket.on('halfBoardReceived', () => {
@@ -200,10 +301,13 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling all clients a move has been made */
-    socket.on('playerMadeMove', ({ turn, board, deadPieces }) => {
+    socket.on('playerMadeMove', ({ turn, board, deadPieces, moves }) => {
       setClientTurn(turn);
       setMyBoard(board);
       setMyDeadPieces(deadPieces);
+      if (Array.isArray(moves) && moves.length) {
+        setLastMove(moves[moves.length - 1]);
+      }
     });
 
     /** Server is telling all clients the game has ended */
