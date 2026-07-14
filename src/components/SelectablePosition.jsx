@@ -1,5 +1,5 @@
+import { useEffect } from 'react';
 import Position from './Position';
-import GameTooltip from 'components/GameTooltip';
 import { Box } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import PropTypes from 'prop-types';
@@ -54,7 +54,7 @@ export default function SelectablePosition({
   isLastMove = false,
   isEnglish,
   disabled = false,
-  gamePhase = 2,
+  onHoverPiece,
 }) {
   const { hovered, ref } = useHover();
   const shadeColor = getShadeColor(
@@ -66,7 +66,15 @@ export default function SelectablePosition({
     isLastMove
   );
 
-  const positionContent = (
+  // report hover to the parent (drives the desktop PieceInfoPanel) instead
+  // of the old per-tile tooltip; only fires while there's a real piece here
+  useEffect(() => {
+    if (hovered && piece && piece.name) {
+      onHoverPiece?.(piece);
+    }
+  }, [hovered]);
+
+  return (
     <Box
       sx={{
         cursor: disabled ? 'not-allowed' : 'pointer',
@@ -85,23 +93,6 @@ export default function SelectablePosition({
       />
     </Box>
   );
-
-  // Only show tooltip for pieces, not empty spaces
-  if (piece && piece.name) {
-    return (
-      <GameTooltip
-        pieceName={piece.name}
-        gamePhase={gamePhase}
-        isEnglish={isEnglish}
-        placement="top"
-        disabled={disabled}
-      >
-        {positionContent}
-      </GameTooltip>
-    );
-  }
-
-  return positionContent;
 }
 
 SelectablePosition.propTypes = {
@@ -116,5 +107,5 @@ SelectablePosition.propTypes = {
   isLastMove: PropTypes.bool,
   isEnglish: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
-  gamePhase: PropTypes.number,
+  onHoverPiece: PropTypes.func,
 };
