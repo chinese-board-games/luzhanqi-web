@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { io } from 'socket.io-client';
+import { toast } from 'react-toastify';
 import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
 import PropTypes from 'prop-types';
 
@@ -310,6 +311,19 @@ export const GameProvider = ({ children }) => {
       }
     });
 
+    /** Server is telling both players (and spectators) that a field marshal
+     * died on the move that just resolved - notable since the loser's flag
+     * becomes revealed to their opponent once this happens */
+    socket.on('fieldMarshallDown', (fallen) => {
+      fallen.forEach(({ playerName: fallenPlayerName }) => {
+        const isMine = fallenPlayerName === playerNameRef.current;
+        const message = isMine
+          ? 'Your Field Marshal has fallen!'
+          : `${fallenPlayerName}'s Field Marshal has fallen — their flag is now revealed!`;
+        toast.warning(message, { autoClose: 6000 });
+      });
+    });
+
     /** Server is telling all clients the game has ended */
     socket.on('endGame', ({ winnerIndex, gameStats, finalGame }) => {
       setGamePhase(3);
@@ -323,11 +337,14 @@ export const GameProvider = ({ children }) => {
       pushErrors(errMsg);
     });
 
+    // this effect re-runs on every roomId/errors change and re-registers
+    // every listener above from scratch - without removing the old set
+    // first, they'd silently pile up (each firing an extra time per
+    // re-run), which is exactly what was happening before this cleanup
+    // existed: side-effecting handlers like the fieldMarshallDown toast
+    // below would fire multiple times for a single server event.
     return () => {
-      socket.on('disconnect', () => {
-        console.info(`SocketID: ${socket.id}`);
-        console.info(`Connected: ${socket.connected}`);
-      });
+      socket.off();
     };
   }, [roomId, JSON.stringify(errors)]);
 
