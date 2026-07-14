@@ -8,6 +8,7 @@ import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { useForm } from '@mantine/form';
 import { Title } from '@mantine/core';
 import HelpButton from '../components/HelpButton';
+import { archiveGame } from 'api/User';
 
 function Menu({ joinedRoom = false, urlRoomId = '' }) {
   const {
@@ -18,7 +19,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     host: { setHost },
     errors: { errors, setErrors },
     isEnglish: { isEnglish },
-    activeGames: { activeGames },
+    activeGames: { activeGames, setActiveGames },
     checkActiveGames,
   } = useContext(GameContext);
 
@@ -126,6 +127,14 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
         'You must provide both a game number and a spectator name.',
       ]);
     }
+  };
+
+  /** Dismiss the rejoin prompt for a game without forcing the user to
+   * rejoin (and maybe forfeit) just to get rid of the notification. */
+  const handleArchive = async (gameId) => {
+    if (!user?.uid) return;
+    await archiveGame(user.uid, gameId);
+    setActiveGames((prev) => prev.filter((g) => g.gameId !== gameId));
   };
 
   const handleCreateSubmit = ({
@@ -330,7 +339,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
           {!joinedRoom && activeGames.length > 0 ? (
             <Container style={cardStyle}>
               <Title order={3}>Rejoin a Game</Title>
-              {activeGames.map((game) => (
+              {activeGames.slice(0, 1).map((game) => (
                 <Container key={game.gameId} style={cardContentStyle}>
                   <Text size="sm" style={{ flex: 1 }}>
                     {game.isAiGame ? 'vs. Computer' : `vs. ${game.opponentName}`}
@@ -338,6 +347,9 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
                   <Link to={`/game/${game.gameId}`} style={linkStyle}>
                     <Button size="xs">Rejoin</Button>
                   </Link>
+                  <Button size="xs" variant="outline" onClick={() => handleArchive(game.gameId)}>
+                    Archive
+                  </Button>
                 </Container>
               ))}
             </Container>

@@ -3,16 +3,19 @@ import { Button, Title, Text } from '@mantine/core';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { Table } from '@mantine/core';
-import { getUser, createUser } from 'api/User';
+import { getUser, createUser, archiveGame, unarchiveGame } from 'api/User';
 import { getGameById } from 'api/Game';
 
 const UserModal = ({ showModal, setShowModal }) => {
   const user = useFirebaseAuth();
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({});
   const [gameData, setGameData] = useState([]);
+  const [archivedIds, setArchivedIds] = useState(new Set());
 
   useEffect(async () => {
     const fetchUser = async () => {
@@ -22,6 +25,7 @@ const UserModal = ({ showModal, setShowModal }) => {
         myUser = await createUser(user.uid);
       }
       setUserData(myUser);
+      setArchivedIds(new Set(myUser?.archivedGames || []));
       return myUser;
     };
 
@@ -48,6 +52,25 @@ const UserModal = ({ showModal, setShowModal }) => {
       fetchGames(myUser);
     }
   }, [setUserData, user?.uid, showModal]);
+
+  const handleRejoin = (gameId) => {
+    setShowModal(false);
+    navigate(`/game/${gameId}`);
+  };
+
+  const handleArchive = async (gameId) => {
+    await archiveGame(user.uid, gameId);
+    setArchivedIds((prev) => new Set(prev).add(gameId));
+  };
+
+  const handleUnarchive = async (gameId) => {
+    await unarchiveGame(user.uid, gameId);
+    setArchivedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(gameId);
+      return next;
+    });
+  };
 
   return (
     <Modal
@@ -97,6 +120,7 @@ const UserModal = ({ showModal, setShowModal }) => {
               <th>Date</th>
               <th>Opponent</th>
               <th>Result</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -105,6 +129,7 @@ const UserModal = ({ showModal, setShowModal }) => {
                 console.warn(`Failure to fetch a game:`, myGame);
                 return;
               }
+              const isIncomplete = !myGame.winnerId;
               return (
                 <tr key={myGame._id}>
                   <td>{new Date(myGame.createdAt).toLocaleDateString()}</td>
@@ -114,11 +139,42 @@ const UserModal = ({ showModal, setShowModal }) => {
                     <td>{myGame.hostId === user?.uid ? myGame.players[1] : myGame.players[0]}</td>
                   )}
                   <td>
-                    <p>
-                      {myGame.winnerId === user?.uid
-                        ? 'Win'
-                        : (myGame.winnerId && 'Loss') ?? 'Incomplete'}
-                    </p>
+                    {myGame.winnerId === user?.uid
+                      ? 'Win'
+                      : (myGame.winnerId && 'Loss') ?? 'Incomplete'}
+                  </td>
+                  <td>
+                    {isIncomplete ? (
+                      <div style={{ display: 'flex', gap: '0.4em', alignItems: 'center' }}>
+                        {archivedIds.has(myGame._id) ? (
+                          <>
+                            <Text size="xs" c="dimmed">
+                              Archived
+                            </Text>
+                            <Button
+                              size="xs"
+                              variant="outline"
+                              onClick={() => handleUnarchive(myGame._id)}
+                            >
+                              Unarchive
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button size="xs" onClick={() => handleRejoin(myGame._id)}>
+                              Rejoin
+                            </Button>
+                            <Button
+                              size="xs"
+                              variant="outline"
+                              onClick={() => handleArchive(myGame._id)}
+                            >
+                              Archive
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    ) : null}
                   </td>
                 </tr>
               );
