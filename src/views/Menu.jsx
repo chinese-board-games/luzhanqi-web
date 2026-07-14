@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { GameContext } from 'contexts/GameContext';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { Button, Checkbox, Container, TextInput } from '@mantine/core';
+import { Button, Checkbox, Container, TextInput, Tabs, Slider, Text } from '@mantine/core';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { useForm } from '@mantine/form';
 import { Title } from '@mantine/core';
@@ -63,13 +63,13 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   const linkStyle = { color: 'white' };
 
   /** Tell the server to create a new game */
-  const createNewGame = (name, vsAi) => {
+  const createNewGame = (name, vsAi, aiSettings) => {
     if (name) {
       setPlayerName(name);
       socket.emit('hostCreateNewGame', {
         playerName: name,
         hostId: user?.uid || null,
-        gameConfig: vsAi ? { opponentType: 'ai' } : undefined,
+        gameConfig: vsAi ? { opponentType: 'ai', aiSettings } : undefined,
       });
       setHost(true);
       // GameContext will redirect to /game when socket starts the game
@@ -117,8 +117,15 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     }
   };
 
-  const handleCreateSubmit = ({ playerName, vsAi }) => {
-    createNewGame(playerName, vsAi);
+  const handleCreateSubmit = ({
+    playerName,
+    vsAi,
+    randomness,
+    positionalDrive,
+    caution,
+    aggression,
+  }) => {
+    createNewGame(playerName, vsAi, { randomness, positionalDrive, caution, aggression });
   };
 
   const handleJoinSubmit = ({ playerName, roomId }) => {
@@ -131,23 +138,103 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
 
   const CreateForm = () => {
     const createForm = useForm({
-      initialValues: { playerName, vsAi: false },
+      initialValues: {
+        playerName,
+        vsAi: false,
+        // defaults must match DEFAULT_AI_WEIGHTS in the backend's aiConstants.ts
+        randomness: 1.5,
+        positionalDrive: 0.15,
+        caution: 0.5,
+        aggression: 1,
+      },
     });
+    const vsAi = createForm.values.vsAi;
 
     return (
       <Container style={cardStyle}>
         <Title order={3}>Host a New Game</Title>
         <form onSubmit={createForm.onSubmit(handleCreateSubmit)}>
-          <TextInput
-            label="Player name:"
-            placeholder="Ex. Ian"
-            {...createForm.getInputProps('playerName')}
-          />
-          <Checkbox
-            mt="md"
-            label="Play against the computer"
-            {...createForm.getInputProps('vsAi', { type: 'checkbox' })}
-          />
+          <Tabs defaultValue="basic" keepMounted={false}>
+            <Tabs.List>
+              <Tabs.Tab value="basic">Basic</Tabs.Tab>
+              {vsAi ? <Tabs.Tab value="advanced">Advanced</Tabs.Tab> : null}
+            </Tabs.List>
+
+            <Tabs.Panel value="basic" pt="sm">
+              <TextInput
+                label="Player name:"
+                placeholder="Ex. Ian"
+                {...createForm.getInputProps('playerName')}
+              />
+              <Checkbox
+                mt="md"
+                label="Play against the computer"
+                {...createForm.getInputProps('vsAi', { type: 'checkbox' })}
+              />
+            </Tabs.Panel>
+
+            {vsAi ? (
+              <Tabs.Panel value="advanced" pt="sm">
+                <Text size="xs" c="dimmed" mb="sm">
+                  Tune how the computer opponent plays.
+                </Text>
+                <Text size="sm">Randomness</Text>
+                <Text size="xs" c="dimmed">
+                  How unpredictable its moves are.
+                </Text>
+                <Slider
+                  min={0}
+                  max={3}
+                  step={0.1}
+                  label={(v) => v.toFixed(1)}
+                  value={createForm.values.randomness}
+                  onChange={(v) => createForm.setFieldValue('randomness', v)}
+                />
+                <Text size="sm" mt="md">
+                  Positional drive
+                </Text>
+                <Text size="xs" c="dimmed">
+                  How much it favors advancing toward your side over holding position.
+                </Text>
+                <Slider
+                  min={0}
+                  max={0.5}
+                  step={0.01}
+                  label={(v) => v.toFixed(2)}
+                  value={createForm.values.positionalDrive}
+                  onChange={(v) => createForm.setFieldValue('positionalDrive', v)}
+                />
+                <Text size="sm" mt="md">
+                  Caution
+                </Text>
+                <Text size="xs" c="dimmed">
+                  How strongly it avoids exposing valuable pieces to risk.
+                </Text>
+                <Slider
+                  min={0}
+                  max={2}
+                  step={0.1}
+                  label={(v) => v.toFixed(1)}
+                  value={createForm.values.caution}
+                  onChange={(v) => createForm.setFieldValue('caution', v)}
+                />
+                <Text size="sm" mt="md">
+                  Aggression
+                </Text>
+                <Text size="xs" c="dimmed">
+                  How much extra value it places on capturing pieces.
+                </Text>
+                <Slider
+                  min={0}
+                  max={3}
+                  step={0.1}
+                  label={(v) => v.toFixed(1)}
+                  value={createForm.values.aggression}
+                  onChange={(v) => createForm.setFieldValue('aggression', v)}
+                />
+              </Tabs.Panel>
+            ) : null}
+          </Tabs>
           <br />
           <Button variant="info" type="submit">
             Create Match
