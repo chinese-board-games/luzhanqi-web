@@ -49,6 +49,12 @@ export const archiveGame = async (userId, gameId) => {
   });
 };
 
+export const unarchiveGame = async (userId, gameId) => {
+  return axios.delete(`/user/${userId}/games/${gameId}/archive`).catch((err) => {
+    console.error(err);
+  });
+};
+
 export const getGames = async (userId) => {
   return axios.get(`/user/${userId}/games`).catch((err) => {
     console.error(err);

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { Table } from '@mantine/core';
-import { getUser, createUser, archiveGame } from 'api/User';
+import { getUser, createUser, archiveGame, unarchiveGame } from 'api/User';
 import { getGameById } from 'api/Game';
 
 const UserModal = ({ showModal, setShowModal }) => {
@@ -61,6 +61,15 @@ const UserModal = ({ showModal, setShowModal }) => {
   const handleArchive = async (gameId) => {
     await archiveGame(user.uid, gameId);
     setArchivedIds((prev) => new Set(prev).add(gameId));
+  };
+
+  const handleUnarchive = async (gameId) => {
+    await unarchiveGame(user.uid, gameId);
+    setArchivedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(gameId);
+      return next;
+    });
   };
 
   return (
@@ -138,22 +147,33 @@ const UserModal = ({ showModal, setShowModal }) => {
                   </td>
                   <td>
                     {isIncomplete ? (
-                      <div style={{ display: 'flex', gap: '0.4em' }}>
-                        <Button size="xs" onClick={() => handleRejoin(myGame._id)}>
-                          Rejoin
-                        </Button>
+                      <div style={{ display: 'flex', gap: '0.4em', alignItems: 'center' }}>
                         {archivedIds.has(myGame._id) ? (
-                          <Text size="xs" c="dimmed">
-                            Archived
-                          </Text>
+                          <>
+                            <Text size="xs" c="dimmed">
+                              Archived
+                            </Text>
+                            <Button
+                              size="xs"
+                              variant="outline"
+                              onClick={() => handleUnarchive(myGame._id)}
+                            >
+                              Unarchive
+                            </Button>
+                          </>
                         ) : (
-                          <Button
-                            size="xs"
-                            variant="outline"
-                            onClick={() => handleArchive(myGame._id)}
-                          >
-                            Archive
-                          </Button>
+                          <>
+                            <Button size="xs" onClick={() => handleRejoin(myGame._id)}>
+                              Rejoin
+                            </Button>
+                            <Button
+                              size="xs"
+                              variant="outline"
+                              onClick={() => handleArchive(myGame._id)}
+                            >
+                              Archive
+                            </Button>
+                          </>
                         )}
                       </div>
                     ) : null}
