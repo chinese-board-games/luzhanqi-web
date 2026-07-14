@@ -23,6 +23,7 @@ export default function GameBoard({
   isEnglish = false,
   isSpectator = false,
   gamePhase = 2,
+  lastMove = null,
 }) {
   const [origin, setOrigin] = useState(NO_SELECT);
   const [destination, setDestination] = useState(NO_SELECT);
@@ -81,6 +82,9 @@ export default function GameBoard({
             availibleMoves.has(JSON.stringify([r, c]))
           }
           movable={board[r][c] == null && availibleMoves.has(JSON.stringify([r, c]))}
+          isLastMove={
+            !!lastMove && (isEqual(lastMove.source, [r, c]) || isEqual(lastMove.target, [r, c]))
+          }
           onClick={() => {
             // disallow selection if not your turn
             if (!isTurn) return;
@@ -182,4 +186,8 @@ GameBoard.propTypes = {
   isEnglish: PropTypes.bool,
   isSpectator: PropTypes.bool,
   gamePhase: PropTypes.number,
+  lastMove: PropTypes.shape({
+    source: PropTypes.arrayOf(PropTypes.number),
+    target: PropTypes.arrayOf(PropTypes.number),
+  }),
 };

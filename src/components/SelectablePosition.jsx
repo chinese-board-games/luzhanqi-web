@@ -9,9 +9,17 @@ const shadeMap = {
   destination: { color: 'orange.1', hover: 'orange.2' },
   attackable: { color: 'red.1', hover: 'red.2' },
   movable: { color: 'green.1', hover: 'green.2' },
+  lastMove: { color: 'yellow.2', hover: 'yellow.3' },
 };
 
-const getShadeColor = (hovered, originSelected, destinationSelected, attackable, movable) => {
+const getShadeColor = (
+  hovered,
+  originSelected,
+  destinationSelected,
+  attackable,
+  movable,
+  isLastMove
+) => {
   let state = null;
 
   if (originSelected) {
@@ -22,6 +30,8 @@ const getShadeColor = (hovered, originSelected, destinationSelected, attackable,
     state = 'attackable';
   } else if (movable) {
     state = 'movable';
+  } else if (isLastMove) {
+    state = 'lastMove';
   }
 
   if (!state) {
@@ -41,6 +51,7 @@ export default function SelectablePosition({
   destinationSelected = false,
   attackable = false,
   movable = false,
+  isLastMove = false,
   isEnglish,
   disabled = false,
   gamePhase = 2,
@@ -51,7 +62,8 @@ export default function SelectablePosition({
     originSelected,
     destinationSelected,
     attackable,
-    movable
+    movable,
+    isLastMove
   );
 
   const positionContent = (
@@ -101,6 +113,7 @@ SelectablePosition.propTypes = {
   destinationSelected: PropTypes.bool.isRequired,
   attackable: PropTypes.bool,
   movable: PropTypes.bool.isRequired,
+  isLastMove: PropTypes.bool,
   isEnglish: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   gamePhase: PropTypes.number,

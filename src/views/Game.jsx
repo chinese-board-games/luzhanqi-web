@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { GameContext } from 'contexts/GameContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -27,6 +27,7 @@ const Game = () => {
     errors: { errors, setErrors },
     myBoard: { myBoard },
     myDeadPieces: { myDeadPieces },
+    lastMove: { lastMove },
     isEnglish: { isEnglish },
     joinedGame: { joinedGame },
     rejoining: { rejoining },
@@ -35,6 +36,19 @@ const Game = () => {
   } = useContext(GameContext);
 
   const affiliation = playerList.indexOf(playerName);
+
+  /** Show the last move highlight immediately, then let it fade after a
+   * few seconds so it doesn't linger and clutter the board. */
+  const [lastMoveVisible, setLastMoveVisible] = useState(false);
+  useEffect(() => {
+    if (!lastMove) {
+      setLastMoveVisible(false);
+      return undefined;
+    }
+    setLastMoveVisible(true);
+    const timer = setTimeout(() => setLastMoveVisible(false), 2000);
+    return () => clearTimeout(timer);
+  }, [lastMove]);
 
   /** On mount (or a hard reload), silently try to reclaim a seat using a
    * locally-stored session before falling back to the normal join form. */
@@ -58,6 +72,16 @@ const Game = () => {
   const rotateMove = ([row, col]) => {
     return [11 - row, 4 - col];
   };
+
+  // last move coordinates are always stored host-perspective; rotate for
+  // display the same way the board itself is rotated for the guest
+  const displayLastMove =
+    lastMoveVisible && lastMove
+      ? {
+          source: host ? lastMove.source : rotateMove(lastMove.source),
+          target: host ? lastMove.target : rotateMove(lastMove.target),
+        }
+      : null;
 
   const playerMakeMove = (source, target, host) => {
     if (source.length && target.length) {
@@ -201,6 +225,7 @@ const Game = () => {
               isEnglish={isEnglish}
               isSpectator={spectatorList.includes(spectatorName)}
               gamePhase={gamePhase}
+              lastMove={displayLastMove}
             />
           ) : null
         }

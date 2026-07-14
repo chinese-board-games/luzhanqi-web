@@ -156,7 +156,11 @@ export default function Position({
   return (
     <div ref={setNodeRef} className={`${row}-${col}`}>
       {/* TODO: only show overlay when something is being dragged */}
-      <Center mih="5em" bg={(!disabled && shadeColor) || 'transparent'}>
+      <Center
+        mih="5em"
+        bg={(!disabled && shadeColor) || 'transparent'}
+        sx={{ transition: 'background-color 1.5s ease-out' }}
+      >
         {getPositionContent()}
       </Center>
     </div>

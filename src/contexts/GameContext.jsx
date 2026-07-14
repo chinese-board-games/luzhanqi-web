@@ -63,6 +63,9 @@ export const GameProvider = ({ children }) => {
   // eslint-disable-next-line no-unused-vars
   const [myBoard, setMyBoard] = useState(Array(12).fill(Array(5).fill(null)));
   const [myDeadPieces, setMyDeadPieces] = useState([]);
+  /** the most recent move's { source, target } coordinates (host-perspective,
+   * unrotated), or null before any move has been made */
+  const [lastMove, setLastMove] = useState(null);
   const [myPositions, setMyPositions] = useState(Array(6).fill(Array(5).fill(null)));
   const [submittedSide, setSubmittedSide] = useState(false);
   const [pendingMove, setPendingMove] = useState({
@@ -134,6 +137,7 @@ export const GameProvider = ({ children }) => {
     spectatorList: { spectatorList, setSpectatorList },
     myBoard: { myBoard, setMyBoard },
     myDeadPieces: { myDeadPieces, setMyDeadPieces },
+    lastMove: { lastMove, setLastMove },
     myPositions: { myPositions, setMyPositions },
     submittedSide: { submittedSide, setSubmittedSide },
     pendingMove: { pendingMove, setPendingMove },
@@ -213,6 +217,9 @@ export const GameProvider = ({ children }) => {
       setSubmittedSide(!!data.submittedSide);
       if (data.board) setMyBoard(data.board);
       if (Array.isArray(data.deadPieces)) setMyDeadPieces(data.deadPieces);
+      if (Array.isArray(data.moves) && data.moves.length) {
+        setLastMove(data.moves[data.moves.length - 1]);
+      }
       if (data.phase === 3) {
         setWinner(data.winnerIndex);
         if (data.gameStats) setGameResults(data.gameStats);
@@ -279,6 +286,7 @@ export const GameProvider = ({ children }) => {
     socket.on('boardSet', (game) => {
       setMyBoard(game.board);
       setGamePhase(2);
+      setLastMove(null);
       // normally set by beginNewGame, but that event never fires for AI
       // games since they skip the Lobby's "Room Full" step entirely
       if (typeof game.turn === 'number') setClientTurn(game.turn);
@@ -293,10 +301,13 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling all clients a move has been made */
-    socket.on('playerMadeMove', ({ turn, board, deadPieces }) => {
+    socket.on('playerMadeMove', ({ turn, board, deadPieces, moves }) => {
       setClientTurn(turn);
       setMyBoard(board);
       setMyDeadPieces(deadPieces);
+      if (Array.isArray(moves) && moves.length) {
+        setLastMove(moves[moves.length - 1]);
+      }
     });
 
     /** Server is telling all clients the game has ended */
