@@ -41,6 +41,14 @@ export const removeGame = async (userId, gameId) => {
   });
 };
 
+/** Dismisses a game from the user's "rejoin" prompt without removing it
+ * from their games list - it still shows up in full game history. */
+export const archiveGame = async (userId, gameId) => {
+  return axios.post(`/user/${userId}/games/${gameId}/archive`).catch((err) => {
+    console.error(err);
+  });
+};
+
 export const getGames = async (userId) => {
   return axios.get(`/user/${userId}/games`).catch((err) => {
     console.error(err);
