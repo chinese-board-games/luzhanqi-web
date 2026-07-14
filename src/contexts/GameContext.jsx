@@ -337,12 +337,8 @@ export const GameProvider = ({ children }) => {
       pushErrors(errMsg);
     });
 
-    // this effect re-runs on every roomId/errors change and re-registers
-    // every listener above from scratch - without removing the old set
-    // first, they'd silently pile up (each firing an extra time per
-    // re-run), which is exactly what was happening before this cleanup
-    // existed: side-effecting handlers like the fieldMarshallDown toast
-    // below would fire multiple times for a single server event.
+    // this effect re-registers every listener above from scratch on each
+    // run, so the old set must be removed first or they'll pile up
     return () => {
       socket.off();
     };
