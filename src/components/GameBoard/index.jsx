@@ -132,7 +132,21 @@ export default function GameBoard({
 
   return (
     <>
-      <Container bg="rgb(224, 224, 224)" sx={{ borderRadius: '1em' }} p="1em 2em" maw="40em">
+      <Container
+        bg="rgb(224, 224, 224)"
+        maw="40em"
+        sx={{
+          borderRadius: '1em',
+          padding: '1em 2em',
+          overflowX: 'auto',
+          '@media (max-width: 450px)': {
+            padding: '1em 0.5em',
+          },
+          '@media (max-width: 375px)': {
+            padding: '0.75em 0.25em',
+          },
+        }}
+      >
         {isSpectator || gamePhase > 2 ? null : (
           <Center py="1em">
             <Stack>
@@ -166,7 +180,9 @@ export default function GameBoard({
         )}
 
         <ConnectionLines />
-        <Grid columns={20}>{combined.map((cell) => cell)}</Grid>
+        <Grid columns={20} gutter={6}>
+          {combined.map((cell) => cell)}
+        </Grid>
       </Container>
       <DeadPieces deadPieces={deadPieces} isEnglish={isEnglish} />
     </>
