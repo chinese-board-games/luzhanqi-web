@@ -139,11 +139,9 @@ const UserModal = ({ showModal, setShowModal }) => {
                     <td>{myGame.hostId === user?.uid ? myGame.players[1] : myGame.players[0]}</td>
                   )}
                   <td>
-                    <p>
-                      {myGame.winnerId === user?.uid
-                        ? 'Win'
-                        : (myGame.winnerId && 'Loss') ?? 'Incomplete'}
-                    </p>
+                    {myGame.winnerId === user?.uid
+                      ? 'Win'
+                      : (myGame.winnerId && 'Loss') ?? 'Incomplete'}
                   </td>
                   <td>
                     {isIncomplete ? (
