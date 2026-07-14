@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Button, Checkbox, Container, Title } from '@mantine/core';
+import { Button, Checkbox, Container, CopyButton, Text, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { GameContext } from 'contexts/GameContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -9,6 +9,7 @@ const Lobby = () => {
   const {
     socket,
     roomId: { roomId },
+    joinCode: { joinCode },
     playerName: { playerName },
     playerList: { playerList },
     spectatorName: { spectatorName },
@@ -71,6 +72,21 @@ const Lobby = () => {
 
   return (
     <Container style={{ backgroundColor: '#d0edf5' }}>
+      {joinCode ? (
+        <Container style={{ display: 'flex', alignItems: 'center', gap: '0.5em', padding: 0 }}>
+          <Text size="sm">Room code:</Text>
+          <Text size="xl" weight={700} sx={{ fontFamily: 'monospace', letterSpacing: '0.15em' }}>
+            {joinCode}
+          </Text>
+          <CopyButton value={joinCode}>
+            {({ copied, copy }) => (
+              <Button size="xs" color={copied ? 'green' : 'blue'} onClick={copy}>
+                {copied ? 'Copied' : 'Copy'}
+              </Button>
+            )}
+          </CopyButton>
+        </Container>
+      ) : null}
       {
         /** You have joined the game and are waiting for the host to start */
         joinedGame && !host ? (

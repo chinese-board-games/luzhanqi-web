@@ -50,6 +50,8 @@ export const GameProvider = ({ children }) => {
   const [spectatorName, setSpectatorName] = useState(defaultName);
   /** game ID assigned to host, or user-input: game Id entered by player */
   const [roomId, setRoomId] = useState('');
+  /** short human-shareable code resolving to roomId, for inviting others */
+  const [joinCode, setJoinCode] = useState('');
   const [storedPlayerName, setStoredPlayerName] = useState(null);
   const [storedRoomId, setStoredRoomId] = useState(null);
   const [storedPlayerList, setStoredPlayerList] = useState([]);
@@ -147,6 +149,7 @@ export const GameProvider = ({ children }) => {
     playerName: { playerName, setPlayerName },
     spectatorName: { spectatorName, setSpectatorName },
     roomId: { roomId, setRoomId },
+    joinCode: { joinCode, setJoinCode },
     storedPlayerName: { storedPlayerName, setStoredPlayerName },
     storedRoomId: { storedRoomId, setStoredRoomId },
     storedPlayerList: { storedPlayerList, setStoredPlayerList },
@@ -191,15 +194,19 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server has created a new game, only host receives this message */
-    socket.on('newGameCreated', ({ gameId, mySocketId, players, phase, token }) => {
-      const serverRoomId = gameId;
-      console.info(`GameID: ${serverRoomId}, SocketID: ${mySocketId}`);
-      setRoomId(serverRoomId);
-      setPlayerList(players);
-      saveSession(serverRoomId, playerNameRef.current, token);
-      if (typeof phase === 'number') setGamePhase(phase);
-      navigate(`/game/${serverRoomId}`);
-    });
+    socket.on(
+      'newGameCreated',
+      ({ gameId, joinCode: newJoinCode, mySocketId, players, phase, token }) => {
+        const serverRoomId = gameId;
+        console.info(`GameID: ${serverRoomId}, SocketID: ${mySocketId}`);
+        setRoomId(serverRoomId);
+        setJoinCode(newJoinCode || '');
+        setPlayerList(players);
+        saveSession(serverRoomId, playerNameRef.current, token);
+        if (typeof phase === 'number') setGamePhase(phase);
+        navigate(`/game/${serverRoomId}`);
+      }
+    );
 
     /** Server is telling all clients the game has started  */
     socket.on('beginNewGame', ({ mySocketId, roomId, turn }) => {
@@ -222,6 +229,7 @@ export const GameProvider = ({ children }) => {
       // setPlayerList(data.players);
       const joinedRoomId = data.joinRoomId || roomId;
       navigate(`/game/${joinedRoomId}`);
+      setJoinCode(data.joinCode || '');
       saveSession(joinedRoomId, playerNameRef.current, data.token);
       if (typeof data.phase === 'number') setGamePhase(data.phase);
       if (Array.isArray(data.spectators)) setSpectatorList(data.spectators);
@@ -308,9 +316,12 @@ export const GameProvider = ({ children }) => {
     );
 
     /** Server is telling this socket that it has joined a room */
-    socket.on('youAreSpectatingTheRoom', () => {
+    socket.on('youAreSpectatingTheRoom', (data) => {
       setJoinedGame(true);
-      navigate(`/game/${roomId}`);
+      const joinedRoomId = data?.gameId || roomId;
+      setRoomId(joinedRoomId);
+      setJoinCode(data?.joinCode || '');
+      navigate(`/game/${joinedRoomId}`);
     });
 
     /** Server is sending the starting board with all placed pieces */
