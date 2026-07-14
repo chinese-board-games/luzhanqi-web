@@ -51,10 +51,12 @@ const Game = () => {
   }, [lastMove]);
 
   /** On mount (or a hard reload), silently try to reclaim a seat using a
-   * locally-stored session before falling back to the normal join form. */
+   * locally-stored session - or, on a device with none but a logged-in
+   * uid, ask the server to match that uid against the game's players -
+   * before falling back to the normal join form. */
   useEffect(() => {
     if (roomId && !joinedGame && playerList.length === 0) {
-      attemptRejoin(roomId);
+      attemptRejoin(roomId, uid);
     }
     // only re-run when the room in the URL changes, not on every state update
   }, [roomId]);

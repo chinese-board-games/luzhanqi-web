@@ -18,6 +18,8 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     host: { setHost },
     errors: { errors, setErrors },
     isEnglish: { isEnglish },
+    activeGames: { activeGames },
+    checkActiveGames,
   } = useContext(GameContext);
 
   const user = useFirebaseAuth();
@@ -37,6 +39,15 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
       setRoomId(urlRoomId);
     }
   });
+
+  // only on the real landing page (not the in-game "join" fallback form),
+  // ask whether this logged-in account has other games worth rejoining -
+  // notably covers logging in from a device with no local session for them
+  useEffect(() => {
+    if (!joinedRoom && user?.uid) {
+      checkActiveGames(user.uid);
+    }
+  }, [joinedRoom, user?.uid]);
 
   const viewStyle = {
     backgroundColor: '#d0edf5',
@@ -316,6 +327,21 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     <>
       <Container style={viewStyle}>
         <Container style={stackStyle}>
+          {!joinedRoom && activeGames.length > 0 ? (
+            <Container style={cardStyle}>
+              <Title order={3}>Rejoin a Game</Title>
+              {activeGames.map((game) => (
+                <Container key={game.gameId} style={cardContentStyle}>
+                  <Text size="sm" style={{ flex: 1 }}>
+                    {game.isAiGame ? 'vs. Computer' : `vs. ${game.opponentName}`}
+                  </Text>
+                  <Link to={`/game/${game.gameId}`} style={linkStyle}>
+                    <Button size="xs">Rejoin</Button>
+                  </Link>
+                </Container>
+              ))}
+            </Container>
+          ) : null}
           {joinedRoom ? null : <CreateForm />}
           <JoinForm urlRoomId={urlRoomId} />
           <SpectateForm urlRoomId={urlRoomId} />

@@ -104,23 +104,42 @@ export const GameProvider = ({ children }) => {
   const [rejoining, setRejoining] = useState(false);
   /** name of the opponent whose socket most recently disconnected, or null */
   const [disconnectedPlayer, setDisconnectedPlayer] = useState(null);
+  /** in-progress games tied to the logged-in user's account that are worth
+   * rejoining (opponent connected, or an AI game), from a device with no
+   * localStorage session for them - see checkActiveGames */
+  const [activeGames, setActiveGames] = useState([]);
 
-  /** Attempts to silently reclaim a seat using a locally-stored session token. Returns
-   * false immediately if no stored session exists for this game ID. */
-  const attemptRejoin = (gameId) => {
+  /** Attempts to reclaim a seat using a locally-stored session token if one
+   * exists for this game ID, otherwise (given a logged-in uid) falls back
+   * to asking the server to match the uid against the game's players.
+   * Returns false immediately if neither is available. */
+  const attemptRejoin = (gameId, uid = null) => {
     const session = loadSession(gameId);
-    if (!session) {
+    if (!session && !uid) {
       setRejoining(false);
       return false;
     }
     setRejoining(true);
-    setPlayerName(session.playerName);
+    if (session) {
+      setPlayerName(session.playerName);
+    }
     socket.emit('playerRejoinRoom', {
       gameId,
-      playerName: session.playerName,
-      token: session.token,
+      playerName: session?.playerName,
+      token: session?.token,
+      uid,
     });
     return true;
+  };
+
+  /** Asks the server which of the logged-in user's games are still ongoing
+   * and worth showing a "rejoin" prompt for. Results land in activeGames. */
+  const checkActiveGames = (uid) => {
+    if (!uid) {
+      setActiveGames([]);
+      return;
+    }
+    socket.emit('getMyActiveGames', { uid });
   };
 
   const gameState = {
@@ -151,7 +170,9 @@ export const GameProvider = ({ children }) => {
     errors: { errors, setErrors },
     rejoining: { rejoining, setRejoining },
     disconnectedPlayer: { disconnectedPlayer, setDisconnectedPlayer },
+    activeGames: { activeGames, setActiveGames },
     attemptRejoin,
+    checkActiveGames,
   };
 
   // extend error (list of errors) to include new errors
@@ -206,10 +227,13 @@ export const GameProvider = ({ children }) => {
       if (Array.isArray(data.spectators)) setSpectatorList(data.spectators);
     });
 
-    /** A stored session successfully reclaimed a seat after a disconnect/reload */
+    /** A stored session, or (from a device with none) a logged-in uid
+     * matching a seat, successfully reclaimed a seat after a disconnect */
     socket.on('youHaveRejoinedTheRoom', (data) => {
       setRejoining(false);
       setJoinedGame(true);
+      setPlayerName(data.playerName);
+      saveSession(data.gameId, data.playerName, data.token);
       setPlayerList(data.players || []);
       setSpectatorList(data.spectators || []);
       setHost(data.players?.[0] === data.playerName);
@@ -242,6 +266,12 @@ export const GameProvider = ({ children }) => {
 
     socket.on('playerReconnected', ({ playerName: returnedName }) => {
       setDisconnectedPlayer((current) => (current === returnedName ? null : current));
+    });
+
+    /** Server's answer to checkActiveGames - games tied to this account
+     * that are still ongoing and worth prompting the user to rejoin */
+    socket.on('myActiveGames', (games) => {
+      setActiveGames(Array.isArray(games) ? games : []);
     });
 
     socket.on('playerLeftRoom', ({ playerName: returnedPlayerName, players }) => {
