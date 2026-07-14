@@ -67,6 +67,11 @@ export default function Position({
               height: theme.other.campSizing.sm.height,
               fontSize: theme.other.campSizing.sm.fontSize,
             },
+            '@media (max-width: 375px)': {
+              width: theme.other.campSizing.xs.width,
+              height: theme.other.campSizing.xs.height,
+              fontSize: theme.other.campSizing.xs.fontSize,
+            },
           })}
         >
           {placedPiece || '行營'}

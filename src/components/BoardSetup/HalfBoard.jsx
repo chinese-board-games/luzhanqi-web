@@ -193,7 +193,20 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
   };
 
   return (
-    <Container bg="#e0e0e0" maw="46em" p="1em 2em">
+    <Container
+      bg="#e0e0e0"
+      maw="46em"
+      sx={{
+        padding: '1em 2em',
+        overflowX: 'auto',
+        '@media (max-width: 450px)': {
+          padding: '1em 0.5em',
+        },
+        '@media (max-width: 375px)': {
+          padding: '0.75em 0.25em',
+        },
+      }}
+    >
       <HalfBoardConnectionLines />
       <DndContext
         autoScroll={false}
@@ -239,7 +252,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
           <Box sx={{ position: 'sticky', top: 0, zIndex: 110 }}>
             <PieceSelector unplacedPieces={unplacedPieces} isEnglish={isEnglish} />
           </Box>
-          <Grid columns={20}>
+          <Grid columns={20} gutter={6}>
             {halfBoard.flatMap((row, r) =>
               row.map((piece, c) => (
                 // eslint-disable-next-line react/no-array-index-key

@@ -123,7 +123,18 @@ const Game = () => {
 
   return (
     <>
-      <Container style={{ minWidth: '23em', width: '90%' }}>
+      <Container
+        sx={{
+          width: '90%',
+          minWidth: '23em',
+          // 23em (368px) forces horizontal overflow on phones narrower than
+          // that - drop the minimum and use the full width instead
+          '@media (max-width: 450px)': {
+            width: '100%',
+            minWidth: 'unset',
+          },
+        }}
+      >
         {roomId ? (
           <Container>
             {/* if the playerList is empty, the user must have gotten here via a urlRoomId */}

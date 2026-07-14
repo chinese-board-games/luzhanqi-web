@@ -79,6 +79,11 @@ export const other = {
       height: '3.5em',
       fontSize: '12pt',
     },
+    xs: {
+      width: '3em',
+      height: '3em',
+      fontSize: '10pt',
+    },
   },
   fontLinesSizing: {
     md: {
