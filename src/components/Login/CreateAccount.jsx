@@ -8,7 +8,7 @@ import { addGame, createUser } from 'api/User';
 import { updateUidMap } from 'api/Game';
 import PropTypes from 'prop-types';
 
-const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
+const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName, isEnglish }) => {
   const form = useForm({
     initialValues: {
       email: '',
@@ -27,15 +27,15 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName })
     const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     // present error if email invalid
     if (!emailPattern.test(email)) {
-      errors.add('Please provide a valid email.');
+      errors.add(isEnglish ? 'Please provide a valid email.' : '請提供有效的電子郵件地址。');
     }
     // present error if password is blank
     if (password.length === 0) {
-      errors.add('Please provide a password.');
+      errors.add(isEnglish ? 'Please provide a password.' : '請提供密碼。');
     }
     // present error if passwords don't match
     if (password !== confirmPassword) {
-      errors.add('Passwords do not match.');
+      errors.add(isEnglish ? 'Passwords do not match.' : '密碼不相符。');
     }
     if (errors.size !== 0) {
       // there are validation errors
@@ -66,17 +66,23 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName })
     console.error('Error in user creation');
     return (
       <div>
-        <p>Error: {error.message}</p>
+        <p>
+          {isEnglish ? 'Error: ' : '錯誤：'}
+          {error.message}
+        </p>
       </div>
     );
   }
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>{isEnglish ? 'Loading...' : '載入中...'}</p>;
   }
   if (user) {
     return (
       <div>
-        <p>Registered User: {user.user.email}</p>
+        <p>
+          {isEnglish ? 'Registered User: ' : '已註冊使用者：'}
+          {user.user.email}
+        </p>
       </div>
     );
   }
@@ -91,29 +97,29 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName })
   };
   return (
     <div>
-      <h2>Create Account</h2>
+      <h2>{isEnglish ? 'Create Account' : '建立帳號'}</h2>
 
       <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
         <TextInput
-          label="Email address"
+          label={isEnglish ? 'Email address' : '電子郵件地址'}
           placeholder="example@provider.com"
           {...form.getInputProps('email')}
         />
         <PasswordInput
-          label="Password"
-          placeholder="Enter password"
+          label={isEnglish ? 'Password' : '密碼'}
+          placeholder={isEnglish ? 'Enter password' : '請輸入密碼'}
           {...form.getInputProps('password')}
         />
         <PasswordInput
-          label="Confirm password"
-          placeholder="Confirm password"
+          label={isEnglish ? 'Confirm password' : '確認密碼'}
+          placeholder={isEnglish ? 'Confirm password' : '請再次輸入密碼'}
           {...form.getInputProps('confirmPassword')}
         />
         <Button type="submit" style={{ marginTop: '0.5em' }}>
-          Sign Up
+          {isEnglish ? 'Sign Up' : '註冊'}
         </Button>
         <Button variant="subtle" onClick={() => setExistingAccount(true)}>
-          Sign In
+          {isEnglish ? 'Sign In' : '登入'}
         </Button>
         <ToastContainer />
       </form>
@@ -126,6 +132,7 @@ CreateAccount.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   roomId: PropTypes.string.isRequired,
   playerName: PropTypes.string.isRequired,
+  isEnglish: PropTypes.bool,
 };
 
 export default CreateAccount;

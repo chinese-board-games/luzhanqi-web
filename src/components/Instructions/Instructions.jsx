@@ -170,10 +170,22 @@ const Instructions = ({ opened, onClose, gamePhase = 0, isEnglish = false }) => 
           </Text>
           <Group gap="xs" mt="xs">
             <Badge color={piece.canMove ? 'green' : 'red'} size="sm">
-              {piece.canMove ? 'Can Move' : 'Cannot Move'}
+              {isEnglish
+                ? piece.canMove
+                  ? 'Can Move'
+                  : 'Cannot Move'
+                : piece.canMove
+                ? '可移動'
+                : '不可移動'}
             </Badge>
             <Badge color={piece.canAttack ? 'green' : 'red'} size="sm">
-              {piece.canAttack ? 'Can Attack' : 'Cannot Attack'}
+              {isEnglish
+                ? piece.canAttack
+                  ? 'Can Attack'
+                  : 'Cannot Attack'
+                : piece.canAttack
+                ? '可攻擊'
+                : '不可攻擊'}
             </Badge>
           </Group>
           {piece.special && (
@@ -215,7 +227,11 @@ const Instructions = ({ opened, onClose, gamePhase = 0, isEnglish = false }) => 
         )}
 
         {gamePhase === 0 && (
-          <Alert icon={<IconHelp size={16} />} title="Quick Start" color="green">
+          <Alert
+            icon={<IconHelp size={16} />}
+            title={isEnglish ? 'Quick Start' : '快速開始'}
+            color="green"
+          >
             <Text size="sm">
               {isEnglish
                 ? 'Welcome to Luzhanqi! Create or join a game to start playing.'

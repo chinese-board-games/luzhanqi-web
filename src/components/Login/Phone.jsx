@@ -11,7 +11,7 @@ import { addGame } from 'api/User';
 import { updateUidMap } from 'api/Game';
 import PropTypes from 'prop-types';
 
-const Phone = ({ setShowModal, roomId, playerName }) => {
+const Phone = ({ setShowModal, roomId, playerName, isEnglish }) => {
   const confirmForm = useForm({
     initialValues: {
       confirmationCode: '',
@@ -27,7 +27,7 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
   const handleSubmitPhoneNumber = (e) => {
     e.preventDefault();
     if (phoneNumber === '' || phoneNumber.length < 10) {
-      toast.warn('Please enter a valid phone number');
+      toast.warn(isEnglish ? 'Please enter a valid phone number' : '請輸入有效的電話號碼');
       window.verifier.clear();
       return;
     }
@@ -92,17 +92,17 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
 
   return (
     <Container>
-      <Title order={2}>Phone</Title>
+      <Title order={2}>{isEnglish ? 'Phone' : '電話'}</Title>
       {displayConfirmationCodePrompt ? (
         <form
           onSubmit={confirmForm.onSubmit(handleSubmitConfirmationCode, handleConfirmationCodeError)}
         >
           <TextInput
-            label="Confirmation code"
+            label={isEnglish ? 'Confirmation code' : '驗證碼'}
             placeholder="000000"
             {...confirmForm.getInputProps('confirmationCode')}
           />
-          <Button type="submit">Submit Confirmation Code</Button>
+          <Button type="submit">{isEnglish ? 'Submit Confirmation Code' : '送出驗證碼'}</Button>
         </form>
       ) : (
         <>
@@ -111,14 +111,18 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
           </Container>
           {/* Do not change to Mantine Form because we use a special component to handle phone numbers */}
           <form onSubmit={handleSubmitPhoneNumber}>
-            <Text>Phone Number</Text>
+            <Text>{isEnglish ? 'Phone Number' : '電話號碼'}</Text>
             <PhoneInput
               country="us"
               value={phoneNumber}
               onChange={(phone) => setPhoneNumber(phone)}
             />
-            <Text>We&#39;ll never share your phone number with anyone else.</Text>
-            <Button type="submit">Login</Button>
+            <Text>
+              {isEnglish
+                ? "We'll never share your phone number with anyone else."
+                : '我們絕不會將您的電話號碼分享給任何人。'}
+            </Text>
+            <Button type="submit">{isEnglish ? 'Login' : '登入'}</Button>
           </form>
         </>
       )}
@@ -131,6 +135,7 @@ Phone.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   roomId: PropTypes.string.isRequired,
   playerName: PropTypes.string.isRequired,
+  isEnglish: PropTypes.bool,
 };
 
 export default Phone;

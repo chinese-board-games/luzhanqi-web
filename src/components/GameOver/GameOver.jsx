@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { GameContext } from 'contexts/GameContext';
 import { Container, Table } from '@mantine/core';
+import { pieces } from '../../models/Piece';
 
 const GameOver = () => {
   const gameState = useContext(GameContext);
@@ -14,14 +15,18 @@ const GameOver = () => {
       gameResults: { remain },
     },
     host: { host },
+    isEnglish: { isEnglish },
   } = gameState;
 
   const playerIndex = playerList.indexOf(playerName);
   const isSpectator = spectatorList.includes(spectatorName);
-  const hostName = playerList[0] || 'Host';
-  const guestName = playerList[1] || 'Guest';
+  const hostName = playerList[0] || (isEnglish ? 'Host' : '主持人');
+  const guestName = playerList[1] || (isEnglish ? 'Guest' : '客人');
 
   const getCleanName = (name) => {
+    if (!isEnglish) {
+      return pieces[name]?.display || name;
+    }
     return name
       .split('_')
       .map((word) => word[0].toUpperCase() + word.slice(1))
@@ -30,20 +35,31 @@ const GameOver = () => {
 
   return (
     <Container style={{ backgroundColor: 'white', borderRadius: '0.5em', padding: '1em' }}>
-      <h1>Game Over</h1>
+      <h1>{isEnglish ? 'Game Over' : '遊戲結束'}</h1>
       {isSpectator ? (
-        <h2>Winner: {winner === 0 ? hostName : guestName}</h2>
+        <h2>
+          {isEnglish ? 'Winner: ' : '獲勝者：'}
+          {winner === 0 ? hostName : guestName}
+        </h2>
       ) : winner === playerIndex ? (
-        <h2>You win!</h2>
+        <h2>{isEnglish ? 'You win!' : '您獲勝了！'}</h2>
       ) : (
-        <h2>You lost</h2>
+        <h2>{isEnglish ? 'You lost' : '您輸了'}</h2>
       )}
-      <h4>{isSpectator ? `${hostName} (Host)` : host ? 'Your pieces' : `${hostName} (Host)`}</h4>
+      <h4>
+        {isSpectator
+          ? `${hostName} (${isEnglish ? 'Host' : '主持人'})`
+          : host
+          ? isEnglish
+            ? 'Your pieces'
+            : '您的棋子'
+          : `${hostName} (${isEnglish ? 'Host' : '主持人'})`}
+      </h4>
       <Table striped highlightOnHover withBorder withColumnBorders>
         <thead>
           <tr>
-            <th>Piece</th>
-            <th>Count</th>
+            <th>{isEnglish ? 'Piece' : '棋子'}</th>
+            <th>{isEnglish ? 'Count' : '數量'}</th>
           </tr>
         </thead>
         <tbody>
@@ -62,13 +78,19 @@ const GameOver = () => {
       </Table>
       <br />
       <h4>
-        {isSpectator ? `${guestName} (Guest)` : host ? `${guestName} (Guest)` : 'Your pieces'}
+        {isSpectator
+          ? `${guestName} (${isEnglish ? 'Guest' : '客人'})`
+          : host
+          ? `${guestName} (${isEnglish ? 'Guest' : '客人'})`
+          : isEnglish
+          ? 'Your pieces'
+          : '您的棋子'}
       </h4>
       <Table striped highlightOnHover withBorder withColumnBorders>
         <thead>
           <tr>
-            <th>Piece</th>
-            <th>Count</th>
+            <th>{isEnglish ? 'Piece' : '棋子'}</th>
+            <th>{isEnglish ? 'Count' : '數量'}</th>
           </tr>
         </thead>
         <tbody>

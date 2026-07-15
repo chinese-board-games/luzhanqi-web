@@ -17,6 +17,7 @@ const Lobby = () => {
     host: { host },
     joinedGame: { joinedGame },
     errors: { errors, setErrors },
+    isEnglish: { isEnglish },
   } = useContext(GameContext);
 
   const user = useFirebaseAuth();
@@ -42,7 +43,10 @@ const Lobby = () => {
     if (playerList.length >= 2) {
       socket.emit('hostRoomFull', roomId, gameConfig);
     } else {
-      setErrors((prevErrors) => [...prevErrors, 'There must be two players in the lobby']);
+      setErrors((prevErrors) => [
+        ...prevErrors,
+        isEnglish ? 'There must be two players in the lobby' : '大廳中必須有兩名玩家',
+      ]);
     }
   };
 
@@ -74,14 +78,14 @@ const Lobby = () => {
     <Container style={{ backgroundColor: '#d0edf5' }}>
       {joinCode ? (
         <Container style={{ display: 'flex', alignItems: 'center', gap: '0.5em', padding: 0 }}>
-          <Text size="sm">Room code:</Text>
+          <Text size="md">{isEnglish ? 'Room code:' : '房間代碼：'}</Text>
           <Text size="xl" weight={700} sx={{ fontFamily: 'monospace', letterSpacing: '0.15em' }}>
             {joinCode}
           </Text>
           <CopyButton value={joinCode}>
             {({ copied, copy }) => (
               <Button size="xs" color={copied ? 'green' : 'blue'} onClick={copy}>
-                {copied ? 'Copied' : 'Copy'}
+                {isEnglish ? (copied ? 'Copied' : 'Copy') : copied ? '已複製' : '複製'}
               </Button>
             )}
           </CopyButton>
@@ -91,10 +95,13 @@ const Lobby = () => {
         /** You have joined the game and are waiting for the host to start */
         joinedGame && !host ? (
           <>
-            <Title order={3}>請等主持人</Title>
-            <Title order={3}>Waiting for the host</Title>
+            {isEnglish ? (
+              <Title order={3}>Waiting for the host</Title>
+            ) : (
+              <Title order={3}>請等主持人</Title>
+            )}
             <Button variant="outline" color="red" onClick={memberLeaveRoom}>
-              Leave Room
+              {isEnglish ? 'Leave Room' : '離開房間'}
             </Button>
           </>
         ) : null
@@ -104,8 +111,11 @@ const Lobby = () => {
         /** Give host ability to start game */
         host ? (
           <>
-            <Title order={3}>按 &quot;Room Full&quot; 開始遊戲</Title>
-            <Title order={3}>Click &quot;Room Full&quot; to begin the game</Title>
+            {isEnglish ? (
+              <Title order={3}>Click &quot;Room Full&quot; to begin the game</Title>
+            ) : (
+              <Title order={3}>點擊「房間已滿」開始遊戲</Title>
+            )}
             <Container style={{ display: 'flex', gap: '0.5em' }}>
               <Button
                 variant="filled"
@@ -113,17 +123,17 @@ const Lobby = () => {
                 onClick={() => roomFull(configForm.values)}
                 style={{ width: '8em' }}
               >
-                Room Full
+                {isEnglish ? 'Room Full' : '房間已滿'}
               </Button>
               <Button variant="outline" color="red" onClick={playerLeaveRoom}>
-                Delete Room
+                {isEnglish ? 'Delete Room' : '刪除房間'}
               </Button>
             </Container>
-            <Title order={4}>Rules</Title>
+            <Title order={4}>{isEnglish ? 'Rules' : '規則'}</Title>
             <form>
               <Checkbox
                 mt="md"
-                label="Enable fog of war"
+                label={isEnglish ? 'Enable fog of war' : '啟用戰爭迷霧'}
                 {...configForm.getInputProps('fogOfWar', { type: 'checkbox' })}
               />
             </form>

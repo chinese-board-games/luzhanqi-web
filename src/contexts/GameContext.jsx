@@ -77,6 +77,13 @@ export const GameProvider = ({ children }) => {
   });
   const [successors, setSuccessors] = useState([]);
   const [isEnglish, setIsEnglish] = useState(false);
+  // mirrors playerNameRef above - lets the socket handlers below (registered
+  // in an effect that doesn't re-run on every isEnglish change) always read
+  // the current language instead of a stale closure
+  const isEnglishRef = useRef(isEnglish);
+  useEffect(() => {
+    isEnglishRef.current = isEnglish;
+  }, [isEnglish]);
 
   /**
    * Game phases:
@@ -358,9 +365,13 @@ export const GameProvider = ({ children }) => {
     socket.on('fieldMarshallDown', (fallen) => {
       fallen.forEach(({ playerName: fallenPlayerName }) => {
         const isMine = fallenPlayerName === playerNameRef.current;
-        const message = isMine
-          ? 'Your Field Marshal has fallen!'
-          : `${fallenPlayerName}'s Field Marshal has fallen — their flag is now revealed!`;
+        const message = isEnglishRef.current
+          ? isMine
+            ? 'Your Field Marshal has fallen!'
+            : `${fallenPlayerName}'s Field Marshal has fallen — their flag is now revealed!`
+          : isMine
+          ? '你的司令陣亡了！'
+          : `${fallenPlayerName} 的司令陣亡了 — 他們的軍旗現已顯示！`;
         toast.warning(message, { autoClose: 6000 });
       });
     });

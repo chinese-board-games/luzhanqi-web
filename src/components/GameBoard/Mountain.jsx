@@ -1,17 +1,17 @@
 import { Center } from '@mantine/core';
 import PropTypes from 'prop-types';
 
-export default function Mountain({ rotation }) {
+export default function Mountain({ rotation, isEnglish }) {
   return (
     <Center
       sx={(theme) => ({
         borderRadius: '100%',
         border: '.1em solid gray',
-        writingMode: 'vertical-rl',
+        writingMode: isEnglish ? 'horizontal-tb' : 'vertical-rl',
         fontSize: theme.other.mountainSizing.md.fontSize,
         zIndex: 100,
         whiteSpace: 'nowrap',
-        rotate: rotation || '0deg',
+        rotate: isEnglish ? '0deg' : rotation || '0deg',
         fontFamily: 'SentyWEN2017',
         '@media (max-width: 450px)': {
           fontSize: theme.other.mountainSizing.sm.fontSize,
@@ -24,11 +24,12 @@ export default function Mountain({ rotation }) {
       w="4em"
       h="4em"
     >
-      山界
+      {isEnglish ? 'Mountain' : '山界'}
     </Center>
   );
 }
 
 Mountain.propTypes = {
   rotation: PropTypes.string,
+  isEnglish: PropTypes.bool,
 };
