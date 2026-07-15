@@ -77,6 +77,10 @@ export const GameProvider = ({ children }) => {
   });
   const [successors, setSuccessors] = useState([]);
   const [isEnglish, setIsEnglish] = useState(false);
+  // rule-variant config (flyingBombs/landminesSurvive/captureTheFlag/...)
+  // set by the host in the Lobby - needed locally so move highlighting and
+  // combat-outcome prediction match how the server will actually resolve them
+  const [gameConfig, setGameConfig] = useState({});
   // mirrors playerNameRef above - lets the socket handlers below (registered
   // in an effect that doesn't re-run on every isEnglish change) always read
   // the current language instead of a stale closure
@@ -177,6 +181,7 @@ export const GameProvider = ({ children }) => {
     winner: { winner, setWinner },
     gameResults: { gameResults, setGameResults },
     isEnglish: { isEnglish, setIsEnglish },
+    gameConfig: { gameConfig, setGameConfig },
     errors: { errors, setErrors },
     rejoining: { rejoining, setRejoining },
     disconnectedPlayer: { disconnectedPlayer, setDisconnectedPlayer },
@@ -264,6 +269,7 @@ export const GameProvider = ({ children }) => {
         setWinner(data.winnerIndex);
         if (data.gameStats) setGameResults(data.gameStats);
       }
+      if (data.config) setGameConfig(data.config);
       setRoomId(data.gameId);
       navigate(`/game/${data.gameId}`);
     });
@@ -339,6 +345,7 @@ export const GameProvider = ({ children }) => {
       // normally set by beginNewGame, but that event never fires for AI
       // games since they skip the Lobby's "Room Full" step entirely
       if (typeof game.turn === 'number') setClientTurn(game.turn);
+      if (game.config) setGameConfig(game.config);
     });
 
     socket.on('halfBoardReceived', () => {

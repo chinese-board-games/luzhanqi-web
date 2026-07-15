@@ -75,13 +75,15 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   const linkStyle = { color: 'white' };
 
   /** Tell the server to create a new game */
-  const createNewGame = (name, vsAi, aiSettings) => {
+  const createNewGame = (name, vsAi, aiSettings, rules) => {
     if (name) {
       setPlayerName(name);
       socket.emit('hostCreateNewGame', {
         playerName: name,
         hostId: user?.uid || null,
-        gameConfig: vsAi ? { opponentType: 'ai', aiSettings } : undefined,
+        // vsAi games skip the Lobby (where a human game's host would
+        // otherwise set these), so rules must be sent at creation time
+        gameConfig: vsAi ? { opponentType: 'ai', aiSettings, ...rules } : undefined,
       });
       setHost(true);
       // GameContext will redirect to /game when socket starts the game
@@ -151,8 +153,17 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     positionalDrive,
     caution,
     aggression,
+    fogOfWar,
+    landminesSurvive,
+    flyingBombs,
+    captureTheFlag,
   }) => {
-    createNewGame(playerName, vsAi, { randomness, positionalDrive, caution, aggression });
+    createNewGame(
+      playerName,
+      vsAi,
+      { randomness, positionalDrive, caution, aggression },
+      { fogOfWar, landminesSurvive, flyingBombs, captureTheFlag }
+    );
   };
 
   const handleJoinSubmit = ({ playerName, roomId }) => {
@@ -173,6 +184,11 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
         positionalDrive: 0.15,
         caution: 0.5,
         aggression: 1,
+        // rule variants - defaults match createGame's resolvedConfig in the backend
+        fogOfWar: true,
+        landminesSurvive: false,
+        flyingBombs: false,
+        captureTheFlag: false,
       },
     });
     const vsAi = createForm.values.vsAi;
@@ -184,6 +200,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
           <Tabs defaultValue="basic" keepMounted={false}>
             <Tabs.List>
               <Tabs.Tab value="basic">{isEnglish ? 'Basic' : '基本'}</Tabs.Tab>
+              {vsAi ? <Tabs.Tab value="rules">{isEnglish ? 'Rules' : '規則'}</Tabs.Tab> : null}
               {vsAi ? (
                 <Tabs.Tab value="advanced">{isEnglish ? 'Advanced' : '進階'}</Tabs.Tab>
               ) : null}
@@ -201,6 +218,43 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
                 {...createForm.getInputProps('vsAi', { type: 'checkbox' })}
               />
             </Tabs.Panel>
+
+            {vsAi ? (
+              <Tabs.Panel value="rules" pt="sm">
+                <Checkbox
+                  mt="md"
+                  label={isEnglish ? 'Enable fog of war' : '啟用戰爭迷霧'}
+                  {...createForm.getInputProps('fogOfWar', { type: 'checkbox' })}
+                />
+                <Checkbox
+                  mt="sm"
+                  label={
+                    isEnglish
+                      ? 'Landmines survive (only the attacker dies)'
+                      : '地雷不會被摧毀（只有攻擊方陣亡）'
+                  }
+                  {...createForm.getInputProps('landminesSurvive', { type: 'checkbox' })}
+                />
+                <Checkbox
+                  mt="sm"
+                  label={
+                    isEnglish
+                      ? 'Flying bombs (bombs move like the Engineer)'
+                      : '飛彈（炸彈可像工兵一樣轉彎移動）'
+                  }
+                  {...createForm.getInputProps('flyingBombs', { type: 'checkbox' })}
+                />
+                <Checkbox
+                  mt="sm"
+                  label={
+                    isEnglish
+                      ? 'Capture the flag (carry it back to your HQ to win)'
+                      : '奪旗規則（需將軍旗帶回己方大本營才能獲勝）'
+                  }
+                  {...createForm.getInputProps('captureTheFlag', { type: 'checkbox' })}
+                />
+              </Tabs.Panel>
+            ) : null}
 
             {vsAi ? (
               <Tabs.Panel value="advanced" pt="sm">

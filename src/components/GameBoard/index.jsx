@@ -27,6 +27,7 @@ export default function GameBoard({
   forfeit,
   affiliation,
   isEnglish = false,
+  gameConfig = {},
   isSpectator = false,
   gamePhase = 2,
   lastMove = null,
@@ -44,7 +45,11 @@ export default function GameBoard({
   const originPiece = originSelected ? board[origin[0]][origin[1]] : null;
   const destinationPiece = destinationSelected ? board[destination[0]][destination[1]] : null;
 
-  const moves = originSelected ? getSuccessors(board, origin[0], origin[1], affiliation) : [];
+  const moves = originSelected
+    ? getSuccessors(board, origin[0], origin[1], affiliation, {
+        flyingBombs: gameConfig.flyingBombs,
+      })
+    : [];
   const availibleMoves = new Set(moves.map((move) => JSON.stringify(move)));
 
   const positionDisabled = (row, col) => {
@@ -209,6 +214,7 @@ export default function GameBoard({
             originPiece={originPiece}
             destinationPiece={destinationPiece}
             isEnglish={isEnglish}
+            gameConfig={gameConfig}
           />
         ) : null}
       </Flex>
@@ -228,6 +234,7 @@ GameBoard.propTypes = {
   opponent: PropTypes.string,
   affiliation: PropTypes.number,
   isEnglish: PropTypes.bool,
+  gameConfig: PropTypes.object,
   isSpectator: PropTypes.bool,
   gamePhase: PropTypes.number,
   lastMove: PropTypes.shape({
