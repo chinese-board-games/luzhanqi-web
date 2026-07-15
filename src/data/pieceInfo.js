@@ -30,4 +30,19 @@ const pieceInfo = Object.fromEntries(
   ])
 );
 
+/** Same piece info, localized: picks the English or Traditional Chinese
+ * title/description/rules depending on isEnglish. */
+export const getPieceInfo = (isEnglish) =>
+  Object.fromEntries(
+    Object.entries(pieceInfo).map(([id, piece]) => [
+      id,
+      {
+        ...piece,
+        title: isEnglish ? piece.title : piece.title_zh,
+        description: isEnglish ? piece.description : piece.description_zh,
+        rules: isEnglish ? piece.rules : piece.rules_zh,
+      },
+    ])
+  );
+
 export default pieceInfo;

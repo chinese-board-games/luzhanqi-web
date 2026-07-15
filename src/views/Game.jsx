@@ -10,7 +10,7 @@ import GameOver from 'components/GameOver';
 import GameBoard from 'components/GameBoard';
 import HelpButton from 'components/HelpButton';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
-import { Container, Flex, Center, Button, CopyButton, Title, Loader } from '@mantine/core';
+import { Container, Flex, Center, Title, Loader } from '@mantine/core';
 
 const Game = () => {
   let { roomId } = useParams();
@@ -99,7 +99,10 @@ const Game = () => {
         },
       });
     } else {
-      setErrors((prevErrors) => [...prevErrors, 'You must have both a source and target tile']);
+      setErrors((prevErrors) => [
+        ...prevErrors,
+        isEnglish ? 'You must have both a source and target tile' : '您必須同時選擇起點和終點',
+      ]);
     }
   };
 
@@ -142,7 +145,7 @@ const Game = () => {
             {/* if the playerList is empty, the user must have gotten here via a urlRoomId */}
             {playerList.length > 0 ? (
               <Container>
-                <Title order={2}>Players:</Title>
+                <Title order={2}>{isEnglish ? 'Players:' : '玩家：'}</Title>
                 <Flex wrap="wrap">
                   {playerList.map((name, i) => (
                     <Center
@@ -160,7 +163,7 @@ const Game = () => {
                     </Center>
                   ))}
                 </Flex>
-                <Title order={2}>Spectators:</Title>
+                <Title order={2}>{isEnglish ? 'Spectators:' : '觀眾：'}</Title>
                 <Flex wrap="wrap">
                   {spectatorList.map((name) => (
                     <Center
@@ -178,16 +181,6 @@ const Game = () => {
                     </Center>
                   ))}
                 </Flex>
-                <br />
-                {gamePhase == 0 ? (
-                  <CopyButton value={window.location.href}>
-                    {({ copied, copy }) => (
-                      <Button color={copied ? 'green' : 'blue'} onClick={copy}>
-                        {copied ? 'Copied' : 'Copy URL'}
-                      </Button>
-                    )}
-                  </CopyButton>
-                ) : null}
               </Container>
             ) : null}
           </Container>
@@ -196,7 +189,9 @@ const Game = () => {
         {disconnectedPlayer ? (
           <Center>
             <Title order={4}>
-              {disconnectedPlayer} disconnected — waiting for them to reconnect…
+              {isEnglish
+                ? `${disconnectedPlayer} disconnected — waiting for them to reconnect…`
+                : `${disconnectedPlayer} 已斷線 — 等待重新連線中…`}
             </Title>
           </Center>
         ) : null}

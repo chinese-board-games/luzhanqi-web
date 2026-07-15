@@ -10,7 +10,7 @@ import { Table } from '@mantine/core';
 import { getUser, createUser, archiveGame, unarchiveGame } from 'api/User';
 import { getGameById } from 'api/Game';
 
-const UserModal = ({ showModal, setShowModal }) => {
+const UserModal = ({ showModal, setShowModal, isEnglish }) => {
   const user = useFirebaseAuth();
   const navigate = useNavigate();
   const [userData, setUserData] = useState({});
@@ -102,25 +102,43 @@ const UserModal = ({ showModal, setShowModal }) => {
           X
         </Button>
       </div>
-      <Title size={25}>Hi, {user?.displayName || user?.phoneNumber || user?.email}</Title>
+      <Title size={25}>
+        {isEnglish ? 'Hi, ' : '您好，'}
+        {user?.displayName || user?.phoneNumber || user?.email}
+      </Title>
       <Text>
-        You&apos;ve played{' '}
-        <Text span fw={700}>
-          {userData?.games?.length || 'no'}
-        </Text>{' '}
-        games
+        {isEnglish ? (
+          <>
+            You&apos;ve played{' '}
+            <Text span fw={700}>
+              {userData?.games?.length || 'no'}
+            </Text>{' '}
+            games
+          </>
+        ) : (
+          <>
+            您已經玩過{' '}
+            <Text span fw={700}>
+              {userData?.games?.length || 0}
+            </Text>{' '}
+            場遊戲
+          </>
+        )}
       </Text>
 
-      <Text>Your rank is {userData?.rank || '(no rank)'}</Text>
+      <Text>
+        {isEnglish ? 'Your rank is ' : '您的排名是 '}
+        {userData?.rank || (isEnglish ? '(no rank)' : '（無排名）')}
+      </Text>
       {/* create a table with columns date, opponent, win/loss, detail */}
       {userData?.games?.length > 0 && (
         <Table>
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Opponent</th>
-              <th>Result</th>
-              <th>Actions</th>
+              <th>{isEnglish ? 'Date' : '日期'}</th>
+              <th>{isEnglish ? 'Opponent' : '對手'}</th>
+              <th>{isEnglish ? 'Result' : '結果'}</th>
+              <th>{isEnglish ? 'Actions' : '操作'}</th>
             </tr>
           </thead>
           <tbody>
@@ -134,14 +152,17 @@ const UserModal = ({ showModal, setShowModal }) => {
                 <tr key={myGame._id}>
                   <td>{new Date(myGame.createdAt).toLocaleDateString()}</td>
                   {myGame.hostId && myGame.hostId === myGame.clientId ? (
-                    <td>Yourself</td>
+                    <td>{isEnglish ? 'Yourself' : '您自己'}</td>
                   ) : (
                     <td>{myGame.hostId === user?.uid ? myGame.players[1] : myGame.players[0]}</td>
                   )}
                   <td>
                     {myGame.winnerId === user?.uid
-                      ? 'Win'
-                      : (myGame.winnerId && 'Loss') ?? 'Incomplete'}
+                      ? isEnglish
+                        ? 'Win'
+                        : '勝利'
+                      : (myGame.winnerId && (isEnglish ? 'Loss' : '失敗')) ??
+                        (isEnglish ? 'Incomplete' : '未完成')}
                   </td>
                   <td>
                     {isIncomplete ? (
@@ -149,27 +170,27 @@ const UserModal = ({ showModal, setShowModal }) => {
                         {archivedIds.has(myGame._id) ? (
                           <>
                             <Text size="xs" c="dimmed">
-                              Archived
+                              {isEnglish ? 'Archived' : '已封存'}
                             </Text>
                             <Button
                               size="xs"
                               variant="outline"
                               onClick={() => handleUnarchive(myGame._id)}
                             >
-                              Unarchive
+                              {isEnglish ? 'Unarchive' : '取消封存'}
                             </Button>
                           </>
                         ) : (
                           <>
                             <Button size="xs" onClick={() => handleRejoin(myGame._id)}>
-                              Rejoin
+                              {isEnglish ? 'Rejoin' : '重新加入'}
                             </Button>
                             <Button
                               size="xs"
                               variant="outline"
                               onClick={() => handleArchive(myGame._id)}
                             >
-                              Archive
+                              {isEnglish ? 'Archive' : '封存'}
                             </Button>
                           </>
                         )}
@@ -189,6 +210,7 @@ const UserModal = ({ showModal, setShowModal }) => {
 UserModal.propTypes = {
   showModal: PropTypes.bool.isRequired,
   setShowModal: PropTypes.func.isRequired,
+  isEnglish: PropTypes.bool,
 };
 
 export default UserModal;

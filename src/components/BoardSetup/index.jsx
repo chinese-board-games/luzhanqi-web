@@ -28,18 +28,14 @@ export default function BoardSetup() {
 
   if (isSpectator) {
     return (
-      <>
-        <Title order={2}>Waiting for players to set the board</Title>
-        <Title order={2}>等待玩家設定棋盤</Title>
-      </>
+      <Title order={2}>
+        {isEnglish ? 'Waiting for players to set the board' : '等待玩家設定棋盤'}
+      </Title>
     );
   }
 
   return submittedSide ? (
-    <>
-      <Title order={2}>請等對手</Title>
-      <Title order={2}>Waiting for other player</Title>
-    </>
+    <Title order={2}>{isEnglish ? 'Waiting for other player' : '請等對手'}</Title>
   ) : (
     <HalfBoard
       sendStartingBoard={sendStartingBoard}

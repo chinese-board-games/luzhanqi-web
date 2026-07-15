@@ -3,7 +3,7 @@ import { Button, Flex, Title, Text } from '@mantine/core';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 
-const WarnModal = ({ showModal, setShowModal, forfeit }) => (
+const WarnModal = ({ showModal, setShowModal, forfeit, isEnglish }) => (
   <Modal
     ariaHideApp={false}
     isOpen={showModal}
@@ -31,8 +31,12 @@ const WarnModal = ({ showModal, setShowModal, forfeit }) => (
         X
       </Button>
     </Flex>
-    <Title order={2}>Are you sure?</Title>
-    <Text>To leave a game in-progress is to forfeit the game.</Text>
+    <Title order={2}>{isEnglish ? 'Are you sure?' : '您確定嗎？'}</Title>
+    <Text>
+      {isEnglish
+        ? 'To leave a game in-progress is to forfeit the game.'
+        : '離開進行中的遊戲將視為投降。'}
+    </Text>
     <br />
     <Flex style={{ gap: '0.25em', justifyContent: 'flex-end' }}>
       <Button
@@ -42,10 +46,10 @@ const WarnModal = ({ showModal, setShowModal, forfeit }) => (
           setShowModal(false);
         }}
       >
-        Forfeit
+        {isEnglish ? 'Forfeit' : '投降'}
       </Button>
       <Button color="green" onClick={() => setShowModal(false)}>
-        Return to game
+        {isEnglish ? 'Return to game' : '返回遊戲'}
       </Button>
     </Flex>
   </Modal>
@@ -55,6 +59,7 @@ WarnModal.propTypes = {
   showModal: PropTypes.bool.isRequired,
   setShowModal: PropTypes.func.isRequired,
   forfeit: PropTypes.func.isRequired,
+  isEnglish: PropTypes.bool,
 };
 
 export default WarnModal;

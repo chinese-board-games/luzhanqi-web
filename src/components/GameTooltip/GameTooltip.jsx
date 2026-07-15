@@ -2,15 +2,16 @@ import React from 'react';
 import { Tooltip, Text, Box, List, ThemeIcon } from '@mantine/core';
 import { IconInfoCircle } from '@tabler/icons-react';
 import PropTypes from 'prop-types';
-import pieceInfo from 'data/pieceInfo';
+import { getPieceInfo } from 'data/pieceInfo';
 
 const GameTooltip = ({
   children,
   pieceName,
   placement = 'top',
   showTooltips = true, // <-- TODO: toggle isn't currently used
+  isEnglish = false,
 }) => {
-  const info = pieceInfo[pieceName];
+  const info = getPieceInfo(isEnglish)[pieceName];
 
   if (!showTooltips || !info) return children; // respect toggle
 
@@ -49,6 +50,7 @@ GameTooltip.propTypes = {
   pieceName: PropTypes.string,
   placement: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
   showTooltips: PropTypes.bool, // new prop
+  isEnglish: PropTypes.bool,
 };
 
 export default GameTooltip;

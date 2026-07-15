@@ -74,7 +74,7 @@ export default function Position({
             },
           })}
         >
-          {placedPiece || '行營'}
+          {placedPiece || (isEnglish ? 'Camp' : '行營')}
         </Center>
       );
     }
@@ -109,12 +109,15 @@ export default function Position({
           bg="pastel-tan.1"
         >
           <Stack spacing="0em" align="stretch" justify="center">
-            {placedPiece || (
-              <>
-                <Center sx={{ lineHeight: '1.1' }}>大</Center>
-                <Center sx={{ lineHeight: '1.1' }}>本營</Center>
-              </>
-            )}
+            {placedPiece ||
+              (isEnglish ? (
+                <Center sx={{ lineHeight: '1.1' }}>HQ</Center>
+              ) : (
+                <>
+                  <Center sx={{ lineHeight: '1.1' }}>大</Center>
+                  <Center sx={{ lineHeight: '1.1' }}>本營</Center>
+                </>
+              ))}
           </Stack>
         </Center>
       );
@@ -146,7 +149,7 @@ export default function Position({
         })}
         bg="pastel-tan.1"
       >
-        {placedPiece || '後勤'}
+        {placedPiece || (isEnglish ? 'Railroad' : '後勤')}
       </Center>
     );
   };

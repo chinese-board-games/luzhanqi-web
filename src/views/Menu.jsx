@@ -86,7 +86,10 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
       setHost(true);
       // GameContext will redirect to /game when socket starts the game
     } else {
-      setErrors((prevErrors) => [...prevErrors, 'You must provide a player name.']);
+      setErrors((prevErrors) => [
+        ...prevErrors,
+        isEnglish ? 'You must provide a player name.' : '請輸入玩家名稱。',
+      ]);
     }
   };
 
@@ -104,7 +107,9 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     } else {
       setErrors((prevErrors) => [
         ...prevErrors,
-        'You must provide both a game number and a player name.',
+        isEnglish
+          ? 'You must provide both a game number and a player name.'
+          : '請同時輸入房間代碼和玩家名稱。',
       ]);
     }
   };
@@ -124,7 +129,9 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     } else {
       setErrors((prevErrors) => [
         ...prevErrors,
-        'You must provide both a game number and a spectator name.',
+        isEnglish
+          ? 'You must provide both a game number and a spectator name.'
+          : '請同時輸入房間代碼和觀眾名稱。',
       ]);
     }
   };
@@ -172,23 +179,25 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
 
     return (
       <Container style={cardStyle}>
-        <Title order={3}>Host a New Game</Title>
+        <Title order={3}>{isEnglish ? 'Host a New Game' : '建立新遊戲'}</Title>
         <form onSubmit={createForm.onSubmit(handleCreateSubmit)}>
           <Tabs defaultValue="basic" keepMounted={false}>
             <Tabs.List>
-              <Tabs.Tab value="basic">Basic</Tabs.Tab>
-              {vsAi ? <Tabs.Tab value="advanced">Advanced</Tabs.Tab> : null}
+              <Tabs.Tab value="basic">{isEnglish ? 'Basic' : '基本'}</Tabs.Tab>
+              {vsAi ? (
+                <Tabs.Tab value="advanced">{isEnglish ? 'Advanced' : '進階'}</Tabs.Tab>
+              ) : null}
             </Tabs.List>
 
             <Tabs.Panel value="basic" pt="sm">
               <TextInput
-                label="Player name:"
+                label={isEnglish ? 'Player name:' : '玩家名稱：'}
                 placeholder="Ex. Ian"
                 {...createForm.getInputProps('playerName')}
               />
               <Checkbox
                 mt="md"
-                label="Play against the computer"
+                label={isEnglish ? 'Play against the computer' : '與電腦對戰'}
                 {...createForm.getInputProps('vsAi', { type: 'checkbox' })}
               />
             </Tabs.Panel>
@@ -196,11 +205,11 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
             {vsAi ? (
               <Tabs.Panel value="advanced" pt="sm">
                 <Text size="xs" c="dimmed" mb="sm">
-                  Tune how the computer opponent plays.
+                  {isEnglish ? 'Tune how the computer opponent plays.' : '調整電腦對手的下棋方式。'}
                 </Text>
-                <Text size="sm">Randomness</Text>
+                <Text size="sm">{isEnglish ? 'Randomness' : '隨機性'}</Text>
                 <Text size="xs" c="dimmed">
-                  How unpredictable its moves are.
+                  {isEnglish ? 'How unpredictable its moves are.' : '棋步的不可預測程度。'}
                 </Text>
                 <Slider
                   min={0}
@@ -211,10 +220,12 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
                   onChange={(v) => createForm.setFieldValue('randomness', v)}
                 />
                 <Text size="sm" mt="md">
-                  Positional drive
+                  {isEnglish ? 'Positional drive' : '進攻傾向'}
                 </Text>
                 <Text size="xs" c="dimmed">
-                  How much it favors advancing toward your side over holding position.
+                  {isEnglish
+                    ? 'How much it favors advancing toward your side over holding position.'
+                    : '相較於固守陣地，電腦有多傾向向前推進。'}
                 </Text>
                 <Slider
                   min={0}
@@ -225,10 +236,12 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
                   onChange={(v) => createForm.setFieldValue('positionalDrive', v)}
                 />
                 <Text size="sm" mt="md">
-                  Caution
+                  {isEnglish ? 'Caution' : '謹慎程度'}
                 </Text>
                 <Text size="xs" c="dimmed">
-                  How strongly it avoids exposing valuable pieces to risk.
+                  {isEnglish
+                    ? 'How strongly it avoids exposing valuable pieces to risk.'
+                    : '電腦避免讓重要棋子暴露於風險中的程度。'}
                 </Text>
                 <Slider
                   min={0}
@@ -239,10 +252,12 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
                   onChange={(v) => createForm.setFieldValue('caution', v)}
                 />
                 <Text size="sm" mt="md">
-                  Aggression
+                  {isEnglish ? 'Aggression' : '侵略性'}
                 </Text>
                 <Text size="xs" c="dimmed">
-                  How much extra value it places on capturing pieces.
+                  {isEnglish
+                    ? 'How much extra value it places on capturing pieces.'
+                    : '電腦對俘獲棋子賦予多少額外價值。'}
                 </Text>
                 <Slider
                   min={0}
@@ -257,7 +272,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
           </Tabs>
           <br />
           <Button variant="info" type="submit">
-            Create Match
+            {isEnglish ? 'Create Match' : '建立對局'}
           </Button>
         </form>
       </Container>
@@ -274,22 +289,22 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     });
     return (
       <Container style={cardStyle}>
-        <Title order={3}>Join a Game</Title>
+        <Title order={3}>{isEnglish ? 'Join a Game' : '加入遊戲'}</Title>
         <form onSubmit={joinForm.onSubmit(handleJoinSubmit)}>
           <TextInput
-            label="Player name:"
+            label={isEnglish ? 'Player name:' : '玩家名稱：'}
             placeholder="Ex. Ian"
             {...joinForm.getInputProps('playerName')}
           />
           <TextInput
-            label="Join game:"
+            label={isEnglish ? 'Join game:' : '加入代碼：'}
             placeholder="Ex. 7K4X2P"
             {...joinForm.getInputProps('roomId')}
             disabled={!!urlRoomId}
           />
           <br />
           <Button variant="info" type="submit">
-            Submit
+            {isEnglish ? 'Submit' : '送出'}
           </Button>
         </form>
       </Container>
@@ -310,22 +325,22 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     });
     return (
       <Container style={cardStyle}>
-        <Title order={3}>Spectate a Game</Title>
+        <Title order={3}>{isEnglish ? 'Spectate a Game' : '觀戰遊戲'}</Title>
         <form onSubmit={spectateForm.onSubmit(handleSpectateSubmit)}>
           <TextInput
-            label="Spectator name:"
+            label={isEnglish ? 'Spectator name:' : '觀眾名稱：'}
             placeholder="Ex. Ian"
             {...spectateForm.getInputProps('spectatorName')}
           />
           <TextInput
-            label="Spectate game:"
+            label={isEnglish ? 'Spectate game:' : '觀戰代碼：'}
             placeholder="Ex. 7K4X2P"
             {...spectateForm.getInputProps('roomId')}
             disabled={!!urlRoomId}
           />
           <br />
           <Button variant="info" type="submit">
-            Submit
+            {isEnglish ? 'Submit' : '送出'}
           </Button>
         </form>
       </Container>
@@ -338,17 +353,23 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
         <Container style={stackStyle}>
           {!joinedRoom && activeGames.length > 0 ? (
             <Container style={cardStyle}>
-              <Title order={3}>Rejoin a Game</Title>
+              <Title order={3}>{isEnglish ? 'Rejoin a Game' : '重新加入遊戲'}</Title>
               {activeGames.slice(0, 1).map((game) => (
                 <Container key={game.gameId} style={cardContentStyle}>
                   <Text size="sm" style={{ flex: 1 }}>
-                    {game.isAiGame ? 'vs. Computer' : `vs. ${game.opponentName}`}
+                    {isEnglish
+                      ? game.isAiGame
+                        ? 'vs. Computer'
+                        : `vs. ${game.opponentName}`
+                      : game.isAiGame
+                      ? '對戰電腦'
+                      : `對戰 ${game.opponentName}`}
                   </Text>
                   <Link to={`/game/${game.gameId}`} style={linkStyle}>
-                    <Button size="xs">Rejoin</Button>
+                    <Button size="xs">{isEnglish ? 'Rejoin' : '重新加入'}</Button>
                   </Link>
                   <Button size="xs" variant="outline" onClick={() => handleArchive(game.gameId)}>
-                    Archive
+                    {isEnglish ? 'Archive' : '封存'}
                   </Button>
                 </Container>
               ))}

@@ -11,7 +11,13 @@ import { addGame } from 'api/User';
 import { updateUidMap } from 'api/Game';
 import PropTypes from 'prop-types';
 
-const EmailAndPasswordSignIn = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
+const EmailAndPasswordSignIn = ({
+  setExistingAccount,
+  setShowModal,
+  roomId,
+  playerName,
+  isEnglish,
+}) => {
   const form = useForm({
     initialValues: {
       email: '',
@@ -55,40 +61,46 @@ const EmailAndPasswordSignIn = ({ setExistingAccount, setShowModal, roomId, play
   if (error) {
     return (
       <div>
-        <p>Error: {error.message}</p>
+        <p>
+          {isEnglish ? 'Error: ' : '錯誤：'}
+          {error.message}
+        </p>
       </div>
     );
   }
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>{isEnglish ? 'Loading...' : '載入中...'}</p>;
   }
   if (user) {
     return (
       <div>
-        <p>Registered User: {user.user.email}</p>
+        <p>
+          {isEnglish ? 'Registered User: ' : '已註冊使用者：'}
+          {user.user.email}
+        </p>
       </div>
     );
   }
   return (
     <div>
-      <h2>Sign In</h2>
+      <h2>{isEnglish ? 'Sign In' : '登入'}</h2>
       <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
         <TextInput
-          label="Email address"
+          label={isEnglish ? 'Email address' : '電子郵件地址'}
           placeholder="example@provider.com"
           {...form.getInputProps('email')}
         />
         <PasswordInput
-          label="Password"
-          placeholder="Enter password"
+          label={isEnglish ? 'Password' : '密碼'}
+          placeholder={isEnglish ? 'Enter password' : '請輸入密碼'}
           {...form.getInputProps('password')}
         />
 
         <Button type="submit" style={{ marginTop: '0.5em' }}>
-          Login
+          {isEnglish ? 'Login' : '登入'}
         </Button>
         <Button variant="subtle" onClick={() => setExistingAccount(false)}>
-          Create Account
+          {isEnglish ? 'Create Account' : '建立帳號'}
         </Button>
       </form>
       <ToastContainer />
@@ -101,6 +113,7 @@ EmailAndPasswordSignIn.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   roomId: PropTypes.string.isRequired,
   playerName: PropTypes.string.isRequired,
+  isEnglish: PropTypes.bool,
 };
 
 export default EmailAndPasswordSignIn;

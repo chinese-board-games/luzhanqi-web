@@ -125,11 +125,11 @@ export default function GameBoard({
   );
 
   const divider = [
-    <FrontLines key="1" />,
-    <Mountain rotation="-90deg" key="2" />,
-    <FrontLines key="3" />,
-    <Mountain rotation="90deg" key="4" />,
-    <FrontLines key="5" />,
+    <FrontLines key="1" isEnglish={isEnglish} />,
+    <Mountain rotation="-90deg" key="2" isEnglish={isEnglish} />,
+    <FrontLines key="3" isEnglish={isEnglish} />,
+    <Mountain rotation="90deg" key="4" isEnglish={isEnglish} />,
+    <FrontLines key="5" isEnglish={isEnglish} />,
   ].map((content, i) => (
     <Grid.Col key={`divider-${i}`} span={4}>
       <Center mih="5em">{content}</Center>
@@ -172,7 +172,13 @@ export default function GameBoard({
                       setDestination(NO_SELECT);
                     }}
                   >
-                    {isTurn ? 'Send move' : 'Opponent turn'}
+                    {isEnglish
+                      ? isTurn
+                        ? 'Send move'
+                        : 'Opponent turn'
+                      : isTurn
+                      ? '送出移動'
+                      : '對手回合'}
                   </Button>
                   <Button
                     variant="outline"
@@ -182,10 +188,10 @@ export default function GameBoard({
                       setDestination(NO_SELECT);
                     }}
                   >
-                    Reset move
+                    {isEnglish ? 'Reset move' : '重設移動'}
                   </Button>
                   <Button variant="filled" color="red" onClick={forfeit}>
-                    Forfeit
+                    {isEnglish ? 'Forfeit' : '投降'}
                   </Button>
                 </Group>
               </Stack>
@@ -202,6 +208,7 @@ export default function GameBoard({
             hoveredPiece={hoveredPiece}
             originPiece={originPiece}
             destinationPiece={destinationPiece}
+            isEnglish={isEnglish}
           />
         ) : null}
       </Flex>

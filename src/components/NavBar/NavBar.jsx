@@ -109,12 +109,12 @@ const NavBar = () => {
       {playerList.length ? (
         <Flex style={{ display: 'flex', alignItems: 'center' }}>
           <Button variant="filled" color="violet" size="compact-lg" onClick={resetToLanding}>
-            Return home
+            {isEnglish ? 'Return home' : '返回首頁'}
           </Button>
         </Flex>
       ) : (
         <Title order={1} color="darkred">
-          陸戰棋
+          {isEnglish ? 'Luzhanqi' : '陸戰棋'}
         </Title>
       )}
 
@@ -143,21 +143,16 @@ const NavBar = () => {
                 window.location.reload();
               }}
             >
-              Logout
+              {isEnglish ? 'Logout' : '登出'}
             </Button>
           </>
         ) : (
           <Button size="compact-md" onClick={() => setShowAuthModal(true)}>
-            Sign In/Sign Up
+            {isEnglish ? 'Sign In/Sign Up' : '登入/註冊'}
           </Button>
         )}
-        <Button
-          size="compact-sm"
-          color="green"
-          style={{ width: '3em' }}
-          onClick={() => setIsEnglish(!isEnglish)}
-        >
-          {isEnglish ? '中文' : 'en'}
+        <Button size="compact-md" color="green" onClick={() => setIsEnglish(!isEnglish)}>
+          {isEnglish ? '中文' : 'EN'}
         </Button>
       </Flex>
 
@@ -166,9 +161,15 @@ const NavBar = () => {
         setShowModal={setShowAuthModal}
         roomId={roomId}
         playerName={playerName}
+        isEnglish={isEnglish}
       />
-      <UserModal showModal={showUserModal} setShowModal={setShowUserModal} />
-      <WarnModal showModal={showWarnModal} setShowModal={setShowWarnModal} forfeit={forfeit} />
+      <UserModal showModal={showUserModal} setShowModal={setShowUserModal} isEnglish={isEnglish} />
+      <WarnModal
+        showModal={showWarnModal}
+        setShowModal={setShowWarnModal}
+        forfeit={forfeit}
+        isEnglish={isEnglish}
+      />
     </Flex>
   );
 };
