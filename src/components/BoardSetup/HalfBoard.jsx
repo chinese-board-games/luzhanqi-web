@@ -10,6 +10,7 @@ import {
   Button,
   Box,
   Tooltip,
+  Menu,
 } from '@mantine/core';
 import {
   DragOverlay,
@@ -28,6 +29,7 @@ import GameTooltip from 'components/GameTooltip';
 import LineTo from 'react-lineto';
 import Position from '../Position';
 import { setupPieces, pieces } from '../../models/Piece';
+import { exampleBoards } from '../../data/exampleBoards';
 import {
   mapBoard,
   copyBoard,
@@ -66,20 +68,11 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
 
   const boardCompleted = unplacedPieces.length === 0;
 
-  const setExampleOne = () => {
-    const example1 = [
-      ['major_general', 'lieutenant', 'colonel', 'engineer', 'major_general'],
-      ['engineer', 'none', 'field_marshall', 'none', 'engineer'],
-      ['colonel', 'lieutenant', 'none', 'bomb', 'major'],
-      ['brigadier_general', 'none', 'brigadier_general', 'none', 'lieutenant'],
-      ['bomb', 'landmine', 'general', 'captain', 'captain'],
-      ['landmine', 'flag', 'major', 'landmine', 'captain'],
-    ];
-
+  const setExample = (exampleBoardLayout) => {
     const exampleBoard = [...emptyBoard];
     const placedPieces = new Map();
 
-    example1.forEach((row, y) => {
+    exampleBoardLayout.forEach((row, y) => {
       row.forEach((pieceName, x) => {
         if (pieceName === 'none') {
           return;
@@ -218,14 +211,28 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
       >
         <Stack>
           <Center>
-            <Title>Board Setup</Title>
+            <Title>{isEnglish ? 'Board Setup' : '棋盤佈局'}</Title>
           </Center>
           <Center>
             <Group>
-              <Button type="button" variant="secondary" onClick={setExampleOne}>
-                Set Example 1
-              </Button>
-              <Tooltip disabled={boardCompleted} label="You still have unplaced pieces!">
+              <Menu shadow="md" width={160}>
+                <Menu.Target>
+                  <Button type="button" variant="secondary">
+                    {isEnglish ? 'Use Example' : '使用範例佈局'} ▾
+                  </Button>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  {exampleBoards.map((example) => (
+                    <Menu.Item key={example.name} onClick={() => setExample(example.board)}>
+                      {isEnglish ? example.name : example.name_zh}
+                    </Menu.Item>
+                  ))}
+                </Menu.Dropdown>
+              </Menu>
+              <Tooltip
+                disabled={boardCompleted}
+                label={isEnglish ? 'You still have unplaced pieces!' : '您還有棋子尚未放置！'}
+              >
                 <span>
                   <Button
                     disabled={!boardCompleted}
@@ -233,7 +240,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
                     variant="info"
                     onClick={() => sendStartingBoard(halfBoard)}
                   >
-                    Send Board Placement
+                    {isEnglish ? 'Send Board Placement' : '送出棋盤佈局'}
                   </Button>
                 </span>
               </Tooltip>
@@ -245,7 +252,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
                   setUnplacedPieces([...affiliatedPieces].sort((a, b) => a.order - b.order));
                 }}
               >
-                Reset Board
+                {isEnglish ? 'Reset Board' : '重設棋盤'}
               </Button>
             </Group>
           </Center>
