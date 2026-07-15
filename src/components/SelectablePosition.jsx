@@ -90,6 +90,7 @@ export default function SelectablePosition({
         shadeColor={shadeColor}
         isHalfBoard={false}
         isEnglish={isEnglish}
+        isLastMove={isLastMove}
       />
     </Box>
   );
