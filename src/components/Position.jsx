@@ -18,6 +18,7 @@ export default function Position({
   isHalfBoard = false,
   isEnglish,
   disabled = false,
+  isLastMove = false,
 }) {
   const placedPiece =
     piece && piece.name && isHalfBoard
@@ -167,7 +168,10 @@ export default function Position({
       <Center
         mih="5em"
         bg={(!disabled && shadeColor) || 'transparent'}
-        sx={{ transition: 'background-color 1.5s ease-out' }}
+        // only the last-move fade-out should ease in/out - a click-driven
+        // highlight (origin/destination/attackable/movable) must apply
+        // immediately, with no delay
+        sx={{ transition: isLastMove ? 'background-color 1.5s ease-out' : 'none' }}
       >
         {getPositionContent()}
       </Center>
@@ -184,4 +188,5 @@ Position.propTypes = {
   isHalfBoard: PropTypes.bool.isRequired,
   isEnglish: PropTypes.bool.isRequired,
   disabled: PropTypes.bool,
+  isLastMove: PropTypes.bool,
 };
