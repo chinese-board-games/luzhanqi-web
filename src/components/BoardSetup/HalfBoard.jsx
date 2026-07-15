@@ -41,10 +41,12 @@ import {
 import useWindowSize from 'hooks/useWindowSize';
 import PropTypes from 'prop-types';
 
-const emptyBoard = [];
-for (let i = 0; i < 6; i++) {
-  emptyBoard.push([null, null, null, null, null]);
-}
+// returns a fresh 6x5 board every call - each row is a brand new array, so
+// callers can safely mutate individual cells without corrupting a shared
+// reference (a previous version returned the same row arrays every time,
+// so filling in an example board via direct cell assignment permanently
+// polluted every future "empty" board for the rest of the browser session)
+const makeEmptyBoard = () => Array.from({ length: 6 }, () => [null, null, null, null, null]);
 
 export default function HalfBoard({ sendStartingBoard, playerList, playerName, isEnglish }) {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
@@ -58,7 +60,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
   const [unplacedPieces, setUnplacedPieces] = useState(
     [...affiliatedPieces].sort((a, b) => a.order - b.order)
   );
-  const [halfBoard, setHalfboard] = useState([...emptyBoard]);
+  const [halfBoard, setHalfboard] = useState(makeEmptyBoard());
   const [activeId, setActiveId] = useState(null);
   // TODO: refactor this to be more effecient
   const activePiece =
@@ -69,7 +71,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
   const boardCompleted = unplacedPieces.length === 0;
 
   const setExample = (exampleBoardLayout) => {
-    const exampleBoard = [...emptyBoard];
+    const exampleBoard = makeEmptyBoard();
     const placedPieces = new Map();
 
     exampleBoardLayout.forEach((row, y) => {
@@ -248,7 +250,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
                 type="button"
                 color="red.6"
                 onClick={() => {
-                  setHalfboard([...emptyBoard]);
+                  setHalfboard(makeEmptyBoard());
                   setUnplacedPieces([...affiliatedPieces].sort((a, b) => a.order - b.order));
                 }}
               >
