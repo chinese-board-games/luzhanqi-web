@@ -71,9 +71,12 @@ export default function PieceInfoPanel({
   originPiece,
   destinationPiece,
   isEnglish = false,
+  gameConfig = {},
 }) {
   const outcome =
-    originPiece && destinationPiece ? predictOutcome(originPiece, destinationPiece) : null;
+    originPiece && destinationPiece
+      ? predictOutcome(originPiece, destinationPiece, gameConfig)
+      : null;
   const showOutcome = !!(outcome && destinationPiece);
 
   return (
@@ -117,4 +120,5 @@ PieceInfoPanel.propTypes = {
   originPiece: PropTypes.object,
   destinationPiece: PropTypes.object,
   isEnglish: PropTypes.bool,
+  gameConfig: PropTypes.object,
 };

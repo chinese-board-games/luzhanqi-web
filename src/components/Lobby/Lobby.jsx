@@ -24,6 +24,9 @@ const Lobby = () => {
   const configForm = useForm({
     initialValues: {
       fogOfWar: true,
+      landminesSurvive: false,
+      flyingBombs: false,
+      captureTheFlag: false,
     },
   });
 
@@ -135,6 +138,33 @@ const Lobby = () => {
                 mt="md"
                 label={isEnglish ? 'Enable fog of war' : '啟用戰爭迷霧'}
                 {...configForm.getInputProps('fogOfWar', { type: 'checkbox' })}
+              />
+              <Checkbox
+                mt="sm"
+                label={
+                  isEnglish
+                    ? 'Landmines survive (only the attacker dies)'
+                    : '地雷不會被摧毀（只有攻擊方陣亡）'
+                }
+                {...configForm.getInputProps('landminesSurvive', { type: 'checkbox' })}
+              />
+              <Checkbox
+                mt="sm"
+                label={
+                  isEnglish
+                    ? 'Flying bombs (bombs move like the Engineer)'
+                    : '飛彈（炸彈可像工兵一樣轉彎移動）'
+                }
+                {...configForm.getInputProps('flyingBombs', { type: 'checkbox' })}
+              />
+              <Checkbox
+                mt="sm"
+                label={
+                  isEnglish
+                    ? 'Capture the flag (carry it back to your HQ to win)'
+                    : '奪旗規則（需將軍旗帶回己方大本營才能獲勝）'
+                }
+                {...configForm.getInputProps('captureTheFlag', { type: 'checkbox' })}
               />
             </form>
           </>

@@ -29,6 +29,7 @@ const Game = () => {
     myDeadPieces: { myDeadPieces },
     lastMove: { lastMove },
     isEnglish: { isEnglish },
+    gameConfig: { gameConfig },
     joinedGame: { joinedGame },
     rejoining: { rejoining },
     disconnectedPlayer: { disconnectedPlayer },
@@ -231,6 +232,7 @@ const Game = () => {
               opponentName={playerList[1 - affiliation]}
               affiliation={affiliation}
               isEnglish={isEnglish}
+              gameConfig={gameConfig}
               isSpectator={spectatorList.includes(spectatorName)}
               gamePhase={gamePhase}
               lastMove={displayLastMove}

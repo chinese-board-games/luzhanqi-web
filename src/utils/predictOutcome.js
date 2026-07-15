@@ -7,9 +7,10 @@
  *
  * @param {Object} source the attacking piece (always known - it's your own)
  * @param {Object|null} target the piece on the destination tile, or null
+ * @param {{landminesSurvive?: boolean}} config the game's rule-variant config
  * @returns {{type: 'move'|'unknown'|'both-die'|'target-dies'|'source-dies'}|null}
  */
-export function predictOutcome(source, target) {
+export function predictOutcome(source, target, config = {}) {
   if (!source) {
     return null;
   }
@@ -23,12 +24,13 @@ export function predictOutcome(source, target) {
     return null;
   }
 
-  if (
-    source.name === 'bomb' ||
-    source.name === target.name ||
-    target.name === 'bomb' ||
-    (source.name !== 'engineer' && target.name === 'landmine')
-  ) {
+  if (source.name !== 'engineer' && target.name === 'landmine') {
+    // under landminesSurvive the mine stays and only the attacker dies,
+    // same outcome (for the attacker) as any other lost fight
+    return config.landminesSurvive ? { type: 'source-dies' } : { type: 'both-die' };
+  }
+
+  if (source.name === 'bomb' || source.name === target.name || target.name === 'bomb') {
     return { type: 'both-die' };
   }
 
