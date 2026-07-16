@@ -26,8 +26,11 @@ export function predictOutcome(source, target, config = {}) {
 
   if (source.name !== 'engineer' && target.name === 'landmine') {
     // under landminesSurvive the mine stays and only the attacker dies,
-    // same outcome (for the attacker) as any other lost fight
-    return config.landminesSurvive ? { type: 'source-dies' } : { type: 'both-die' };
+    // same outcome (for the attacker) as any other lost fight - except a
+    // bomb, which always trades with whatever it hits, mine included
+    return config.landminesSurvive && source.name !== 'bomb'
+      ? { type: 'source-dies' }
+      : { type: 'both-die' };
   }
 
   if (source.name === 'bomb' || source.name === target.name || target.name === 'bomb') {
