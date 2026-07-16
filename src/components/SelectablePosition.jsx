@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { forwardRef, useEffect } from 'react';
 import Position from './Position';
 import { Box } from '@mantine/core';
-import { useHover } from '@mantine/hooks';
+import { useHover, useMergedRef } from '@mantine/hooks';
 import PropTypes from 'prop-types';
 
 const shadeMap = {
@@ -42,21 +42,25 @@ const getShadeColor = (
   return hovered ? hover : color;
 };
 
-export default function SelectablePosition({
-  row,
-  col,
-  piece,
-  onClick,
-  originSelected = false,
-  destinationSelected = false,
-  attackable = false,
-  movable = false,
-  isLastMove = false,
-  isEnglish,
-  disabled = false,
-  onHoverPiece,
-}) {
-  const { hovered, ref } = useHover();
+const SelectablePosition = forwardRef(function SelectablePosition(
+  {
+    row,
+    col,
+    piece,
+    onClick,
+    originSelected = false,
+    destinationSelected = false,
+    attackable = false,
+    movable = false,
+    isLastMove = false,
+    isEnglish,
+    disabled = false,
+    onHoverPiece,
+  },
+  ref
+) {
+  const { hovered, ref: hoverRef } = useHover();
+  const mergedRef = useMergedRef(hoverRef, ref);
   const shadeColor = getShadeColor(
     hovered,
     originSelected,
@@ -79,7 +83,7 @@ export default function SelectablePosition({
       sx={{
         cursor: disabled ? 'not-allowed' : 'pointer',
       }}
-      ref={ref}
+      ref={mergedRef}
       onClick={disabled ? undefined : onClick}
     >
       <Position
@@ -94,7 +98,7 @@ export default function SelectablePosition({
       />
     </Box>
   );
-}
+});
 
 SelectablePosition.propTypes = {
   row: PropTypes.number.isRequired,
@@ -110,3 +114,5 @@ SelectablePosition.propTypes = {
   disabled: PropTypes.bool.isRequired,
   onHoverPiece: PropTypes.func,
 };
+
+export default SelectablePosition;

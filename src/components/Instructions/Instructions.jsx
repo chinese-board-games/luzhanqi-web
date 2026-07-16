@@ -114,8 +114,8 @@ const Instructions = ({ opened, onClose, gamePhase = 0, isEnglish = false }) => 
             {
               title: isEnglish ? 'Making Moves' : '移動棋子',
               description: isEnglish
-                ? 'Click on your piece to select it, then click on a valid destination. Click "Send move" to confirm.'
-                : '點擊您的棋子選擇它，然後點擊有效目的地。點擊「發送移動」確認。',
+                ? 'Click on your piece to select it, then click on a valid destination. Click "Send" to confirm.'
+                : '點擊您的棋子選擇它，然後點擊有效目的地。點擊「發送」確認。',
             },
             {
               title: isEnglish ? 'Piece Hierarchy' : '棋子階級',
