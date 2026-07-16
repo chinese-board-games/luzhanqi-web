@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 import { getAuth } from 'firebase/auth';
@@ -27,7 +27,7 @@ axios.interceptors.request.use(async (config) => {
   return config;
 });
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ErrorBoundary>
       <BrowserRouter>
@@ -46,6 +46,5 @@ ReactDOM.render(
         </FirebaseAuthProvider>
       </BrowserRouter>
     </ErrorBoundary>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
