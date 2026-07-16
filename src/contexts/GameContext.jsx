@@ -98,6 +98,13 @@ export const GameProvider = ({ children }) => {
 
   // eslint-disable-next-line no-unused-vars
   const [gamePhase, setGamePhase] = useState(0);
+  // mirrors playerNameRef above - lets the error handler below (registered
+  // in an effect that doesn't re-run on every gamePhase change) always read
+  // the current phase instead of a stale closure
+  const gamePhaseRef = useRef(gamePhase);
+  useEffect(() => {
+    gamePhaseRef.current = gamePhase;
+  }, [gamePhase]);
 
   const boardPositions = {};
 
@@ -396,9 +403,15 @@ export const GameProvider = ({ children }) => {
       }
     });
 
-    /** Server is returning an error message to the client */
+    /** Server is returning an error message to the client. During active
+     * gameplay, also resync with the server - an error here can mean a
+     * client-side optimistic update (see Game.jsx's playerMakeMove) guessed
+     * wrong and is now showing a stale/incorrect board. */
     socket.on('error', (errMsg) => {
       pushErrors(errMsg);
+      if (gamePhaseRef.current === 2) {
+        attemptRejoin(roomId);
+      }
     });
 
     // this effect re-registers every listener above from scratch on each

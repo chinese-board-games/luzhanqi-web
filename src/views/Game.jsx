@@ -11,6 +11,7 @@ import GameBoard from 'components/GameBoard';
 import HelpButton from 'components/HelpButton';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { Container, Flex, Center, Title, Loader } from '@mantine/core';
+import { applyMoveOptimistically } from 'utils/predictOutcome';
 
 const Game = () => {
   let { roomId } = useParams();
@@ -25,9 +26,9 @@ const Game = () => {
     host: { host },
     clientTurn: { clientTurn },
     errors: { errors, setErrors },
-    myBoard: { myBoard },
+    myBoard: { myBoard, setMyBoard },
     myDeadPieces: { myDeadPieces },
-    lastMove: { lastMove },
+    lastMove: { lastMove, setLastMove },
     isEnglish: { isEnglish },
     gameConfig: { gameConfig },
     joinedGame: { joinedGame },
@@ -88,15 +89,25 @@ const Game = () => {
 
   const playerMakeMove = async (source, target, host) => {
     if (source.length && target.length) {
-      // if target is in successors, make move
+      const moveSource = host ? source : rotateMove(source);
+      const moveTarget = host ? target : rotateMove(target);
+
+      // optimistic update: apply the move locally immediately so the
+      // player doesn't wait for the server round-trip to see it take
+      // effect - GameContext's playerMadeMove handler overwrites this with
+      // the authoritative board once the server responds, which also
+      // corrects any guess this couldn't make (an attack on a fogged piece)
+      setMyBoard((board) => applyMoveOptimistically(board, moveSource, moveTarget, gameConfig));
+      setLastMove({ source: moveSource, target: moveTarget });
+
       socket.emit('playerMakeMove', {
         playerName,
         idToken: user ? await user.getIdToken() : null,
         room: roomId,
         turn: clientTurn,
         pendingMove: {
-          source: host ? source : rotateMove(source),
-          target: host ? target : rotateMove(target),
+          source: moveSource,
+          target: moveTarget,
         },
       });
     } else {
