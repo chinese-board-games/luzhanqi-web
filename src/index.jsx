@@ -4,13 +4,15 @@ import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 import { getAuth } from 'firebase/auth';
 
+import '@mantine/core/styles.css';
 import './index.css';
+import './CustomFonts.css';
 import { GameProvider } from 'contexts/GameContext';
 import { FirebaseAuthProvider } from 'contexts/FirebaseContext';
 import { MantineProvider } from '@mantine/core';
+import { MantineEmotionProvider, emotionTransform } from '@mantine/emotion';
 import ErrorBoundary from 'components/ErrorBoundary';
 import App from './App';
-import { CustomFonts } from './CustomFonts';
 import theme, { other } from './theme';
 
 axios.defaults.baseURL = `${import.meta.env.VITE_API}`;
@@ -33,15 +35,17 @@ createRoot(document.getElementById('root')).render(
       <BrowserRouter>
         <FirebaseAuthProvider>
           <MantineProvider
+            stylesTransform={emotionTransform}
             theme={{
               ...theme,
               other,
             }}
           >
-            <CustomFonts />
-            <GameProvider>
-              <App />
-            </GameProvider>
+            <MantineEmotionProvider>
+              <GameProvider>
+                <App />
+              </GameProvider>
+            </MantineEmotionProvider>
           </MantineProvider>
         </FirebaseAuthProvider>
       </BrowserRouter>
