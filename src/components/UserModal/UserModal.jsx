@@ -17,7 +17,7 @@ const UserModal = ({ showModal, setShowModal, isEnglish }) => {
   const [gameData, setGameData] = useState([]);
   const [archivedIds, setArchivedIds] = useState(new Set());
 
-  useEffect(async () => {
+  useEffect(() => {
     const fetchUser = async () => {
       let myUser = await getUser(user.uid);
       if (isEmpty(myUser)) {
@@ -48,8 +48,7 @@ const UserModal = ({ showModal, setShowModal, isEnglish }) => {
     };
 
     if (user) {
-      const myUser = await fetchUser();
-      fetchGames(myUser);
+      fetchUser().then(fetchGames);
     }
   }, [setUserData, user?.uid, showModal]);
 
