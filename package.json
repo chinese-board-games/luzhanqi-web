@@ -16,17 +16,11 @@
     "@mantine/form": "^7.17.8",
     "@mantine/hooks": "^7.17.8",
     "@tabler/icons-react": "^3.44.0",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^12.1.10",
     "axios": "^1.2.2",
-    "bootstrap": "^4.5.3",
     "firebase": "^9.15.0",
     "framer-motion": "^12.42.2",
-    "jquery": "^3.5.1",
     "lodash": "^4.17.20",
     "lodash.isequal": "^4.5.0",
-    "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
@@ -38,9 +32,7 @@
     "react-router-dom": "^6.4.3",
     "react-toastify": "^9.1.1",
     "socket.io-client": "^4.5.4",
-    "typescript": "^4.1.3",
-    "unique-names-generator": "^4.3.1",
-    "web-vitals": "^0.2.4"
+    "unique-names-generator": "^4.3.1"
   },
   "scripts": {
     "start": "vite",
@@ -50,12 +42,6 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "format": "prettier src/**/*.js --write --config ./.prettierrc"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -96,9 +82,5 @@
     "*.{js,jsx,ts,tsx,md,html,css}": "prettier --write",
     "*.{js,jsx}": "eslint",
     "*.js": "eslint --fix"
-  },
-  "overrides": {
-    "autoprefixer": "10.4.5",
-    "nth-check": "^2.1.1"
   }
 }

@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect, useRef } from 'react';
-import { unstable_batchedUpdates } from 'react-dom';
 import { useNavigate } from 'react-router';
 import { io } from 'socket.io-client';
 import { toast } from 'react-toastify';
@@ -221,17 +220,7 @@ export const GameProvider = ({ children }) => {
    * Function on second parameter handles socket call parameters
    */
   useEffect(() => {
-    // socket.io callbacks fire outside React's event system, so React 17
-    // won't auto-batch the setState calls inside them - most handlers below
-    // call several setters per event (e.g. playerMadeMove sets turn, board,
-    // deadPieces, and lastMove), which without this wrapper means up to one
-    // full re-render of every GameContext consumer per setState call instead
-    // of one per event. Wrapping keeps each event to a single re-render.
-    const on = (event, handler) => {
-      socket.on(event, (...args) => unstable_batchedUpdates(() => handler(...args)));
-    };
-
-    on('connect', () => {
+    socket.on('connect', () => {
       console.info(`SocketID: ${socket.id}`);
       console.info(`Connected: ${socket.connected}`);
       // the underlying transport can reconnect under a new socket.id after
@@ -250,19 +239,22 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server has created a new game, only host receives this message */
-    on('newGameCreated', ({ gameId, joinCode: newJoinCode, mySocketId, players, phase, token }) => {
-      const serverRoomId = gameId;
-      console.info(`GameID: ${serverRoomId}, SocketID: ${mySocketId}`);
-      setRoomId(serverRoomId);
-      setJoinCode(newJoinCode || '');
-      setPlayerList(players);
-      saveSession(serverRoomId, playerNameRef.current, token);
-      if (typeof phase === 'number') setGamePhase(phase);
-      navigate(`/game/${serverRoomId}`);
-    });
+    socket.on(
+      'newGameCreated',
+      ({ gameId, joinCode: newJoinCode, mySocketId, players, phase, token }) => {
+        const serverRoomId = gameId;
+        console.info(`GameID: ${serverRoomId}, SocketID: ${mySocketId}`);
+        setRoomId(serverRoomId);
+        setJoinCode(newJoinCode || '');
+        setPlayerList(players);
+        saveSession(serverRoomId, playerNameRef.current, token);
+        if (typeof phase === 'number') setGamePhase(phase);
+        navigate(`/game/${serverRoomId}`);
+      }
+    );
 
     /** Server is telling all clients the game has started  */
-    on('beginNewGame', ({ mySocketId, roomId, turn }) => {
+    socket.on('beginNewGame', ({ mySocketId, roomId, turn }) => {
       console.info(`Starting game for room ${roomId} on socket ${mySocketId}`);
       // setDisplayTimer(true);
       setClientTurn(turn);
@@ -270,14 +262,14 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling all clients someone has joined the room */
-    on('playerJoinedRoom', ({ playerName: returnedPlayerName, players, spectators }) => {
+    socket.on('playerJoinedRoom', ({ playerName: returnedPlayerName, players, spectators }) => {
       console.info(`${returnedPlayerName} has joined the room!`);
       setPlayerList(players);
       if (Array.isArray(spectators)) setSpectatorList(spectators);
     });
 
     /** Server is telling this socket that it has joined a room */
-    on('youHaveJoinedTheRoom', (data) => {
+    socket.on('youHaveJoinedTheRoom', (data) => {
       setJoinedGame(true);
       // setPlayerList(data.players);
       const joinedRoomId = data.joinRoomId || roomId;
@@ -290,7 +282,7 @@ export const GameProvider = ({ children }) => {
 
     /** A stored session, or (from a device with none) a logged-in uid
      * matching a seat, successfully reclaimed a seat after a disconnect */
-    on('youHaveRejoinedTheRoom', (data) => {
+    socket.on('youHaveRejoinedTheRoom', (data) => {
       setRejoining(false);
       setJoinedGame(true);
       setPlayerName(data.playerName);
@@ -316,27 +308,27 @@ export const GameProvider = ({ children }) => {
     });
 
     /** The stored session token was rejected - fall back to the normal join form */
-    on('rejoinFailed', (data) => {
+    socket.on('rejoinFailed', (data) => {
       setRejoining(false);
       clearSession(data.gameId);
     });
 
     /** An opponent's socket dropped - their seat is still reserved, they may reconnect */
-    on('playerDisconnected', ({ playerName: droppedName }) => {
+    socket.on('playerDisconnected', ({ playerName: droppedName }) => {
       setDisconnectedPlayer(droppedName);
     });
 
-    on('playerReconnected', ({ playerName: returnedName }) => {
+    socket.on('playerReconnected', ({ playerName: returnedName }) => {
       setDisconnectedPlayer((current) => (current === returnedName ? null : current));
     });
 
     /** Server's answer to checkActiveGames - games tied to this account
      * that are still ongoing and worth prompting the user to rejoin */
-    on('myActiveGames', (games) => {
+    socket.on('myActiveGames', (games) => {
       setActiveGames(Array.isArray(games) ? games : []);
     });
 
-    on('playerLeftRoom', ({ playerName: returnedPlayerName, players }) => {
+    socket.on('playerLeftRoom', ({ playerName: returnedPlayerName, players }) => {
       console.info(`${returnedPlayerName} has left the room!`);
       setPlayerList(players);
       setClientTurn(-1);
@@ -344,13 +336,13 @@ export const GameProvider = ({ children }) => {
       setSubmittedSide(false);
     });
 
-    on('spectatorLeftRoom', ({ spectatorName: returnedSpectatorName, spectators }) => {
+    socket.on('spectatorLeftRoom', ({ spectatorName: returnedSpectatorName, spectators }) => {
       console.info(`${returnedSpectatorName} has left the room!`);
       setSpectatorList(spectators);
     });
 
     /** Server is telling this socket that it has left a room */
-    on('youHaveLeftTheRoom', () => {
+    socket.on('youHaveLeftTheRoom', () => {
       setJoinedGame(false);
       setPlayerList([]);
       navigate(`/`);
@@ -360,14 +352,17 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling all clients someone is spectating the room */
-    on('spectatorJoinedRoom', ({ spectatorName: returnedSpectatorName, spectators, players }) => {
-      console.info(`${returnedSpectatorName} has joined the room!`);
-      setPlayerList(players);
-      setSpectatorList(spectators);
-    });
+    socket.on(
+      'spectatorJoinedRoom',
+      ({ spectatorName: returnedSpectatorName, spectators, players }) => {
+        console.info(`${returnedSpectatorName} has joined the room!`);
+        setPlayerList(players);
+        setSpectatorList(spectators);
+      }
+    );
 
     /** Server is telling this socket that it has joined a room */
-    on('youAreSpectatingTheRoom', (data) => {
+    socket.on('youAreSpectatingTheRoom', (data) => {
       setJoinedGame(true);
       const joinedRoomId = data?.gameId || roomId;
       setRoomId(joinedRoomId);
@@ -376,7 +371,7 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is sending the starting board with all placed pieces */
-    on('boardSet', (game) => {
+    socket.on('boardSet', (game) => {
       setMyBoard(game.board);
       setGamePhase(2);
       setLastMove(null);
@@ -386,16 +381,16 @@ export const GameProvider = ({ children }) => {
       if (game.config) setGameConfig(game.config);
     });
 
-    on('halfBoardReceived', () => {
+    socket.on('halfBoardReceived', () => {
       setSubmittedSide(true);
     });
 
-    on('pieceSelected', (pieces) => {
+    socket.on('pieceSelected', (pieces) => {
       setSuccessors(pieces);
     });
 
     /** Server is telling all clients a move has been made */
-    on('playerMadeMove', ({ turn, board, deadPieces, moves }) => {
+    socket.on('playerMadeMove', ({ turn, board, deadPieces, moves }) => {
       setClientTurn(turn);
       setMyBoard(board);
       setMyDeadPieces(deadPieces);
@@ -407,7 +402,7 @@ export const GameProvider = ({ children }) => {
     /** Server is telling both players (and spectators) that a field marshal
      * died on the move that just resolved - notable since the loser's flag
      * becomes revealed to their opponent once this happens */
-    on('fieldMarshallDown', (fallen) => {
+    socket.on('fieldMarshallDown', (fallen) => {
       fallen.forEach(({ playerName: fallenPlayerName }) => {
         const isMine = fallenPlayerName === playerNameRef.current;
         const message = isEnglishRef.current
@@ -422,7 +417,7 @@ export const GameProvider = ({ children }) => {
     });
 
     /** Server is telling all clients the game has ended */
-    on('endGame', ({ winnerIndex, gameStats, finalGame }) => {
+    socket.on('endGame', ({ winnerIndex, gameStats, finalGame }) => {
       setGamePhase(3);
       setWinner(winnerIndex);
       setGameResults(gameStats);
@@ -438,7 +433,7 @@ export const GameProvider = ({ children }) => {
      * gameplay, also resync with the server - an error here can mean a
      * client-side optimistic update (see Game.jsx's playerMakeMove) guessed
      * wrong and is now showing a stale/incorrect board. */
-    on('error', (errMsg) => {
+    socket.on('error', (errMsg) => {
       pushErrors(errMsg);
       if (gamePhaseRef.current === 2) {
         attemptRejoin(roomId);
