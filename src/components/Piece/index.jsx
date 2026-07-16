@@ -12,6 +12,11 @@ export default function Piece({ name, affiliation, isEnglish }) {
         borderRadius: '10%',
         boxShadow: theme.shadows.sm,
         writingMode: 'horizontal-tb',
+        // pieces are clicked/dragged rapidly during play and setup - without
+        // this, a fast double-click or a drag that starts on the label text
+        // selects it like ordinary page text instead of acting on the piece
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
         width: theme.other.pieceSizing.md.width,
         height: theme.other.pieceSizing.md.height,
         fontSize: theme.other.pieceSizing.md.fontSize,
