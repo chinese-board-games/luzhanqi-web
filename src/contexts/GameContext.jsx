@@ -123,12 +123,12 @@ export const GameProvider = ({ children }) => {
   const [activeGames, setActiveGames] = useState([]);
 
   /** Attempts to reclaim a seat using a locally-stored session token if one
-   * exists for this game ID, otherwise (given a logged-in uid) falls back
-   * to asking the server to match the uid against the game's players.
-   * Returns false immediately if neither is available. */
-  const attemptRejoin = (gameId, uid = null) => {
+   * exists for this game ID, otherwise (given a logged-in Firebase user)
+   * falls back to asking the server to match a verified uid against the
+   * game's players. Returns false immediately if neither is available. */
+  const attemptRejoin = async (gameId, user = null) => {
     const session = loadSession(gameId);
-    if (!session && !uid) {
+    if (!session && !user) {
       setRejoining(false);
       return false;
     }
@@ -140,19 +140,19 @@ export const GameProvider = ({ children }) => {
       gameId,
       playerName: session?.playerName,
       token: session?.token,
-      uid,
+      idToken: user ? await user.getIdToken() : null,
     });
     return true;
   };
 
   /** Asks the server which of the logged-in user's games are still ongoing
    * and worth showing a "rejoin" prompt for. Results land in activeGames. */
-  const checkActiveGames = (uid) => {
-    if (!uid) {
+  const checkActiveGames = async (user) => {
+    if (!user) {
       setActiveGames([]);
       return;
     }
-    socket.emit('getMyActiveGames', { uid });
+    socket.emit('getMyActiveGames', { idToken: await user.getIdToken() });
   };
 
   const gameState = {

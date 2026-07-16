@@ -75,7 +75,7 @@ const Phone = ({ setShowModal, roomId, playerName, isEnglish }) => {
         if (roomId) {
           // already joined a room
           addGame(user.uid, roomId);
-          updateUidMap(roomId, playerName, user.uid);
+          updateUidMap(roomId, playerName);
         }
         console.info(`user: ${JSON.stringify(user)} user.phoneNumber: ${user.phoneNumber}`);
         setShowModal(false);

@@ -50,7 +50,7 @@ const NavBar = () => {
     });
   };
 
-  const resetToLanding = () => {
+  const resetToLanding = async () => {
     if (gamePhase == 2) {
       setShowWarnModal(true);
       return;
@@ -89,7 +89,7 @@ const NavBar = () => {
     setErrors([]);
     socket.emit('playerLeaveRoom', {
       playerName,
-      uid: user?.uid || null,
+      idToken: user ? await user.getIdToken() : null,
       leaveRoomId: roomId,
     });
     setRoomId('');

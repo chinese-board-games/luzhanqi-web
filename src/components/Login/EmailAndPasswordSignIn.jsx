@@ -36,7 +36,7 @@ const EmailAndPasswordSignIn = ({
         if (roomId) {
           // already joined a room
           addGame(user.uid, roomId);
-          updateUidMap(roomId, playerName, user.uid);
+          updateUidMap(roomId, playerName);
         }
         setShowModal(false);
       })

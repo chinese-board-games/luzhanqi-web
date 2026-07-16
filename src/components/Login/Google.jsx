@@ -22,7 +22,7 @@ const Google = ({ setShowModal, roomId, playerName }) => {
         if (roomId) {
           // already joined a room
           addGame(user.uid, roomId);
-          updateUidMap(roomId, playerName, user.uid);
+          updateUidMap(roomId, playerName);
         }
         console.info(`credential: ${JSON.stringify(credential)}`);
         console.info(`token: ${token}`);
