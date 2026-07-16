@@ -332,7 +332,7 @@ function PieceSelector({ unplacedPieces, isEnglish }) {
   });
   return (
     <Center
-      bg="linear-gradient(180deg, rgba(224,224,224,1) 0%, rgba(224,224,224,.5) 100%);"
+      bg="linear-gradient(180deg, rgba(224,224,224,1) 0%, rgba(224,224,224,.5) 100%)"
       miw="100%"
       py="1em"
       mih="14em"
