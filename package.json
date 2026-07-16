@@ -80,6 +80,8 @@
     "eslint-plugin-react": "^7.33.2",
     "husky": "^4.3.6",
     "lint-staged": "^10.5.3",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
     "prettier": "^2.2.1",
     "sharp": "^0.35.3",
     "vite": "^5.0.0",
