@@ -43,3 +43,52 @@ export function predictOutcome(source, target, config = {}) {
 
   return { type: 'source-dies' };
 }
+
+/**
+ * Optimistically applies a move to the board immediately on send, so the
+ * player doesn't wait for the server round-trip to see it take effect.
+ * Reuses predictOutcome's classification rather than re-deriving the rules
+ * - only paints the result onto the board. The source tile is always
+ * cleared (true in every outcome, backend-side, regardless of who wins);
+ * the target tile is only filled in when the outcome is deterministic - an
+ * attack on a fogged 'enemy' piece is genuinely unknowable client-side, so
+ * the target is left alone until the server's playerMadeMove response
+ * confirms or corrects it.
+ *
+ * @param {Array<Array<Object|null>>} board
+ * @param {[number, number]} source
+ * @param {[number, number]} target
+ * @param {Object} gameConfig
+ * @returns {Array<Array<Object|null>>} a new board array
+ */
+export function applyMoveOptimistically(board, source, target, gameConfig = {}) {
+  const [sr, sc] = source;
+  const [tr, tc] = target;
+  const sourcePiece = board[sr][sc];
+  const targetPiece = board[tr][tc];
+  const outcome = predictOutcome(sourcePiece, targetPiece, gameConfig);
+  if (!outcome) {
+    return board;
+  }
+
+  const newBoard = board.map((row) => [...row]);
+  newBoard[sr][sc] = null;
+
+  switch (outcome.type) {
+    case 'move':
+    case 'target-dies':
+      newBoard[tr][tc] = sourcePiece;
+      break;
+    case 'both-die':
+      newBoard[tr][tc] = null;
+      break;
+    case 'source-dies':
+    case 'unknown':
+    default:
+      // target tile is left as-is: source-dies means the defender stands
+      // unchanged, and unknown means the true outcome can't be guessed
+      break;
+  }
+
+  return newBoard;
+}
