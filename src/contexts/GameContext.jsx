@@ -388,7 +388,12 @@ export const GameProvider = ({ children }) => {
       setGamePhase(3);
       setWinner(winnerIndex);
       setGameResults(gameStats);
-      setMyBoard(finalGame.board);
+      // finalGame is the server's unfogged view, revealing the board now
+      // that fog no longer needs to hide anything - guard it since it
+      // crosses the socket boundary from a separately-maintained payload
+      if (finalGame) {
+        setMyBoard(finalGame.board);
+      }
     });
 
     /** Server is returning an error message to the client */
