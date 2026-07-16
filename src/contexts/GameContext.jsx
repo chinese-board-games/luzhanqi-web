@@ -9,6 +9,19 @@ const socket = io(import.meta.env.VITE_API);
 // const socket = io('localhost:4000');
 // const socket = io('https://luzhanqi.herokuapp.com/');
 
+// dev-only: without this, every Vite hot-reload of this module (or
+// anything it transitively imports) opens a brand new socket connection on
+// top of the old one, which never gets closed - a long dev session with
+// many edits ends up with dozens of live sockets/listeners piling up in
+// the same tab, which is real, cumulative overhead the app itself doesn't
+// have (import.meta.hot doesn't exist in a production build, so this is a
+// no-op there)
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    socket.close();
+  });
+}
+
 export const GameContext = createContext({});
 
 const sessionKey = (gameId) => `luzhanqi:session:${gameId}`;
