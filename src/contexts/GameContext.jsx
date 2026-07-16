@@ -210,6 +210,19 @@ export const GameProvider = ({ children }) => {
     socket.on('connect', () => {
       console.info(`SocketID: ${socket.id}`);
       console.info(`Connected: ${socket.connected}`);
+      // the underlying transport can reconnect under a new socket.id after
+      // a network drop or server restart without the page ever reloading -
+      // React state (joinedGame, playerList, ...) survives that untouched,
+      // so Game.jsx's own mount-time rejoin effect never re-fires, but the
+      // server's in-memory socketSeatRegistry (keyed by socket.id, proof
+      // that a later move/forfeit/etc. actually belongs to this seat) does
+      // NOT survive it. Silently re-establishing the seat here - a no-op
+      // on the very first connect, since roomId is still empty then - is
+      // what prevents "You do not have permission to act as X" on the
+      // first action after a reconnect.
+      if (roomId) {
+        attemptRejoin(roomId);
+      }
     });
 
     /** Server has created a new game, only host receives this message */
