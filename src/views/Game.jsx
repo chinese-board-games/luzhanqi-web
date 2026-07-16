@@ -14,7 +14,7 @@ import { Container, Flex, Center, Title, Loader } from '@mantine/core';
 
 const Game = () => {
   let { roomId } = useParams();
-  const uid = useFirebaseAuth()?.uid;
+  const user = useFirebaseAuth();
   const {
     socket,
     spectatorName: { spectatorName },
@@ -53,11 +53,11 @@ const Game = () => {
 
   /** On mount (or a hard reload), silently try to reclaim a seat using a
    * locally-stored session - or, on a device with none but a logged-in
-   * uid, ask the server to match that uid against the game's players -
-   * before falling back to the normal join form. */
+   * user, ask the server to match a verified uid against the game's
+   * players - before falling back to the normal join form. */
   useEffect(() => {
     if (roomId && !joinedGame && playerList.length === 0) {
-      attemptRejoin(roomId, uid);
+      attemptRejoin(roomId, user);
     }
     // only re-run when the room in the URL changes, not on every state update
   }, [roomId]);
@@ -86,12 +86,12 @@ const Game = () => {
         }
       : null;
 
-  const playerMakeMove = (source, target, host) => {
+  const playerMakeMove = async (source, target, host) => {
     if (source.length && target.length) {
       // if target is in successors, make move
       socket.emit('playerMakeMove', {
         playerName,
-        uid,
+        idToken: user ? await user.getIdToken() : null,
         room: roomId,
         turn: clientTurn,
         pendingMove: {
@@ -110,9 +110,10 @@ const Game = () => {
   const playerForfeit = (e) => {
     console.info('Game forfeitted!');
     e.preventDefault();
+    // the server derives winnerId from the *other* player's already-
+    // recorded uid, not from anything the forfeiting client sends
     socket.emit('playerForfeit', {
       playerName,
-      uid,
       room: roomId,
     });
   };

@@ -46,7 +46,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   // notably covers logging in from a device with no local session for them
   useEffect(() => {
     if (!joinedRoom && user?.uid) {
-      checkActiveGames(user.uid);
+      checkActiveGames(user);
     }
   }, [joinedRoom, user?.uid]);
 
@@ -75,12 +75,12 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   const linkStyle = { color: 'white' };
 
   /** Tell the server to create a new game */
-  const createNewGame = (name, vsAi, aiSettings, rules) => {
+  const createNewGame = async (name, vsAi, aiSettings, rules) => {
     if (name) {
       setPlayerName(name);
       socket.emit('hostCreateNewGame', {
         playerName: name,
-        hostId: user?.uid || null,
+        idToken: user ? await user.getIdToken() : null,
         // vsAi games skip the Lobby (where a human game's host would
         // otherwise set these), so rules must be sent at creation time
         gameConfig: vsAi ? { opponentType: 'ai', aiSettings, ...rules } : undefined,
@@ -96,13 +96,13 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   };
 
   /** Attempt to join a room by game ID */
-  const playerJoinGame = (name, roomId) => {
+  const playerJoinGame = async (name, roomId) => {
     if (name && roomId) {
-      console.info(`Attempting to JOIN game ${roomId} as ${name} with clientId ${user?.uid}`);
+      console.info(`Attempting to JOIN game ${roomId} as ${name}`);
       setPlayerName(name);
       socket.emit('playerJoinRoom', {
         playerName: name,
-        clientId: user?.uid || null,
+        idToken: user ? await user.getIdToken() : null,
         joinRoomId: roomId,
       });
       setRoomId(roomId);
@@ -117,14 +117,12 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   };
 
   /** Attempt to spectate a room by game ID */
-  const spectateGame = (spectatorName, roomId) => {
+  const spectateGame = async (spectatorName, roomId) => {
     if (playerName && roomId) {
-      console.info(
-        `Attempting to SPECTATE game ${roomId} as ${spectatorName} with clientId ${user?.uid}`
-      );
+      console.info(`Attempting to SPECTATE game ${roomId} as ${spectatorName}`);
       socket.emit('spectateRoom', {
         spectatorName,
-        clientId: user?.uid || null,
+        idToken: user ? await user.getIdToken() : null,
         joinRoomId: roomId,
       });
       setRoomId(roomId);

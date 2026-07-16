@@ -53,18 +53,18 @@ const Lobby = () => {
     }
   };
 
-  const playerLeaveRoom = () => {
+  const playerLeaveRoom = async () => {
     socket.emit('playerLeaveRoom', {
       playerName,
-      uid: user?.uid || null,
+      idToken: user ? await user.getIdToken() : null,
       leaveRoomId: roomId,
     });
   };
 
-  const spectatorLeaveRoom = () => {
+  const spectatorLeaveRoom = async () => {
     socket.emit('spectatorLeaveRoom', {
       spectatorName,
-      uid: user?.uid || null,
+      idToken: user ? await user.getIdToken() : null,
       leaveRoomId: roomId,
     });
   };

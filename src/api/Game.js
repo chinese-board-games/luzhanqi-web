@@ -12,8 +12,10 @@ export const getGameById = async (gameId) => {
     });
 };
 
-export const updateUidMap = async (gameId, playerName, uid) => {
-  return axios.post(`/games/${gameId}/${playerName}/${uid}`).catch((err) => {
+export const updateUidMap = async (gameId, playerName) => {
+  // the server derives the uid from the caller's own verified ID token
+  // (attached by the axios interceptor in index.jsx), not from this URL
+  return axios.post(`/games/${gameId}/${playerName}`).catch((err) => {
     console.error(err);
   });
 };
