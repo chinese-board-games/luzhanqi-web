@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { getPieceInfo } from 'data/pieceInfo';
 import { predictOutcome } from 'utils/predictOutcome';
 
-const outcomeMessages = {
+export const outcomeMessages = {
   'both-die': {
     color: 'red',
     text: { en: 'Both pieces will be destroyed.', zh: '雙方棋子都會被摧毀。' },
@@ -17,6 +17,10 @@ const outcomeMessages = {
   'source-dies': {
     color: 'red',
     text: { en: 'Your piece will be destroyed.', zh: '您的棋子將被摧毀。' },
+  },
+  move: {
+    color: 'blue',
+    text: { en: 'Move to this tile.', zh: '移動至此空格。' },
   },
   unknown: {
     color: 'gray',

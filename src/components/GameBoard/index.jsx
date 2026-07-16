@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Grid, Container, Center, Stack, Button, Group, Flex } from '@mantine/core';
+import { Grid, Container, Center, Button, Flex, Popover } from '@mantine/core';
 import { emptyBoard } from 'utils/core';
 import SelectablePosition from '../SelectablePosition';
 import PieceInfoPanel from '../PieceInfoPanel';
+import MoveConfirmCard from '../MoveConfirmCard';
 import { isEqual } from 'lodash';
 import FrontLines from './FrontLines';
 import Mountain from './Mountain';
@@ -84,15 +85,17 @@ export default function GameBoard({
     [];
 
   const gridCells = board.flatMap((row, r) =>
-    row.map((piece, c) => (
-      <Grid.Col span={4} key={`${r}-${c}`}>
+    row.map((piece, c) => {
+      const isDestinationCell = isEqual(destination, [r, c]);
+
+      const cell = (
         <SelectablePosition
           piece={piece}
           row={r}
           col={c}
-          selected={isEqual(origin, [r, c]) || isEqual(destination, [r, c])}
+          selected={isEqual(origin, [r, c]) || isDestinationCell}
           originSelected={isEqual(origin, [r, c])}
-          destinationSelected={isEqual(destination, [r, c])}
+          destinationSelected={isDestinationCell}
           attackable={
             board[r][c] &&
             board[r][c].affiliation != affiliation &&
@@ -111,7 +114,7 @@ export default function GameBoard({
               setDestination(NO_SELECT);
               return;
             }
-            if (isEqual(destination, [r, c])) {
+            if (isDestinationCell) {
               setDestination(NO_SELECT);
               return;
             }
@@ -125,8 +128,43 @@ export default function GameBoard({
           disabled={positionDisabled(r, c)}
           onHoverPiece={setHoveredPiece}
         />
-      </Grid.Col>
-    ))
+      );
+
+      return (
+        <Grid.Col span={4} key={`${r}-${c}`}>
+          {isDestinationCell ? (
+            <Popover
+              opened
+              withinPortal
+              position="bottom"
+              withArrow
+              shadow="md"
+              radius="md"
+              trapFocus
+              closeOnClickOutside={false}
+            >
+              <Popover.Target>{cell}</Popover.Target>
+              <Popover.Dropdown>
+                <MoveConfirmCard
+                  originPiece={originPiece}
+                  destinationPiece={destinationPiece}
+                  gameConfig={gameConfig}
+                  isEnglish={isEnglish}
+                  onConfirm={() => {
+                    sendMove(origin, destination, host);
+                    setOrigin(NO_SELECT);
+                    setDestination(NO_SELECT);
+                  }}
+                  onCancel={() => setDestination(NO_SELECT)}
+                />
+              </Popover.Dropdown>
+            </Popover>
+          ) : (
+            cell
+          )}
+        </Grid.Col>
+      );
+    })
   );
 
   const divider = [
@@ -167,39 +205,9 @@ export default function GameBoard({
         >
           {isSpectator || gamePhase > 2 ? null : (
             <Center py="1em">
-              <Stack>
-                <Group align="center" direction="horizontal">
-                  <Button
-                    disabled={!isTurn || !(originSelected && destinationSelected)}
-                    onClick={() => {
-                      sendMove(origin, destination, host);
-                      setOrigin(NO_SELECT);
-                      setDestination(NO_SELECT);
-                    }}
-                  >
-                    {isEnglish
-                      ? isTurn
-                        ? 'Send move'
-                        : 'Opponent turn'
-                      : isTurn
-                      ? '送出移動'
-                      : '對手回合'}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    color="red"
-                    onClick={() => {
-                      setOrigin(NO_SELECT);
-                      setDestination(NO_SELECT);
-                    }}
-                  >
-                    {isEnglish ? 'Reset move' : '重設移動'}
-                  </Button>
-                  <Button variant="filled" color="red" onClick={forfeit}>
-                    {isEnglish ? 'Forfeit' : '投降'}
-                  </Button>
-                </Group>
-              </Stack>
+              <Button variant="filled" color="red" onClick={forfeit}>
+                {isEnglish ? 'Forfeit' : '投降'}
+              </Button>
             </Center>
           )}
 
