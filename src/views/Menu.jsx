@@ -18,11 +18,6 @@ const cardStyle = {
   boxShadow: '0.3em 0.3em 0.1em #69a2ff',
 };
 
-/** Defined outside Menu (a stable component identity, not recreated on
- * every Menu render) so toggling isEnglish or any other Menu-level state
- * change doesn't unmount/remount this form - that used to wipe out
- * whatever the user had already typed and fall back to the stale
- * initialValues. */
 function CreateForm({ playerName, isEnglish, onSubmit }) {
   const createForm = useForm({
     initialValues: {
@@ -295,7 +290,6 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
     }
   });
 
-  // only on the real landing page (not the in-game "join" fallback form),
   // ask whether this logged-in account has other games worth rejoining -
   // notably covers logging in from a device with no local session for them
   useEffect(() => {
