@@ -25,6 +25,17 @@ if (import.meta.hot) {
 export const GameContext = createContext({});
 
 const sessionKey = (gameId) => `luzhanqi:session:${gameId}`;
+const LANGUAGE_KEY = 'luzhanqi:isEnglish';
+
+// defaults to Chinese (false) if nothing was ever saved, or the saved
+// value can't be parsed
+const loadIsEnglish = () => {
+  try {
+    return JSON.parse(window.localStorage.getItem(LANGUAGE_KEY)) === true;
+  } catch {
+    return false;
+  }
+};
 
 const saveSession = (gameId, name, token) => {
   if (!gameId || !token) return;
@@ -89,7 +100,7 @@ export const GameProvider = ({ children }) => {
     target: [],
   });
   const [successors, setSuccessors] = useState([]);
-  const [isEnglish, setIsEnglish] = useState(false);
+  const [isEnglish, setIsEnglish] = useState(loadIsEnglish);
   // rule-variant config (flyingBombs/landminesSurvive/captureTheFlag/...)
   // set by the host in the Lobby - needed locally so move highlighting and
   // combat-outcome prediction match how the server will actually resolve them
@@ -100,6 +111,10 @@ export const GameProvider = ({ children }) => {
   const isEnglishRef = useRef(isEnglish);
   useEffect(() => {
     isEnglishRef.current = isEnglish;
+    // persist across refreshes/new tabs - otherwise every reload silently
+    // fell back to the useState(false) default regardless of what the
+    // player had picked
+    window.localStorage.setItem(LANGUAGE_KEY, JSON.stringify(isEnglish));
   }, [isEnglish]);
 
   /**
