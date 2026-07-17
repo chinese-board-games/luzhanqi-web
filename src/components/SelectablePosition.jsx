@@ -70,8 +70,8 @@ const SelectablePosition = forwardRef(function SelectablePosition(
     isLastMove
   );
 
-  // report hover to the parent (drives the desktop PieceInfoPanel) instead
-  // of the old per-tile tooltip; only fires while there's a real piece here
+  // reports hover to the parent, which drives the desktop PieceInfoPanel;
+  // only fires while there's a real piece here
   useEffect(() => {
     if (hovered && piece && piece.name) {
       onHoverPiece?.(piece);
