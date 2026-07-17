@@ -31,24 +31,27 @@ axios.interceptors.request.use(async (config) => {
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <BrowserRouter>
-        <FirebaseAuthProvider>
-          <MantineProvider
-            stylesTransform={emotionTransform}
-            theme={{
-              ...theme,
-              other,
-            }}
-          >
-            <MantineEmotionProvider>
+    <BrowserRouter>
+      <FirebaseAuthProvider>
+        <MantineProvider
+          stylesTransform={emotionTransform}
+          theme={{
+            ...theme,
+            other,
+          }}
+        >
+          <MantineEmotionProvider>
+            {/* inside MantineProvider so the fallback UI (which itself
+             * uses Mantine components) still has theme context to render
+             * against if something below throws */}
+            <ErrorBoundary>
               <GameProvider>
                 <App />
               </GameProvider>
-            </MantineEmotionProvider>
-          </MantineProvider>
-        </FirebaseAuthProvider>
-      </BrowserRouter>
-    </ErrorBoundary>
+            </ErrorBoundary>
+          </MantineEmotionProvider>
+        </MantineProvider>
+      </FirebaseAuthProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

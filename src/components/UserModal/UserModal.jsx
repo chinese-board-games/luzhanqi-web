@@ -24,12 +24,19 @@ const UserModal = ({ showModal, setShowModal, isEnglish }) => {
         console.warn('User not found, creating it now');
         myUser = await createUser(user.uid);
       }
-      setUserData(myUser);
+      setUserData(myUser || {});
       setArchivedIds(new Set(myUser?.archivedGames || []));
       return myUser;
     };
 
     const fetchGames = async (fetchedUser) => {
+      // both the fetch and the create-on-miss fallback can fail (e.g. the
+      // backend rejecting the request entirely) - nothing to fetch games
+      // for in that case
+      if (!fetchedUser) {
+        console.warn('No user data available, skipping game history fetch');
+        return;
+      }
       console.info(`fetching ${fetchedUser.uid} games`);
       const myGames = await Promise.all(
         fetchedUser.games.map(async (gameId) => {
