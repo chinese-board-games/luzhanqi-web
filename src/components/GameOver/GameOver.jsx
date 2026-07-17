@@ -55,26 +55,26 @@ const GameOver = () => {
             : '您的棋子'
           : `${hostName} (${isEnglish ? 'Host' : '主持人'})`}
       </h4>
-      <Table striped highlightOnHover withBorder withColumnBorders>
-        <thead>
-          <tr>
-            <th>{isEnglish ? 'Piece' : '棋子'}</th>
-            <th>{isEnglish ? 'Count' : '數量'}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table striped highlightOnHover withTableBorder withColumnBorders>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>{isEnglish ? 'Piece' : '棋子'}</Table.Th>
+            <Table.Th>{isEnglish ? 'Count' : '數量'}</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {remain[0]
             .sort((a, b) => b.order - a.order)
             .filter((c) => c.name != 'enemy')
             .map(({ name, count }) => {
               return (
-                <tr key={name}>
-                  <td>{getCleanName(name)}</td>
-                  <td>{count}</td>
-                </tr>
+                <Table.Tr key={name}>
+                  <Table.Td>{getCleanName(name)}</Table.Td>
+                  <Table.Td>{count}</Table.Td>
+                </Table.Tr>
               );
             })}
-        </tbody>
+        </Table.Tbody>
       </Table>
       <br />
       <h4>
@@ -86,26 +86,26 @@ const GameOver = () => {
           ? 'Your pieces'
           : '您的棋子'}
       </h4>
-      <Table striped highlightOnHover withBorder withColumnBorders>
-        <thead>
-          <tr>
-            <th>{isEnglish ? 'Piece' : '棋子'}</th>
-            <th>{isEnglish ? 'Count' : '數量'}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table striped highlightOnHover withTableBorder withColumnBorders>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>{isEnglish ? 'Piece' : '棋子'}</Table.Th>
+            <Table.Th>{isEnglish ? 'Count' : '數量'}</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {remain[1]
             .sort((a, b) => b.order - a.order)
             .filter((c) => c.name != 'enemy')
             .map((obj) => {
               return (
-                <tr key={obj.name}>
-                  <td>{getCleanName(obj.name)}</td>
-                  <td>{obj.count}</td>
-                </tr>
+                <Table.Tr key={obj.name}>
+                  <Table.Td>{getCleanName(obj.name)}</Table.Td>
+                  <Table.Td>{obj.count}</Table.Td>
+                </Table.Tr>
               );
             })}
-        </tbody>
+        </Table.Tbody>
       </Table>
     </Container>
   );
