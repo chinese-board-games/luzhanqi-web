@@ -42,16 +42,17 @@ const UserModal = ({ showModal, setShowModal, isEnglish }) => {
       const myGames = await Promise.all(
         fetchedUser.games.map(async (gameId) => {
           const game = await getGameById(gameId);
-          if (!game.players) {
+          if (!game?.players) {
             console.warn(`Error fetching game ${gameId}`);
           }
           return game;
         })
       );
-      // do not load a game with a certain _id more than once
-      const myUniqueGames = myGames.filter(
-        (v, i, a) => a.findIndex((v2) => v2._id === v._id) === i
-      );
+      // drop games that failed to fetch (e.g. deleted but still referenced
+      // by the user), and do not load a game with a certain _id more than once
+      const myUniqueGames = myGames
+        .filter((game) => game?.players)
+        .filter((v, i, a) => a.findIndex((v2) => v2._id === v._id) === i);
       setGameData(myUniqueGames);
     };
 
@@ -145,7 +146,7 @@ const UserModal = ({ showModal, setShowModal, isEnglish }) => {
               <>
                 You&apos;ve played{' '}
                 <Text span fw={700}>
-                  {userData?.games?.length || 'no'}
+                  {gameData.length || 'no'}
                 </Text>{' '}
                 games
               </>
@@ -153,7 +154,7 @@ const UserModal = ({ showModal, setShowModal, isEnglish }) => {
               <>
                 您已經玩過{' '}
                 <Text span fw={700}>
-                  {userData?.games?.length || 0}
+                  {gameData.length || 0}
                 </Text>{' '}
                 場遊戲
               </>
@@ -165,7 +166,7 @@ const UserModal = ({ showModal, setShowModal, isEnglish }) => {
             {userData?.rank || (isEnglish ? '(no rank)' : '（無排名）')}
           </Text>
           {/* create a table with columns date, opponent, win/loss, detail */}
-          {userData?.games?.length > 0 && (
+          {gameData.length > 0 && (
             <Box sx={{ overflowX: 'auto' }}>
               <Table
                 striped
