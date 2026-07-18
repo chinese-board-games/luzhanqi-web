@@ -8,6 +8,7 @@ import { isEqual } from 'lodash';
 import FrontLines from './FrontLines';
 import Mountain from './Mountain';
 import ConnectionLines from './ConnectionLines';
+import LastMoveArrow from './LastMoveArrow';
 import DeadPieces from './DeadPieces';
 import PropTypes from 'prop-types';
 import { getSuccessors } from 'utils';
@@ -212,6 +213,7 @@ export default function GameBoard({
           )}
 
           <ConnectionLines />
+          <LastMoveArrow lastMove={lastMove} />
           <Grid columns={20} gutter={6}>
             {combined.map((cell) => cell)}
           </Grid>
