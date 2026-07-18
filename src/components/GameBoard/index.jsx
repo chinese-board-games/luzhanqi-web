@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Grid, Container, Center, Button, Flex, Popover } from '@mantine/core';
+import { useState, useEffect, useRef } from 'react';
+import { Box, Grid, Container, Center, Button, Flex, Popover } from '@mantine/core';
 import { emptyBoard } from 'utils/core';
 import SelectablePosition from '../SelectablePosition';
 import PieceInfoPanel from '../PieceInfoPanel';
@@ -8,6 +8,7 @@ import { isEqual } from 'lodash';
 import FrontLines from './FrontLines';
 import Mountain from './Mountain';
 import ConnectionLines from './ConnectionLines';
+import LastMoveArrow from './LastMoveArrow';
 import DeadPieces from './DeadPieces';
 import PropTypes from 'prop-types';
 import { getSuccessors } from 'utils';
@@ -38,6 +39,7 @@ export default function GameBoard({
   const [hoveredPiece, setHoveredPiece] = useState(null);
   const [width] = useWindowSize();
   const showInfoPanel = width >= DESKTOP_PANEL_BREAKPOINT;
+  const gridContainerRef = useRef(null);
 
   const originSelected = !isEqual(origin, NO_SELECT);
   const destinationSelected = !isEqual(destination, NO_SELECT);
@@ -212,9 +214,12 @@ export default function GameBoard({
           )}
 
           <ConnectionLines />
-          <Grid columns={20} gutter={6}>
-            {combined.map((cell) => cell)}
-          </Grid>
+          <Box ref={gridContainerRef} sx={{ position: 'relative' }}>
+            <LastMoveArrow lastMove={lastMove} containerRef={gridContainerRef} />
+            <Grid columns={20} gutter={6}>
+              {combined.map((cell) => cell)}
+            </Grid>
+          </Box>
         </Container>
         {showInfoPanel ? (
           <PieceInfoPanel

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { GameContext } from 'contexts/GameContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -39,19 +39,6 @@ const Game = () => {
 
   const affiliation = playerList.indexOf(playerName);
 
-  /** Show the last move highlight immediately, then let it fade after a
-   * few seconds so it doesn't linger and clutter the board. */
-  const [lastMoveVisible, setLastMoveVisible] = useState(false);
-  useEffect(() => {
-    if (!lastMove) {
-      setLastMoveVisible(false);
-      return undefined;
-    }
-    setLastMoveVisible(true);
-    const timer = setTimeout(() => setLastMoveVisible(false), 2000);
-    return () => clearTimeout(timer);
-  }, [lastMove]);
-
   /** On mount (or a hard reload), silently try to reclaim a seat using a
    * locally-stored session - or, on a device with none but a logged-in
    * user, ask the server to match a verified uid against the game's
@@ -79,13 +66,12 @@ const Game = () => {
 
   // last move coordinates are always stored host-perspective; rotate for
   // display the same way the board itself is rotated for the guest
-  const displayLastMove =
-    lastMoveVisible && lastMove
-      ? {
-          source: host ? lastMove.source : rotateMove(lastMove.source),
-          target: host ? lastMove.target : rotateMove(lastMove.target),
-        }
-      : null;
+  const displayLastMove = lastMove
+    ? {
+        source: host ? lastMove.source : rotateMove(lastMove.source),
+        target: host ? lastMove.target : rotateMove(lastMove.target),
+      }
+    : null;
 
   const playerMakeMove = async (source, target, host) => {
     if (source.length && target.length) {
