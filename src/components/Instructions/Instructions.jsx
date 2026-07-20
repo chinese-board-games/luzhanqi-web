@@ -14,6 +14,7 @@ import {
   Divider,
   Grid,
   Alert,
+  Tabs,
 } from '@mantine/core';
 import {
   IconQuestionMark,
@@ -22,9 +23,13 @@ import {
   IconFlag,
   IconBomb,
   IconShield,
+  IconShieldHalfFilled,
   IconSword,
   IconHelp,
   IconUser,
+  IconUserShield,
+  IconTool,
+  IconBadge as IconBadgeIcon,
   IconChevronUp,
   IconStar,
   IconMedal,
@@ -32,17 +37,23 @@ import {
   IconShieldStar,
   IconSwords,
   IconTrain,
+  IconBook,
 } from '@tabler/icons-react';
 import { GameContext } from 'contexts/GameContext';
 import pieceRules from 'data/pieceData.json';
 import PropTypes from 'prop-types';
+import Rulebook from './Rulebook';
 
 const iconMap = {
   IconFlag: <IconFlag size={20} />,
   IconBomb: <IconBomb size={20} />,
   IconShield: <IconShield size={20} />,
+  IconShieldHalfFilled: <IconShieldHalfFilled size={20} />,
   IconSword: <IconSword size={20} />,
   IconUser: <IconUser size={20} />,
+  IconUserShield: <IconUserShield size={20} />,
+  IconTool: <IconTool size={20} />,
+  IconBadge: <IconBadgeIcon size={20} />,
   IconChevronUp: <IconChevronUp size={20} />,
   IconStar: <IconStar size={20} />,
   IconMedal: <IconMedal size={20} />,
@@ -158,41 +169,23 @@ const Instructions = ({ opened, onClose, gamePhase = 0, isEnglish = false }) => 
   };
 
   const renderPieceCard = (piece) => (
-    <Card key={piece.name} shadow="sm" padding="sm" radius="md" withBorder>
+    <Card key={piece.id} shadow="sm" padding="sm" radius="md" withBorder>
       <Group style={{ flexDirection: 'row', flexWrap: 'nowrap' }}>
         <ThemeIcon color="blue" variant="light" size={75}>
           {iconMap[piece.icon] || <IconQuestionMark size={75} />}
         </ThemeIcon>
         <Box>
-          <Text fw={500}>{piece.name}</Text>
+          <Text fw={500}>{isEnglish ? piece.title : piece.title_zh}</Text>
           <Text size="sm" c="dimmed">
-            {piece.description}
+            {isEnglish ? piece.description : piece.description_zh}
           </Text>
           <Group gap="xs" mt="xs">
-            <Badge color={piece.canMove ? 'green' : 'red'} size="sm">
-              {isEnglish
-                ? piece.canMove
-                  ? 'Can Move'
-                  : 'Cannot Move'
-                : piece.canMove
-                ? '可移動'
-                : '不可移動'}
-            </Badge>
-            <Badge color={piece.canAttack ? 'green' : 'red'} size="sm">
-              {isEnglish
-                ? piece.canAttack
-                  ? 'Can Attack'
-                  : 'Cannot Attack'
-                : piece.canAttack
-                ? '可攻擊'
-                : '不可攻擊'}
-            </Badge>
+            {(isEnglish ? piece.rules : piece.rules_zh).map((rule) => (
+              <Badge key={rule} color="blue" variant="light" size="sm">
+                {rule}
+              </Badge>
+            ))}
           </Group>
-          {piece.special && (
-            <Text size="xs" c="blue" mt="xs">
-              {piece.special}
-            </Text>
-          )}
         </Box>
       </Group>
     </Card>
@@ -202,50 +195,67 @@ const Instructions = ({ opened, onClose, gamePhase = 0, isEnglish = false }) => 
 
   return (
     <Modal opened={opened} onClose={onClose} title={phaseInstructions.title} size="xl" centered>
-      <Stack>
-        <Stepper active={activeStep} onStepClick={setActiveStep} breakpoint="sm">
-          {phaseInstructions.steps.map((step, index) => (
-            <Stepper.Step key={index} label={step.title} description={step.description} />
-          ))}
-        </Stepper>
+      <Tabs defaultValue="quick-steps">
+        <Tabs.List>
+          <Tabs.Tab value="quick-steps" leftSection={<IconHelp size={16} />}>
+            {isEnglish ? 'Quick Steps' : '快速步驟'}
+          </Tabs.Tab>
+          <Tabs.Tab value="rulebook" leftSection={<IconBook size={16} />}>
+            {isEnglish ? 'Rulebook' : '規則手冊'}
+          </Tabs.Tab>
+        </Tabs.List>
 
-        <Divider />
-
-        {gamePhase === 2 && (
-          <Box>
-            <Title order={4} mb="md">
-              {isEnglish ? 'Piece Reference' : '棋子參考'}
-            </Title>
-            <Grid>
-              {pieceRules.map((piece, index) => (
-                <Grid.Col span={6} key={`${piece.name}-${index}`}>
-                  {renderPieceCard(piece)}
-                </Grid.Col>
+        <Tabs.Panel value="quick-steps" pt="md">
+          <Stack>
+            <Stepper active={activeStep} onStepClick={setActiveStep} breakpoint="sm">
+              {phaseInstructions.steps.map((step, index) => (
+                <Stepper.Step key={index} label={step.title} description={step.description} />
               ))}
-            </Grid>
-          </Box>
-        )}
+            </Stepper>
 
-        {gamePhase === 0 && (
-          <Alert
-            icon={<IconHelp size={16} />}
-            title={isEnglish ? 'Quick Start' : '快速開始'}
-            color="green"
-          >
-            <Text size="sm">
-              {isEnglish
-                ? 'Welcome to Luzhanqi! Create or join a game to start playing.'
-                : '歡迎來到陸戰棋！創建遊戲或與朋友一起加入開始遊戲。'}
-            </Text>
-          </Alert>
-        )}
+            <Divider />
 
-        <Group justify="right" mt="md">
-          <Button variant="outline" onClick={onClose}>
-            {isEnglish ? 'Close' : '關閉'}
-          </Button>
-        </Group>
-      </Stack>
+            {gamePhase === 2 && (
+              <Box>
+                <Title order={4} mb="md">
+                  {isEnglish ? 'Piece Reference' : '棋子參考'}
+                </Title>
+                <Grid>
+                  {pieceRules.map((piece, index) => (
+                    <Grid.Col span={6} key={piece.id || index}>
+                      {renderPieceCard(piece)}
+                    </Grid.Col>
+                  ))}
+                </Grid>
+              </Box>
+            )}
+
+            {gamePhase === 0 && (
+              <Alert
+                icon={<IconHelp size={16} />}
+                title={isEnglish ? 'Quick Start' : '快速開始'}
+                color="green"
+              >
+                <Text size="sm">
+                  {isEnglish
+                    ? 'Welcome to Luzhanqi! Create or join a game to start playing.'
+                    : '歡迎來到陸戰棋！創建遊戲或與朋友一起加入開始遊戲。'}
+                </Text>
+              </Alert>
+            )}
+          </Stack>
+        </Tabs.Panel>
+
+        <Tabs.Panel value="rulebook" pt="md">
+          <Rulebook isEnglish={isEnglish} />
+        </Tabs.Panel>
+      </Tabs>
+
+      <Group justify="right" mt="md">
+        <Button variant="outline" onClick={onClose}>
+          {isEnglish ? 'Close' : '關閉'}
+        </Button>
+      </Group>
     </Modal>
   );
 };

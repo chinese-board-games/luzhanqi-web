@@ -34,99 +34,89 @@
       "icon": "IconTool",
       "title": "Engineer",
       "description": "Can safely defuse landmines and bombs.",
-      "rules": ["Can move", "Can attack", "Only piece that can capture landmines safely"],
+      "rules": ["Can move", "Can attack", "Only piece that can capture landmines safely", "Rank 1"],
       "title_zh": "工兵",
       "description_zh": "能安全拆除地雷和炸彈。",
-      "rules_zh": ["可以移動", "可以攻擊", "唯一能安全俘獲地雷的棋子"]
-    },
-    {
-      "id": "sergeant",
-      "icon": "IconUserCircle",
-      "title": "Sergeant",
-      "description": "Low-ranking NCO with basic combat abilities.",
-      "rules": ["Can move", "Can attack", "Rank 2"],
-      "title_zh": "士官",
-      "description_zh": "階級較低的士官，具備基本戰鬥能力。",
-      "rules_zh": ["可以移動", "可以攻擊", "階級 2"]
+      "rules_zh": ["可以移動", "可以攻擊", "唯一能安全俘獲地雷的棋子", "階級 1"]
     },
     {
       "id": "lieutenant",
       "icon": "IconUser",
       "title": "Lieutenant",
       "description": "Junior officer commanding small units.",
-      "rules": ["Can move", "Can attack", "Rank 3"],
+      "rules": ["Can move", "Can attack", "Rank 2"],
       "title_zh": "排長",
       "description_zh": "指揮小型部隊的初級軍官。",
-      "rules_zh": ["可以移動", "可以攻擊", "階級 3"]
+      "rules_zh": ["可以移動", "可以攻擊", "階級 2"]
     },
     {
       "id": "captain",
       "icon": "IconUserShield",
       "title": "Captain",
       "description": "Commands a company; strong leadership.",
-      "rules": ["Can move", "Can attack", "Rank 4"],
+      "rules": ["Can move", "Can attack", "Rank 3"],
       "title_zh": "連長",
       "description_zh": "指揮一個連，領導能力強。",
-      "rules_zh": ["可以移動", "可以攻擊", "階級 4"]
+      "rules_zh": ["可以移動", "可以攻擊", "階級 3"]
     },
     {
       "id": "major",
       "icon": "IconChevronUp",
       "title": "Major",
       "description": "Mid-level field officer.",
-      "rules": ["Can move", "Can attack", "Rank 5"],
+      "rules": ["Can move", "Can attack", "Rank 4"],
       "title_zh": "營長",
       "description_zh": "中階野戰軍官。",
-      "rules_zh": ["可以移動", "可以攻擊", "階級 5"]
+      "rules_zh": ["可以移動", "可以攻擊", "階級 4"]
     },
     {
       "id": "colonel",
       "icon": "IconBadge",
       "title": "Colonel",
       "description": "Senior officer commanding regiments.",
-      "rules": ["Can move", "Can attack", "Rank 6"],
+      "rules": ["Can move", "Can attack", "Rank 5"],
       "title_zh": "團長",
       "description_zh": "指揮團級部隊的高級軍官。",
-      "rules_zh": ["可以移動", "可以攻擊", "階級 6"]
+      "rules_zh": ["可以移動", "可以攻擊", "階級 5"]
     },
     {
       "id": "brigadier_general",
       "icon": "IconStar",
       "title": "Brigadier General",
       "description": "Commands a brigade.",
-      "rules": ["Can move", "Can attack", "Rank 7"],
+      "rules": ["Can move", "Can attack", "Rank 6"],
       "title_zh": "旅長",
       "description_zh": "指揮一個旅。",
-      "rules_zh": ["可以移動", "可以攻擊", "階級 7"]
+      "rules_zh": ["可以移動", "可以攻擊", "階級 6"]
     },
     {
       "id": "major_general",
       "icon": "IconMedal",
       "title": "Major General",
       "description": "High-ranking general, decorated for leadership.",
-      "rules": ["Can move", "Can attack", "Rank 8"],
+      "rules": ["Can move", "Can attack", "Rank 7"],
       "title_zh": "師長",
       "description_zh": "高階將領，因領導才能而受勳。",
-      "rules_zh": ["可以移動", "可以攻擊", "階級 8"]
+      "rules_zh": ["可以移動", "可以攻擊", "階級 7"]
     },
     {
       "id": "general",
       "icon": "IconShieldStar",
       "title": "General",
       "description": "Senior general officer commanding corps-level forces.",
-      "rules": ["Can move", "Can attack", "Rank 9"],
+      "rules": ["Can move", "Can attack", "Rank 8"],
       "title_zh": "軍長",
       "description_zh": "指揮軍級部隊的高級將領。",
-      "rules_zh": ["可以移動", "可以攻擊", "階級 9"]
+      "rules_zh": ["可以移動", "可以攻擊", "階級 8"]
     },
     {
       "id": "field_marshall",
       "icon": "IconCrown",
       "title": "Field Marshal",
       "description": "Supreme commander of all forces.",
-      "rules": ["Can move", "Can attack", "Highest rank (10)"],
+      "rules": ["Can move", "Can attack", "Highest rank (9)"],
       "title_zh": "司令",
       "description_zh": "全軍最高統帥。",
-      "rules_zh": ["可以移動", "可以攻擊", "最高階級（10）"]
+      "rules_zh": ["可以移動", "可以攻擊", "最高階級（9）"]
     }
   ]
