@@ -14,7 +14,9 @@ socket.io-client for realtime gameplay, Firebase for optional auth, and
 
 There is no real test suite (`npm test` is a placeholder). Verify UI changes
 by actually running the app and driving the feature in a browser. CI
-(`.github/workflows/`) runs on Node 24.x.
+(`.github/workflows/ci.yml`) runs lint + build + `npm test` on Node 24.x on
+every PR/push to `main`, and is a required status check — see "Deployment"
+below for what happens after a PR merges.
 
 Needs a `.env`/`.env.local` with `VITE_API` pointing at a running
 luzhanqi-backend instance (see README.md). Vite env vars are baked in at
@@ -28,6 +30,24 @@ staged files.
 
 Use [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`,
 `fix:`, `refactor:`, `style:`, `docs:`, `chore:`, optionally with a scope).
+
+## Deployment
+
+`main` is the staging trigger; `production` is the prod trigger (the
+backend repo follows the same model). The pipeline:
+
+1. A PR into `main` must pass `ci.yml` before it can merge (branch
+   protection).
+2. Merging to `main` auto-deploys the `luzhanqi-staging` Netlify site.
+3. `.github/workflows/promote.yml`, triggered by that same push, polls
+   Netlify until that commit's staging deploy is `ready`, then smoke-tests
+   the staging URL (expects 200 and a `<div id="root">` in the body). Only
+   on success does it fast-forward `production` to match.
+4. Netlify auto-deploys the `luzhanqi` site (prod) from `production`.
+
+**Never push directly to `production`** — it only ever advances via step 3.
+Which branch each Netlify site tracks is configured in the Netlify
+dashboard (Site settings → Build & deploy), not in this repo.
 
 ## Layout
 
@@ -141,5 +161,6 @@ user.getIdToken() : null` (see `GameContext.jsx`'s `attemptRejoin`/
   reload during dev opens a new socket on top of the old one, which never
   gets closed (a no-op in production, where `import.meta.hot` doesn't
   exist).
-- Deploys to Netlify (staging + prod); `VITE_API` is set per deploy context
-  in Netlify's environment variable settings, not in this repo.
+- `VITE_API` is set per Netlify site in its environment variable settings,
+  not in this repo — see "Deployment" above for which branch feeds which
+  site.

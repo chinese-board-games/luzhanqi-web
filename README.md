@@ -1,4 +1,6 @@
 # Luzhanqi Web
+
+Production site: **https://luzhanqi.netlify.app**
 Staging site: **https://luzhanqi-staging.netlify.app**
 
 Ensure that you have ESLint and Prettier installed and enabled in VSCode.  
@@ -45,3 +47,10 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+## Deployment
+
+Merging a PR into `main` deploys to the staging site above, then a GitHub
+Actions workflow smoke-tests it and — if it passes — promotes it to
+production automatically. See `AGENTS.md`'s "Deployment" section for the
+full flow, and `CONTRIBUTORS.md` for the contribution workflow.
