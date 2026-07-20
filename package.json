@@ -17,7 +17,7 @@
     "@mantine/hooks": "^7.17.8",
     "@tabler/icons-react": "^3.44.0",
     "axios": "^1.2.2",
-    "firebase": "^9.15.0",
+    "firebase": "^12.16.0",
     "framer-motion": "^12.42.2",
     "lodash": "^4.17.20",
     "lodash.isequal": "^4.5.0",
