@@ -1,6 +1,12 @@
-import LineTo from 'react-lineto';
+import ReactLineTo from 'react-lineto';
 import { isRailroad, boardConnections } from '../../utils/core';
 import useWindowSize from 'hooks/useWindowSize';
+
+// react-lineto is a CJS-only package (no "module"/"exports" field), and
+// different bundlers' dep-prebundling interop unwrap its default export to
+// different depths - this works regardless of which one the current
+// bundler does
+const LineTo = ReactLineTo.default || ReactLineTo;
 
 export default function ConnectionLines() {
   useWindowSize(); // rerender on window resize for lines to update
