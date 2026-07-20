@@ -26,7 +26,7 @@ import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import SortablePiece from 'components/SortablePiece';
 import DraggablePiece from 'components/DraggablePiece';
 import GameTooltip from 'components/GameTooltip';
-import LineTo from 'react-lineto';
+import ReactLineTo from 'react-lineto';
 import Position from '../Position';
 import { setupPieces, pieces } from '../../models/Piece';
 import { exampleBoards } from '../../data/exampleBoards';
@@ -40,6 +40,12 @@ import {
 } from '../../utils';
 import useWindowSize from 'hooks/useWindowSize';
 import PropTypes from 'prop-types';
+
+// react-lineto is a CJS-only package (no "module"/"exports" field), and
+// different bundlers' dep-prebundling interop unwrap its default export to
+// different depths - this works regardless of which one the current
+// bundler does
+const LineTo = ReactLineTo.default || ReactLineTo;
 
 // returns a fresh 6x5 board every call - each row is a brand new array, so
 // callers can safely mutate individual cells without corrupting a shared
