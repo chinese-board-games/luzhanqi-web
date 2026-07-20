@@ -11,7 +11,7 @@ const WarnModal = ({ showModal, setShowModal, forfeit, isEnglish }) => (
     style={{
       overlay: {
         backgroundColor: '#00000080',
-        zIndex: 120,
+        zIndex: 300,
       },
       content: {
         width: '80%',
