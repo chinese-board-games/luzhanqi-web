@@ -7,7 +7,7 @@
  *
  * @param {Object} source the attacking piece (always known - it's your own)
  * @param {Object|null} target the piece on the destination tile, or null
- * @param {{landminesSurvive?: boolean}} config the game's rule-variant config
+ * @param {{landminesSurvive?: boolean, captureTheFlag?: boolean}} config the game's rule-variant config
  * @returns {{type: 'move'|'unknown'|'both-die'|'target-dies'|'source-dies'}|null}
  */
 export function predictOutcome(source, target, config = {}) {
@@ -31,6 +31,13 @@ export function predictOutcome(source, target, config = {}) {
     return config.landminesSurvive && source.name !== 'bomb'
       ? { type: 'source-dies' }
       : { type: 'both-die' };
+  }
+
+  if (config.captureTheFlag && target.name === 'flag' && source.name === 'bomb') {
+    // under captureTheFlag the flag is an objective to be carried home, not
+    // something a bomb can simply blow up - only the bomb dies, the flag
+    // stands unchanged (same shape as any other lost attack)
+    return { type: 'source-dies' };
   }
 
   if (source.name === 'bomb' || source.name === target.name || target.name === 'bomb') {
