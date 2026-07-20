@@ -12,7 +12,7 @@ const AuthModal = ({ showModal, setShowModal, roomId, playerName, isEnglish }) =
     style={{
       overlay: {
         backgroundColor: '#00000080',
-        zIndex: 120,
+        zIndex: 300,
       },
       content: {
         width: '80%',

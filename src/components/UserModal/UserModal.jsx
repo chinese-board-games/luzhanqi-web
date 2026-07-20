@@ -88,7 +88,7 @@ const UserModal = ({ showModal, setShowModal, isEnglish }) => {
       style={{
         overlay: {
           backgroundColor: '#00000080',
-          zIndex: 120,
+          zIndex: 300,
         },
         content: {
           // override react-modal's default 40px top/left/right/bottom inset
