@@ -52,5 +52,5 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 Merging a PR into `main` deploys to the staging site above, then a GitHub
 Actions workflow smoke-tests it and — if it passes — promotes it to
-production automatically. See `AGENTS.md`'s "Deployment" section for the
-full flow, and `CONTRIBUTORS.md` for the contribution workflow.
+production automatically. See `CONTRIBUTORS.md` for the full flow
+(including a diagram) and the contribution workflow.
