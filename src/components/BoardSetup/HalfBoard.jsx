@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Container,
   Flex,
@@ -26,7 +26,7 @@ import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import SortablePiece from 'components/SortablePiece';
 import DraggablePiece from 'components/DraggablePiece';
 import GameTooltip from 'components/GameTooltip';
-import ReactLineTo from 'react-lineto';
+import BoardConnectionLines from '../BoardConnectionLines';
 import Position from '../Position';
 import { setupPieces, pieces } from '../../models/Piece';
 import { exampleBoards } from '../../data/exampleBoards';
@@ -38,14 +38,7 @@ import {
   isHalfBoardRailroad,
   isValidHalfBoardPlacement,
 } from '../../utils';
-import useWindowSize from 'hooks/useWindowSize';
 import PropTypes from 'prop-types';
-
-// react-lineto is a CJS-only package (no "module"/"exports" field), and
-// different bundlers' dep-prebundling interop unwrap its default export to
-// different depths - this works regardless of which one the current
-// bundler does
-const LineTo = ReactLineTo.default || ReactLineTo;
 
 // returns a fresh 6x5 board every call - each row is a brand new array, so
 // callers can safely mutate individual cells without corrupting a shared
@@ -56,6 +49,7 @@ const makeEmptyBoard = () => Array.from({ length: 6 }, () => [null, null, null, 
 
 export default function HalfBoard({ sendStartingBoard, playerList, playerName, isEnglish }) {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+  const gridContainerRef = useRef(null);
 
   // TODO: piece affiliation will be -1 if the players are not in game (playerList is [])
   const affiliatedPieces = setupPieces.map((piece) => ({
@@ -208,7 +202,6 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
         },
       }}
     >
-      <HalfBoardConnectionLines />
       <DndContext
         autoScroll={false}
         sensors={sensors}
@@ -267,23 +260,26 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
           <Box sx={{ position: 'sticky', top: 0, zIndex: 110 }}>
             <PieceSelector unplacedPieces={unplacedPieces} isEnglish={isEnglish} />
           </Box>
-          <Grid columns={20} gutter={6}>
-            {halfBoard.flatMap((row, r) =>
-              row.map((piece, c) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Grid.Col span={4} key={`${r}-${c}`}>
-                  <Position
-                    piece={piece}
-                    row={r}
-                    col={c}
-                    activeId={activeId}
-                    isHalfBoard={true}
-                    isEnglish={isEnglish}
-                  />
-                </Grid.Col>
-              ))
-            )}
-          </Grid>
+          <Box ref={gridContainerRef} sx={{ position: 'relative' }}>
+            <HalfBoardConnectionLines containerRef={gridContainerRef} />
+            <Grid columns={20} gutter={6}>
+              {halfBoard.flatMap((row, r) =>
+                row.map((piece, c) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <Grid.Col span={4} key={`${r}-${c}`}>
+                    <Position
+                      piece={piece}
+                      row={r}
+                      col={c}
+                      activeId={activeId}
+                      isHalfBoard={true}
+                      isEnglish={isEnglish}
+                    />
+                  </Grid.Col>
+                ))
+              )}
+            </Grid>
+          </Box>
         </Stack>
         <DragOverlay>
           {activeId ? (
@@ -307,30 +303,18 @@ HalfBoard.propTypes = {
   isEnglish: PropTypes.bool.isRequired,
 };
 
-function HalfBoardConnectionLines() {
-  useWindowSize(); // rerender on window resize for lines to update
-  return (
-    <>
-      {halfBoardConnections.map(({ start, end }) => {
-        const isRailroadConnection = !!(
-          isHalfBoardRailroad(start[0], start[1]) && isHalfBoardRailroad(end[0], end[1])
-        );
-        return (
-          <LineTo
-            key={`${start[0]}-${start[1]}-${end[0]}-${end[1]}`}
-            from={`${start[0]}-${start[1]}`}
-            to={`${end[0]}-${end[1]}`}
-            borderColor={isRailroadConnection ? 'gray' : 'black'}
-            borderWidth={isRailroadConnection ? 4 : 3}
-            borderStyle={isRailroadConnection ? 'dashed' : 'solid'}
-            toAnchor="center"
-            delay={0}
-          />
-        );
-      })}
-    </>
-  );
+function HalfBoardConnectionLines({ containerRef }) {
+  const connections = halfBoardConnections.map(({ start, end }) => ({
+    start,
+    end,
+    isRailroad: !!(isHalfBoardRailroad(start[0], start[1]) && isHalfBoardRailroad(end[0], end[1])),
+  }));
+  return <BoardConnectionLines connections={connections} containerRef={containerRef} />;
 }
+
+HalfBoardConnectionLines.propTypes = {
+  containerRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }).isRequired,
+};
 
 function PieceSelector({ unplacedPieces, isEnglish }) {
   const { setNodeRef } = useDroppable({
