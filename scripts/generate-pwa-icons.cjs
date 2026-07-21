@@ -11,7 +11,10 @@ async function makeIcon(size, outFile, { safeZoneRatio } = {}) {
   const scale = safeZoneRatio ?? 0.82;
   const contentSize = Math.round(size * scale);
   const svgBuffer = await sharp(SRC)
-    .resize(contentSize, contentSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .resize(contentSize, contentSize, {
+      fit: 'contain',
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
     .png()
     .toBuffer();
 
