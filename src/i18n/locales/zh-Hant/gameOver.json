@@ -1,0 +1,11 @@
+{
+  "host": "主持人",
+  "guest": "客人",
+  "gameOver": "遊戲結束",
+  "winner": "獲勝者：",
+  "youWin": "您獲勝了！",
+  "youLost": "您輸了",
+  "yourPieces": "您的棋子",
+  "piece": "棋子",
+  "count": "數量"
+}

@@ -1,10 +1,10 @@
 import { Center, Text } from '@mantine/core';
 import React from 'react';
-import { default as PieceModel } from '../../models/Piece';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
-export default function Piece({ name, affiliation, isEnglish }) {
-  const piece = PieceModel(name, affiliation);
+export default function Piece({ name, affiliation }) {
+  const { t } = useTranslation('pieces');
   return (
     <Center
       bg="pastel-tan.0"
@@ -33,7 +33,7 @@ export default function Piece({ name, affiliation, isEnglish }) {
       })}
     >
       <Text sx={{ fontFamily: 'SentyWEN2017' }} color={affiliation === 0 ? 'indigo.7' : 'red.7'}>
-        {isEnglish ? piece.english : piece.display}
+        {t(`${name}.short`)}
       </Text>
     </Center>
   );
@@ -42,5 +42,4 @@ export default function Piece({ name, affiliation, isEnglish }) {
 Piece.propTypes = {
   name: PropTypes.string.isRequired,
   affiliation: PropTypes.number.isRequired,
-  isEnglish: PropTypes.bool.isRequired,
 };

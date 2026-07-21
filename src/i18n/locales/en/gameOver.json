@@ -1,0 +1,11 @@
+{
+  "host": "Host",
+  "guest": "Guest",
+  "gameOver": "Game Over",
+  "winner": "Winner: ",
+  "youWin": "You win!",
+  "youLost": "You lost",
+  "yourPieces": "Your pieces",
+  "piece": "Piece",
+  "count": "Count"
+}

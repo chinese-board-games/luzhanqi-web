@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import { GameContext } from 'contexts/GameContext';
 import { Container, Table } from '@mantine/core';
-import { pieces } from '../../models/Piece';
+import { useTranslation } from 'react-i18next';
 
 const GameOver = () => {
+  const { t } = useTranslation('gameOver');
+  const { t: tPieces } = useTranslation('pieces');
   const gameState = useContext(GameContext);
   const {
     winner: { winner },
@@ -15,51 +17,38 @@ const GameOver = () => {
       gameResults: { remain },
     },
     host: { host },
-    isEnglish: { isEnglish },
   } = gameState;
 
   const playerIndex = playerList.indexOf(playerName);
   const isSpectator = spectatorList.includes(spectatorName);
-  const hostName = playerList[0] || (isEnglish ? 'Host' : '主持人');
-  const guestName = playerList[1] || (isEnglish ? 'Guest' : '客人');
-
-  const getCleanName = (name) => {
-    if (!isEnglish) {
-      return pieces[name]?.display || name;
-    }
-    return name
-      .split('_')
-      .map((word) => word[0].toUpperCase() + word.slice(1))
-      .join(' ');
-  };
+  const hostName = playerList[0] || t('host');
+  const guestName = playerList[1] || t('guest');
 
   return (
     <Container style={{ backgroundColor: 'white', borderRadius: '0.5em', padding: '1em' }}>
-      <h1>{isEnglish ? 'Game Over' : '遊戲結束'}</h1>
+      <h1>{t('gameOver')}</h1>
       {isSpectator ? (
         <h2>
-          {isEnglish ? 'Winner: ' : '獲勝者：'}
+          {t('winner')}
           {winner === 0 ? hostName : guestName}
         </h2>
       ) : winner === playerIndex ? (
-        <h2>{isEnglish ? 'You win!' : '您獲勝了！'}</h2>
+        <h2>{t('youWin')}</h2>
       ) : (
-        <h2>{isEnglish ? 'You lost' : '您輸了'}</h2>
+        <h2>{t('youLost')}</h2>
       )}
       <h4>
         {isSpectator
-          ? `${hostName} (${isEnglish ? 'Host' : '主持人'})`
+          ? `${hostName} (${t('host')})`
           : host
-          ? isEnglish
-            ? 'Your pieces'
-            : '您的棋子'
-          : `${hostName} (${isEnglish ? 'Host' : '主持人'})`}
+          ? t('yourPieces')
+          : `${hostName} (${t('host')})`}
       </h4>
       <Table striped highlightOnHover withTableBorder withColumnBorders>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>{isEnglish ? 'Piece' : '棋子'}</Table.Th>
-            <Table.Th>{isEnglish ? 'Count' : '數量'}</Table.Th>
+            <Table.Th>{t('piece')}</Table.Th>
+            <Table.Th>{t('count')}</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -69,7 +58,7 @@ const GameOver = () => {
             .map(({ name, count }) => {
               return (
                 <Table.Tr key={name}>
-                  <Table.Td>{getCleanName(name)}</Table.Td>
+                  <Table.Td>{tPieces(`${name}.title`)}</Table.Td>
                   <Table.Td>{count}</Table.Td>
                 </Table.Tr>
               );
@@ -79,18 +68,16 @@ const GameOver = () => {
       <br />
       <h4>
         {isSpectator
-          ? `${guestName} (${isEnglish ? 'Guest' : '客人'})`
+          ? `${guestName} (${t('guest')})`
           : host
-          ? `${guestName} (${isEnglish ? 'Guest' : '客人'})`
-          : isEnglish
-          ? 'Your pieces'
-          : '您的棋子'}
+          ? `${guestName} (${t('guest')})`
+          : t('yourPieces')}
       </h4>
       <Table striped highlightOnHover withTableBorder withColumnBorders>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>{isEnglish ? 'Piece' : '棋子'}</Table.Th>
-            <Table.Th>{isEnglish ? 'Count' : '數量'}</Table.Th>
+            <Table.Th>{t('piece')}</Table.Th>
+            <Table.Th>{t('count')}</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -100,7 +87,7 @@ const GameOver = () => {
             .map((obj) => {
               return (
                 <Table.Tr key={obj.name}>
-                  <Table.Td>{getCleanName(obj.name)}</Table.Td>
+                  <Table.Td>{tPieces(`${obj.name}.title`)}</Table.Td>
                   <Table.Td>{obj.count}</Table.Td>
                 </Table.Tr>
               );

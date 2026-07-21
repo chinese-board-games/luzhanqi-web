@@ -2,6 +2,7 @@ import React from 'react';
 import DraggablePiece from 'components/DraggablePiece';
 import { Center, Stack } from '@mantine/core';
 import { useDroppable } from '@dnd-kit/core';
+import { useTranslation } from 'react-i18next';
 import { isHalfBoardCamp, isHalfBoardHQ, isCamp, isHQ } from '../utils/core';
 import Piece from './Piece';
 import PropTypes from 'prop-types';
@@ -15,25 +16,18 @@ export default function Position({
   activeId,
   shadeColor,
   isHalfBoard = false,
-  isEnglish,
   disabled = false,
   isLastMove = false,
 }) {
+  const { t } = useTranslation('board');
   const placedPiece =
     piece && piece.name && isHalfBoard
       ? activeId !== piece.id && (
-          <DraggablePiece
-            name={piece.name}
-            affiliation={0}
-            id={piece.id}
-            key={piece.id}
-            data={{ row, col }}
-            isEnglish={isEnglish}
-          />
+          <DraggablePiece name={piece.name} affiliation={0} id={piece.id} data={{ row, col }} />
         )
       : piece && (
           <div style={{ filter: 'drop-shadow(0 0 0.75rem grey)' }}>
-            <Piece name={piece.name} affiliation={piece.affiliation} isEnglish={isEnglish} />
+            <Piece name={piece.name} affiliation={piece.affiliation} />
           </div>
         );
   const getPositionContent = () => {
@@ -65,7 +59,7 @@ export default function Position({
             },
           })}
         >
-          {placedPiece || (isEnglish ? 'Camp' : '行營')}
+          {placedPiece || t('camp')}
         </Center>
       );
     }
@@ -100,15 +94,7 @@ export default function Position({
           bg="pastel-tan.1"
         >
           <Stack spacing="0em" align="stretch" justify="center">
-            {placedPiece ||
-              (isEnglish ? (
-                <Center sx={{ lineHeight: '1.1' }}>HQ</Center>
-              ) : (
-                <>
-                  <Center sx={{ lineHeight: '1.1' }}>大</Center>
-                  <Center sx={{ lineHeight: '1.1' }}>本營</Center>
-                </>
-              ))}
+            {placedPiece || <Center sx={{ lineHeight: '1.1' }}>{t('hq')}</Center>}
           </Stack>
         </Center>
       );
@@ -140,7 +126,7 @@ export default function Position({
         })}
         bg="pastel-tan.1"
       >
-        {placedPiece || (isEnglish ? 'Railroad' : '後勤')}
+        {placedPiece || t('railroad')}
       </Center>
     );
   };
@@ -176,7 +162,6 @@ Position.propTypes = {
   activeId: PropTypes.string,
   shadeColor: PropTypes.string,
   isHalfBoard: PropTypes.bool.isRequired,
-  isEnglish: PropTypes.bool.isRequired,
   disabled: PropTypes.bool,
   isLastMove: PropTypes.bool,
 };

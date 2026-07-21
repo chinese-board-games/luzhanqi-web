@@ -4,11 +4,13 @@ import { useForm } from '@mantine/form';
 import { Button, TextInput, PasswordInput } from '@mantine/core';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import { addGame, createUser } from 'api/User';
 import { updateUidMap } from 'api/Game';
 import PropTypes from 'prop-types';
 
-const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName, isEnglish }) => {
+const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
+  const { t } = useTranslation('auth');
   const form = useForm({
     initialValues: {
       email: '',
@@ -27,15 +29,15 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName, i
     const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     // present error if email invalid
     if (!emailPattern.test(email)) {
-      errors.add(isEnglish ? 'Please provide a valid email.' : '請提供有效的電子郵件地址。');
+      errors.add(t('invalidEmail'));
     }
     // present error if password is blank
     if (password.length === 0) {
-      errors.add(isEnglish ? 'Please provide a password.' : '請提供密碼。');
+      errors.add(t('passwordRequired'));
     }
     // present error if passwords don't match
     if (password !== confirmPassword) {
-      errors.add(isEnglish ? 'Passwords do not match.' : '密碼不相符。');
+      errors.add(t('passwordMismatch'));
     }
     if (errors.size !== 0) {
       // there are validation errors
@@ -67,20 +69,20 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName, i
     return (
       <div>
         <p>
-          {isEnglish ? 'Error: ' : '錯誤：'}
+          {t('error')}
           {error.message}
         </p>
       </div>
     );
   }
   if (loading) {
-    return <p>{isEnglish ? 'Loading...' : '載入中...'}</p>;
+    return <p>{t('loading')}</p>;
   }
   if (user) {
     return (
       <div>
         <p>
-          {isEnglish ? 'Registered User: ' : '已註冊使用者：'}
+          {t('registeredUser')}
           {user.user.email}
         </p>
       </div>
@@ -97,29 +99,29 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName, i
   };
   return (
     <div>
-      <h2>{isEnglish ? 'Create Account' : '建立帳號'}</h2>
+      <h2>{t('createAccount')}</h2>
 
       <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
         <TextInput
-          label={isEnglish ? 'Email address' : '電子郵件地址'}
+          label={t('emailAddress')}
           placeholder="example@provider.com"
           {...form.getInputProps('email')}
         />
         <PasswordInput
-          label={isEnglish ? 'Password' : '密碼'}
-          placeholder={isEnglish ? 'Enter password' : '請輸入密碼'}
+          label={t('password')}
+          placeholder={t('enterPassword')}
           {...form.getInputProps('password')}
         />
         <PasswordInput
-          label={isEnglish ? 'Confirm password' : '確認密碼'}
-          placeholder={isEnglish ? 'Confirm password' : '請再次輸入密碼'}
+          label={t('confirmPasswordLabel')}
+          placeholder={t('confirmPasswordPlaceholder')}
           {...form.getInputProps('confirmPassword')}
         />
         <Button type="submit" style={{ marginTop: '0.5em' }}>
-          {isEnglish ? 'Sign Up' : '註冊'}
+          {t('signUp')}
         </Button>
         <Button variant="subtle" onClick={() => setExistingAccount(true)}>
-          {isEnglish ? 'Sign In' : '登入'}
+          {t('signIn')}
         </Button>
         <ToastContainer />
       </form>
@@ -132,7 +134,6 @@ CreateAccount.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   roomId: PropTypes.string.isRequired,
   playerName: PropTypes.string.isRequired,
-  isEnglish: PropTypes.bool,
 };
 
 export default CreateAccount;

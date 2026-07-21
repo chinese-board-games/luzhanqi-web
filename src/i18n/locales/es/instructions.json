@@ -1,0 +1,81 @@
+{
+  "tabs": {
+    "quickSteps": "Pasos rápidos",
+    "rulebook": "Reglamento"
+  },
+  "close": "Cerrar",
+  "pieceReference": "Referencia de piezas",
+  "quickStart": {
+    "title": "Inicio rápido",
+    "body": "¡Bienvenido a Luzhanqi! Crea o únete a una partida para empezar a jugar."
+  },
+  "phases": {
+    "0": {
+      "title": "Cómo unirte a una partida",
+      "steps": [
+        {
+          "title": "Crear o unirte",
+          "description": "Puedes crear una nueva partida como anfitrión o unirte a una existente usando un ID de partida."
+        },
+        {
+          "title": "Esperar a los jugadores",
+          "description": "Espera a que se una otro jugador. El anfitrión puede iniciar la partida cuando esté listo."
+        },
+        {
+          "title": "Configuración de la partida",
+          "description": "Configura opciones como la niebla de guerra antes de empezar."
+        }
+      ]
+    },
+    "1": {
+      "title": "Configurando tu tablero",
+      "steps": [
+        {
+          "title": "Arrastra y suelta las piezas",
+          "description": "Arrastra las piezas desde la zona superior a tu mitad del tablero. Cada pieza tiene reglas de colocación específicas."
+        },
+        {
+          "title": "Reglas de colocación de piezas",
+          "description": "• La bandera debe estar en la fila trasera\n• Las bombas y minas no pueden estar en la fila delantera\n• Todas las piezas deben colocarse"
+        },
+        {
+          "title": "Envía tu tablero",
+          "description": "Haz clic en \"Enviar disposición del tablero\" cuando todas las piezas estén colocadas correctamente."
+        }
+      ]
+    },
+    "2": {
+      "title": "Cómo jugar",
+      "steps": [
+        {
+          "title": "Realizar movimientos",
+          "description": "Haz clic en tu pieza para seleccionarla, luego haz clic en un destino válido. Haz clic en \"Enviar\" para confirmar."
+        },
+        {
+          "title": "Jerarquía de piezas",
+          "description": "Las piezas de mayor rango capturan a las de menor rango. Rangos iguales destruyen ambas piezas."
+        },
+        {
+          "title": "Reglas especiales",
+          "description": "• El Ingeniero puede desactivar minas con seguridad\n• Las bombas destruyen a cualquier pieza atacante\n• Capturar la bandera gana la partida"
+        }
+      ]
+    },
+    "3": {
+      "title": "Resultados de la partida",
+      "steps": [
+        {
+          "title": "Condiciones de victoria",
+          "description": "Captura la bandera del oponente para ganar, o hazlo rendirse."
+        },
+        {
+          "title": "Estadísticas de la partida",
+          "description": "Consulta las piezas restantes y perdidas de ambos jugadores."
+        }
+      ]
+    },
+    "default": {
+      "title": "Instrucciones del juego"
+    }
+  }
+}

@@ -1,10 +1,12 @@
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GameContext } from 'contexts/GameContext';
 
 import HalfBoard from './HalfBoard';
 import { Title } from '@mantine/core';
 
 export default function BoardSetup() {
+  const { t } = useTranslation('boardSetup');
   const {
     playerName: { playerName },
     playerList: { playerList },
@@ -13,7 +15,6 @@ export default function BoardSetup() {
     roomId: { roomId },
     socket,
     submittedSide: { submittedSide },
-    isEnglish: { isEnglish },
   } = useContext(GameContext);
 
   const isSpectator = spectatorList.includes(spectatorName);
@@ -27,21 +28,16 @@ export default function BoardSetup() {
   };
 
   if (isSpectator) {
-    return (
-      <Title order={2}>
-        {isEnglish ? 'Waiting for players to set the board' : '等待玩家設定棋盤'}
-      </Title>
-    );
+    return <Title order={2}>{t('waitingForBoard')}</Title>;
   }
 
   return submittedSide ? (
-    <Title order={2}>{isEnglish ? 'Waiting for other player' : '請等對手'}</Title>
+    <Title order={2}>{t('waitingForOpponent')}</Title>
   ) : (
     <HalfBoard
       sendStartingBoard={sendStartingBoard}
       playerList={playerList}
       playerName={playerName}
-      isEnglish={isEnglish}
     />
   );
 }

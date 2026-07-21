@@ -6,18 +6,14 @@ import { useForm } from '@mantine/form';
 import { Button, TextInput, PasswordInput } from '@mantine/core';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import { addGame } from 'api/User';
 import { updateUidMap } from 'api/Game';
 import PropTypes from 'prop-types';
 
-const EmailAndPasswordSignIn = ({
-  setExistingAccount,
-  setShowModal,
-  roomId,
-  playerName,
-  isEnglish,
-}) => {
+const EmailAndPasswordSignIn = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
+  const { t } = useTranslation('auth');
   const form = useForm({
     initialValues: {
       email: '',
@@ -62,20 +58,20 @@ const EmailAndPasswordSignIn = ({
     return (
       <div>
         <p>
-          {isEnglish ? 'Error: ' : '錯誤：'}
+          {t('error')}
           {error.message}
         </p>
       </div>
     );
   }
   if (loading) {
-    return <p>{isEnglish ? 'Loading...' : '載入中...'}</p>;
+    return <p>{t('loading')}</p>;
   }
   if (user) {
     return (
       <div>
         <p>
-          {isEnglish ? 'Registered User: ' : '已註冊使用者：'}
+          {t('registeredUser')}
           {user.user.email}
         </p>
       </div>
@@ -83,24 +79,24 @@ const EmailAndPasswordSignIn = ({
   }
   return (
     <div>
-      <h2>{isEnglish ? 'Sign In' : '登入'}</h2>
+      <h2>{t('signIn')}</h2>
       <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
         <TextInput
-          label={isEnglish ? 'Email address' : '電子郵件地址'}
+          label={t('emailAddress')}
           placeholder="example@provider.com"
           {...form.getInputProps('email')}
         />
         <PasswordInput
-          label={isEnglish ? 'Password' : '密碼'}
-          placeholder={isEnglish ? 'Enter password' : '請輸入密碼'}
+          label={t('password')}
+          placeholder={t('enterPassword')}
           {...form.getInputProps('password')}
         />
 
         <Button type="submit" style={{ marginTop: '0.5em' }}>
-          {isEnglish ? 'Login' : '登入'}
+          {t('login')}
         </Button>
         <Button variant="subtle" onClick={() => setExistingAccount(false)}>
-          {isEnglish ? 'Create Account' : '建立帳號'}
+          {t('createAccount')}
         </Button>
       </form>
       <ToastContainer />
@@ -113,7 +109,6 @@ EmailAndPasswordSignIn.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   roomId: PropTypes.string.isRequired,
   playerName: PropTypes.string.isRequired,
-  isEnglish: PropTypes.bool,
 };
 
 export default EmailAndPasswordSignIn;

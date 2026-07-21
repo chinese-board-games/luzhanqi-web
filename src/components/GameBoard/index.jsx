@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Box, Grid, Container, Center, Button, Flex, Popover } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import { emptyBoard } from 'utils/core';
 import SelectablePosition from '../SelectablePosition';
 import PieceInfoPanel from '../PieceInfoPanel';
@@ -28,12 +29,12 @@ export default function GameBoard({
   sendMove,
   forfeit,
   affiliation,
-  isEnglish = false,
   gameConfig = {},
   isSpectator = false,
   gamePhase = 2,
   lastMove = null,
 }) {
+  const { t } = useTranslation('board');
   const [origin, setOrigin] = useState(NO_SELECT);
   const [destination, setDestination] = useState(NO_SELECT);
   const [hoveredPiece, setHoveredPiece] = useState(null);
@@ -126,7 +127,6 @@ export default function GameBoard({
             }
             setOrigin([r, c]);
           }}
-          isEnglish={isEnglish}
           disabled={positionDisabled(r, c)}
           onHoverPiece={setHoveredPiece}
         />
@@ -151,7 +151,6 @@ export default function GameBoard({
                   originPiece={originPiece}
                   destinationPiece={destinationPiece}
                   gameConfig={gameConfig}
-                  isEnglish={isEnglish}
                   onConfirm={() => {
                     sendMove(origin, destination, host);
                     setOrigin(NO_SELECT);
@@ -170,11 +169,11 @@ export default function GameBoard({
   );
 
   const divider = [
-    <FrontLines key="1" isEnglish={isEnglish} />,
-    <Mountain rotation="-90deg" key="2" isEnglish={isEnglish} />,
-    <FrontLines key="3" isEnglish={isEnglish} />,
-    <Mountain rotation="90deg" key="4" isEnglish={isEnglish} />,
-    <FrontLines key="5" isEnglish={isEnglish} />,
+    <FrontLines key="1" />,
+    <Mountain rotation="-90deg" key="2" />,
+    <FrontLines key="3" />,
+    <Mountain rotation="90deg" key="4" />,
+    <FrontLines key="5" />,
   ].map((content, i) => (
     <Grid.Col key={`divider-${i}`} span={4}>
       <Center mih="5em">{content}</Center>
@@ -208,7 +207,7 @@ export default function GameBoard({
           {isSpectator || gamePhase > 2 ? null : (
             <Center py="1em">
               <Button variant="filled" color="red" onClick={forfeit}>
-                {isEnglish ? 'Forfeit' : '投降'}
+                {t('forfeit')}
               </Button>
             </Center>
           )}
@@ -230,12 +229,11 @@ export default function GameBoard({
             hoveredPiece={hoveredPiece}
             originPiece={originPiece}
             destinationPiece={destinationPiece}
-            isEnglish={isEnglish}
             gameConfig={gameConfig}
           />
         ) : null}
       </Flex>
-      <DeadPieces deadPieces={deadPieces} isEnglish={isEnglish} />
+      <DeadPieces deadPieces={deadPieces} />
     </>
   );
 }
@@ -250,7 +248,6 @@ GameBoard.propTypes = {
   player: PropTypes.string,
   opponent: PropTypes.string,
   affiliation: PropTypes.number,
-  isEnglish: PropTypes.bool,
   gameConfig: PropTypes.object,
   isSpectator: PropTypes.bool,
   gamePhase: PropTypes.number,

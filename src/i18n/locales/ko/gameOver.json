@@ -1,0 +1,11 @@
+{
+  "host": "호스트",
+  "guest": "게스트",
+  "gameOver": "게임 종료",
+  "winner": "승자: ",
+  "youWin": "승리했습니다!",
+  "youLost": "패배했습니다",
+  "yourPieces": "내 말",
+  "piece": "말",
+  "count": "수량"
+}

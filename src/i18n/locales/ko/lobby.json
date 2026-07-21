@@ -1,0 +1,16 @@
+{
+  "twoPlayersRequired": "로비에는 두 명의 플레이어가 있어야 합니다",
+  "roomCode": "방 코드:",
+  "copy": "복사",
+  "copied": "복사됨",
+  "waitingForHost": "호스트를 기다리는 중",
+  "leaveRoom": "방 나가기",
+  "clickRoomFull": "'방 가득 참'을 클릭해 게임을 시작하세요",
+  "roomFull": "방 가득 참",
+  "deleteRoom": "방 삭제",
+  "rules": "규칙",
+  "enableFogOfWar": "전장의 안개 활성화",
+  "landminesSurvive": "지뢰 파괴 안 됨(공격한 말만 죽음)",
+  "flyingBombs": "비행 폭탄(폭탄이 공병처럼 이동)",
+  "captureTheFlag": "깃발 뺏기(본부까지 가져가야 승리)"
+}

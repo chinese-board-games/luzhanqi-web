@@ -1,0 +1,22 @@
+{
+  "camp": "Camp",
+  "forfeit": "Abandonner",
+  "hq": "QG",
+  "railroad": "Chemin de fer",
+  "mountain": "Montagne",
+  "frontLine": "Ligne de Front",
+  "deadPieces": "Pièces éliminées",
+  "pieceInfo": "Infos sur la pièce",
+  "attacks": "attaque",
+  "hoverHint": "Survolez une pièce pour voir les détails.",
+  "outcomes": {
+    "bothDie": "Les deux pièces seront détruites.",
+    "targetDies": "La pièce ennemie sera détruite.",
+    "sourceDies": "Votre pièce sera détruite.",
+    "move": "Se déplacer sur cette case.",
+    "unknown": "L'identité de cette pièce est cachée — le résultat ne peut pas être prédit."
+  },
+  "vs": "contre",
+  "send": "Envoyer",
+  "cancel": "Annuler"
+}

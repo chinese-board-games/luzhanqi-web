@@ -1,0 +1,8 @@
+{
+  "sourceTargetRequired": "출발 칸과 도착 칸을 모두 선택해야 합니다",
+  "players": "플레이어:",
+  "spectators": "관전자:",
+  "disconnected": "{{name}}님의 연결이 끊어졌습니다 — 재연결을 기다리는 중…",
+  "fieldMarshalSelf": "당신의 원수가 쓰러졌습니다!",
+  "fieldMarshalOther": "{{name}}님의 원수가 쓰러졌습니다 — 상대의 군기가 공개되었습니다!"
+}

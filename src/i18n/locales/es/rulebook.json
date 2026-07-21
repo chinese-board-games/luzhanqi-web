@@ -1,0 +1,98 @@
+{
+  "intro": "¿Eres nuevo en Luzhanqi? Aquí tienes todo lo que necesitas saber antes de tu primera partida.",
+  "tiles": {
+    "camp": "Campamento",
+    "hq": "Cuartel General",
+    "mountain": "Montaña",
+    "railroad": "Ferrocarril"
+  },
+  "ranks": [
+    "Mariscal de Campo",
+    "General",
+    "General de División",
+    "General de Brigada",
+    "Coronel",
+    "Mayor",
+    "Capitán",
+    "Teniente",
+    "Ingeniero"
+  ],
+  "sections": {
+    "objective": {
+      "title": "Objetivo",
+      "body": "Captura la bandera del oponente para ganar. Con la variante \"Capturar la bandera\" activada, capturarla no basta por sí solo: la pieza que la captura debe llevarla de vuelta hasta tu propio cuartel general (QG) para ganar. Una partida también termina de inmediato si tu oponente se rinde."
+    },
+    "board": {
+      "title": "El Tablero",
+      "intro": "El tablero mide 12 filas por 5 columnas, dividido en dos mitades simétricas separadas por una cadena montañosa con dos puntos de cruce. Cada mitad tiene varios tipos especiales de casilla:",
+      "hq": {
+        "label": "Cuartel General (QG):",
+        "body": "las dos casillas al fondo de tu lado. Tu bandera debe empezar aquí."
+      },
+      "camps": {
+        "label": "Campamentos:",
+        "body": "zonas seguras: una pieza en un campamento nunca puede ser atacada ni capturada por nadie. Los campamentos también se conectan en diagonal con sus vecinos, siendo el único lugar donde las piezas pueden moverse/atacar en diagonal."
+      },
+      "railroads": {
+        "label": "Ferrocarriles:",
+        "body": "se muestran como líneas discontinuas que conectan casillas. La mayoría de las piezas pueden recorrer cualquier distancia en línea recta por el ferrocarril en un solo movimiento, pero no pueden girar en una esquina a mitad de camino. El Ingeniero es la excepción: puede girar libremente por la red ferroviaria. (Con la variante \"Bombas Voladoras\", la Bomba también puede.)"
+      },
+      "elsewhere": {
+        "label": "En cualquier otro lugar:",
+        "body": "conexiones normales: un paso a la vez, sin diagonales, sin giros en las esquinas."
+      },
+      "mountains": {
+        "label": "Montañas:",
+        "body": "el límite entre las dos mitades. Ninguna pieza puede cruzarlo, salvo por los dos puntos de cruce abiertos."
+      }
+    },
+    "pieces": {
+      "title": "Las Piezas",
+      "intro": "Cada bando tiene 25 piezas: 12 rangos de combate (abajo, de más débil a más fuerte) más la Bandera, 2 Bombas y 3 Minas, que nunca se mueven ni atacan por sí solas.",
+      "rankHeader": "Rango",
+      "pieceHeader": "Pieza",
+      "countHeader": "Cantidad",
+      "flagCount": "Bandera ×1",
+      "bombCount": "Bomba ×2",
+      "landmineCount": "Mina ×3"
+    },
+    "combat": {
+      "title": "Reglas de Combate",
+      "rules": [
+        "Mueve una pieza sobre una pieza enemiga para atacarla. La pieza de mayor rango gana y permanece en esa casilla; la perdedora es eliminada.",
+        "Rangos iguales, o un ataque que involucre a una Bomba (atacando o siendo atacada), destruyen ambas piezas.",
+        "El Ingeniero es la única pieza que desactiva una Mina con seguridad: cualquier otra pieza que la ataque es destruida junto con ella (a menos que la variante \"Las Minas Sobreviven\" esté activada, en cuyo caso solo muere el atacante).",
+        "Una pieza en un Campamento no puede ser atacada en absoluto, por ninguna pieza."
+      ]
+    },
+    "setup": {
+      "title": "Reglas de Colocación",
+      "rules": [
+        "La Bandera debe colocarse en una de tus dos casillas de Cuartel General.",
+        "Las Bombas no pueden colocarse en tu fila delantera (la más cercana a las montañas).",
+        "Las Minas solo pueden colocarse en tus dos filas traseras.",
+        "Las casillas de Campamento deben permanecer siempre vacías durante la colocación."
+      ]
+    },
+    "variants": {
+      "title": "Variantes de Reglas Opcionales",
+      "intro": "El anfitrión puede activar cualquiera de estas antes de comenzar una partida; todas están desactivadas por defecto excepto la niebla de guerra.",
+      "fogOfWar": {
+        "label": "Niebla de Guerra (activada por defecto):",
+        "body": "no puedes ver qué es una pieza enemiga hasta que ataca o es atacada; hasta entonces aparece como una pieza genérica desconocida."
+      },
+      "landminesSurvive": {
+        "label": "Las Minas Sobreviven:",
+        "body": "una pieza que no sea el Ingeniero y ataque una Mina es destruida, pero la mina permanece en el tablero en lugar de ser destruida también (una Bomba que ataca una mina sigue destruyendo a ambas, sin importar esta opción)."
+      },
+      "flyingBombs": {
+        "label": "Bombas Voladoras:",
+        "body": "las Bombas se mueven como el Ingeniero: cualquier distancia por el ferrocarril, girando libremente, en lugar de un paso a la vez."
+      },
+      "captureTheFlag": {
+        "label": "Capturar la Bandera:",
+        "body": "capturar la bandera enemiga no gana la partida por sí sola: la pieza que la captura debe llevarla de vuelta hasta tu propio Cuartel General. Si esa pieza es destruida en el camino, la bandera cae y reaparece en la fila de origen de su dueño original para que otra pieza la capture. Una Bomba que ataque la Bandera bajo esta variante solo destruye a la Bomba, dejando la Bandera en su sitio: solo puede ser capturada, nunca destruida directamente."
+      }
+    }
+  }
+}

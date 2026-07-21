@@ -1,0 +1,10 @@
+{
+  "waitingForBoard": "En attente que les joueurs configurent le plateau",
+  "waitingForOpponent": "En attente de l'autre joueur",
+  "title": "Configuration du plateau",
+  "useExample": "Utiliser un exemple",
+  "example": "Exemple {{n}}",
+  "unplacedWarning": "Il vous reste des pièces non placées !",
+  "sendPlacement": "Envoyer la disposition du plateau",
+  "resetBoard": "Réinitialiser le plateau"
+}

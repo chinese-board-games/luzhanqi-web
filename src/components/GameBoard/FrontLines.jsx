@@ -1,7 +1,10 @@
 import { Center, Stack, Text } from '@mantine/core';
-import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+import { isVerticalScript } from '../../i18n';
 
-export default function FrontLines({ isEnglish }) {
+export default function FrontLines() {
+  const { t, i18n } = useTranslation('board');
+  const vertical = isVerticalScript(i18n.language);
   return (
     <Center
       sx={(theme) => ({
@@ -20,18 +23,14 @@ export default function FrontLines({ isEnglish }) {
       w="4em"
       h="4em"
     >
-      {isEnglish ? (
-        <Text sx={{ fontFamily: 'SentyWEN2017' }}>Front Line</Text>
-      ) : (
+      {vertical ? (
         <Stack sx={{ gap: '0' }}>
-          <Text sx={{ rotate: '180deg', fontFamily: 'SentyWEN2017' }}>前綫</Text>
-          <Text sx={{ fontFamily: 'SentyWEN2017' }}>前綫</Text>
+          <Text sx={{ rotate: '180deg', fontFamily: 'SentyWEN2017' }}>{t('frontLine')}</Text>
+          <Text sx={{ fontFamily: 'SentyWEN2017' }}>{t('frontLine')}</Text>
         </Stack>
+      ) : (
+        <Text sx={{ fontFamily: 'SentyWEN2017' }}>{t('frontLine')}</Text>
       )}
     </Center>
   );
 }
-
-FrontLines.propTypes = {
-  isEnglish: PropTypes.bool,
-};

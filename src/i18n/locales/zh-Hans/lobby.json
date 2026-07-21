@@ -1,0 +1,16 @@
+{
+  "twoPlayersRequired": "大厅中必须有两名玩家",
+  "roomCode": "房间代码：",
+  "copy": "复制",
+  "copied": "已复制",
+  "waitingForHost": "请等主持人",
+  "leaveRoom": "离开房间",
+  "clickRoomFull": "点击「房间已满」开始游戏",
+  "roomFull": "房间已满",
+  "deleteRoom": "删除房间",
+  "rules": "规则",
+  "enableFogOfWar": "启用战争迷雾",
+  "landminesSurvive": "地雷不会被摧毁（只有攻击方阵亡）",
+  "flyingBombs": "飞弹（炸弹可像工兵一样转弯移动）",
+  "captureTheFlag": "夺旗规则（需将军旗带回己方大本营才能获胜）"
+}

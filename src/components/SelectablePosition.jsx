@@ -53,7 +53,6 @@ const SelectablePosition = forwardRef(function SelectablePosition(
     attackable = false,
     movable = false,
     isLastMove = false,
-    isEnglish,
     disabled = false,
     onHoverPiece,
   },
@@ -93,7 +92,6 @@ const SelectablePosition = forwardRef(function SelectablePosition(
         disabled={disabled}
         shadeColor={shadeColor}
         isHalfBoard={false}
-        isEnglish={isEnglish}
         isLastMove={isLastMove}
       />
     </Box>
@@ -110,7 +108,6 @@ SelectablePosition.propTypes = {
   attackable: PropTypes.bool,
   movable: PropTypes.bool.isRequired,
   isLastMove: PropTypes.bool,
-  isEnglish: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   onHoverPiece: PropTypes.func,
 };

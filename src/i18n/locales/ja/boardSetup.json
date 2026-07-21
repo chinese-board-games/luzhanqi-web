@@ -1,0 +1,10 @@
+{
+  "waitingForBoard": "プレイヤーの盤面設定を待っています",
+  "waitingForOpponent": "相手を待っています",
+  "title": "盤面配置",
+  "useExample": "配置例を使う",
+  "example": "配置例 {{n}}",
+  "unplacedWarning": "まだ配置していない駒があります！",
+  "sendPlacement": "盤面配置を送信",
+  "resetBoard": "盤面をリセット"
+}

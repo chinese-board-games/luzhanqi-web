@@ -1,0 +1,28 @@
+{
+  "warn": {
+    "title": "Êtes-vous sûr ?",
+    "body": "Quitter une partie en cours équivaut à abandonner.",
+    "forfeit": "Abandonner",
+    "returnToGame": "Retourner à la partie"
+  },
+  "user": {
+    "close": "Fermer",
+    "greeting": "Bonjour, {{name}}",
+    "gamesPlayed_one": "Vous avez joué {{count}} partie",
+    "gamesPlayed_other": "Vous avez joué {{count}} parties",
+    "rank": "Votre rang est {{rank}}",
+    "noRank": "(pas de rang)",
+    "dateHeader": "Date",
+    "opponentHeader": "Adversaire",
+    "resultHeader": "Résultat",
+    "actionsHeader": "Actions",
+    "yourself": "Vous-même",
+    "win": "Victoire",
+    "loss": "Défaite",
+    "incomplete": "Incomplète",
+    "archived": "Archivée",
+    "unarchive": "Désarchiver",
+    "rejoin": "Rejoindre",
+    "archive": "Archiver"
+  }
+}

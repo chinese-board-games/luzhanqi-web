@@ -1,0 +1,10 @@
+{
+  "waitingForBoard": "Waiting for players to set the board",
+  "waitingForOpponent": "Waiting for other player",
+  "title": "Board Setup",
+  "useExample": "Use Example",
+  "example": "Example {{n}}",
+  "unplacedWarning": "You still have unplaced pieces!",
+  "sendPlacement": "Send Board Placement",
+  "resetBoard": "Reset Board"
+}

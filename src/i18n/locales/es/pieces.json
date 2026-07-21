@@ -1,0 +1,82 @@
+{
+  "flag": {
+    "short": "BAN",
+    "title": "Bandera",
+    "description": "La pieza más importante. Si es capturada, pierdes la partida.",
+    "rules": ["No puede moverse", "No puede atacar", "Debe protegerse a toda costa"]
+  },
+  "landmine": {
+    "short": "MIN",
+    "title": "Mina",
+    "description": "Explosivo oculto. Solo el Ingeniero puede desactivarla con seguridad.",
+    "rules": ["No puede moverse", "No puede atacar", "Solo el Ingeniero puede capturarla con seguridad"]
+  },
+  "bomb": {
+    "short": "BMB",
+    "title": "Bomba",
+    "description": "Explota al ser atacada. Ambas piezas quedan destruidas.",
+    "rules": ["No puede moverse", "No puede atacar", "Destruye a cualquier atacante excepto al Ingeniero"]
+  },
+  "engineer": {
+    "short": "ING",
+    "title": "Ingeniero",
+    "description": "Puede desactivar minas y bombas con seguridad.",
+    "rules": [
+      "Puede moverse",
+      "Puede atacar",
+      "Única pieza que captura minas con seguridad",
+      "Rango 1"
+    ]
+  },
+  "lieutenant": {
+    "short": "TTE",
+    "title": "Teniente",
+    "description": "Oficial subalterno que comanda unidades pequeñas.",
+    "rules": ["Puede moverse", "Puede atacar", "Rango 2"]
+  },
+  "captain": {
+    "short": "CAP",
+    "title": "Capitán",
+    "description": "Comanda una compañía; gran liderazgo.",
+    "rules": ["Puede moverse", "Puede atacar", "Rango 3"]
+  },
+  "major": {
+    "short": "MAY",
+    "title": "Mayor",
+    "description": "Oficial de campo de nivel medio.",
+    "rules": ["Puede moverse", "Puede atacar", "Rango 4"]
+  },
+  "colonel": {
+    "short": "COR",
+    "title": "Coronel",
+    "description": "Oficial superior que comanda regimientos.",
+    "rules": ["Puede moverse", "Puede atacar", "Rango 5"]
+  },
+  "brigadier_general": {
+    "short": "GB",
+    "title": "General de Brigada",
+    "description": "Comanda una brigada.",
+    "rules": ["Puede moverse", "Puede atacar", "Rango 6"]
+  },
+  "major_general": {
+    "short": "GD",
+    "title": "General de División",
+    "description": "General de alto rango, condecorado por su liderazgo.",
+    "rules": ["Puede moverse", "Puede atacar", "Rango 7"]
+  },
+  "general": {
+    "short": "GEN",
+    "title": "General",
+    "description": "General superior que comanda fuerzas a nivel de cuerpo de ejército.",
+    "rules": ["Puede moverse", "Puede atacar", "Rango 8"]
+  },
+  "field_marshall": {
+    "short": "MAR",
+    "title": "Mariscal de Campo",
+    "description": "Comandante supremo de todas las fuerzas.",
+    "rules": ["Puede moverse", "Puede atacar", "Rango más alto (9)"]
+  },
+  "enemy": {
+    "short": "ENE"
+  }
+}

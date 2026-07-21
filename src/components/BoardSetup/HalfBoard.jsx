@@ -23,6 +23,7 @@ import {
   useDroppable,
 } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
+import { useTranslation } from 'react-i18next';
 import SortablePiece from 'components/SortablePiece';
 import DraggablePiece from 'components/DraggablePiece';
 import GameTooltip from 'components/GameTooltip';
@@ -47,7 +48,8 @@ import PropTypes from 'prop-types';
 // polluted every future "empty" board for the rest of the browser session)
 const makeEmptyBoard = () => Array.from({ length: 6 }, () => [null, null, null, null, null]);
 
-export default function HalfBoard({ sendStartingBoard, playerList, playerName, isEnglish }) {
+export default function HalfBoard({ sendStartingBoard, playerList, playerName }) {
+  const { t } = useTranslation('boardSetup');
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const gridContainerRef = useRef(null);
 
@@ -212,28 +214,26 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
       >
         <Stack>
           <Center>
-            <Title>{isEnglish ? 'Board Setup' : '棋盤佈局'}</Title>
+            <Title>{t('title')}</Title>
           </Center>
           <Center>
             <Group>
               <Menu shadow="md" width={160}>
                 <Menu.Target>
                   <Button type="button" variant="secondary">
-                    {isEnglish ? 'Use Example' : '使用範例佈局'} ▾
+                    {t('useExample')} ▾
                   </Button>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  {exampleBoards.map((example) => (
-                    <Menu.Item key={example.name} onClick={() => setExample(example.board)}>
-                      {isEnglish ? example.name : example.name_zh}
+                  {exampleBoards.map((example, i) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <Menu.Item key={i} onClick={() => setExample(example.board)}>
+                      {t('example', { n: i + 1 })}
                     </Menu.Item>
                   ))}
                 </Menu.Dropdown>
               </Menu>
-              <Tooltip
-                disabled={boardCompleted}
-                label={isEnglish ? 'You still have unplaced pieces!' : '您還有棋子尚未放置！'}
-              >
+              <Tooltip disabled={boardCompleted} label={t('unplacedWarning')}>
                 <span>
                   <Button
                     disabled={!boardCompleted}
@@ -241,7 +241,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
                     variant="info"
                     onClick={() => sendStartingBoard(halfBoard)}
                   >
-                    {isEnglish ? 'Send Board Placement' : '送出棋盤佈局'}
+                    {t('sendPlacement')}
                   </Button>
                 </span>
               </Tooltip>
@@ -253,12 +253,12 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
                   setUnplacedPieces([...affiliatedPieces].sort((a, b) => a.order - b.order));
                 }}
               >
-                {isEnglish ? 'Reset Board' : '重設棋盤'}
+                {t('resetBoard')}
               </Button>
             </Group>
           </Center>
           <Box sx={{ position: 'sticky', top: 0, zIndex: 110 }}>
-            <PieceSelector unplacedPieces={unplacedPieces} isEnglish={isEnglish} />
+            <PieceSelector unplacedPieces={unplacedPieces} />
           </Box>
           <Box ref={gridContainerRef} sx={{ position: 'relative' }}>
             <HalfBoardConnectionLines containerRef={gridContainerRef} />
@@ -273,7 +273,6 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
                       col={c}
                       activeId={activeId}
                       isHalfBoard={true}
-                      isEnglish={isEnglish}
                     />
                   </Grid.Col>
                 ))
@@ -283,12 +282,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName, i
         </Stack>
         <DragOverlay>
           {activeId ? (
-            <DraggablePiece
-              name={activePiece.name}
-              affiliation={0}
-              data={activePiece.data}
-              isEnglish={isEnglish}
-            />
+            <DraggablePiece name={activePiece.name} affiliation={0} data={activePiece.data} />
           ) : null}
         </DragOverlay>
       </DndContext>
@@ -300,7 +294,6 @@ HalfBoard.propTypes = {
   sendStartingBoard: PropTypes.func.isRequired,
   playerList: PropTypes.array.isRequired,
   playerName: PropTypes.string.isRequired,
-  isEnglish: PropTypes.bool.isRequired,
 };
 
 function HalfBoardConnectionLines({ containerRef }) {
@@ -316,7 +309,7 @@ HalfBoardConnectionLines.propTypes = {
   containerRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }).isRequired,
 };
 
-function PieceSelector({ unplacedPieces, isEnglish }) {
+function PieceSelector({ unplacedPieces }) {
   const { setNodeRef } = useDroppable({
     id: 'unplaced',
   });
@@ -332,19 +325,8 @@ function PieceSelector({ unplacedPieces, isEnglish }) {
         <SortableContext items={unplacedPieces}>
           <Flex justify="center" align="center" gap="1em" wrap="wrap">
             {unplacedPieces.map((piece) => (
-              <GameTooltip
-                key={piece.id}
-                pieceName={piece.name}
-                gamePhase={1}
-                isEnglish={isEnglish}
-                placement="top"
-              >
-                <SortablePiece
-                  name={piece.name}
-                  affiliation={0}
-                  id={piece.id}
-                  isEnglish={isEnglish}
-                />
+              <GameTooltip key={piece.id} pieceName={piece.name} gamePhase={1} placement="top">
+                <SortablePiece name={piece.name} affiliation={0} id={piece.id} />
               </GameTooltip>
             ))}
           </Flex>
@@ -356,5 +338,4 @@ function PieceSelector({ unplacedPieces, isEnglish }) {
 
 PieceSelector.propTypes = {
   unplacedPieces: PropTypes.array.isRequired,
-  isEnglish: PropTypes.bool.isRequired,
 };

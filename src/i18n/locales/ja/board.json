@@ -1,0 +1,22 @@
+{
+  "camp": "陣地",
+  "forfeit": "降参",
+  "hq": "本営",
+  "railroad": "鉄道",
+  "mountain": "山岳",
+  "frontLine": "前線",
+  "deadPieces": "戦死した駒",
+  "pieceInfo": "駒の情報",
+  "attacks": "攻撃",
+  "hoverHint": "駒にカーソルを合わせると詳細が表示されます。",
+  "outcomes": {
+    "bothDie": "両方の駒が破壊されます。",
+    "targetDies": "敵の駒が破壊されます。",
+    "sourceDies": "あなたの駒が破壊されます。",
+    "move": "このマスに移動します。",
+    "unknown": "この駒の正体は不明のため、結果を予測できません。"
+  },
+  "vs": "対",
+  "send": "送信",
+  "cancel": "キャンセル"
+}

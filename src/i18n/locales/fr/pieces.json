@@ -1,0 +1,82 @@
+{
+  "flag": {
+    "short": "DRA",
+    "title": "Drapeau",
+    "description": "La pièce la plus importante. Si elle est capturée, vous perdez la partie.",
+    "rules": ["Ne peut pas se déplacer", "Ne peut pas attaquer", "Doit être protégé à tout prix"]
+  },
+  "landmine": {
+    "short": "MIN",
+    "title": "Mine",
+    "description": "Explosif caché. Seul l'Ingénieur peut la désamorcer sans danger.",
+    "rules": ["Ne peut pas se déplacer", "Ne peut pas attaquer", "Seul l'Ingénieur peut la capturer sans danger"]
+  },
+  "bomb": {
+    "short": "BMB",
+    "title": "Bombe",
+    "description": "Explose lorsqu'elle est attaquée. Les deux pièces sont détruites.",
+    "rules": ["Ne peut pas se déplacer", "Ne peut pas attaquer", "Détruit tout attaquant sauf l'Ingénieur"]
+  },
+  "engineer": {
+    "short": "ING",
+    "title": "Ingénieur",
+    "description": "Peut désamorcer les mines et les bombes sans danger.",
+    "rules": [
+      "Peut se déplacer",
+      "Peut attaquer",
+      "Seule pièce pouvant capturer les mines sans danger",
+      "Rang 1"
+    ]
+  },
+  "lieutenant": {
+    "short": "LT",
+    "title": "Lieutenant",
+    "description": "Officier subalterne commandant de petites unités.",
+    "rules": ["Peut se déplacer", "Peut attaquer", "Rang 2"]
+  },
+  "captain": {
+    "short": "CAP",
+    "title": "Capitaine",
+    "description": "Commande une compagnie ; grand leadership.",
+    "rules": ["Peut se déplacer", "Peut attaquer", "Rang 3"]
+  },
+  "major": {
+    "short": "CDT",
+    "title": "Commandant",
+    "description": "Officier de terrain de niveau intermédiaire.",
+    "rules": ["Peut se déplacer", "Peut attaquer", "Rang 4"]
+  },
+  "colonel": {
+    "short": "COL",
+    "title": "Colonel",
+    "description": "Officier supérieur commandant des régiments.",
+    "rules": ["Peut se déplacer", "Peut attaquer", "Rang 5"]
+  },
+  "brigadier_general": {
+    "short": "GB",
+    "title": "Général de brigade",
+    "description": "Commande une brigade.",
+    "rules": ["Peut se déplacer", "Peut attaquer", "Rang 6"]
+  },
+  "major_general": {
+    "short": "GD",
+    "title": "Général de division",
+    "description": "Général de haut rang, décoré pour son leadership.",
+    "rules": ["Peut se déplacer", "Peut attaquer", "Rang 7"]
+  },
+  "general": {
+    "short": "GEN",
+    "title": "Général",
+    "description": "Général supérieur commandant des forces au niveau du corps d'armée.",
+    "rules": ["Peut se déplacer", "Peut attaquer", "Rang 8"]
+  },
+  "field_marshall": {
+    "short": "MAR",
+    "title": "Maréchal",
+    "description": "Commandant suprême de toutes les forces.",
+    "rules": ["Peut se déplacer", "Peut attaquer", "Rang le plus élevé (9)"]
+  },
+  "enemy": {
+    "short": "ENN"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "warn": {
+    "title": "よろしいですか？",
+    "body": "進行中のゲームを離れると降参したことになります。",
+    "forfeit": "降参",
+    "returnToGame": "ゲームに戻る"
+  },
+  "user": {
+    "close": "閉じる",
+    "greeting": "こんにちは、{{name}}さん",
+    "gamesPlayed_other": "{{count}} 試合プレイしました",
+    "rank": "あなたのランクは {{rank}} です",
+    "noRank": "（ランクなし）",
+    "dateHeader": "日付",
+    "opponentHeader": "対戦相手",
+    "resultHeader": "結果",
+    "actionsHeader": "操作",
+    "yourself": "自分",
+    "win": "勝利",
+    "loss": "敗北",
+    "incomplete": "未完了",
+    "archived": "アーカイブ済み",
+    "unarchive": "アーカイブ解除",
+    "rejoin": "再参加",
+    "archive": "アーカイブ"
+  }
+}

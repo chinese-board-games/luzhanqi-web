@@ -1,0 +1,11 @@
+{
+  "host": "Anfitrión",
+  "guest": "Invitado",
+  "gameOver": "Fin de la partida",
+  "winner": "Ganador: ",
+  "youWin": "¡Ganaste!",
+  "youLost": "Perdiste",
+  "yourPieces": "Tus piezas",
+  "piece": "Pieza",
+  "count": "Cantidad"
+}

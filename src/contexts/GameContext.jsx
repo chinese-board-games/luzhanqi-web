@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
 import PropTypes from 'prop-types';
 
+import i18n from '../i18n';
+
 const socket = io(import.meta.env.VITE_API);
 // const socket = io('localhost:4000');
 // const socket = io('https://luzhanqi.herokuapp.com/');
@@ -25,17 +27,6 @@ if (import.meta.hot) {
 export const GameContext = createContext({});
 
 const sessionKey = (gameId) => `luzhanqi:session:${gameId}`;
-const LANGUAGE_KEY = 'luzhanqi:isEnglish';
-
-// defaults to Chinese (false) if nothing was ever saved, or the saved
-// value can't be parsed
-const loadIsEnglish = () => {
-  try {
-    return JSON.parse(window.localStorage.getItem(LANGUAGE_KEY)) === true;
-  } catch {
-    return false;
-  }
-};
 
 const saveSession = (gameId, name, token) => {
   if (!gameId || !token) return;
@@ -100,22 +91,10 @@ export const GameProvider = ({ children }) => {
     target: [],
   });
   const [successors, setSuccessors] = useState([]);
-  const [isEnglish, setIsEnglish] = useState(loadIsEnglish);
   // rule-variant config (flyingBombs/landminesSurvive/captureTheFlag/...)
   // set by the host in the Lobby - needed locally so move highlighting and
   // combat-outcome prediction match how the server will actually resolve them
   const [gameConfig, setGameConfig] = useState({});
-  // mirrors playerNameRef above - lets the socket handlers below (registered
-  // in an effect that doesn't re-run on every isEnglish change) always read
-  // the current language instead of a stale closure
-  const isEnglishRef = useRef(isEnglish);
-  useEffect(() => {
-    isEnglishRef.current = isEnglish;
-    // persist across refreshes/new tabs - otherwise every reload silently
-    // fell back to the useState(false) default regardless of what the
-    // player had picked
-    window.localStorage.setItem(LANGUAGE_KEY, JSON.stringify(isEnglish));
-  }, [isEnglish]);
 
   /**
    * Game phases:
@@ -221,7 +200,6 @@ export const GameProvider = ({ children }) => {
     startingBoard: { startingBoard, setStartingBoard },
     winner: { winner, setWinner },
     gameResults: { gameResults, setGameResults },
-    isEnglish: { isEnglish, setIsEnglish },
     gameConfig: { gameConfig, setGameConfig },
     errors: { errors, setErrors },
     rejoining: { rejoining, setRejoining },
@@ -440,13 +418,9 @@ export const GameProvider = ({ children }) => {
     socket.on('fieldMarshallDown', (fallen) => {
       fallen.forEach(({ playerName: fallenPlayerName }) => {
         const isMine = fallenPlayerName === playerNameRef.current;
-        const message = isEnglishRef.current
-          ? isMine
-            ? 'Your Field Marshal has fallen!'
-            : `${fallenPlayerName}'s Field Marshal has fallen — their flag is now revealed!`
-          : isMine
-          ? '你的司令陣亡了！'
-          : `${fallenPlayerName} 的司令陣亡了 — 他們的軍旗現已顯示！`;
+        const message = isMine
+          ? i18n.t('game:fieldMarshalSelf')
+          : i18n.t('game:fieldMarshalOther', { name: fallenPlayerName });
         toast.warning(message, { autoClose: 6000 });
       });
     });
