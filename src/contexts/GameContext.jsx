@@ -327,7 +327,9 @@ export const GameProvider = ({ children }) => {
       if (data.board) setMyBoard(data.board);
       if (Array.isArray(data.deadPieces)) setMyDeadPieces(data.deadPieces);
       if (Array.isArray(data.moves) && data.moves.length) {
-        setLastMove(data.moves[data.moves.length - 1]);
+        // turn is whose turn is next, so the mover is the other affiliation
+        const affiliation = typeof data.turn === 'number' ? 1 - (data.turn % 2) : undefined;
+        setLastMove({ ...data.moves[data.moves.length - 1], affiliation });
       }
       if (data.phase === 3) {
         setWinner(data.winnerIndex);
@@ -426,7 +428,9 @@ export const GameProvider = ({ children }) => {
       setMyBoard(board);
       setMyDeadPieces(deadPieces);
       if (Array.isArray(moves) && moves.length) {
-        setLastMove(moves[moves.length - 1]);
+        // turn is whose turn is next, so the mover is the other affiliation
+        const affiliation = typeof turn === 'number' ? 1 - (turn % 2) : undefined;
+        setLastMove({ ...moves[moves.length - 1], affiliation });
       }
     });
 
