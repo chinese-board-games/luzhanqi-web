@@ -4,5 +4,8 @@
     "title": "陸戦棋",
     "logout": "ログアウト",
     "signIn": "ログイン/登録"
+  },
+  "help": {
+    "gameInstructions": "ゲームの説明"
   }
 }

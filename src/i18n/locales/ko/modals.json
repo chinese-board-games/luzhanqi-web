@@ -1,0 +1,27 @@
+{
+  "warn": {
+    "title": "확실합니까?",
+    "body": "진행 중인 게임을 나가면 항복으로 처리됩니다.",
+    "forfeit": "항복",
+    "returnToGame": "게임으로 돌아가기"
+  },
+  "user": {
+    "close": "닫기",
+    "greeting": "안녕하세요, {{name}}님",
+    "gamesPlayed_other": "{{count}}게임을 플레이했습니다",
+    "rank": "당신의 순위는 {{rank}}입니다",
+    "noRank": "(순위 없음)",
+    "dateHeader": "날짜",
+    "opponentHeader": "상대",
+    "resultHeader": "결과",
+    "actionsHeader": "작업",
+    "yourself": "자기 자신",
+    "win": "승리",
+    "loss": "패배",
+    "incomplete": "미완료",
+    "archived": "보관됨",
+    "unarchive": "보관 취소",
+    "rejoin": "다시 참가",
+    "archive": "보관"
+  }
+}

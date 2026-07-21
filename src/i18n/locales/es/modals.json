@@ -1,0 +1,28 @@
+{
+  "warn": {
+    "title": "¿Estás seguro?",
+    "body": "Salir de una partida en curso cuenta como rendirse.",
+    "forfeit": "Rendirse",
+    "returnToGame": "Volver a la partida"
+  },
+  "user": {
+    "close": "Cerrar",
+    "greeting": "Hola, {{name}}",
+    "gamesPlayed_one": "Has jugado {{count}} partida",
+    "gamesPlayed_other": "Has jugado {{count}} partidas",
+    "rank": "Tu rango es {{rank}}",
+    "noRank": "(sin rango)",
+    "dateHeader": "Fecha",
+    "opponentHeader": "Oponente",
+    "resultHeader": "Resultado",
+    "actionsHeader": "Acciones",
+    "yourself": "Tú mismo",
+    "win": "Victoria",
+    "loss": "Derrota",
+    "incomplete": "Incompleta",
+    "archived": "Archivada",
+    "unarchive": "Desarchivar",
+    "rejoin": "Volver a unirse",
+    "archive": "Archivar"
+  }
+}

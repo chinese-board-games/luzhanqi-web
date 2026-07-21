@@ -1,0 +1,10 @@
+{
+  "waitingForBoard": "Esperando a que los jugadores configuren el tablero",
+  "waitingForOpponent": "Esperando al otro jugador",
+  "title": "Configuración del tablero",
+  "useExample": "Usar ejemplo",
+  "example": "Ejemplo {{n}}",
+  "unplacedWarning": "¡Todavía tienes piezas sin colocar!",
+  "sendPlacement": "Enviar disposición del tablero",
+  "resetBoard": "Reiniciar tablero"
+}

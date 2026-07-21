@@ -1,0 +1,16 @@
+{
+  "twoPlayersRequired": "There must be two players in the lobby",
+  "roomCode": "Room code:",
+  "copy": "Copy",
+  "copied": "Copied",
+  "waitingForHost": "Waiting for the host",
+  "leaveRoom": "Leave Room",
+  "clickRoomFull": "Click \"Room Full\" to begin the game",
+  "roomFull": "Room Full",
+  "deleteRoom": "Delete Room",
+  "rules": "Rules",
+  "enableFogOfWar": "Enable fog of war",
+  "landminesSurvive": "Landmines survive (only the attacker dies)",
+  "flyingBombs": "Flying bombs (bombs move like the Engineer)",
+  "captureTheFlag": "Capture the flag (carry it back to your HQ to win)"
+}

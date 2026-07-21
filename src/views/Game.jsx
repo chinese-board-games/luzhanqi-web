@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { GameContext } from 'contexts/GameContext';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import Lobby from 'components/Lobby';
 import Menu from './Menu';
@@ -14,6 +15,7 @@ import { Container, Flex, Center, Title, Loader } from '@mantine/core';
 import { applyMoveOptimistically } from 'utils/predictOutcome';
 
 const Game = () => {
+  const { t } = useTranslation('game');
   let { roomId } = useParams();
   const user = useFirebaseAuth();
   const {
@@ -29,7 +31,6 @@ const Game = () => {
     myBoard: { myBoard, setMyBoard },
     myDeadPieces: { myDeadPieces },
     lastMove: { lastMove, setLastMove },
-    isEnglish: { isEnglish },
     gameConfig: { gameConfig },
     joinedGame: { joinedGame },
     rejoining: { rejoining },
@@ -97,10 +98,7 @@ const Game = () => {
         },
       });
     } else {
-      setErrors((prevErrors) => [
-        ...prevErrors,
-        isEnglish ? 'You must have both a source and target tile' : '您必須同時選擇起點和終點',
-      ]);
+      setErrors((prevErrors) => [...prevErrors, t('sourceTargetRequired')]);
     }
   };
 
@@ -144,7 +142,7 @@ const Game = () => {
             {/* if the playerList is empty, the user must have gotten here via a urlRoomId */}
             {playerList.length > 0 ? (
               <Container>
-                <Title order={2}>{isEnglish ? 'Players:' : '玩家：'}</Title>
+                <Title order={2}>{t('players')}</Title>
                 <Flex wrap="wrap">
                   {playerList.map((name, i) => (
                     <Center
@@ -162,7 +160,7 @@ const Game = () => {
                     </Center>
                   ))}
                 </Flex>
-                <Title order={2}>{isEnglish ? 'Spectators:' : '觀眾：'}</Title>
+                <Title order={2}>{t('spectators')}</Title>
                 <Flex wrap="wrap">
                   {spectatorList.map((name) => (
                     <Center
@@ -187,11 +185,7 @@ const Game = () => {
 
         {disconnectedPlayer ? (
           <Center>
-            <Title order={4}>
-              {isEnglish
-                ? `${disconnectedPlayer} disconnected — waiting for them to reconnect…`
-                : `${disconnectedPlayer} 已斷線 — 等待重新連線中…`}
-            </Title>
+            <Title order={4}>{t('disconnected', { name: disconnectedPlayer })}</Title>
           </Center>
         ) : null}
 
@@ -229,7 +223,6 @@ const Game = () => {
               playerName={playerName}
               opponentName={playerList[1 - affiliation]}
               affiliation={affiliation}
-              isEnglish={isEnglish}
               gameConfig={gameConfig}
               isSpectator={spectatorList.includes(spectatorName)}
               gamePhase={gamePhase}
@@ -238,7 +231,7 @@ const Game = () => {
           ) : null
         }
       </Container>
-      <HelpButton gamePhase={gamePhase} isEnglish={isEnglish} />
+      <HelpButton gamePhase={gamePhase} />
       <ToastContainer />
     </>
   );

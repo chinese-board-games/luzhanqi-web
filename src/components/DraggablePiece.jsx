@@ -3,7 +3,7 @@ import { useDraggable } from '@dnd-kit/core';
 import Piece from './Piece';
 import PropTypes from 'prop-types';
 
-export default function DraggablePiece({ name, affiliation, id, data, isEnglish }) {
+export default function DraggablePiece({ name, affiliation, id, data }) {
   const { setNodeRef, attributes, listeners, transition, isDragging } = useDraggable({
     id,
     data,
@@ -16,7 +16,7 @@ export default function DraggablePiece({ name, affiliation, id, data, isEnglish 
   };
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Piece name={name} affiliation={affiliation} isEnglish={isEnglish} />
+      <Piece name={name} affiliation={affiliation} />
     </div>
   );
 }
@@ -26,5 +26,4 @@ DraggablePiece.propTypes = {
   affiliation: PropTypes.number.isRequired,
   id: PropTypes.string,
   data: PropTypes.object,
-  isEnglish: PropTypes.bool.isRequired,
 };

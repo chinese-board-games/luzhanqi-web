@@ -1,0 +1,98 @@
+{
+  "intro": "New to Luzhanqi? Here's everything you need to know before your first game.",
+  "tiles": {
+    "camp": "Camp",
+    "hq": "HQ",
+    "mountain": "Mountain",
+    "railroad": "Railroad"
+  },
+  "ranks": [
+    "Field Marshal",
+    "General",
+    "Major General",
+    "Brigadier General",
+    "Colonel",
+    "Major",
+    "Captain",
+    "Lieutenant",
+    "Engineer"
+  ],
+  "sections": {
+    "objective": {
+      "title": "Objective",
+      "body": "Capture the opponent's Flag to win. Under the \"Capture the Flag\" rule variant, capturing it isn't enough by itself - the piece that captures it must then carry it all the way back to your own headquarters (HQ) before you win. A game also ends immediately if your opponent forfeits."
+    },
+    "board": {
+      "title": "The Board",
+      "intro": "The board is 12 rows by 5 columns, split into two mirrored halves separated by a mountain range with two crossing points. Each half has a few special kinds of cell:",
+      "hq": {
+        "label": "Headquarters (HQ):",
+        "body": "the two cells at the very back of your side. Your Flag must start here."
+      },
+      "camps": {
+        "label": "Camps:",
+        "body": "safe zones - a piece standing in a camp can never be attacked or captured, by anyone. Camps also connect diagonally to their neighbors, so it's the one place pieces can move/attack on the diagonal."
+      },
+      "railroads": {
+        "label": "Railroads:",
+        "body": "shown as dashed lines connecting cells. Most pieces can travel any distance along a straight railroad line in one move, but can't turn a corner mid-move. The Engineer is the exception - it can turn corners freely along the rail network. (Under the \"Flying Bombs\" variant, the Bomb can too.)"
+      },
+      "elsewhere": {
+        "label": "Everywhere else:",
+        "body": "ordinary connections - one step at a time, no diagonals, no corner-turning."
+      },
+      "mountains": {
+        "label": "Mountains:",
+        "body": "the boundary between the two halves. No piece can cross it except through the two open crossing points."
+      }
+    },
+    "pieces": {
+      "title": "The Pieces",
+      "intro": "Each side has 25 pieces: 12 combat ranks (below, weakest to strongest) plus the Flag, 2 Bombs, and 3 Landmines, which never move or attack on their own.",
+      "rankHeader": "Rank",
+      "pieceHeader": "Piece",
+      "countHeader": "Count",
+      "flagCount": "Flag ×1",
+      "bombCount": "Bomb ×2",
+      "landmineCount": "Landmine ×3"
+    },
+    "combat": {
+      "title": "Combat Rules",
+      "rules": [
+        "Move a piece onto an enemy piece to attack it. The higher-ranked piece wins and survives on that cell; the loser is removed.",
+        "Equal ranks, or an attack involving a Bomb (attacking or being attacked), destroy both pieces.",
+        "The Engineer is the only piece that safely defuses a Landmine - every other piece that attacks one is destroyed along with it (unless the \"Landmines Survive\" variant is on, in which case only the attacker dies).",
+        "A piece standing in a Camp can't be attacked at all, by any piece."
+      ]
+    },
+    "setup": {
+      "title": "Setup Rules",
+      "rules": [
+        "The Flag must be placed in one of your two HQ cells.",
+        "Bombs can't be placed in your front row (closest to the mountains).",
+        "Landmines can only be placed in your back two rows.",
+        "Camp cells must always stay empty during setup."
+      ]
+    },
+    "variants": {
+      "title": "Optional Rule Variants",
+      "intro": "The host can turn any of these on before starting a game - they're all off by default except fog of war.",
+      "fogOfWar": {
+        "label": "Fog of War (default on):",
+        "body": "you can't see what an enemy piece is until it attacks or is attacked - it shows up as a generic unknown piece until then."
+      },
+      "landminesSurvive": {
+        "label": "Landmines Survive:",
+        "body": "a non-Engineer attacking a Landmine is destroyed, but the mine stays on the board instead of also being destroyed (a Bomb attacking a mine still destroys both, regardless of this setting)."
+      },
+      "flyingBombs": {
+        "label": "Flying Bombs:",
+        "body": "Bombs move like the Engineer - any distance along the railroad, turning corners freely - instead of one step at a time."
+      },
+      "captureTheFlag": {
+        "label": "Capture the Flag:",
+        "body": "capturing the enemy Flag doesn't win the game by itself - the capturing piece must carry it all the way back to your own HQ. If that carrier is destroyed along the way, the Flag drops and respawns at its original owner's home row for someone else to capture. A Bomb attacking the Flag under this variant only destroys the Bomb, leaving the Flag in place - it can only ever be captured, never blown up outright."
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "camp": "Camp",
+  "forfeit": "Forfeit",
+  "hq": "HQ",
+  "railroad": "Railroad",
+  "mountain": "Mountain",
+  "frontLine": "Front Line",
+  "deadPieces": "Dead pieces",
+  "pieceInfo": "Piece Info",
+  "attacks": "attacks",
+  "hoverHint": "Hover over a piece to see details.",
+  "outcomes": {
+    "bothDie": "Both pieces will be destroyed.",
+    "targetDies": "The enemy piece will be destroyed.",
+    "sourceDies": "Your piece will be destroyed.",
+    "move": "Move to this tile.",
+    "unknown": "This piece's identity is hidden — the outcome can't be predicted."
+  },
+  "vs": "vs",
+  "send": "Send",
+  "cancel": "Cancel"
+}

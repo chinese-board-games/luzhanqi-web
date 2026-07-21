@@ -1,0 +1,8 @@
+{
+  "sourceTargetRequired": "Debes seleccionar tanto una casilla de origen como de destino",
+  "players": "Jugadores:",
+  "spectators": "Espectadores:",
+  "disconnected": "{{name}} se desconectó — esperando a que vuelva a conectarse…",
+  "fieldMarshalSelf": "¡Tu Mariscal de Campo ha caído!",
+  "fieldMarshalOther": "¡El Mariscal de Campo de {{name}} ha caído — su bandera ahora está revelada!"
+}

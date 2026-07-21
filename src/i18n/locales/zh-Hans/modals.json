@@ -1,0 +1,27 @@
+{
+  "warn": {
+    "title": "您确定吗？",
+    "body": "离开进行中的游戏将视为投降。",
+    "forfeit": "投降",
+    "returnToGame": "返回游戏"
+  },
+  "user": {
+    "close": "关闭",
+    "greeting": "您好，{{name}}",
+    "gamesPlayed_other": "您已经玩过 {{count}} 场游戏",
+    "rank": "您的排名是 {{rank}}",
+    "noRank": "（无排名）",
+    "dateHeader": "日期",
+    "opponentHeader": "对手",
+    "resultHeader": "结果",
+    "actionsHeader": "操作",
+    "yourself": "您自己",
+    "win": "胜利",
+    "loss": "失败",
+    "incomplete": "未完成",
+    "archived": "已封存",
+    "unarchive": "取消封存",
+    "rejoin": "重新加入",
+    "archive": "封存"
+  }
+}

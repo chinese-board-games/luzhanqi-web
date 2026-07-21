@@ -1,0 +1,22 @@
+{
+  "camp": "Campamento",
+  "forfeit": "Rendirse",
+  "hq": "QG",
+  "railroad": "Ferrocarril",
+  "mountain": "Montaña",
+  "frontLine": "Línea de Frente",
+  "deadPieces": "Piezas caídas",
+  "pieceInfo": "Información de la pieza",
+  "attacks": "ataca a",
+  "hoverHint": "Pasa el cursor sobre una pieza para ver los detalles.",
+  "outcomes": {
+    "bothDie": "Ambas piezas serán destruidas.",
+    "targetDies": "La pieza enemiga será destruida.",
+    "sourceDies": "Tu pieza será destruida.",
+    "move": "Mover a esta casilla.",
+    "unknown": "La identidad de esta pieza está oculta: no se puede predecir el resultado."
+  },
+  "vs": "contra",
+  "send": "Enviar",
+  "cancel": "Cancelar"
+}

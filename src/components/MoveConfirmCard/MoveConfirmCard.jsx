@@ -1,11 +1,13 @@
 import { Box, Text, Group, Button, Stack, Divider, ThemeIcon } from '@mantine/core';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { getPieceInfo } from 'data/pieceInfo';
 import { predictOutcome } from 'utils/predictOutcome';
 import { outcomeMessages } from '../PieceInfoPanel/PieceInfoPanel';
 
-function MiniPieceInfo({ piece, isEnglish }) {
-  const info = getPieceInfo(isEnglish)[piece.name];
+function MiniPieceInfo({ piece }) {
+  const { t } = useTranslation('pieces');
+  const info = getPieceInfo(t)[piece.name];
   if (!info) {
     return null;
   }
@@ -23,17 +25,16 @@ function MiniPieceInfo({ piece, isEnglish }) {
 
 MiniPieceInfo.propTypes = {
   piece: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
-  isEnglish: PropTypes.bool,
 };
 
 export default function MoveConfirmCard({
   originPiece,
   destinationPiece,
   gameConfig = {},
-  isEnglish = false,
   onConfirm,
   onCancel,
 }) {
+  const { t } = useTranslation('board');
   const outcome = predictOutcome(originPiece, destinationPiece, gameConfig);
   const message = outcome && outcomeMessages[outcome.type];
 
@@ -42,25 +43,25 @@ export default function MoveConfirmCard({
       <Stack spacing="xs">
         {destinationPiece ? (
           <Group position="apart" noWrap>
-            <MiniPieceInfo piece={originPiece} isEnglish={isEnglish} />
+            <MiniPieceInfo piece={originPiece} />
             <Text size="xs" c="dimmed">
-              {isEnglish ? 'vs' : '對'}
+              {t('vs')}
             </Text>
-            <MiniPieceInfo piece={destinationPiece} isEnglish={isEnglish} />
+            <MiniPieceInfo piece={destinationPiece} />
           </Group>
         ) : null}
         {message ? (
           <Text size="sm" fw={600} color={message.color}>
-            {isEnglish ? message.text.en : message.text.zh}
+            {t(`outcomes.${message.key}`)}
           </Text>
         ) : null}
         <Divider />
         <Group position="apart" grow>
           <Button size="md" onClick={onConfirm}>
-            {isEnglish ? 'Send' : '送出'}
+            {t('send')}
           </Button>
           <Button size="md" variant="outline" color="red" onClick={onCancel}>
-            {isEnglish ? 'Cancel' : '取消'}
+            {t('cancel')}
           </Button>
         </Group>
       </Stack>
@@ -72,7 +73,6 @@ MoveConfirmCard.propTypes = {
   originPiece: PropTypes.object,
   destinationPiece: PropTypes.object,
   gameConfig: PropTypes.object,
-  isEnglish: PropTypes.bool,
   onConfirm: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };

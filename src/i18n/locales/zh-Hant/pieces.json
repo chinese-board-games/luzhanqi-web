@@ -1,0 +1,77 @@
+{
+  "flag": {
+    "short": "軍旗",
+    "title": "軍旗",
+    "description": "最重要的棋子。若被俘獲，您將輸掉遊戲。",
+    "rules": ["不能移動", "不能攻擊", "必須不惜一切代價保護"]
+  },
+  "landmine": {
+    "short": "地雷",
+    "title": "地雷",
+    "description": "隱藏的爆裂物。只有工兵能安全拆除。",
+    "rules": ["不能移動", "不能攻擊", "只有工兵能安全俘獲"]
+  },
+  "bomb": {
+    "short": "炸彈",
+    "title": "炸彈",
+    "description": "被攻擊時會爆炸，雙方棋子同歸於盡。",
+    "rules": ["不能移動", "不能攻擊", "會摧毀除工兵外的任何攻擊者"]
+  },
+  "engineer": {
+    "short": "工兵",
+    "title": "工兵",
+    "description": "能安全拆除地雷和炸彈。",
+    "rules": ["可以移動", "可以攻擊", "唯一能安全俘獲地雷的棋子", "階級 1"]
+  },
+  "lieutenant": {
+    "short": "排長",
+    "title": "排長",
+    "description": "指揮小型部隊的初級軍官。",
+    "rules": ["可以移動", "可以攻擊", "階級 2"]
+  },
+  "captain": {
+    "short": "連長",
+    "title": "連長",
+    "description": "指揮一個連，領導能力強。",
+    "rules": ["可以移動", "可以攻擊", "階級 3"]
+  },
+  "major": {
+    "short": "營長",
+    "title": "營長",
+    "description": "中階野戰軍官。",
+    "rules": ["可以移動", "可以攻擊", "階級 4"]
+  },
+  "colonel": {
+    "short": "團長",
+    "title": "團長",
+    "description": "指揮團級部隊的高級軍官。",
+    "rules": ["可以移動", "可以攻擊", "階級 5"]
+  },
+  "brigadier_general": {
+    "short": "旅長",
+    "title": "旅長",
+    "description": "指揮一個旅。",
+    "rules": ["可以移動", "可以攻擊", "階級 6"]
+  },
+  "major_general": {
+    "short": "師長",
+    "title": "師長",
+    "description": "高階將領，因領導才能而受勳。",
+    "rules": ["可以移動", "可以攻擊", "階級 7"]
+  },
+  "general": {
+    "short": "軍長",
+    "title": "軍長",
+    "description": "指揮軍級部隊的高級將領。",
+    "rules": ["可以移動", "可以攻擊", "階級 8"]
+  },
+  "field_marshall": {
+    "short": "司令",
+    "title": "司令",
+    "description": "全軍最高統帥。",
+    "rules": ["可以移動", "可以攻擊", "最高階級（9）"]
+  },
+  "enemy": {
+    "short": "敵軍"
+  }
+}

@@ -4,5 +4,8 @@
     "title": "육전기",
     "logout": "로그아웃",
     "signIn": "로그인/회원가입"
+  },
+  "help": {
+    "gameInstructions": "게임 설명"
   }
 }

@@ -1,18 +1,19 @@
-/** An object containing basic game information for each piece type. */
+/** An object containing basic game information for each piece type. Display
+ * labels are localized separately via the "pieces" i18next namespace. */
 export const pieces = {
-  bomb: { count: 2, order: -1, display: '炸彈', english: 'BOMB', kills: 0 },
-  brigadier_general: { count: 2, order: 6, display: '旅長', english: 'BG', kills: 0 },
-  captain: { count: 3, order: 3, display: '連長', english: 'CPT', kills: 0 },
-  colonel: { count: 2, order: 5, display: '團長', english: 'COL', kills: 0 },
-  engineer: { count: 3, order: 1, display: '工兵', english: 'ENG', kills: 0 },
-  field_marshall: { count: 1, order: 9, display: '司令', english: 'FM', kills: 0 },
-  flag: { count: 1, order: 0, display: '軍旗', english: 'FLAG', kills: 0 },
-  general: { count: 1, order: 8, display: '軍長', english: 'GEN', kills: 0 },
-  landmine: { count: 3, order: -1, display: '地雷', english: 'MINE', kills: 0 },
-  lieutenant: { count: 3, order: 2, display: '排長', english: 'LT', kills: 0 },
-  major_general: { count: 2, order: 7, display: '師長', english: 'MG', kills: 0 },
-  major: { count: 2, order: 4, display: '營長', english: 'MAJ', kills: 0 },
-  enemy: { count: 0, order: -1, display: '敵軍', english: 'ENY', kills: 0 },
+  bomb: { count: 2, order: -1, kills: 0 },
+  brigadier_general: { count: 2, order: 6, kills: 0 },
+  captain: { count: 3, order: 3, kills: 0 },
+  colonel: { count: 2, order: 5, kills: 0 },
+  engineer: { count: 3, order: 1, kills: 0 },
+  field_marshall: { count: 1, order: 9, kills: 0 },
+  flag: { count: 1, order: 0, kills: 0 },
+  general: { count: 1, order: 8, kills: 0 },
+  landmine: { count: 3, order: -1, kills: 0 },
+  lieutenant: { count: 3, order: 2, kills: 0 },
+  major_general: { count: 2, order: 7, kills: 0 },
+  major: { count: 2, order: 4, kills: 0 },
+  enemy: { count: 0, order: -1, kills: 0 },
 };
 
 export const setupPieces = [];
@@ -31,7 +32,6 @@ Object.keys(pieces).forEach((name) => {
  * @property {number} affiliation
  * @property {number} order
  * @property {number} kills
- * @property {string} display
  * @property {string} id
  */
 

@@ -4,5 +4,8 @@
     "title": "Luzhanqi",
     "logout": "Cerrar sesión",
     "signIn": "Iniciar sesión/Registrarse"
+  },
+  "help": {
+    "gameInstructions": "Instrucciones del juego"
   }
 }

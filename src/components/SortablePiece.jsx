@@ -4,7 +4,7 @@ import { CSS } from '@dnd-kit/utilities';
 import Piece from './Piece';
 import PropTypes from 'prop-types';
 
-export default function SortablePiece({ name, affiliation, id, isEnglish }) {
+export default function SortablePiece({ name, affiliation, id }) {
   const { attributes, listeners, setNodeRef, transition, transform } = useSortable({
     id,
   });
@@ -15,7 +15,7 @@ export default function SortablePiece({ name, affiliation, id, isEnglish }) {
   };
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Piece name={name} affiliation={affiliation} isEnglish={isEnglish} />
+      <Piece name={name} affiliation={affiliation} />
     </div>
   );
 }
@@ -24,5 +24,4 @@ SortablePiece.propTypes = {
   name: PropTypes.string.isRequired,
   affiliation: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
-  isEnglish: PropTypes.bool.isRequired,
 };

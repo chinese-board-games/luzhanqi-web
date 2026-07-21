@@ -1,0 +1,16 @@
+{
+  "twoPlayersRequired": "大廳中必須有兩名玩家",
+  "roomCode": "房間代碼：",
+  "copy": "複製",
+  "copied": "已複製",
+  "waitingForHost": "請等主持人",
+  "leaveRoom": "離開房間",
+  "clickRoomFull": "點擊「房間已滿」開始遊戲",
+  "roomFull": "房間已滿",
+  "deleteRoom": "刪除房間",
+  "rules": "規則",
+  "enableFogOfWar": "啟用戰爭迷霧",
+  "landminesSurvive": "地雷不會被摧毀（只有攻擊方陣亡）",
+  "flyingBombs": "飛彈（炸彈可像工兵一樣轉彎移動）",
+  "captureTheFlag": "奪旗規則（需將軍旗帶回己方大本營才能獲勝）"
+}

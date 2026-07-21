@@ -1,0 +1,98 @@
+{
+  "intro": "Nouveau sur Luzhanqi ? Voici tout ce que vous devez savoir avant votre première partie.",
+  "tiles": {
+    "camp": "Camp",
+    "hq": "QG",
+    "mountain": "Montagne",
+    "railroad": "Chemin de fer"
+  },
+  "ranks": [
+    "Maréchal",
+    "Général",
+    "Général de division",
+    "Général de brigade",
+    "Colonel",
+    "Commandant",
+    "Capitaine",
+    "Lieutenant",
+    "Ingénieur"
+  ],
+  "sections": {
+    "objective": {
+      "title": "Objectif",
+      "body": "Capturez le drapeau de l'adversaire pour gagner. Avec la variante « Capturer le drapeau », le capturer ne suffit pas : la pièce qui le capture doit le ramener jusqu'à votre propre quartier général (QG) pour gagner. Une partie se termine aussi immédiatement si votre adversaire abandonne."
+    },
+    "board": {
+      "title": "Le Plateau",
+      "intro": "Le plateau mesure 12 lignes sur 5 colonnes, divisé en deux moitiés symétriques séparées par une chaîne de montagnes avec deux points de passage. Chaque moitié comporte plusieurs types de cases spéciales :",
+      "hq": {
+        "label": "Quartier général (QG) :",
+        "body": "les deux cases tout au fond de votre côté. Votre drapeau doit y commencer."
+      },
+      "camps": {
+        "label": "Camps :",
+        "body": "zones sûres - une pièce sur un camp ne peut jamais être attaquée ni capturée, par personne. Les camps se connectent aussi en diagonale à leurs voisins, seul endroit où les pièces peuvent se déplacer/attaquer en diagonale."
+      },
+      "railroads": {
+        "label": "Chemins de fer :",
+        "body": "représentés par des lignes en pointillés reliant des cases. La plupart des pièces peuvent parcourir n'importe quelle distance en ligne droite sur un chemin de fer en un seul mouvement, mais ne peuvent pas tourner en cours de route. L'Ingénieur fait exception - il peut tourner librement sur le réseau ferroviaire. (Avec la variante « Bombes volantes », la Bombe le peut aussi.)"
+      },
+      "elsewhere": {
+        "label": "Partout ailleurs :",
+        "body": "connexions ordinaires - une case à la fois, sans diagonale, sans virage."
+      },
+      "mountains": {
+        "label": "Montagnes :",
+        "body": "la frontière entre les deux moitiés. Aucune pièce ne peut la franchir, sauf par les deux points de passage ouverts."
+      }
+    },
+    "pieces": {
+      "title": "Les Pièces",
+      "intro": "Chaque camp possède 25 pièces : 12 rangs de combat (ci-dessous, du plus faible au plus fort) plus le Drapeau, 2 Bombes et 3 Mines, qui ne se déplacent ni n'attaquent jamais d'elles-mêmes.",
+      "rankHeader": "Rang",
+      "pieceHeader": "Pièce",
+      "countHeader": "Nombre",
+      "flagCount": "Drapeau ×1",
+      "bombCount": "Bombe ×2",
+      "landmineCount": "Mine ×3"
+    },
+    "combat": {
+      "title": "Règles de Combat",
+      "rules": [
+        "Déplacez une pièce sur une pièce ennemie pour l'attaquer. La pièce de rang supérieur gagne et reste sur cette case ; la perdante est retirée.",
+        "Des rangs égaux, ou une attaque impliquant une Bombe (attaquante ou attaquée), détruisent les deux pièces.",
+        "L'Ingénieur est la seule pièce qui désamorce une Mine sans danger - toute autre pièce qui l'attaque est détruite avec elle (sauf si la variante « Les mines survivent » est activée, auquel cas seul l'attaquant meurt).",
+        "Une pièce sur un Camp ne peut être attaquée par aucune pièce."
+      ]
+    },
+    "setup": {
+      "title": "Règles de Mise en Place",
+      "rules": [
+        "Le Drapeau doit être placé dans l'une de vos deux cases de QG.",
+        "Les Bombes ne peuvent pas être placées sur votre rangée avant (la plus proche des montagnes).",
+        "Les Mines ne peuvent être placées que sur vos deux rangées arrière.",
+        "Les cases de Camp doivent toujours rester vides pendant la mise en place."
+      ]
+    },
+    "variants": {
+      "title": "Variantes de Règles Optionnelles",
+      "intro": "L'hôte peut activer n'importe laquelle de ces règles avant de démarrer une partie - elles sont toutes désactivées par défaut, sauf le brouillard de guerre.",
+      "fogOfWar": {
+        "label": "Brouillard de Guerre (activé par défaut) :",
+        "body": "vous ne pouvez pas voir ce qu'est une pièce ennemie tant qu'elle n'attaque pas ou n'est pas attaquée - elle apparaît comme une pièce inconnue générique jusque-là."
+      },
+      "landminesSurvive": {
+        "label": "Les Mines Survivent :",
+        "body": "une pièce autre que l'Ingénieur attaquant une Mine est détruite, mais la mine reste sur le plateau au lieu d'être détruite elle aussi (une Bombe attaquant une mine détruit toujours les deux, quel que soit ce réglage)."
+      },
+      "flyingBombs": {
+        "label": "Bombes Volantes :",
+        "body": "les Bombes se déplacent comme l'Ingénieur - n'importe quelle distance le long du chemin de fer, en tournant librement - au lieu d'une case à la fois."
+      },
+      "captureTheFlag": {
+        "label": "Capturer le Drapeau :",
+        "body": "capturer le drapeau ennemi ne fait pas gagner la partie à lui seul - la pièce capturante doit le ramener jusqu'à votre propre QG. Si cette pièce est détruite en chemin, le drapeau tombe et réapparaît sur la rangée d'origine de son propriétaire pour qu'une autre pièce puisse le capturer. Une Bombe attaquant le Drapeau sous cette variante ne détruit que la Bombe, laissant le Drapeau en place - il ne peut être que capturé, jamais détruit directement."
+      }
+    }
+  }
+}

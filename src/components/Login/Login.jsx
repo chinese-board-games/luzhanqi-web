@@ -1,12 +1,14 @@
 import React from 'react';
 import { Button, Container } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import EmailAndPasswordSignIn from './EmailAndPasswordSignIn';
 import CreateAccount from './CreateAccount';
 import Google from './Google';
 import Phone from './Phone';
 import PropTypes from 'prop-types';
 
-const LoginComponent = ({ setShowModal, roomId, playerName, isEnglish }) => {
+const LoginComponent = ({ setShowModal, roomId, playerName }) => {
+  const { t } = useTranslation('auth');
   const [existingAccount, setExistingAccount] = React.useState(false);
   const [usePhone, setUsePhone] = React.useState(false);
 
@@ -18,7 +20,6 @@ const LoginComponent = ({ setShowModal, roomId, playerName, isEnglish }) => {
           setShowModal={setShowModal}
           roomId={roomId}
           playerName={playerName}
-          isEnglish={isEnglish}
         />
       ) : (
         <CreateAccount
@@ -26,36 +27,19 @@ const LoginComponent = ({ setShowModal, roomId, playerName, isEnglish }) => {
           setShowModal={setShowModal}
           roomId={roomId}
           playerName={playerName}
-          isEnglish={isEnglish}
         />
       )}
-      <Google
-        setShowModal={setShowModal}
-        roomId={roomId}
-        playerName={playerName}
-        isEnglish={isEnglish}
-      />
+      <Google setShowModal={setShowModal} roomId={roomId} playerName={playerName} />
     </>
   );
 
   return (
     <Container>
       <Button variant="light" onClick={() => setUsePhone(!usePhone)}>
-        {isEnglish
-          ? usePhone
-            ? 'Use Email'
-            : 'Use Phone'
-          : usePhone
-          ? '使用電子郵件'
-          : '使用電話'}
+        {usePhone ? t('useEmail') : t('usePhone')}
       </Button>
       {usePhone ? (
-        <Phone
-          setShowModal={setShowModal}
-          roomId={roomId}
-          playerName={playerName}
-          isEnglish={isEnglish}
-        />
+        <Phone setShowModal={setShowModal} roomId={roomId} playerName={playerName} />
       ) : (
         displayEmail
       )}
@@ -67,7 +51,6 @@ LoginComponent.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   roomId: PropTypes.string.isRequired,
   playerName: PropTypes.string.isRequired,
-  isEnglish: PropTypes.bool,
 };
 
 export default LoginComponent;

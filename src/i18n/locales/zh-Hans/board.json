@@ -1,0 +1,22 @@
+{
+  "camp": "行营",
+  "forfeit": "投降",
+  "hq": "大本营",
+  "railroad": "后勤",
+  "mountain": "山界",
+  "frontLine": "前线",
+  "deadPieces": "阵亡棋子",
+  "pieceInfo": "棋子资讯",
+  "attacks": "攻击",
+  "hoverHint": "将鼠标移到棋子上以查看详情。",
+  "outcomes": {
+    "bothDie": "双方棋子都会被摧毁。",
+    "targetDies": "敌方棋子将被摧毁。",
+    "sourceDies": "您的棋子将被摧毁。",
+    "move": "移动至此空格。",
+    "unknown": "这枚棋子的身份未知 — 无法预测结果。"
+  },
+  "vs": "对",
+  "send": "送出",
+  "cancel": "取消"
+}

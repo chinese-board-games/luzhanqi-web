@@ -1,0 +1,8 @@
+{
+  "sourceTargetRequired": "您必須同時選擇起點和終點",
+  "players": "玩家：",
+  "spectators": "觀眾：",
+  "disconnected": "{{name}} 已斷線 — 等待重新連線中…",
+  "fieldMarshalSelf": "你的司令陣亡了！",
+  "fieldMarshalOther": "{{name}} 的司令陣亡了 — 他們的軍旗現已顯示！"
+}

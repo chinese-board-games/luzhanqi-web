@@ -1,0 +1,10 @@
+{
+  "waitingForBoard": "플레이어의 보드 설정을 기다리는 중",
+  "waitingForOpponent": "상대방을 기다리는 중",
+  "title": "보드 배치",
+  "useExample": "예시 사용",
+  "example": "예시 {{n}}",
+  "unplacedWarning": "아직 배치하지 않은 말이 있습니다!",
+  "sendPlacement": "보드 배치 전송",
+  "resetBoard": "보드 초기화"
+}

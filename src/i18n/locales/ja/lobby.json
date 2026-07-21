@@ -1,0 +1,16 @@
+{
+  "twoPlayersRequired": "ロビーには2人のプレイヤーが必要です",
+  "roomCode": "ルームコード：",
+  "copy": "コピー",
+  "copied": "コピーしました",
+  "waitingForHost": "ホストを待っています",
+  "leaveRoom": "ルームを退出",
+  "clickRoomFull": "「満員」をクリックしてゲームを開始します",
+  "roomFull": "満員",
+  "deleteRoom": "ルームを削除",
+  "rules": "ルール",
+  "enableFogOfWar": "戦争の霧を有効にする",
+  "landminesSurvive": "地雷は破壊されない（攻撃側のみ死亡）",
+  "flyingBombs": "飛行爆弾（爆弾が工兵のように移動する）",
+  "captureTheFlag": "旗取りルール（本営まで持ち帰ると勝利）"
+}

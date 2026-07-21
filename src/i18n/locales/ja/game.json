@@ -1,0 +1,8 @@
+{
+  "sourceTargetRequired": "移動元と移動先の両方のマスを選択する必要があります",
+  "players": "プレイヤー：",
+  "spectators": "観戦者：",
+  "disconnected": "{{name}} が切断されました — 再接続を待っています…",
+  "fieldMarshalSelf": "あなたの元帥が倒れました！",
+  "fieldMarshalOther": "{{name}}の元帥が倒れました — 相手の軍旗が公開されました！"
+}

@@ -1,0 +1,8 @@
+{
+  "sourceTargetRequired": "Vous devez sélectionner une case de départ et une case d'arrivée",
+  "players": "Joueurs :",
+  "spectators": "Spectateurs :",
+  "disconnected": "{{name}} déconnecté — en attente de reconnexion…",
+  "fieldMarshalSelf": "Votre Maréchal est tombé !",
+  "fieldMarshalOther": "Le Maréchal de {{name}} est tombé — son drapeau est maintenant révélé !"
+}

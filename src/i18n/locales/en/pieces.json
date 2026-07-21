@@ -1,0 +1,82 @@
+{
+  "flag": {
+    "short": "FLAG",
+    "title": "Flag",
+    "description": "The most important piece. If captured, you lose the game.",
+    "rules": ["Cannot move", "Cannot attack", "Must be protected at all costs"]
+  },
+  "landmine": {
+    "short": "MINE",
+    "title": "Landmine",
+    "description": "Hidden explosive. Only Engineer can defuse safely.",
+    "rules": ["Cannot move", "Cannot attack", "Only Engineer can capture safely"]
+  },
+  "bomb": {
+    "short": "BOMB",
+    "title": "Bomb",
+    "description": "Explodes when attacked. Both pieces destroyed.",
+    "rules": ["Cannot move", "Cannot attack", "Destroys any attacker except Engineer"]
+  },
+  "engineer": {
+    "short": "ENG",
+    "title": "Engineer",
+    "description": "Can safely defuse landmines and bombs.",
+    "rules": [
+      "Can move",
+      "Can attack",
+      "Only piece that can capture landmines safely",
+      "Rank 1"
+    ]
+  },
+  "lieutenant": {
+    "short": "LT",
+    "title": "Lieutenant",
+    "description": "Junior officer commanding small units.",
+    "rules": ["Can move", "Can attack", "Rank 2"]
+  },
+  "captain": {
+    "short": "CPT",
+    "title": "Captain",
+    "description": "Commands a company; strong leadership.",
+    "rules": ["Can move", "Can attack", "Rank 3"]
+  },
+  "major": {
+    "short": "MAJ",
+    "title": "Major",
+    "description": "Mid-level field officer.",
+    "rules": ["Can move", "Can attack", "Rank 4"]
+  },
+  "colonel": {
+    "short": "COL",
+    "title": "Colonel",
+    "description": "Senior officer commanding regiments.",
+    "rules": ["Can move", "Can attack", "Rank 5"]
+  },
+  "brigadier_general": {
+    "short": "BG",
+    "title": "Brigadier General",
+    "description": "Commands a brigade.",
+    "rules": ["Can move", "Can attack", "Rank 6"]
+  },
+  "major_general": {
+    "short": "MG",
+    "title": "Major General",
+    "description": "High-ranking general, decorated for leadership.",
+    "rules": ["Can move", "Can attack", "Rank 7"]
+  },
+  "general": {
+    "short": "GEN",
+    "title": "General",
+    "description": "Senior general officer commanding corps-level forces.",
+    "rules": ["Can move", "Can attack", "Rank 8"]
+  },
+  "field_marshall": {
+    "short": "FM",
+    "title": "Field Marshal",
+    "description": "Supreme commander of all forces.",
+    "rules": ["Can move", "Can attack", "Highest rank (9)"]
+  },
+  "enemy": {
+    "short": "ENY"
+  }
+}

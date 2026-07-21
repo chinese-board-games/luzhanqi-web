@@ -1,0 +1,22 @@
+{
+  "camp": "진지",
+  "forfeit": "항복",
+  "hq": "본부",
+  "railroad": "철도",
+  "mountain": "산악",
+  "frontLine": "전선",
+  "deadPieces": "전사한 말",
+  "pieceInfo": "말 정보",
+  "attacks": "공격",
+  "hoverHint": "말 위에 마우스를 올리면 세부 정보가 표시됩니다.",
+  "outcomes": {
+    "bothDie": "양쪽 말이 모두 파괴됩니다.",
+    "targetDies": "상대 말이 파괴됩니다.",
+    "sourceDies": "당신의 말이 파괴됩니다.",
+    "move": "이 칸으로 이동합니다.",
+    "unknown": "이 말의 정체가 숨겨져 있어 결과를 예측할 수 없습니다."
+  },
+  "vs": "대",
+  "send": "전송",
+  "cancel": "취소"
+}

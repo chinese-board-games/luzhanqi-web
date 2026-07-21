@@ -1,0 +1,81 @@
+{
+  "tabs": {
+    "quickSteps": "Étapes rapides",
+    "rulebook": "Règlement"
+  },
+  "close": "Fermer",
+  "pieceReference": "Référence des pièces",
+  "quickStart": {
+    "title": "Démarrage rapide",
+    "body": "Bienvenue dans Luzhanqi ! Créez ou rejoignez une partie pour commencer à jouer."
+  },
+  "phases": {
+    "0": {
+      "title": "Comment rejoindre une partie",
+      "steps": [
+        {
+          "title": "Créer ou rejoindre",
+          "description": "Créez une nouvelle partie en tant qu'hôte ou rejoignez une partie existante à l'aide d'un ID de partie."
+        },
+        {
+          "title": "Attendre les joueurs",
+          "description": "Attendez qu'un autre joueur rejoigne la partie. L'hôte peut démarrer la partie quand il est prêt."
+        },
+        {
+          "title": "Paramètres de la partie",
+          "description": "Configurez des options comme le brouillard de guerre avant de commencer."
+        }
+      ]
+    },
+    "1": {
+      "title": "Configuration de votre plateau",
+      "steps": [
+        {
+          "title": "Glisser-déposer les pièces",
+          "description": "Faites glisser les pièces depuis la zone du haut vers votre moitié du plateau. Chaque pièce a des règles de placement spécifiques."
+        },
+        {
+          "title": "Règles de placement des pièces",
+          "description": "• Le drapeau doit être sur la rangée arrière\n• Les bombes et les mines ne peuvent pas être sur la rangée avant\n• Toutes les pièces doivent être placées"
+        },
+        {
+          "title": "Envoyer votre plateau",
+          "description": "Cliquez sur « Envoyer la disposition du plateau » lorsque toutes les pièces sont correctement placées."
+        }
+      ]
+    },
+    "2": {
+      "title": "Comment jouer",
+      "steps": [
+        {
+          "title": "Effectuer des mouvements",
+          "description": "Cliquez sur votre pièce pour la sélectionner, puis cliquez sur une destination valide. Cliquez sur « Envoyer » pour confirmer."
+        },
+        {
+          "title": "Hiérarchie des pièces",
+          "description": "Les pièces de rang supérieur capturent les pièces de rang inférieur. Des rangs égaux détruisent les deux pièces."
+        },
+        {
+          "title": "Règles spéciales",
+          "description": "• L'Ingénieur peut désamorcer les mines sans danger\n• Les bombes détruisent toute pièce attaquante\n• Capturer le drapeau fait gagner la partie"
+        }
+      ]
+    },
+    "3": {
+      "title": "Résultats de la partie",
+      "steps": [
+        {
+          "title": "Conditions de victoire",
+          "description": "Capturez le drapeau adverse pour gagner, ou forcez l'adversaire à abandonner."
+        },
+        {
+          "title": "Statistiques de la partie",
+          "description": "Consultez les pièces restantes et perdues des deux joueurs."
+        }
+      ]
+    },
+    "default": {
+      "title": "Instructions du jeu"
+    }
+  }
+}

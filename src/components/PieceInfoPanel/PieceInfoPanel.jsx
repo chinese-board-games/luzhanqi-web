@@ -2,37 +2,23 @@ import React from 'react';
 import { Box, Text, List, ThemeIcon, Stack, Divider } from '@mantine/core';
 import { IconInfoCircle } from '@tabler/icons-react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { getPieceInfo } from 'data/pieceInfo';
 import { predictOutcome } from 'utils/predictOutcome';
 
+// maps predictOutcome()'s result type to this outcome's board.json key and
+// badge color
 export const outcomeMessages = {
-  'both-die': {
-    color: 'red',
-    text: { en: 'Both pieces will be destroyed.', zh: '雙方棋子都會被摧毀。' },
-  },
-  'target-dies': {
-    color: 'green',
-    text: { en: 'The enemy piece will be destroyed.', zh: '敵方棋子將被摧毀。' },
-  },
-  'source-dies': {
-    color: 'red',
-    text: { en: 'Your piece will be destroyed.', zh: '您的棋子將被摧毀。' },
-  },
-  move: {
-    color: 'blue',
-    text: { en: 'Move to this tile.', zh: '移動至此空格。' },
-  },
-  unknown: {
-    color: 'gray',
-    text: {
-      en: "This piece's identity is hidden — the outcome can't be predicted.",
-      zh: '這枚棋子的身份未知 — 無法預測結果。',
-    },
-  },
+  'both-die': { color: 'red', key: 'bothDie' },
+  'target-dies': { color: 'green', key: 'targetDies' },
+  'source-dies': { color: 'red', key: 'sourceDies' },
+  move: { color: 'blue', key: 'move' },
+  unknown: { color: 'gray', key: 'unknown' },
 };
 
-function PieceCard({ piece, isEnglish }) {
-  const info = getPieceInfo(isEnglish)[piece.name];
+function PieceCard({ piece }) {
+  const { t } = useTranslation('pieces');
+  const info = getPieceInfo(t)[piece.name];
   if (!info) {
     return null;
   }
@@ -62,7 +48,6 @@ function PieceCard({ piece, isEnglish }) {
 
 PieceCard.propTypes = {
   piece: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
-  isEnglish: PropTypes.bool,
 };
 
 /**
@@ -74,9 +59,9 @@ export default function PieceInfoPanel({
   hoveredPiece,
   originPiece,
   destinationPiece,
-  isEnglish = false,
   gameConfig = {},
 }) {
+  const { t } = useTranslation('board');
   const outcome =
     originPiece && destinationPiece
       ? predictOutcome(originPiece, destinationPiece, gameConfig)
@@ -94,25 +79,23 @@ export default function PieceInfoPanel({
       }}
     >
       <Text fw={700} mb="xs">
-        {isEnglish ? 'Piece Info' : '棋子資訊'}
+        {t('pieceInfo')}
       </Text>
       {showOutcome ? (
         <Stack spacing="sm">
-          <PieceCard piece={originPiece} isEnglish={isEnglish} />
-          <Divider label={isEnglish ? 'attacks' : '攻擊'} labelPosition="center" />
-          <PieceCard piece={destinationPiece} isEnglish={isEnglish} />
+          <PieceCard piece={originPiece} />
+          <Divider label={t('attacks')} labelPosition="center" />
+          <PieceCard piece={destinationPiece} />
           <Divider />
           <Text size="sm" fw={600} color={outcomeMessages[outcome.type]?.color}>
-            {isEnglish
-              ? outcomeMessages[outcome.type]?.text.en
-              : outcomeMessages[outcome.type]?.text.zh}
+            {t(`outcomes.${outcomeMessages[outcome.type]?.key}`)}
           </Text>
         </Stack>
       ) : hoveredPiece ? (
-        <PieceCard piece={hoveredPiece} isEnglish={isEnglish} />
+        <PieceCard piece={hoveredPiece} />
       ) : (
         <Text size="xs" c="dimmed">
-          {isEnglish ? 'Hover over a piece to see details.' : '將滑鼠移到棋子上以查看詳情。'}
+          {t('hoverHint')}
         </Text>
       )}
     </Box>
@@ -123,6 +106,5 @@ PieceInfoPanel.propTypes = {
   hoveredPiece: PropTypes.object,
   originPiece: PropTypes.object,
   destinationPiece: PropTypes.object,
-  isEnglish: PropTypes.bool,
   gameConfig: PropTypes.object,
 };

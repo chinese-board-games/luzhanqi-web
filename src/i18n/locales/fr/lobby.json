@@ -1,0 +1,16 @@
+{
+  "twoPlayersRequired": "Il doit y avoir deux joueurs dans le salon",
+  "roomCode": "Code de salon :",
+  "copy": "Copier",
+  "copied": "Copié",
+  "waitingForHost": "En attente de l'hôte",
+  "leaveRoom": "Quitter le salon",
+  "clickRoomFull": "Cliquez sur « Salon Complet » pour démarrer la partie",
+  "roomFull": "Salon Complet",
+  "deleteRoom": "Supprimer le salon",
+  "rules": "Règles",
+  "enableFogOfWar": "Activer le brouillard de guerre",
+  "landminesSurvive": "Les mines survivent (seul l'attaquant meurt)",
+  "flyingBombs": "Bombes volantes (les bombes se déplacent comme l'Ingénieur)",
+  "captureTheFlag": "Capturer le drapeau (ramenez-le à votre QG pour gagner)"
+}

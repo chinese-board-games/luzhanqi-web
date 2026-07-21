@@ -1,0 +1,16 @@
+{
+  "twoPlayersRequired": "Debe haber dos jugadores en la sala",
+  "roomCode": "Código de sala:",
+  "copy": "Copiar",
+  "copied": "Copiado",
+  "waitingForHost": "Esperando al anfitrión",
+  "leaveRoom": "Salir de la sala",
+  "clickRoomFull": "Haz clic en \"Sala Llena\" para comenzar la partida",
+  "roomFull": "Sala Llena",
+  "deleteRoom": "Eliminar sala",
+  "rules": "Reglas",
+  "enableFogOfWar": "Activar niebla de guerra",
+  "landminesSurvive": "Las minas sobreviven (solo muere el atacante)",
+  "flyingBombs": "Bombas voladoras (las bombas se mueven como el Ingeniero)",
+  "captureTheFlag": "Capturar la bandera (llévala a tu QG para ganar)"
+}

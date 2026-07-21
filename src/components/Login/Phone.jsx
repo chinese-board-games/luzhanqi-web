@@ -5,13 +5,15 @@ import { useForm } from '@mantine/form';
 import { Button, Container, Text, TextInput, Title } from '@mantine/core';
 import PhoneInput from 'react-phone-input-2';
 import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import 'react-phone-input-2/lib/style.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { addGame } from 'api/User';
 import { updateUidMap } from 'api/Game';
 import PropTypes from 'prop-types';
 
-const Phone = ({ setShowModal, roomId, playerName, isEnglish }) => {
+const Phone = ({ setShowModal, roomId, playerName }) => {
+  const { t } = useTranslation('auth');
   const confirmForm = useForm({
     initialValues: {
       confirmationCode: '',
@@ -27,7 +29,7 @@ const Phone = ({ setShowModal, roomId, playerName, isEnglish }) => {
   const handleSubmitPhoneNumber = (e) => {
     e.preventDefault();
     if (phoneNumber === '' || phoneNumber.length < 10) {
-      toast.warn(isEnglish ? 'Please enter a valid phone number' : '請輸入有效的電話號碼');
+      toast.warn(t('invalidPhone'));
       window.verifier.clear();
       return;
     }
@@ -92,17 +94,17 @@ const Phone = ({ setShowModal, roomId, playerName, isEnglish }) => {
 
   return (
     <Container>
-      <Title order={2}>{isEnglish ? 'Phone' : '電話'}</Title>
+      <Title order={2}>{t('phoneTitle')}</Title>
       {displayConfirmationCodePrompt ? (
         <form
           onSubmit={confirmForm.onSubmit(handleSubmitConfirmationCode, handleConfirmationCodeError)}
         >
           <TextInput
-            label={isEnglish ? 'Confirmation code' : '驗證碼'}
+            label={t('confirmationCode')}
             placeholder="000000"
             {...confirmForm.getInputProps('confirmationCode')}
           />
-          <Button type="submit">{isEnglish ? 'Submit Confirmation Code' : '送出驗證碼'}</Button>
+          <Button type="submit">{t('submitConfirmationCode')}</Button>
         </form>
       ) : (
         <>
@@ -111,18 +113,14 @@ const Phone = ({ setShowModal, roomId, playerName, isEnglish }) => {
           </Container>
           {/* Do not change to Mantine Form because we use a special component to handle phone numbers */}
           <form onSubmit={handleSubmitPhoneNumber}>
-            <Text>{isEnglish ? 'Phone Number' : '電話號碼'}</Text>
+            <Text>{t('phoneNumber')}</Text>
             <PhoneInput
               country="us"
               value={phoneNumber}
               onChange={(phone) => setPhoneNumber(phone)}
             />
-            <Text>
-              {isEnglish
-                ? "We'll never share your phone number with anyone else."
-                : '我們絕不會將您的電話號碼分享給任何人。'}
-            </Text>
-            <Button type="submit">{isEnglish ? 'Login' : '登入'}</Button>
+            <Text>{t('phonePrivacyNote')}</Text>
+            <Button type="submit">{t('login')}</Button>
           </form>
         </>
       )}
@@ -135,7 +133,6 @@ Phone.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   roomId: PropTypes.string.isRequired,
   playerName: PropTypes.string.isRequired,
-  isEnglish: PropTypes.bool,
 };
 
 export default Phone;

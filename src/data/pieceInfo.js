@@ -30,17 +30,17 @@ const pieceInfo = Object.fromEntries(
   ])
 );
 
-/** Same piece info, localized: picks the English or Traditional Chinese
- * title/description/rules depending on isEnglish. */
-export const getPieceInfo = (isEnglish) =>
+/** Same piece info, localized via the "pieces" i18next namespace - pass the
+ * `t` function from `useTranslation('pieces')`. */
+export const getPieceInfo = (t) =>
   Object.fromEntries(
     Object.entries(pieceInfo).map(([id, piece]) => [
       id,
       {
         ...piece,
-        title: isEnglish ? piece.title : piece.title_zh,
-        description: isEnglish ? piece.description : piece.description_zh,
-        rules: isEnglish ? piece.rules : piece.rules_zh,
+        title: t(`${id}.title`),
+        description: t(`${id}.description`),
+        rules: t(`${id}.rules`, { returnObjects: true }),
       },
     ])
   );

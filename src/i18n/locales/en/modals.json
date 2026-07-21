@@ -1,0 +1,28 @@
+{
+  "warn": {
+    "title": "Are you sure?",
+    "body": "To leave a game in-progress is to forfeit the game.",
+    "forfeit": "Forfeit",
+    "returnToGame": "Return to game"
+  },
+  "user": {
+    "close": "Close",
+    "greeting": "Hi, {{name}}",
+    "gamesPlayed_one": "You've played {{count}} game",
+    "gamesPlayed_other": "You've played {{count}} games",
+    "rank": "Your rank is {{rank}}",
+    "noRank": "(no rank)",
+    "dateHeader": "Date",
+    "opponentHeader": "Opponent",
+    "resultHeader": "Result",
+    "actionsHeader": "Actions",
+    "yourself": "Yourself",
+    "win": "Win",
+    "loss": "Loss",
+    "incomplete": "Incomplete",
+    "archived": "Archived",
+    "unarchive": "Unarchive",
+    "rejoin": "Rejoin",
+    "archive": "Archive"
+  }
+}

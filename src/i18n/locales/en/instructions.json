@@ -1,0 +1,81 @@
+{
+  "tabs": {
+    "quickSteps": "Quick Steps",
+    "rulebook": "Rulebook"
+  },
+  "close": "Close",
+  "pieceReference": "Piece Reference",
+  "quickStart": {
+    "title": "Quick Start",
+    "body": "Welcome to Luzhanqi! Create or join a game to start playing."
+  },
+  "phases": {
+    "0": {
+      "title": "How to Join a Game",
+      "steps": [
+        {
+          "title": "Create or Join",
+          "description": "Either create a new game as host or join an existing game using a game ID."
+        },
+        {
+          "title": "Wait for Players",
+          "description": "Wait for another player to join. The host can start the game when ready."
+        },
+        {
+          "title": "Game Settings",
+          "description": "Configure game options like fog of war before starting."
+        }
+      ]
+    },
+    "1": {
+      "title": "Setting Up Your Board",
+      "steps": [
+        {
+          "title": "Drag and Drop Pieces",
+          "description": "Drag pieces from the top area to your half of the board. Each piece has specific placement rules."
+        },
+        {
+          "title": "Piece Placement Rules",
+          "description": "• Flag must be in the back row\n• Bombs and landmines cannot be in the front row\n• All pieces must be placed"
+        },
+        {
+          "title": "Submit Your Board",
+          "description": "Click \"Send Board Placement\" when all pieces are placed correctly."
+        }
+      ]
+    },
+    "2": {
+      "title": "How to Play",
+      "steps": [
+        {
+          "title": "Making Moves",
+          "description": "Click on your piece to select it, then click on a valid destination. Click \"Send\" to confirm."
+        },
+        {
+          "title": "Piece Hierarchy",
+          "description": "Higher rank pieces capture lower rank pieces. Equal ranks result in both pieces being destroyed."
+        },
+        {
+          "title": "Special Rules",
+          "description": "• Engineer can safely defuse landmines\n• Bombs destroy any attacking piece\n• Flag capture wins the game"
+        }
+      ]
+    },
+    "3": {
+      "title": "Game Results",
+      "steps": [
+        {
+          "title": "Victory Conditions",
+          "description": "Capture the opponent's flag to win, or force them to forfeit."
+        },
+        {
+          "title": "Game Statistics",
+          "description": "View remaining and lost pieces for both players."
+        }
+      ]
+    },
+    "default": {
+      "title": "Game Instructions"
+    }
+  }
+}

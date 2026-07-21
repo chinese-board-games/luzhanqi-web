@@ -1,0 +1,8 @@
+{
+  "sourceTargetRequired": "You must have both a source and target tile",
+  "players": "Players:",
+  "spectators": "Spectators:",
+  "disconnected": "{{name}} disconnected — waiting for them to reconnect…",
+  "fieldMarshalSelf": "Your Field Marshal has fallen!",
+  "fieldMarshalOther": "{{name}}'s Field Marshal has fallen — their flag is now revealed!"
+}

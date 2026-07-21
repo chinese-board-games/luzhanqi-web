@@ -6,8 +6,6 @@
  */
 export const exampleBoards = [
   {
-    name: 'Example 1',
-    name_zh: '範例一',
     board: [
       ['major_general', 'lieutenant', 'colonel', 'engineer', 'major_general'],
       ['engineer', 'none', 'field_marshall', 'none', 'engineer'],
@@ -19,8 +17,6 @@ export const exampleBoards = [
   },
   {
     // fortress: strong pieces and landmines massed around a col-3 flag
-    name: 'Example 2',
-    name_zh: '範例二',
     board: [
       ['lieutenant', 'captain', 'colonel', 'captain', 'lieutenant'],
       ['engineer', 'none', 'major_general', 'none', 'engineer'],
@@ -32,8 +28,6 @@ export const exampleBoards = [
   },
   {
     // flanks: defense spread across both sides with a col-1 flag
-    name: 'Example 3',
-    name_zh: '範例三',
     board: [
       ['captain', 'lieutenant', 'colonel', 'lieutenant', 'captain'],
       ['engineer', 'none', 'general', 'none', 'engineer'],

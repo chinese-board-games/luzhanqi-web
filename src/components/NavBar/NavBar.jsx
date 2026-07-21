@@ -42,10 +42,6 @@ const NavBar = () => {
     startingBoard: { setStartingBoard },
     winner: { setWinner },
     gameResults: { setGameResults },
-    // still consumed as a plain boolean by the many child components below
-    // (AuthModal/UserModal/WarnModal) that haven't been migrated to
-    // useTranslation() yet - see the compat shim in GameContext.jsx
-    isEnglish: { isEnglish },
     errors: { setErrors },
   } = React.useContext(GameContext);
 
@@ -165,15 +161,9 @@ const NavBar = () => {
         setShowModal={setShowAuthModal}
         roomId={roomId}
         playerName={playerName}
-        isEnglish={isEnglish}
       />
-      <UserModal showModal={showUserModal} setShowModal={setShowUserModal} isEnglish={isEnglish} />
-      <WarnModal
-        showModal={showWarnModal}
-        setShowModal={setShowWarnModal}
-        forfeit={forfeit}
-        isEnglish={isEnglish}
-      />
+      <UserModal showModal={showUserModal} setShowModal={setShowUserModal} />
+      <WarnModal showModal={showWarnModal} setShowModal={setShowWarnModal} forfeit={forfeit} />
     </Flex>
   );
 };

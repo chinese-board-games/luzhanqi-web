@@ -4,5 +4,8 @@
     "title": "Luzhanqi",
     "logout": "Logout",
     "signIn": "Sign In/Sign Up"
+  },
+  "help": {
+    "gameInstructions": "Game Instructions"
   }
 }

@@ -1,0 +1,10 @@
+{
+  "waitingForBoard": "等待玩家設定棋盤",
+  "waitingForOpponent": "請等對手",
+  "title": "棋盤佈局",
+  "useExample": "使用範例佈局",
+  "example": "範例{{n}}",
+  "unplacedWarning": "您還有棋子尚未放置！",
+  "sendPlacement": "送出棋盤佈局",
+  "resetBoard": "重設棋盤"
+}

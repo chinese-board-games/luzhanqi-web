@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { ActionIcon, Tooltip } from '@mantine/core';
 import { IconHelp } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
 import Instructions from 'components/Instructions';
 import PropTypes from 'prop-types';
 
-const HelpButton = ({ gamePhase = 0, isEnglish = false, position = 'fixed' }) => {
+const HelpButton = ({ gamePhase = 0, position = 'fixed' }) => {
+  const { t } = useTranslation();
   const [instructionsOpened, setInstructionsOpened] = useState(false);
 
   const buttonStyle = {
@@ -16,7 +18,7 @@ const HelpButton = ({ gamePhase = 0, isEnglish = false, position = 'fixed' }) =>
 
   return (
     <>
-      <Tooltip label={isEnglish ? 'Game Instructions' : '遊戲說明'} position="left" withArrow>
+      <Tooltip label={t('help.gameInstructions')} position="left" withArrow>
         <ActionIcon
           size="xl"
           radius="xl"
@@ -33,7 +35,6 @@ const HelpButton = ({ gamePhase = 0, isEnglish = false, position = 'fixed' }) =>
         opened={instructionsOpened}
         onClose={() => setInstructionsOpened(false)}
         gamePhase={gamePhase}
-        isEnglish={isEnglish}
       />
     </>
   );
@@ -41,7 +42,6 @@ const HelpButton = ({ gamePhase = 0, isEnglish = false, position = 'fixed' }) =>
 
 HelpButton.propTypes = {
   gamePhase: PropTypes.number,
-  isEnglish: PropTypes.bool,
   position: PropTypes.oneOf(['fixed', 'absolute', 'relative']),
 };
 
