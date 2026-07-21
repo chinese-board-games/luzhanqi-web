@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { GameContext } from 'contexts/GameContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -35,10 +35,21 @@ const Game = () => {
     joinedGame: { joinedGame },
     rejoining: { rejoining },
     disconnectedPlayer: { disconnectedPlayer },
+    connected: { connected },
     attemptRejoin,
   } = useContext(GameContext);
 
   const affiliation = playerList.indexOf(playerName);
+
+  /** true from the moment a move is sent until the server's response (a
+   * turn change) or a rejection (an error) resolves it - blocks a second
+   * move from being sent in the meantime, including across a disconnect,
+   * where the fate of the first move isn't known until reconnection
+   * resyncs state (see issue #109). */
+  const [moveInFlight, setMoveInFlight] = useState(false);
+  useEffect(() => {
+    setMoveInFlight(false);
+  }, [clientTurn]);
 
   /** On mount (or a hard reload), silently try to reclaim a seat using a
    * locally-stored session - or, on a device with none but a logged-in
@@ -53,6 +64,12 @@ const Game = () => {
 
   /** Clear errors after 1 second each */
   useEffect(() => {
+    if (errors.length) {
+      // a rejected move is exactly the kind of error this list carries
+      // during gameplay - unblock sending rather than leaving the player
+      // stuck until some unrelated event happens to flip clientTurn
+      setMoveInFlight(false);
+    }
     errors.forEach((error) => {
       toast.error(error, {
         toastId: `${Date.now()}`,
@@ -71,6 +88,7 @@ const Game = () => {
     ? {
         source: host ? lastMove.source : rotateMove(lastMove.source),
         target: host ? lastMove.target : rotateMove(lastMove.target),
+        affiliation: lastMove.affiliation,
       }
     : null;
 
@@ -85,7 +103,8 @@ const Game = () => {
       // the authoritative board once the server responds, which also
       // corrects any guess this couldn't make (an attack on a fogged piece)
       setMyBoard((board) => applyMoveOptimistically(board, moveSource, moveTarget, gameConfig));
-      setLastMove({ source: moveSource, target: moveTarget });
+      setLastMove({ source: moveSource, target: moveTarget, affiliation });
+      setMoveInFlight(true);
 
       socket.emit('playerMakeMove', {
         playerName,
@@ -215,7 +234,11 @@ const Game = () => {
           gamePhase === 2 || gamePhase === 3 ? (
             <GameBoard
               host={host}
-              isTurn={(host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1)}
+              isTurn={
+                ((host && clientTurn % 2 === 0) || (!host && clientTurn % 2 === 1)) &&
+                connected &&
+                !moveInFlight
+              }
               board={host ? myBoard : transformBoard(myBoard)}
               deadPieces={myDeadPieces}
               sendMove={playerMakeMove}

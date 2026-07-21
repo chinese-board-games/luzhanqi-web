@@ -214,7 +214,11 @@ export default function GameBoard({
 
           <Box ref={gridContainerRef} sx={{ position: 'relative' }}>
             <ConnectionLines containerRef={gridContainerRef} />
-            <LastMoveArrow lastMove={lastMove} containerRef={gridContainerRef} />
+            <LastMoveArrow
+              lastMove={lastMove}
+              containerRef={gridContainerRef}
+              viewerAffiliation={affiliation}
+            />
             <Grid columns={20} gutter={6}>
               {combined.map((cell) => cell)}
             </Grid>

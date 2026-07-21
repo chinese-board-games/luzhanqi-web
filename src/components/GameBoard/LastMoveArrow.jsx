@@ -2,7 +2,9 @@ import { useLayoutEffect, useState } from 'react';
 import useWindowSize from 'hooks/useWindowSize';
 import PropTypes from 'prop-types';
 
-const ARROW_COLOR = 'darkorchid';
+// blue for the viewing player's own moves, red for the opponent's (or the AI's)
+const FRIENDLY_COLOR = 'dodgerblue';
+const ENEMY_COLOR = 'crimson';
 // stop the line short of the destination cell's exact center so the
 // arrowhead doesn't land on top of the piece's name there
 const TARGET_PULLBACK_PX = 16;
@@ -15,7 +17,7 @@ const TARGET_PULLBACK_PX = 16;
 // both cells relative to that same container, so the line lines up
 // correctly regardless of scroll position - no viewport/document
 // coordinate math or portal needed.
-export default function LastMoveArrow({ lastMove, containerRef }) {
+export default function LastMoveArrow({ lastMove, containerRef, viewerAffiliation }) {
   const [line, setLine] = useState(null);
   const [width] = useWindowSize();
 
@@ -57,6 +59,8 @@ export default function LastMoveArrow({ lastMove, containerRef }) {
     return null;
   }
 
+  const color = lastMove.affiliation === viewerAffiliation ? FRIENDLY_COLOR : ENEMY_COLOR;
+
   return (
     <svg
       style={{
@@ -79,7 +83,7 @@ export default function LastMoveArrow({ lastMove, containerRef }) {
           refY="2"
           orient="auto"
         >
-          <path d="M0,0 L4,2 L0,4 Z" fill={ARROW_COLOR} />
+          <path d="M0,0 L4,2 L0,4 Z" fill={color} />
         </marker>
       </defs>
       <line
@@ -87,7 +91,7 @@ export default function LastMoveArrow({ lastMove, containerRef }) {
         y1={line.y1}
         x2={line.x2}
         y2={line.y2}
-        stroke={ARROW_COLOR}
+        stroke={color}
         strokeWidth={2.5}
         markerEnd="url(#last-move-arrowhead)"
       />
@@ -99,6 +103,8 @@ LastMoveArrow.propTypes = {
   lastMove: PropTypes.shape({
     source: PropTypes.arrayOf(PropTypes.number),
     target: PropTypes.arrayOf(PropTypes.number),
+    affiliation: PropTypes.number,
   }),
   containerRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }).isRequired,
+  viewerAffiliation: PropTypes.number,
 };

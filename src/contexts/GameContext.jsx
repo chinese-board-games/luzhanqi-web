@@ -129,6 +129,12 @@ export const GameProvider = ({ children }) => {
 
   /** whether a silent rejoin attempt is in flight for the current game ID */
   const [rejoining, setRejoining] = useState(false);
+  /** whether this socket currently has a live connection to the server -
+   * false between a drop and either a successful reconnect or the user
+   * giving up. See Game.jsx's isTurn gating: a move sent while this is
+   * false either never reaches the server or races a reconnect, so the
+   * board must not be clickable until it's true again. */
+  const [connected, setConnected] = useState(socket.connected);
   /** name of the opponent whose socket most recently disconnected, or null */
   const [disconnectedPlayer, setDisconnectedPlayer] = useState(null);
   /** in-progress games tied to the logged-in user's account that are worth
@@ -197,6 +203,7 @@ export const GameProvider = ({ children }) => {
     gameConfig: { gameConfig, setGameConfig },
     errors: { errors, setErrors },
     rejoining: { rejoining, setRejoining },
+    connected: { connected },
     disconnectedPlayer: { disconnectedPlayer, setDisconnectedPlayer },
     activeGames: { activeGames, setActiveGames },
     attemptRejoin,
@@ -216,6 +223,7 @@ export const GameProvider = ({ children }) => {
     socket.on('connect', () => {
       console.info(`SocketID: ${socket.id}`);
       console.info(`Connected: ${socket.connected}`);
+      setConnected(true);
       // the underlying transport can reconnect under a new socket.id after
       // a network drop or server restart without the page ever reloading -
       // React state (joinedGame, playerList, ...) survives that untouched,
@@ -229,6 +237,14 @@ export const GameProvider = ({ children }) => {
       if (roomId) {
         attemptRejoin(roomId);
       }
+    });
+
+    /** Transport dropped - until this fires false, we don't know whether a
+     * move already sent actually reached the server, so Game.jsx must not
+     * let another one be sent (see issue #109). Cleared back to true by
+     * 'connect' above, which also silently reclaims the seat. */
+    socket.on('disconnect', () => {
+      setConnected(false);
     });
 
     /** Server has created a new game, only host receives this message */
@@ -289,7 +305,9 @@ export const GameProvider = ({ children }) => {
       if (data.board) setMyBoard(data.board);
       if (Array.isArray(data.deadPieces)) setMyDeadPieces(data.deadPieces);
       if (Array.isArray(data.moves) && data.moves.length) {
-        setLastMove(data.moves[data.moves.length - 1]);
+        // turn is whose turn is next, so the mover is the other affiliation
+        const affiliation = typeof data.turn === 'number' ? 1 - (data.turn % 2) : undefined;
+        setLastMove({ ...data.moves[data.moves.length - 1], affiliation });
       }
       if (data.phase === 3) {
         setWinner(data.winnerIndex);
@@ -388,7 +406,9 @@ export const GameProvider = ({ children }) => {
       setMyBoard(board);
       setMyDeadPieces(deadPieces);
       if (Array.isArray(moves) && moves.length) {
-        setLastMove(moves[moves.length - 1]);
+        // turn is whose turn is next, so the mover is the other affiliation
+        const affiliation = typeof turn === 'number' ? 1 - (turn % 2) : undefined;
+        setLastMove({ ...moves[moves.length - 1], affiliation });
       }
     });
 
