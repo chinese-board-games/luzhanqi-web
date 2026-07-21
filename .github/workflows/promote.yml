@@ -9,6 +9,9 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
 env:
   STAGING_SITE_ID: df1fd67b-41bd-429a-a6fd-7be5c05c3812
   STAGING_URL: https://luzhanqi-staging.netlify.app
