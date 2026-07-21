@@ -87,6 +87,7 @@ const Game = () => {
     ? {
         source: host ? lastMove.source : rotateMove(lastMove.source),
         target: host ? lastMove.target : rotateMove(lastMove.target),
+        affiliation: lastMove.affiliation,
       }
     : null;
 
@@ -101,7 +102,7 @@ const Game = () => {
       // the authoritative board once the server responds, which also
       // corrects any guess this couldn't make (an attack on a fogged piece)
       setMyBoard((board) => applyMoveOptimistically(board, moveSource, moveTarget, gameConfig));
-      setLastMove({ source: moveSource, target: moveTarget });
+      setLastMove({ source: moveSource, target: moveTarget, affiliation });
       setMoveInFlight(true);
 
       socket.emit('playerMakeMove', {
