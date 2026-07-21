@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
 import PropTypes from 'prop-types';
 
+import i18n from '../i18n';
+
 const socket = io(import.meta.env.VITE_API);
 // const socket = io('localhost:4000');
 // const socket = io('https://luzhanqi.herokuapp.com/');
@@ -25,17 +27,6 @@ if (import.meta.hot) {
 export const GameContext = createContext({});
 
 const sessionKey = (gameId) => `luzhanqi:session:${gameId}`;
-const LANGUAGE_KEY = 'luzhanqi:isEnglish';
-
-// defaults to Chinese (false) if nothing was ever saved, or the saved
-// value can't be parsed
-const loadIsEnglish = () => {
-  try {
-    return JSON.parse(window.localStorage.getItem(LANGUAGE_KEY)) === true;
-  } catch {
-    return false;
-  }
-};
 
 const saveSession = (gameId, name, token) => {
   if (!gameId || !token) return;
@@ -100,7 +91,20 @@ export const GameProvider = ({ children }) => {
     target: [],
   });
   const [successors, setSuccessors] = useState([]);
-  const [isEnglish, setIsEnglish] = useState(loadIsEnglish);
+  // isEnglish/setIsEnglish are a compat shim over i18next for the many
+  // components not yet migrated to useTranslation() - the real source of
+  // truth (current language, persistence, detection) now lives in
+  // src/i18n. setIsEnglish only distinguishes English from "not English"
+  // (falling back to zh-Hant, matching the old default), so it can't
+  // express the other languages i18next supports - migrated components
+  // should call i18n.changeLanguage directly instead.
+  const [isEnglish, setIsEnglishState] = useState(() => i18n.language?.startsWith('en'));
+  useEffect(() => {
+    const handleLanguageChanged = (lng) => setIsEnglishState(lng.startsWith('en'));
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => i18n.off('languageChanged', handleLanguageChanged);
+  }, []);
+  const setIsEnglish = (value) => i18n.changeLanguage(value ? 'en' : 'zh-Hant');
   // rule-variant config (flyingBombs/landminesSurvive/captureTheFlag/...)
   // set by the host in the Lobby - needed locally so move highlighting and
   // combat-outcome prediction match how the server will actually resolve them
@@ -111,10 +115,6 @@ export const GameProvider = ({ children }) => {
   const isEnglishRef = useRef(isEnglish);
   useEffect(() => {
     isEnglishRef.current = isEnglish;
-    // persist across refreshes/new tabs - otherwise every reload silently
-    // fell back to the useState(false) default regardless of what the
-    // player had picked
-    window.localStorage.setItem(LANGUAGE_KEY, JSON.stringify(isEnglish));
   }, [isEnglish]);
 
   /**

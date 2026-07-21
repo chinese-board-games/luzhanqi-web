@@ -7,6 +7,7 @@ import { getAuth } from 'firebase/auth';
 import '@mantine/core/styles.css';
 import './index.css';
 import './CustomFonts.css';
+import './i18n';
 import { GameProvider } from 'contexts/GameContext';
 import { FirebaseAuthProvider } from 'contexts/FirebaseContext';
 import { MantineProvider } from '@mantine/core';

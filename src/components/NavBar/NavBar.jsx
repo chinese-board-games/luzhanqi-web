@@ -2,6 +2,7 @@ import { getAuth } from 'firebase/auth';
 import React from 'react';
 import { Button, ActionIcon, Flex, Title } from '@mantine/core';
 import { IconUserSquareRounded } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 
@@ -10,8 +11,10 @@ import AuthModal from 'components/AuthModal';
 import UserModal from 'components/UserModal';
 import WarnModal from 'components/WarnModal';
 import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const NavBar = () => {
+  const { t } = useTranslation();
   // state variable to set modal to open or closed
   const [showAuthModal, setShowAuthModal] = React.useState(false);
   const [showUserModal, setShowUserModal] = React.useState(false);
@@ -39,7 +42,10 @@ const NavBar = () => {
     startingBoard: { setStartingBoard },
     winner: { setWinner },
     gameResults: { setGameResults },
-    isEnglish: { isEnglish, setIsEnglish },
+    // still consumed as a plain boolean by the many child components below
+    // (AuthModal/UserModal/WarnModal) that haven't been migrated to
+    // useTranslation() yet - see the compat shim in GameContext.jsx
+    isEnglish: { isEnglish },
     errors: { setErrors },
   } = React.useContext(GameContext);
 
@@ -109,12 +115,12 @@ const NavBar = () => {
       {playerList.length ? (
         <Flex style={{ display: 'flex', alignItems: 'center' }}>
           <Button variant="filled" color="violet" size="compact-lg" onClick={resetToLanding}>
-            {isEnglish ? 'Return home' : '返回首頁'}
+            {t('nav.returnHome')}
           </Button>
         </Flex>
       ) : (
         <Title order={1} color="darkred">
-          {isEnglish ? 'Luzhanqi' : '陸戰棋'}
+          {t('nav.title')}
         </Title>
       )}
 
@@ -143,17 +149,15 @@ const NavBar = () => {
                 window.location.reload();
               }}
             >
-              {isEnglish ? 'Logout' : '登出'}
+              {t('nav.logout')}
             </Button>
           </>
         ) : (
           <Button size="compact-md" onClick={() => setShowAuthModal(true)}>
-            {isEnglish ? 'Sign In/Sign Up' : '登入/註冊'}
+            {t('nav.signIn')}
           </Button>
         )}
-        <Button size="compact-md" color="green" onClick={() => setIsEnglish(!isEnglish)}>
-          {isEnglish ? '中文' : 'EN'}
-        </Button>
+        <LanguageSwitcher />
       </Flex>
 
       <AuthModal
