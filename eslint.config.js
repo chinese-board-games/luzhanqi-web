@@ -5,16 +5,11 @@ import globals from 'globals';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 
 // FlatCompat bridges eslint-plugin-react/jsx-a11y's classic
-// "plugin:x/recommended" shareable configs into flat config - both still
-// ship those in the pre-flat-config shape
+// "plugin:x/recommended" shareable configs into flat config
 const compat = new FlatCompat({
   baseDirectory: path.dirname(fileURLToPath(import.meta.url)),
 });
 
-// ESLint 8's bare `eslint .` only ever matched *.js (jsx files were only
-// linted via lint-staged's explicit glob at commit time) - listing every
-// JS-family extension here makes `npm run lint` actually cover everything
-// it always should have, including root-level .cjs config/scripts
 const JS_FILES = ['**/*.{js,jsx,cjs,mjs}'];
 
 export default [
