@@ -84,7 +84,8 @@ export default function GameBoard({
     return () => {
       window.removeEventListener('keydown', handleEsc);
     };
-  }));
+  }),
+  []);
 
   const gridCells = board.flatMap((row, r) =>
     row.map((piece, c) => {
