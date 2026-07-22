@@ -41,8 +41,8 @@ const GameOver = () => {
         {isSpectator
           ? `${hostName} (${t('host')})`
           : host
-          ? t('yourPieces')
-          : `${hostName} (${t('host')})`}
+            ? t('yourPieces')
+            : `${hostName} (${t('host')})`}
       </h4>
       <Table striped highlightOnHover withTableBorder withColumnBorders>
         <Table.Thead>
@@ -70,8 +70,8 @@ const GameOver = () => {
         {isSpectator
           ? `${guestName} (${t('guest')})`
           : host
-          ? `${guestName} (${t('guest')})`
-          : t('yourPieces')}
+            ? `${guestName} (${t('guest')})`
+            : t('yourPieces')}
       </h4>
       <Table striped highlightOnHover withTableBorder withColumnBorders>
         <Table.Thead>

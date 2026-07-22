@@ -1,4 +1,4 @@
-import isEqual from 'lodash.isequal';
+import { isEqual } from 'lodash';
 import { isCamp, isValidRow, isValidCol, isOccupied, isRailroad } from './core';
 /**
  * Checks validity of coordinate pair as piece destination

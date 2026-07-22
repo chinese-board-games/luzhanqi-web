@@ -78,7 +78,6 @@ export const GameProvider = ({ children }) => {
   const [playerList, setPlayerList] = useState([]);
 
   const [spectatorList, setSpectatorList] = useState([]);
-  // eslint-disable-next-line no-unused-vars
   const [myBoard, setMyBoard] = useState(Array(12).fill(Array(5).fill(null)));
   const [myDeadPieces, setMyDeadPieces] = useState([]);
   /** the most recent move's { source, target } coordinates (host-perspective,
@@ -103,7 +102,6 @@ export const GameProvider = ({ children }) => {
    * 2: gameplay
    */
 
-  // eslint-disable-next-line no-unused-vars
   const [gamePhase, setGamePhase] = useState(0);
   // mirrors playerNameRef above - lets the error handler below (registered
   // in an effect that doesn't re-run on every gamePhase change) always read

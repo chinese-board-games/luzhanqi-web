@@ -189,7 +189,7 @@ const UserModal = ({ showModal, setShowModal }) => {
                         <Table.Td>
                           {myGame.winnerId === user?.uid
                             ? t('user.win')
-                            : (myGame.winnerId && t('user.loss')) ?? t('user.incomplete')}
+                            : ((myGame.winnerId && t('user.loss')) ?? t('user.incomplete'))}
                         </Table.Td>
                         <Table.Td>
                           {isIncomplete ? (

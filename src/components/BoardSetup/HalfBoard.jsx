@@ -226,7 +226,6 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName })
                 </Menu.Target>
                 <Menu.Dropdown>
                   {exampleBoards.map((example, i) => (
-                    // eslint-disable-next-line react/no-array-index-key
                     <Menu.Item key={i} onClick={() => setExample(example.board)}>
                       {t('example', { n: i + 1 })}
                     </Menu.Item>
@@ -265,7 +264,6 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName })
             <Grid columns={20} gutter={6}>
               {halfBoard.flatMap((row, r) =>
                 row.map((piece, c) => (
-                  // eslint-disable-next-line react/no-array-index-key
                   <Grid.Col span={4} key={`${r}-${c}`}>
                     <Position
                       piece={piece}

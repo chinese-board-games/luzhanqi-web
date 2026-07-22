@@ -69,7 +69,7 @@ export default function GameBoard({
     return true;
   };
 
-  useEffect(() => {
+  (useEffect(() => {
     const handleEsc = (event) => {
       if (event.keyCode === 27) {
         if (destinationSelected) {
@@ -85,7 +85,7 @@ export default function GameBoard({
       window.removeEventListener('keydown', handleEsc);
     };
   }),
-    [];
+  []);
 
   const gridCells = board.flatMap((row, r) =>
     row.map((piece, c) => {
