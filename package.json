@@ -40,7 +40,7 @@
     "test": "echo no tests yet",
     "serve": "vite preview",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix",
+    "lint:fix": "eslint . --fix",
     "format": "prettier \"src/**/*.{js,jsx}\" --write",
     "prepare": "husky"
   },
