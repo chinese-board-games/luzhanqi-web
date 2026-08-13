@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { addGame } from 'api/User';
 import { updateUidMap } from 'api/Game';
 import PropTypes from 'prop-types';
+import { logger } from 'utils/logger';
 
 const EmailAndPasswordSignIn = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
   const { t } = useTranslation('auth');
@@ -27,7 +28,7 @@ const EmailAndPasswordSignIn = ({ setExistingAccount, setShowModal, roomId, play
     signInWithEmailAndPassword(email, password)
       .then(({ user }) => {
         // Signed in
-        console.info(`user: ${JSON.stringify(user)}`);
+        logger.info(`user: ${JSON.stringify(user)}`);
         if (roomId) {
           // already joined a room
           addGame(user.uid, roomId);
