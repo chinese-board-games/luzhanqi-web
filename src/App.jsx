@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router';
 import NavBar from 'components/NavBar';
 import Menu from './views/Menu';
 import Game from './views/Game';
