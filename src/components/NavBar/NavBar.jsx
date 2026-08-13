@@ -115,7 +115,7 @@ const NavBar = () => {
           </Button>
         </Flex>
       ) : (
-        <Title order={1} color="darkred">
+        <Title order={1} c="darkred">
           {t('nav.title')}
         </Title>
       )}
