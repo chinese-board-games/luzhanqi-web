@@ -213,7 +213,7 @@ export default function GameBoard({
         >
           {isSpectator || gamePhase > 2 ? null : (
             <Center py="1em">
-              <Button variant="filled" color="red" onClick={forfeit}>
+              <Button variant="filled" color="red" onClick={forfeit} data-testid="forfeit">
                 {t('forfeit')}
               </Button>
             </Center>

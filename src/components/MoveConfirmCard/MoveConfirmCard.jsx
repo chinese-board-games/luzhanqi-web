@@ -57,7 +57,7 @@ export default function MoveConfirmCard({
         ) : null}
         <Divider />
         <Group position="apart" grow>
-          <Button size="md" onClick={onConfirm}>
+          <Button size="md" onClick={onConfirm} data-testid="confirm-move">
             {t('send')}
           </Button>
           <Button size="md" variant="outline" color="red" onClick={onCancel}>

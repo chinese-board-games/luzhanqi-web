@@ -12,28 +12,25 @@ const shadeMap = {
   lastMove: { color: 'yellow.2', hover: 'yellow.3' },
 };
 
-const getShadeColor = (
-  hovered,
+// the cell's role in the current selection, in precedence order. Drives both
+// the shading below and the data-state attribute the e2e suite reads to find
+// legal destinations, so the two can't drift apart.
+export const getCellState = (
   originSelected,
   destinationSelected,
   attackable,
   movable,
   isLastMove
 ) => {
-  let state = null;
+  if (originSelected) return 'origin';
+  if (destinationSelected) return 'destination';
+  if (attackable) return 'attackable';
+  if (movable) return 'movable';
+  if (isLastMove) return 'lastMove';
+  return null;
+};
 
-  if (originSelected) {
-    state = 'origin';
-  } else if (destinationSelected) {
-    state = 'destination';
-  } else if (attackable) {
-    state = 'attackable';
-  } else if (movable) {
-    state = 'movable';
-  } else if (isLastMove) {
-    state = 'lastMove';
-  }
-
+const getShadeColor = (hovered, state) => {
   if (!state) {
     return hovered ? 'gray.1' : 'transparent';
   }
@@ -60,14 +57,8 @@ const SelectablePosition = forwardRef(function SelectablePosition(
 ) {
   const { hovered, ref: hoverRef } = useHover();
   const mergedRef = useMergedRef(hoverRef, ref);
-  const shadeColor = getShadeColor(
-    hovered,
-    originSelected,
-    destinationSelected,
-    attackable,
-    movable,
-    isLastMove
-  );
+  const state = getCellState(originSelected, destinationSelected, attackable, movable, isLastMove);
+  const shadeColor = getShadeColor(hovered, state);
 
   // reports hover to the parent, which drives the desktop PieceInfoPanel;
   // only fires while there's a real piece here
@@ -84,6 +75,9 @@ const SelectablePosition = forwardRef(function SelectablePosition(
       }}
       ref={mergedRef}
       onClick={disabled ? undefined : onClick}
+      data-testid={`cell-${row}-${col}`}
+      data-state={state ?? 'none'}
+      data-disabled={disabled}
     >
       <Position
         row={row}
