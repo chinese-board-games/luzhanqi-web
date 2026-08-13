@@ -13,7 +13,15 @@ const compat = new FlatCompat({
 const JS_FILES = ['**/*.{js,jsx,cjs,mjs}'];
 
 export default [
-  { ignores: ['**/build/**', '**/node_modules/**', '.claude/**'] },
+  {
+    ignores: [
+      '**/build/**',
+      '**/node_modules/**',
+      '.claude/**',
+      'playwright-report/**',
+      'test-results/**',
+    ],
+  },
   ...compat
     .extends('plugin:react/recommended', 'plugin:jsx-a11y/recommended')
     .map((config) => ({ ...config, files: JS_FILES })),
@@ -50,6 +58,13 @@ export default [
       ],
       'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
       'prettier/prettier': ['warn', { semi: true }],
+    },
+  },
+  // the Playwright suite and its config run in node, not the browser
+  {
+    files: ['e2e/**/*.js', 'playwright.config.js'],
+    languageOptions: {
+      globals: globals.node,
     },
   },
 ];

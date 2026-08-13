@@ -25,17 +25,20 @@ const GameOver = () => {
   const guestName = playerList[1] || t('guest');
 
   return (
-    <Container style={{ backgroundColor: 'white', borderRadius: '0.5em', padding: '1em' }}>
+    <Container
+      style={{ backgroundColor: 'white', borderRadius: '0.5em', padding: '1em' }}
+      data-testid="game-over"
+    >
       <h1>{t('gameOver')}</h1>
       {isSpectator ? (
-        <h2>
+        <h2 data-testid="game-over-outcome">
           {t('winner')}
           {winner === 0 ? hostName : guestName}
         </h2>
       ) : winner === playerIndex ? (
-        <h2>{t('youWin')}</h2>
+        <h2 data-testid="game-over-outcome">{t('youWin')}</h2>
       ) : (
-        <h2>{t('youLost')}</h2>
+        <h2 data-testid="game-over-outcome">{t('youLost')}</h2>
       )}
       <h4>
         {isSpectator

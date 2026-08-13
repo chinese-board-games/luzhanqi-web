@@ -42,6 +42,9 @@ jobs:
           echo "Timed out waiting for staging deploy to be ready."
           exit 1
 
+      # cheap precheck - fails in seconds if the deploy is fundamentally
+      # broken, without paying for a browser install first. It can only see
+      # the served shell, though, which is why the playthrough below exists.
       - name: Smoke test staging
         run: |
           code=$(curl -s -o /tmp/staging_body.html -w '%{http_code}' "$STAGING_URL/")
@@ -54,6 +57,37 @@ jobs:
             exit 1
           fi
           echo "Staging smoke test passed."
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      # drives two browsers through a real game on staging: host creates,
+      # guest joins by code, both place boards, moves cross the socket, and a
+      # forfeit ends it. Anything that only breaks after hydration - or only
+      # breaks for the joining player - fails here rather than in production.
+      - name: Play a game against staging
+        env:
+          E2E_BASE_URL: ${{ env.STAGING_URL }}
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
 
   promote:
     needs: wait-and-smoke-test

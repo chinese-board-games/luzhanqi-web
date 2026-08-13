@@ -220,13 +220,17 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName })
             <Group>
               <Menu shadow="md" width={160}>
                 <Menu.Target>
-                  <Button type="button" variant="secondary">
+                  <Button type="button" variant="secondary" data-testid="use-example">
                     {t('useExample')} ▾
                   </Button>
                 </Menu.Target>
                 <Menu.Dropdown>
                   {exampleBoards.map((example, i) => (
-                    <Menu.Item key={i} onClick={() => setExample(example.board)}>
+                    <Menu.Item
+                      key={i}
+                      onClick={() => setExample(example.board)}
+                      data-testid={`use-example-${i + 1}`}
+                    >
                       {t('example', { n: i + 1 })}
                     </Menu.Item>
                   ))}
@@ -239,6 +243,7 @@ export default function HalfBoard({ sendStartingBoard, playerList, playerName })
                     type="button"
                     variant="info"
                     onClick={() => sendStartingBoard(halfBoard)}
+                    data-testid="send-placement"
                   >
                     {t('sendPlacement')}
                   </Button>

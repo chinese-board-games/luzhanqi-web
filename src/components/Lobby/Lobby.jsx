@@ -80,7 +80,12 @@ const Lobby = () => {
       {joinCode ? (
         <Container style={{ display: 'flex', alignItems: 'center', gap: '0.5em', padding: 0 }}>
           <Text size="md">{t('roomCode')}</Text>
-          <Text size="xl" weight={700} sx={{ fontFamily: 'monospace', letterSpacing: '0.15em' }}>
+          <Text
+            size="xl"
+            weight={700}
+            sx={{ fontFamily: 'monospace', letterSpacing: '0.15em' }}
+            data-testid="join-code"
+          >
             {joinCode}
           </Text>
           <CopyButton value={joinCode}>
@@ -115,6 +120,7 @@ const Lobby = () => {
                 color="green"
                 onClick={() => roomFull(configForm.values)}
                 style={{ width: '8em' }}
+                data-testid="room-full"
               >
                 {t('roomFull')}
               </Button>
