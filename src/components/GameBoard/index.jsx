@@ -85,7 +85,7 @@ export default function GameBoard({
       window.removeEventListener('keydown', handleEsc);
     };
   }),
-  []);
+    []);
 
   const gridCells = board.flatMap((row, r) =>
     row.map((piece, c) => {
@@ -206,7 +206,7 @@ export default function GameBoard({
         >
           {isSpectator || gamePhase > 2 ? null : (
             <Center py="1em">
-              <Button variant="filled" color="red" onClick={forfeit}>
+              <Button variant="filled" color="red" onClick={forfeit} data-testid="forfeit">
                 {t('forfeit')}
               </Button>
             </Center>

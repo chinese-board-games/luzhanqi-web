@@ -54,11 +54,13 @@ function CreateForm({ playerName, onSubmit }) {
             <TextInput
               label={t('playerNameLabel')}
               placeholder="Ex. Ian"
+              data-testid="create-player-name"
               {...createForm.getInputProps('playerName')}
             />
             <Checkbox
               mt="md"
               label={t('playAgainstComputer')}
+              data-testid="create-vs-ai"
               {...createForm.getInputProps('vsAi', { type: 'checkbox' })}
             />
           </Tabs.Panel>
@@ -151,7 +153,7 @@ function CreateForm({ playerName, onSubmit }) {
           ) : null}
         </Tabs>
         <br />
-        <Button variant="info" type="submit">
+        <Button variant="info" type="submit" data-testid="create-submit">
           {t('createMatch')}
         </Button>
       </form>
@@ -180,16 +182,18 @@ function JoinForm({ playerName, urlRoomId, onSubmit }) {
         <TextInput
           label={t('playerNameLabel')}
           placeholder="Ex. Ian"
+          data-testid="join-player-name"
           {...joinForm.getInputProps('playerName')}
         />
         <TextInput
           label={t('joinGameLabel')}
           placeholder="Ex. 7K4X2P"
+          data-testid="join-room-code"
           {...joinForm.getInputProps('roomId')}
           disabled={!!urlRoomId}
         />
         <br />
-        <Button variant="info" type="submit">
+        <Button variant="info" type="submit" data-testid="join-submit">
           {t('submit')}
         </Button>
       </form>

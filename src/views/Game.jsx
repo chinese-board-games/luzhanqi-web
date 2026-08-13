@@ -162,10 +162,11 @@ const Game = () => {
             {playerList.length > 0 ? (
               <Container>
                 <Title order={2}>{t('players')}</Title>
-                <Flex wrap="wrap">
+                <Flex wrap="wrap" data-testid="player-list">
                   {playerList.map((name, i) => (
                     <Center
                       key={name}
+                      data-testid={`player-${name}`}
                       sx={{
                         alignItems: 'center',
                         justifyContent: 'center',
