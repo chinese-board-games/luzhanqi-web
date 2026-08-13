@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { addGame } from 'api/User';
 import { updateUidMap } from 'api/Game';
 import PropTypes from 'prop-types';
+import { logger } from 'utils/logger';
 
 const Phone = ({ setShowModal, roomId, playerName }) => {
   const { t } = useTranslation('auth');
@@ -38,7 +39,7 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
       window.verifier.clear();
       recaptchaContainerRef.current.innerHTML = `<div id="recaptcha-container" />`;
     }
-    console.info(`phoneNumber: ${phoneNumber}`);
+    logger.info(`phoneNumber: ${phoneNumber}`);
 
     window.verifier = new RecaptchaVerifier(
       'recaptcha-container',
@@ -47,7 +48,7 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
         callback: (response) => {
           // reCAPTCHA solved, allow signInWithPhoneNumber.
           // ...
-          console.info(`response: ${response}`);
+          logger.info(`response: ${response}`);
         },
         'expired-callback': () => {
           // Response expired. Ask user to solve reCAPTCHA again.
@@ -79,7 +80,7 @@ const Phone = ({ setShowModal, roomId, playerName }) => {
           addGame(user.uid, roomId);
           updateUidMap(roomId, playerName);
         }
-        console.info(`user: ${JSON.stringify(user)} user.phoneNumber: ${user.phoneNumber}`);
+        logger.info(`user: ${JSON.stringify(user)} user.phoneNumber: ${user.phoneNumber}`);
         setShowModal(false);
       })
       .catch((err) => {

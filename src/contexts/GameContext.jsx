@@ -6,6 +6,7 @@ import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
 import PropTypes from 'prop-types';
 
 import i18n from '../i18n';
+import { logger } from 'utils/logger';
 
 const socket = io(import.meta.env.VITE_API);
 // const socket = io('localhost:4000');
@@ -219,8 +220,8 @@ export const GameProvider = ({ children }) => {
    */
   useEffect(() => {
     socket.on('connect', () => {
-      console.info(`SocketID: ${socket.id}`);
-      console.info(`Connected: ${socket.connected}`);
+      logger.info(`SocketID: ${socket.id}`);
+      logger.info(`Connected: ${socket.connected}`);
       setConnected(true);
       // the underlying transport can reconnect under a new socket.id after
       // a network drop or server restart without the page ever reloading -
@@ -250,7 +251,7 @@ export const GameProvider = ({ children }) => {
       'newGameCreated',
       ({ gameId, joinCode: newJoinCode, mySocketId, players, phase, token }) => {
         const serverRoomId = gameId;
-        console.info(`GameID: ${serverRoomId}, SocketID: ${mySocketId}`);
+        logger.info(`GameID: ${serverRoomId}, SocketID: ${mySocketId}`);
         setRoomId(serverRoomId);
         setJoinCode(newJoinCode || '');
         setPlayerList(players);
@@ -262,7 +263,7 @@ export const GameProvider = ({ children }) => {
 
     /** Server is telling all clients the game has started  */
     socket.on('beginNewGame', ({ mySocketId, roomId, turn }) => {
-      console.info(`Starting game for room ${roomId} on socket ${mySocketId}`);
+      logger.info(`Starting game for room ${roomId} on socket ${mySocketId}`);
       // setDisplayTimer(true);
       setClientTurn(turn);
       setGamePhase(1);
@@ -270,7 +271,7 @@ export const GameProvider = ({ children }) => {
 
     /** Server is telling all clients someone has joined the room */
     socket.on('playerJoinedRoom', ({ playerName: returnedPlayerName, players, spectators }) => {
-      console.info(`${returnedPlayerName} has joined the room!`);
+      logger.info(`${returnedPlayerName} has joined the room!`);
       setPlayerList(players);
       if (Array.isArray(spectators)) setSpectatorList(spectators);
     });
@@ -342,7 +343,7 @@ export const GameProvider = ({ children }) => {
     });
 
     socket.on('playerLeftRoom', ({ playerName: returnedPlayerName, players }) => {
-      console.info(`${returnedPlayerName} has left the room!`);
+      logger.info(`${returnedPlayerName} has left the room!`);
       setPlayerList(players);
       setClientTurn(-1);
       setGamePhase(0);
@@ -350,7 +351,7 @@ export const GameProvider = ({ children }) => {
     });
 
     socket.on('spectatorLeftRoom', ({ spectatorName: returnedSpectatorName, spectators }) => {
-      console.info(`${returnedSpectatorName} has left the room!`);
+      logger.info(`${returnedSpectatorName} has left the room!`);
       setSpectatorList(spectators);
     });
 
@@ -368,7 +369,7 @@ export const GameProvider = ({ children }) => {
     socket.on(
       'spectatorJoinedRoom',
       ({ spectatorName: returnedSpectatorName, spectators, players }) => {
-        console.info(`${returnedSpectatorName} has joined the room!`);
+        logger.info(`${returnedSpectatorName} has joined the room!`);
         setPlayerList(players);
         setSpectatorList(spectators);
       }

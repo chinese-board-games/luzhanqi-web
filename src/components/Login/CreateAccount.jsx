@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { addGame, createUser } from 'api/User';
 import { updateUidMap } from 'api/Game';
 import PropTypes from 'prop-types';
+import { logger } from 'utils/logger';
 
 const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName }) => {
   const { t } = useTranslation('auth');
@@ -48,7 +49,7 @@ const CreateAccount = ({ setExistingAccount, setShowModal, roomId, playerName })
     createUserWithEmailAndPassword(email, password)
       .then(async ({ user }) => {
         // Signed in
-        console.info(`user: ${JSON.stringify(user)}`);
+        logger.info(`user: ${JSON.stringify(user)}`);
         await createUser(user.uid);
         if (roomId) {
           // already joined a room

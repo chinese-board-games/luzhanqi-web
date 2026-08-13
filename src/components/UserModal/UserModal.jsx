@@ -11,6 +11,7 @@ import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { Table } from '@mantine/core';
 import { getUser, createUser, archiveGame, unarchiveGame } from 'api/User';
 import { getGameById } from 'api/Game';
+import { logger } from 'utils/logger';
 
 const UserModal = ({ showModal, setShowModal }) => {
   const { t } = useTranslation('modals');
@@ -40,7 +41,7 @@ const UserModal = ({ showModal, setShowModal }) => {
         console.warn('No user data available, skipping game history fetch');
         return;
       }
-      console.info(`fetching ${fetchedUser.uid} games`);
+      logger.info(`fetching ${fetchedUser.uid} games`);
       const myGames = await Promise.all(
         fetchedUser.games.map(async (gameId) => {
           const game = await getGameById(gameId);
