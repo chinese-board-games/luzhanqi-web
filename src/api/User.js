@@ -1,5 +1,6 @@
 // call API endpoints to get and set user data
 import axios from 'axios';
+import { logger } from 'utils/logger';
 
 export const createUser = async (userId) => {
   return axios
@@ -13,7 +14,7 @@ export const createUser = async (userId) => {
 };
 
 export const getUser = async (userId) => {
-  console.info(`getUser: ${userId} `);
+  logger.info(`getUser: ${userId} `);
   return axios
     .get(`/user/${userId}`)
     .then((res) => {
@@ -29,7 +30,7 @@ export const getUser = async (userId) => {
 };
 
 export const addGame = async (userId, gameId) => {
-  console.info(`addGame, game: ${userId}, user: ${gameId}`);
+  logger.info(`addGame, game: ${userId}, user: ${gameId}`);
   return axios.post(`/user/${userId}/games/${gameId}`).catch((err) => {
     console.error(err);
   });

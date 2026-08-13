@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { addGame } from 'api/User';
 import { updateUidMap } from 'api/Game';
 import PropTypes from 'prop-types';
+import { logger } from 'utils/logger';
 
 const Google = ({ setShowModal, roomId, playerName }) => {
   const auth = getAuth();
@@ -14,9 +15,6 @@ const Google = ({ setShowModal, roomId, playerName }) => {
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        // Google access token
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
         // The signed-in user info.
         const { user } = result;
         if (roomId) {
@@ -24,20 +22,13 @@ const Google = ({ setShowModal, roomId, playerName }) => {
           addGame(user.uid, roomId);
           updateUidMap(roomId, playerName);
         }
-        console.info(`credential: ${JSON.stringify(credential)}`);
-        console.info(`token: ${token}`);
-        console.info(`user: ${JSON.stringify(user)}`);
         setShowModal(false);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-        console.info(`errorCode: ${errorCode}`);
-        console.info(`errorMessage: ${errorMessage}`);
-        console.info(`email: ${error.customData?.email}`);
-        console.info(`credential: ${JSON.stringify(credential)}`);
+        logger.info(`errorCode: ${errorCode}`);
+        logger.info(`errorMessage: ${errorMessage}`);
         if (errorCode !== 'auth/popup-closed-by-user') {
           toast.error(errorMessage);
         }

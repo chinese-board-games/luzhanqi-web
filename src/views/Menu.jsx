@@ -10,6 +10,7 @@ import { Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import HelpButton from '../components/HelpButton';
 import { archiveGame } from 'api/User';
+import { logger } from 'utils/logger';
 
 const cardStyle = {
   backgroundColor: '#adcdff',
@@ -323,7 +324,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   /** Attempt to join a room by game ID */
   const playerJoinGame = async (name, roomId) => {
     if (name && roomId) {
-      console.info(`Attempting to JOIN game ${roomId} as ${name}`);
+      logger.info(`Attempting to JOIN game ${roomId} as ${name}`);
       setPlayerName(name);
       socket.emit('playerJoinRoom', {
         playerName: name,
@@ -339,7 +340,7 @@ function Menu({ joinedRoom = false, urlRoomId = '' }) {
   /** Attempt to spectate a room by game ID */
   const spectateGame = async (spectatorName, roomId) => {
     if (playerName && roomId) {
-      console.info(`Attempting to SPECTATE game ${roomId} as ${spectatorName}`);
+      logger.info(`Attempting to SPECTATE game ${roomId} as ${spectatorName}`);
       socket.emit('spectateRoom', {
         spectatorName,
         idToken: user ? await user.getIdToken() : null,
