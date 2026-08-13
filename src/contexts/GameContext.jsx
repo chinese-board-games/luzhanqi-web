@@ -279,7 +279,11 @@ export const GameProvider = ({ children }) => {
     socket.on('youHaveJoinedTheRoom', (data) => {
       setJoinedGame(true);
       // setPlayerList(data.players);
+      // the join form seeds roomId with whatever the player typed, which is
+      // usually the short join code - replace it with the game id the server
+      // resolved it to, since that's what identifies the seat this socket holds
       const joinedRoomId = data.joinRoomId || roomId;
+      setRoomId(joinedRoomId);
       navigate(`/game/${joinedRoomId}`);
       setJoinCode(data.joinCode || '');
       saveSession(joinedRoomId, playerNameRef.current, data.token);
