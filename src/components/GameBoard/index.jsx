@@ -69,7 +69,10 @@ export default function GameBoard({
     return true;
   };
 
-  (useEffect(() => {
+  // handleEsc reads the current selection, so the listener is re-bound
+  // whenever that changes - an empty dependency array would leave it holding
+  // the first render's values and Escape would stop clearing anything
+  useEffect(() => {
     const handleEsc = (event) => {
       if (event.keyCode === 27) {
         if (destinationSelected) {
@@ -84,8 +87,7 @@ export default function GameBoard({
     return () => {
       window.removeEventListener('keydown', handleEsc);
     };
-  }),
-    []);
+  }, [destinationSelected, originSelected]);
 
   const gridCells = board.flatMap((row, r) =>
     row.map((piece, c) => {

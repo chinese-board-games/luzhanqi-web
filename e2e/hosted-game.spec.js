@@ -140,6 +140,18 @@ test('two players can host, join, set up, move, and finish a game', async ({ bro
     }
   });
 
+  await test.step('escape clears a selected piece', async () => {
+    // the keydown listener reads the current selection, so this catches it
+    // being bound to a stale one as well as not being bound at all
+    const ownPiece = host.locator('[data-testid^="cell-"][data-disabled="false"]').first();
+    const pieceId = await ownPiece.getAttribute('data-testid');
+    await ownPiece.click();
+    await expect(host.getByTestId(pieceId)).toHaveAttribute('data-state', 'origin');
+
+    await host.keyboard.press('Escape');
+    await expect(host.getByTestId(pieceId)).not.toHaveAttribute('data-state', 'origin');
+  });
+
   await test.step('players exchange moves over the socket', async () => {
     // the host holds even turns and the game starts at turn 0, so the host
     // moves first (see isTurn in views/Game.jsx). Asserting the move lands on
