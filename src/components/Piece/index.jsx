@@ -32,7 +32,7 @@ export default function Piece({ name, affiliation }) {
         },
       })}
     >
-      <Text sx={{ fontFamily: 'SentyWEN2017' }} color={affiliation === 0 ? 'indigo.7' : 'red.7'}>
+      <Text sx={{ fontFamily: 'SentyWEN2017' }} c={affiliation === 0 ? 'indigo.7' : 'red.7'}>
         {t(`${name}.short`)}
       </Text>
     </Center>

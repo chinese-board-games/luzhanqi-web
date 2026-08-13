@@ -87,7 +87,7 @@ export default function PieceInfoPanel({
           <Divider label={t('attacks')} labelPosition="center" />
           <PieceCard piece={destinationPiece} />
           <Divider />
-          <Text size="sm" fw={600} color={outcomeMessages[outcome.type]?.color}>
+          <Text size="sm" fw={600} c={outcomeMessages[outcome.type]?.color}>
             {t(`outcomes.${outcomeMessages[outcome.type]?.key}`)}
           </Text>
         </Stack>
