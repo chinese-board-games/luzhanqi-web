@@ -51,7 +51,7 @@ export default function MoveConfirmCard({
           </Group>
         ) : null}
         {message ? (
-          <Text size="sm" fw={600} color={message.color}>
+          <Text size="sm" fw={600} c={message.color}>
             {t(`outcomes.${message.key}`)}
           </Text>
         ) : null}

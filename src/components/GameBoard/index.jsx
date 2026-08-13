@@ -144,6 +144,13 @@ export default function GameBoard({
               radius="md"
               trapFocus
               closeOnClickOutside={false}
+              // Mantine 8 defaults this to true, auto-hiding the popover
+              // when its anchor tile scrolls out of view in the board's
+              // overflow-x:auto container (a real case on narrow screens) -
+              // this popover is a forced-open, always-visible move
+              // confirmation, not a hover/click toggle, so keep the pre-8
+              // behavior of never auto-hiding it
+              hideDetached={false}
             >
               <Popover.Target>{cell}</Popover.Target>
               <Popover.Dropdown>
