@@ -4,7 +4,7 @@ import { IconX } from '@tabler/icons-react';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import { useFirebaseAuth } from 'contexts/FirebaseContext';

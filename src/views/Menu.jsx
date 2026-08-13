@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { GameContext } from 'contexts/GameContext';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
 import { Button, Checkbox, Container, TextInput, Tabs, Slider, Text } from '@mantine/core';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
