@@ -13,6 +13,7 @@ import HelpButton from 'components/HelpButton';
 import { useFirebaseAuth } from 'contexts/FirebaseContext';
 import { Container, Flex, Center, Title, Loader } from '@mantine/core';
 import { applyMoveOptimistically } from 'utils/predictOutcome';
+import { logger } from 'utils/logger';
 
 const Game = () => {
   const { t } = useTranslation('game');
@@ -122,7 +123,7 @@ const Game = () => {
   };
 
   const playerForfeit = (e) => {
-    console.info('Game forfeitted!');
+    logger.info('Game forfeitted!');
     e.preventDefault();
     // the server derives winnerId from the *other* player's already-
     // recorded uid, not from anything the forfeiting client sends

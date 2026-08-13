@@ -58,13 +58,22 @@ export default [
       ],
       'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
       'prettier/prettier': ['warn', { semi: true }],
+      // debug output goes through utils/logger so it stays out of deployed
+      // builds; warnings and errors are the client-side signal when something
+      // breaks for a real player, so they're allowed straight through
+      'no-console': ['error', { allow: ['warn', 'error'] }],
     },
   },
-  // the Playwright suite and its config run in node, not the browser
+  // the Playwright suite, its config, and the build scripts run in node, not
+  // the browser - and a build script's console output is its whole point, so
+  // the no-console rule that keeps debug logging out of the app doesn't apply
   {
-    files: ['e2e/**/*.js', 'playwright.config.js'],
+    files: ['e2e/**/*.js', 'playwright.config.js', 'scripts/**'],
     languageOptions: {
       globals: globals.node,
+    },
+    rules: {
+      'no-console': 'off',
     },
   },
 ];
