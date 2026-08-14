@@ -388,7 +388,10 @@ export const GameProvider = ({ children }) => {
     socket.on('boardSet', (game) => {
       setMyBoard(game.board);
       setGamePhase(2);
+      // a fresh board starts with nothing captured and no move behind it -
+      // both survive in state from any previous game this session played
       setLastMove(null);
+      setMyDeadPieces([]);
       // normally set by beginNewGame, but that event never fires for AI
       // games since they skip the Lobby's "Room Full" step entirely
       if (typeof game.turn === 'number') setClientTurn(game.turn);

@@ -8,7 +8,10 @@ export default function DeadPieces({ deadPieces }) {
   return (
     <Container style={{ marginTop: '0.5em' }}>
       <Title order={3}>{t('deadPieces')}</Title>
-      <Flex style={{ gap: '0.5em', flexWrap: 'wrap', marginBottom: '2em' }}>
+      <Flex
+        style={{ gap: '0.5em', flexWrap: 'wrap', marginBottom: '2em' }}
+        data-testid="dead-pieces"
+      >
         {deadPieces.map((piece) => (
           <Piece key={piece.id} name={piece.name} affiliation={piece.affiliation} />
         ))}

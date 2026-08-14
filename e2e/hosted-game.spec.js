@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { newPage, playerName, placeBoardFromExample, makeMove, rotate, cellId } from './helpers';
 
 /**
  * Drives a complete two-player hosted game against a running deployment:
@@ -11,82 +12,8 @@ import { test, expect } from '@playwright/test';
  * the joining player.
  */
 
-// distinguishes the games this suite leaves behind in the staging database
-const runId = process.env.GITHUB_RUN_ID || `local-${Date.now()}`;
-const HOST_NAME = `e2e-host-${runId}`.slice(0, 40);
-const GUEST_NAME = `e2e-guest-${runId}`.slice(0, 40);
-
-/**
- * Language is detected from localStorage then navigator (see src/i18n/index.js),
- * so without pinning it the run would depend on the CI runner's locale. The
- * suite selects by test id rather than copy, but pinning keeps failure
- * screenshots readable.
- */
-async function newPage(browser) {
-  const context = await browser.newContext();
-  await context.addInitScript(() => {
-    window.localStorage.setItem('luzhanqi:language', 'en');
-  });
-  return context.newPage();
-}
-
-/** Fills a board from the first built-in example rather than dragging 25 pieces. */
-async function placeBoardFromExample(page) {
-  await page.getByTestId('use-example').click();
-  await page.getByTestId('use-example-1').click();
-  // the button is disabled until every piece is placed, so this waiting for it
-  // to enable is also the assertion that the example filled the board
-  await expect(page.getByTestId('send-placement')).toBeEnabled();
-  await page.getByTestId('send-placement').click();
-}
-
-/**
- * Each player sees the board from their own side, so the same square has
- * different coordinates in the two pages - mirrors rotateMove in
- * views/Game.jsx. It's an involution, so one direction covers both.
- */
-const rotate = ([row, col]) => [11 - row, 4 - col];
-const cellId = ([row, col]) => `cell-${row}-${col}`;
-const parseCellId = (testId) => testId.replace('cell-', '').split('-').map(Number);
-
-/**
- * Makes one legal move, discovering it from the DOM instead of hardcoding
- * coordinates so the spec survives changes to the example boards or the
- * movement rules.
- *
- * With nothing selected, a cell is enabled only when it holds one of your own
- * pieces (see positionDisabled in components/GameBoard), and selecting an
- * origin marks its legal destinations `movable`/`attackable`. So: try your
- * pieces until one lights up a destination, take it, confirm.
- *
- * @returns the [row, col] moved to, in the moving page's own orientation
- */
-async function makeMove(page) {
-  const ownPieces = page.locator('[data-testid^="cell-"][data-disabled="false"]');
-  await expect(ownPieces.first()).toBeVisible();
-
-  const count = await ownPieces.count();
-  for (let i = 0; i < count; i += 1) {
-    const origin = ownPieces.nth(i);
-    const originId = await origin.getAttribute('data-testid');
-    await origin.click();
-
-    const destinations = page.locator('[data-state="movable"], [data-state="attackable"]');
-    if ((await destinations.count()) === 0) {
-      // no legal move from this piece - deselect and try the next one
-      await page.getByTestId(originId).click();
-      continue;
-    }
-
-    const destination = destinations.first();
-    const destinationId = await destination.getAttribute('data-testid');
-    await destination.click();
-    await page.getByTestId('confirm-move').click();
-    return parseCellId(destinationId);
-  }
-
-  throw new Error("No legal move found for any of this player's pieces");
-}
+const HOST_NAME = playerName('host');
+const GUEST_NAME = playerName('guest');
 
 test('two players can host, join, set up, move, and finish a game', async ({ browser }) => {
   const host = await newPage(browser);
