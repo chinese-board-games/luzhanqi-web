@@ -18,7 +18,7 @@
     "@tabler/icons-react": "^3.50.0",
     "axios": "^1.21.0",
     "firebase": "^13.1.0",
-    "i18next": "^26.6.0",
+    "i18next": "^27.0.1",
     "i18next-browser-languagedetector": "^8.2.4",
     "lodash": "^4.17.20",
     "prop-types": "^15.7.2",
